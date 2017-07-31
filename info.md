@@ -4,4 +4,4 @@
 
 
 ### Binaries
-+ webpack (v3+)
++ **webpack** (v3+)
