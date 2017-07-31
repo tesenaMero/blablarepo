@@ -2,18 +2,19 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './components/app/app.component'
-import { HomeComponent } from './components/home/home.component';
+import { OrdersComponent } from './components/orders/orders.component'
 
 export const sharedConfig: NgModule = {
     bootstrap: [ AppComponent ],
     declarations: [
+        // Hosts (page route parents)
         AppComponent,
-        HomeComponent
+        OrdersComponent
     ],
     imports: [
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
-            { path: 'home', component: HomeComponent },
+            { path: 'home', component: OrdersComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ]
