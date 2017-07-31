@@ -6,6 +6,7 @@ const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 // For production. This will separate the css from the compiled js file and add it into another file
 // This way js and css will load in parallel
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const extractDLS = new ExtractTextPlugin("dls.bundle.css")
 
 module.exports = (env) => {
     // Configuration in common to both client-side and server-side bundles
@@ -30,8 +31,7 @@ module.exports = (env) => {
             ]
         },
         plugins: [
-            //new ExtractTextPlugin("components.bundle.css"),
-            new CheckerPlugin()
+            new CheckerPlugin(),
         ]
     };
 
@@ -77,5 +77,42 @@ module.exports = (env) => {
         devtool: 'inline-source-map'
     });
 
-    return [clientBundleConfig, serverBundleConfig];
+    /**
+     * This task compiles submodules needed.
+     * Current submodules:
+     * 
+     * DLS (https://bitbucket.org/cemex/dlsdraft):
+     *  deploys minified css with images needed as base64 data
+     */
+    const submodulesConfig = {
+        entry: {
+            dls: "./submodules/dls/dist/css/app.css",
+        },
+        output: {
+            path: path.join(__dirname, clientBundleOutputDir),
+            filename: 'submodules.bundle.js',
+            publicPath: '/dist/'
+        },
+        module: {
+            rules: [
+                { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
+                //{ test: /\.css$/, loader: 'css-loader', options: { minimize: true } },
+                {
+                    test: /\.css$/,
+                    use: ExtractTextPlugin.extract({
+                        fallback: "style-loader",
+                        use: [{
+                            loader: "css-loader",
+                            options: { minimize: true }
+                        }]
+                    })
+                }
+            ]
+        },
+        plugins: [
+            new ExtractTextPlugin("dls.bundle.css")
+        ]
+    }
+
+    return [clientBundleConfig, serverBundleConfig, submodulesConfig];
 };
