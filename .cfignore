@@ -1,0 +1,9 @@
+.vs/
+.vscode/
+artifacts/
+obj/
+*.sln
+*.xproj.user
+README.md
+project.lock.json
+Properties/

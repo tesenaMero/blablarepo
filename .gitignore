@@ -19,18 +19,20 @@
 [Rr]eleases/
 x64/
 x86/
-build/
-bld/
-bin/
-Bin/
-obj/
-Obj/
+/src/cemex/build/
+/src/cemex/bld/
+/src/cemex/bin/
+/src/cemex/Bin/
+/src/cemex/obj/
+/src/cemex/Obj/
 .vscode/
 
 # Visual Studio 2015 cache/options directory
 .vs/
-/wwwroot/dist/
-/ClientApp/dist/
+
+# Build files
+/src/cemex/wwwroot/dist/
+/src/cemex/ClientApp/dist/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
@@ -184,6 +186,7 @@ ClientBin/
 *.publishsettings
 orleans.codegen.cs
 
+/src/cemex/node_modules
 /node_modules
 
 /yarn.lock
