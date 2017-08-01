@@ -3,13 +3,17 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './components/app/app.component'
 import { OrdersComponent } from './components/orders/orders.component'
+import { OrdersTableComponent } from './components/orders-table/orders-table.component'
 
 export const sharedConfig: NgModule = {
     bootstrap: [ AppComponent ],
     declarations: [
         // Hosts (page route parents)
         AppComponent,
-        OrdersComponent
+        OrdersComponent,
+
+        // Regular components
+        OrdersTableComponent
     ],
     imports: [
         RouterModule.forRoot([
