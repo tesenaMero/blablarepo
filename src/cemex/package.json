@@ -26,6 +26,7 @@
         "event-source-polyfill": "0.0.9",
         "expose-loader": "0.7.3",
         "file-loader": "0.11.2",
+        "font-awesome": "^4.7.0",
         "html-loader": "0.5.0",
         "isomorphic-fetch": "2.2.1",
         "jquery": "3.2.1",

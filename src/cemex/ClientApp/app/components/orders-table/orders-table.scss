@@ -2,7 +2,7 @@
 // ---------------------
 $table-header-font-weight: 700;
 $table-header-font-color: #001C3B;
-$table-cell-padding: 10px;
+$table-cell-padding: 15px;
 $table-condensed-cell-padding: $table-cell-padding/2;
 $table-bg: #fff;
 $table-bg-accent: #E7EAEE;
@@ -27,6 +27,19 @@ $md-breakpoint: 768px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
 }
 
+// Basics
+@mixin star() {
+    color: #C8D0DC;
+    font-size: 14px;
+    &.active {
+        color: #F1C40F;
+    }
+}
+
+.products>i:nth-child(even) {
+    color: gray;
+}
+
 // Tables
 //
 // -----------------
@@ -38,11 +51,14 @@ $md-breakpoint: 768px;
     background-color: $table-bg;
     background-color: inherit;
     border-collapse: separate;
-    border-spacing: 0 4px;
+    border-spacing: 0 5px;
     >thead,
     >tbody,
     >tfoot {
         >tr {
+            .star {
+                @include star()
+            }
             @include transition(all .3s ease);
             >th,
             >td {
@@ -51,16 +67,38 @@ $md-breakpoint: 768px;
                 vertical-align: top;
                 border-top: 0;
                 @include transition(all .3s ease);
+                &[data-title="Total amount"] {
+                    font-weight: bold;
+                }
+                &.expand {
+                    color: #3FA9F5;
+                    font-size: 18px;
+                    line-height: 24px;
+                }
             }
         }
     }
-    >thead>tr>th {
-        font-weight: $table-header-font-weight;
-        color: $table-header-font-color;
-        vertical-align: bottom;
-        border-bottom: 0;
-        font-size: 12px;
-        line-height: 16px;
+    >thead>tr {
+        cursor: pointer;
+        >th {
+            font-weight: $table-header-font-weight;
+            color: $table-header-font-color;
+            vertical-align: bottom;
+            border-bottom: 0;
+            font-size: 12px;
+            line-height: 16px;
+            .control {
+                height: 4px;
+                width: 15px;
+                margin-bottom: 2px;
+            }
+            &.star {
+                padding-left: 34px;
+                max-width: 45px;
+                text-align: center;
+                @include star()
+            }
+        }
     }
     >caption+thead,
     >colgroup+thead,

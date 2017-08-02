@@ -1,6 +1,6 @@
 $link-blue: #3FA9F5;
 .layout {
-    padding: 37px 17px 37px 26px;
+    padding: 34px 17px 34px 26px;
 }
 
 ul.title-nav {
@@ -18,13 +18,13 @@ ul.title-nav {
             font-weight: 400;
             &:after {
                 content: '\25CF';
-                font-size: 8px;
+                font-size: 12px;
                 border-radius: 50%;
                 line-height: 2rem;
                 vertical-align: middle;
                 padding-left: 11px;
                 padding-right: 8px;
-                color: $link-blue;
+                color: #002A59;
             }
         }
     }

@@ -1,0 +1,19 @@
+.status:before {
+    content: ' ';
+    border-radius: 3px;
+    background-color: #333;
+    padding: 0px 12px;
+    margin-right: 8px;
+}
+
+.status.in-progress:before {
+    background-color: #277BAA;
+}
+
+.status.completed:before {
+    background-color: #7AC944;
+}
+
+.status.draft:before {
+    background-color: #E45C00;
+}
