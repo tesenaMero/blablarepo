@@ -26,7 +26,7 @@ pipelines:
             - cf --version
             - cf api https://api.ng.bluemix.net
             - cf login -u $BMX_DEP_USER -p $BMX_DEP_PWD -o CEMEX -s Development
-            # - git submodule update --init --recursive
+            - git submodule update --init --recursive
             # - npm install webpack -g
             # - cd src/dotnetstarter
             # - npm install
