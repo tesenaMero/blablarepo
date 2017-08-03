@@ -61,7 +61,8 @@ $table-border-color: #e0e0e0;
             }
             @include transition(all .3s ease);
             >th,
-            >td {
+            >td,
+            >div {
                 text-align: left;
                 padding: $table-cell-padding;
                 vertical-align: top;
@@ -105,7 +106,8 @@ $table-border-color: #e0e0e0;
     >thead:first-child {
         >tr:first-child {
             >th,
-            >td {
+            >td,
+            >div {
                 border-top: 0;
             }
         }
@@ -128,7 +130,8 @@ $table-border-color: #e0e0e0;
     >tfoot {
         >tr {
             >th,
-            >td {
+            >td,
+            >div {
                 padding: $table-condensed-cell-padding;
             }
         }
@@ -145,7 +148,8 @@ $table-border-color: #e0e0e0;
     >tfoot {
         >tr {
             >th,
-            >td {
+            >td,
+            >div {
                 border: 0;
                 border-bottom: 1px solid $table-border-color;
             }
@@ -153,7 +157,8 @@ $table-border-color: #e0e0e0;
     }
     >thead>tr {
         >th,
-        >td {
+        >td,
+        >div {
             border-bottom-width: 2px;
         }
     }
@@ -165,13 +170,15 @@ $table-border-color: #e0e0e0;
 .table-striped {
     >tbody>tr:nth-child(even) {
         >td,
-        >th {
+        >th,
+        >div {
             background-color: $table-bg-accent;
         }
     }
     >tbody>tr:nth-child(odd) {
         >td,
-        >th {
+        >th,
+        >div {
             background-color: $table-bg;
         }
     }
@@ -209,13 +216,15 @@ $table-border-color: #e0e0e0;
                     border: 1px solid $table-border-color;
                     border-radius: 2px;
                     margin-bottom: $table-cell-padding;
-                    >td {
+                    >td,
+                    div {
                         background-color: $table-bg;
                         display: block;
                         //vertical-align: middle;
                         text-align: right;
                     }
-                    >td[data-title]:before {
+                    >td[data-title]:before,
+                    div[data-title]:before {
                         content: attr(data-title);
                         float: left;
                         font-size: inherit;
@@ -250,7 +259,8 @@ $table-border-color: #e0e0e0;
         } // Special overrides for the striped tables
         >.table-striped {
             >tbody>tr>td,
-            >tbody>tr:nth-child(even) {
+            >tbody>tr:nth-child(even),
+            >tbody>tr>div {
                 background-color: $table-bg;
             }
             >tbody>tr>td:nth-child(even) {
@@ -260,10 +270,12 @@ $table-border-color: #e0e0e0;
         >.table-hover {
             >tbody {
                 >tr:hover>td,
+                >tr:hover>div,
                 >tr:hover {
                     background-color: $table-bg;
                 }
-                >tr>td:hover {
+                >tr>td:hover,
+                >tr>div:hover {
                     background-color: $table-bg-hover;
                 }
             }

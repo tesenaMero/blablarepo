@@ -1,15 +1,17 @@
 @import "~bootstrap/scss/bootstrap-grid.scss";
 $sidebar-width: 160px;
 $header-height: 56px;
+$dashboard-index: 9999;
 nav.fixed {
     position: fixed;
-    z-index: 999;
+    z-index: $dashboard-index;
 }
 
 nav.side-nav-bar {
     position: fixed;
     top: $header-height;
     height: 100%;
+    z-index: $dashboard-index;
 }
 
 .content {
@@ -25,5 +27,11 @@ nav.side-nav-bar {
     .content {
         padding-left: 0;
         padding-top: $header-height;
+    }
+}
+
+@include media-breakpoint-down(xs) {
+    .cmx-logo {
+        display: none;
     }
 }

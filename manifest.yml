@@ -1,6 +1,6 @@
 ---
 applications:
-- name: ngx42
+- name: ordertaking-dev2
   random-route: true
   memory: 512M
   env:

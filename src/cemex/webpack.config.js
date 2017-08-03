@@ -97,7 +97,6 @@ module.exports = (env) => {
         module: {
             rules: [
                 { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
-                //{ test: /\.css$/, loader: 'css-loader', options: { minimize: true } },
                 {
                     test: /\.css$/,
                     use: ExtractTextPlugin.extract({
