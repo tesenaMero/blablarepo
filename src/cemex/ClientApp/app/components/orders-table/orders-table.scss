@@ -1,3 +1,4 @@
+@import "~bootstrap/scss/bootstrap-grid.scss";
 // Variables
 // ---------------------
 $table-header-font-weight: 700;
@@ -9,7 +10,6 @@ $table-bg-accent: #E7EAEE;
 $table-bg-hover: rgba(0, 0, 0, .12);
 $table-bg-active: $table-bg-hover;
 $table-border-color: #e0e0e0;
-$md-breakpoint: 768px;
 // Mixins
 // -----------------
 @mixin transition($transition...) {
@@ -193,9 +193,9 @@ $md-breakpoint: 768px;
 // by vertical table-cell display. Only applies <768px (md in bootstrap). Everything above that will display normally.
 // For correct display you must add 'data-title' to each 'td'
 .table-responsive-vertical {
-    @media screen and (max-width: $md-breakpoint) {
+    @include media-breakpoint-down(md) {
         // Tighten up spacing
-        > .table {
+        >.table {
             margin-bottom: 0;
             background-color: transparent;
             >thead,
