@@ -11,7 +11,6 @@ const extractDLS = new ExtractTextPlugin("dls.bundle.css")
 module.exports = (env) => {
     // Configuration in common to both client-side and server-side bundles
     const isDevBuild = !(env && env.prod);
-    //console.log("isDevBuild:", isDevBuild)
     const sharedConfig = {
         stats: { modules: false },
         context: __dirname,
@@ -85,34 +84,39 @@ module.exports = (env) => {
      * DLS (https://bitbucket.org/cemex/dlsdraft):
      *  deploys minified css with images needed as base64 data
      */
-    const submodulesConfig = {
+    const dlsBundleConfig = {
         entry: {
-            dls: "./submodules/dls/dist/css/app.css",
+            dls: "./submodules/dls/src/js/app.js"
         },
         output: {
-            path: path.join(__dirname, clientBundleOutputDir),
-            filename: 'submodules.bundle.js',
-            publicPath: '/dist/'
+            path: path.join(__dirname, clientBundleOutputDir, 'dls'),
+            filename: 'dls.bundle.js',
+            publicPath: '/dist/dls/'
         },
         module: {
             rules: [
                 { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
+                { test: /\.(eot|svg|ttf|woff|woff2)$/, use: 'file-loader' },
                 {
-                    test: /\.css$/,
+                    test: /\.s?css$/,
                     use: ExtractTextPlugin.extract({
                         fallback: "style-loader",
-                        use: [{
-                            loader: "css-loader",
-                            options: { minimize: true }
-                        }]
+                        use: [
+                            { loader: 'css-loader', options: { minimize: true } },
+                            { loader: 'sass-loader' }
+                        ],
                     })
                 }
             ]
         },
         plugins: [
-            new ExtractTextPlugin("dls.bundle.css")
+            new ExtractTextPlugin("dls.bundle.css"),
+            new webpack.ProvidePlugin({
+                $: "jquery",
+                jQuery: "jquery",
+            }),
         ]
     }
 
-    return [clientBundleConfig, serverBundleConfig, submodulesConfig];
+    return [clientBundleConfig, serverBundleConfig, dlsBundleConfig];
 };
