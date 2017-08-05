@@ -27,30 +27,18 @@ $table-border-color: #e0e0e0;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
 }
 
-.table thead th {
-    border: 0;
-}
-
-// Hacks to fix the table
-.table-fixed {
-    table-layout: fixed;
-    th,
-    td {
-        overflow: hidden;
-        word-break: break-all;
-    }
-}
-
 // Tables
 //
 // -----------------
 // Baseline styles
-.table.main {
+.table {
     width: 100%;
     max-width: 100%;
     margin-bottom: 2rem;
     background-color: $table-bg;
     background-color: inherit;
+    border-collapse: separate;
+    border-spacing: 0 5px;
     >thead,
     >tbody,
     >tfoot {
@@ -153,28 +141,13 @@ $table-border-color: #e0e0e0;
 //
 // Default zebra-stripe styles (alternating gray and transparent backgrounds)
 .table-striped {
-    >tbody>tr:not(.sub):nth-child(even) {
+    >tbody>tr:nth-child(even) {
         >td,
         >th {
             background-color: $table-bg-accent;
         }
     }
-    >tbody>tr:not(.sub):nth-child(odd) {
-        >td,
-        >th {
-            background-color: $table-bg;
-        }
-    }
-}
-
-.table-striped {
-    >tbody>tr.sub:nth-child(odd) {
-        >td,
-        >th {
-            background-color: $table-bg-accent;
-        }
-    }
-    >tbody>tr.sub:nth-child(even) {
+    >tbody>tr:nth-child(odd) {
         >td,
         >th {
             background-color: $table-bg;
@@ -183,15 +156,15 @@ $table-border-color: #e0e0e0;
 }
 
 // Hover effect
-.table-hover {
-    >tbody>tr:hover {
-        >td,
-        >th {
-            background-color: $table-bg-hover;
-        }
-    }
-}
-
+//
+// .table-hover {
+//     >tbody>tr:hover {
+//         >td,
+//         >th {
+//             background-color: $table-bg-hover;
+//         }
+//     }
+// }
 // Responsive tables (vertical)
 // =================================================
 // Wrap your tables in `.table-responsive-vertical` and we'll make them mobile friendly
