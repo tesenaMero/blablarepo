@@ -86,7 +86,7 @@ $table-border-color: #e0e0e0;
     }
     >tbody,
     >tfoot {
-        >tr {
+        >tr:not(.sub) {
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
             border-radius: 2px;
         }
@@ -296,4 +296,22 @@ $table-border-color: #e0e0e0;
 // Pagination
 .pagination {
     float: right;
+    span {
+        cursor: pointer;
+        border-radius: 2px;
+        text-align: center;
+        color: #5C6570;
+        font-size: 15px;
+        line-height: 20px;
+        padding: 3px 9px;
+        &.active {
+            border: 1px solid #29A6F3;
+            color: #29A6F3;
+            font-weight: bold;
+        }
+        svg {
+            width: 13px;
+            height: 13px;
+        }
+    }
 }

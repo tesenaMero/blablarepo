@@ -40,11 +40,18 @@ ul.title-nav {
         align-items: center;
         margin-top: 8px;
     }
+    .icon-down-single-black {
+        height: 8px;
+        width: 17px;
+        vertical-align: 10px;
+        margin-left: 11px;
+    }
 }
 
 .table-header {
     height: 32px;
     border-radius: 2px;
+    margin-bottom: 16px;
     background-color: #003876;
     display: flex;
     justify-content: center;

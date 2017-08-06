@@ -86,11 +86,14 @@ module.exports = (env) => {
      */
     const dlsBundleConfig = {
         entry: {
-            dls: "./submodules/dls/src/js/app.js"
+            dls: [
+                "./submodules/dls/src/js/app.js",
+                "./submodules/customizations/dls.custom.js",
+            ]
         },
         output: {
             path: path.join(__dirname, clientBundleOutputDir, 'dls'),
-            filename: 'dls.bundle.js',
+            filename: '[name].bundle.js',
             publicPath: '/dist/dls/'
         },
         module: {
@@ -115,7 +118,9 @@ module.exports = (env) => {
                 $: "jquery",
                 jQuery: "jquery",
             }),
-        ]
+        ].concat(isDevBuild ? [] : [
+            new webpack.optimize.UglifyJsPlugin()
+        ])
     }
 
     return [clientBundleConfig, serverBundleConfig, dlsBundleConfig];

@@ -15,7 +15,7 @@
                         99
                     </div>
                 </div>
-                <div class="notifications-container" style="display: none;">
+                <div class="notifications-container">
                     <div class="notifications-list">
                         <div class="notification-entry">
                             <div class="notification-icon">
@@ -109,51 +109,50 @@
         <!-- end .sub-nav-loader -->
     </nav>
 </header>
-<aside>
-    <nav class="side-nav-bar">
-        <div class="collapse-trigger">
+<aside id="sidebar-wrapper">
+    <nav class="side-nav-bar can-hide">
+
+        <div class="collapse-trigger opened-nav">
             <svg class="icon-left-double-silver">
-            <use xlink:href="#icon-left-double" xmlns:xlink="http://www.w3.org/1999/xlink"></use></svg>
+	            	<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-left-double"></use>
+	            </svg>
         </div>
+
+        <div class="expand-trigger hidden-nav">
+            <svg class="icon-right-double-silver">
+	            	<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-double"></use>
+	            </svg>
+        </div>
+
         <div class="legal-entity">
-            <div class="legal-entity-name">
-                Acme Construction
-            </div>
-            <div class="legal-entity-id">
-                ID #1233312 &gt;
-            </div>
+            <div class="legal-entity-name">Acme Construction</div>
+            <div class="legal-entity-id">#1233312 &gt;</div>
         </div>
         <ul>
             <li>
                 <a href="#"><span class="icon"><svg class="icon-sidemenu">
-                <use xlink:href="#icon-control-center" xmlns:xlink="http://www.w3.org/1999/xlink"></use></svg></span> <span class="as-label">Control Center</span></a>
+            <use xlink:href="#icon-control-center" xmlns:xlink="http://www.w3.org/1999/xlink"></use></svg></span> <span class="as-label">Control Center</span></a>
             </li>
             <li>
                 <a href="#"><span class="icon"><svg class="icon-sidemenu">
-                <use xlink:href="#icon-pricing" xmlns:xlink="http://www.w3.org/1999/xlink"></use></svg></span> <span class="as-label">Pricing</span></a>
+            <use xlink:href="#icon-pricing" xmlns:xlink="http://www.w3.org/1999/xlink"></use></svg></span> <span class="as-label roboto-bold">Commercial Conditions</span></a>
             </li>
             <li>
                 <a class="active" href="#"><span class="icon"><svg class="icon-sidemenu">
-                <use xlink:href="#icon-orders" xmlns:xlink="http://www.w3.org/1999/xlink"></use></svg></span> <span class="as-label">Orders</span></a>
+            <use xlink:href="#icon-orders" xmlns:xlink="http://www.w3.org/1999/xlink"></use></svg></span> <span class="as-label">Orders</span></a>
                 <ul class="side-subnav">
                     <li>
-                        <a href="#">Subnav Item 1</a>
-                    </li>
-                    <li>
-                        <a href="#">Subnav Item 2</a>
-                    </li>
-                    <li>
-                        <a href="#">Subnav Item 3</a>
+                        <a href="#">Project profile management</a>
                     </li>
                 </ul>
             </li>
             <li>
                 <a href="#"><span class="icon"><svg class="icon-sidemenu">
-                <use xlink:href="#icon-invoicing" xmlns:xlink="http://www.w3.org/1999/xlink"></use></svg></span> <span class="as-label">Invoices</span></a>
+            <use xlink:href="#icon-invoicing" xmlns:xlink="http://www.w3.org/1999/xlink"></use></svg></span> <span class="as-label">Invoices</span></a>
             </li>
         </ul>
     </nav>
 </aside>
-<div class="content">
+<div id="layout" class="content">
     <router-outlet></router-outlet>
 </div>

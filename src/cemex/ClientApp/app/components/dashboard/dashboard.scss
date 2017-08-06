@@ -12,11 +12,38 @@ nav.side-nav-bar {
     top: $header-height;
     height: 100%;
     z-index: $dashboard-index;
+    transition: all 0.25s ease-in-out;
+    &.moved {
+        transform: translateX(-$sidebar-width);
+    }
 }
 
 .content {
     padding-left: $sidebar-width;
     padding-top: $header-height;
+    transition: all 0.25s ease-in-out;
+    &.moved {
+        padding-left: 0px;
+    }
+}
+
+.side-nav-bar ul li .active {
+    background-image: linear-gradient(90deg, #021A35 43px, #092448 0);
+}
+
+.side-nav-bar ul li a+ul li a {
+    font-size: 14px;
+    line-height: 16px;
+    padding-top: 4px;
+    padding-bottom: 30px;
+}
+
+.side-nav-bar ul li .active+ul li a {
+    background-color: #092448;
+}
+
+.side-nav-bar ul .side-subnav li {
+    border-bottom: 0;
 }
 
 // Outside of classes to optimize a little
