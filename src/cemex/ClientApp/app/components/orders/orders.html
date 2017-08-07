@@ -3,21 +3,23 @@
         <li>Orders</li>
         <li>History</li>
     </ul>
-    <div class="title-container row">
+    <div class="title-container row align-items-center">
         <div class="col-sm-8">
             <h1>All locations</h1>
             <svg class="icon-down-single-black">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use>
             </svg>
         </div>
-        <div id="cto" class="col-sm-4 float-sm-right">
-            <a class="button-ghost float-sm-right" href="#">Request order</a>
+        <div class="cto-container col-sm-4">
+            <div class="float-sm-right">
+                <a class="button-ghost" routerLink="../new">Request order</a>
+            </div>
         </div>
     </div>
 
-    <div class="table-header hidden-lg-up">
+    <!-- <div class="table-header hidden-lg-up">
         <span class="roboto-bold date-text">JANUARY  15 - 21, 2017</span>
-    </div>
+    </div> -->
 
     <orders-table></orders-table>
 </div>

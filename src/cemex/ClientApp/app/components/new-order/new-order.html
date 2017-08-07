@@ -1,0 +1,169 @@
+<div class="layout">
+    <ul class="title-nav">
+        <li>Orders</li>
+    </ul>
+    <div class="title-container row align-items-center">
+        <div class="col-md-8 col-sm-12">
+            <h1>New Order</h1>
+        </div>
+        <div class="cto-container hidden-sm-down col-md-4 col-sm-12">
+            <div class="float-md-right">
+                <a class="button-ghost" routerLink="../orders">Back</a>
+                <a class="button bright-green" href="#">Next</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="cmx-stepper center-md-up cmx-stepper-4 hidden-sm-down">
+        <div class="cmx-progress">
+            <div class="cmx-progress-line"></div>
+        </div>
+        <div class="cmx-step active">
+            <div class="cmx-step-icon">1</div>
+            <!-- <div class="cmx-step-icon">
+                <svg class="icon-completed-checkmark">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-completed-checkmark"></use>
+                </svg>
+            </div> -->
+            <p>Delivery mode</p>
+        </div>
+        <div class="cmx-step inactive">
+            <div class="cmx-step-icon">2</div>
+            <p>Prodcut line</p>
+        </div>
+
+        <div class="cmx-step inactive">
+            <div class="cmx-step-icon">3</div>
+            <p>Specifications</p>
+        </div>
+
+        <div class="cmx-step inactive">
+            <div class="cmx-step-icon">4</div>
+            <p>Summary</p>
+        </div>
+    </div>
+
+    <!-- <div class="row align-items-center no-gutters justify-content-md-center">
+        <div class="col col-lg-2">
+        </div>
+        <div class="col-12 col-md-8">
+            <div class="cmx-stepper cmx-stepper-4">
+                <div class="cmx-progress">
+                    <div class="cmx-progress-line"></div>
+                </div>
+                <div class="cmx-step completed">
+                    <div class="cmx-step-icon">
+                        <svg class="icon-completed-checkmark">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-completed-checkmark"></use>
+                </svg>
+                    </div>
+                    <p>Demo Step 1</p>
+                </div>
+
+                <div class="cmx-step active">
+                    <div class="cmx-step-icon">2</div>
+                    <p>Demo Step 2</p>
+                </div>
+
+                <div class="cmx-step inactive">
+                    <div class="cmx-step-icon">3</div>
+                    <p>Demo Step 3</p>
+                </div>
+
+                <div class="cmx-step inactive">
+                    <div class="cmx-step-icon">4</div>
+                    <p>Demo Step 4</p>
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-2">
+            <div class="cto-container center-with-steps" id="cto">
+                <a class="button-ghost float-md-right" href="#">Back</a>
+                <a class="button bright-green float-md-right" href="#">Next</a>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="jobsite-map-container">
+        <div class="row align-items-center">
+            <div class="col-md-2 col-sm-12 select-label">
+                <label for="pod-select" class="select-label">Select from existing jobiste</label>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <select id="country-field" class="form-control">
+                    <option>Riderback Eastern River Valley</option>
+                </select>
+            </div>
+            <div class="col-md-2 col-sm-12 select-label">
+                <label for="pod-select" class="select-label">Select from existing point of delivery</label>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <select id="pod-select" class="form-control">
+                    <option>Riderback Eastern River Valley</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <span class="floating-button">
+        <div class="float-badge">1</div>
+        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+    </span>
+
+    <div class="mobile-stepper hidden-md-up">
+        <div class="prev hidden-arrow">
+            <a href="#">
+                <svg class="icon-left-single">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-left-single"></use>
+                </svg>
+            </a>
+        </div>
+        <div class="current">
+            <a data-toggle="collapse" href="#collapse-steps">
+                Step 1
+                <svg class="icon-up-single">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-up-single"></use>
+                </svg>
+            </a>
+        </div>
+        <div class="next">
+            <a href="#">
+                <svg class="icon-right-single">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-single"></use>
+                </svg>
+            </a>
+        </div>
+        <div class="stepper-open collapse" id="collapse-steps">
+            <div class="stepper-container">
+                <div class="step">
+                    <div class="cmx-step-icon">
+                        <!-- <svg class="icon-completed-checkmark">
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-completed-checkmark"></use>
+                        </svg> -->
+                        1
+                        <div class="bottom-connector"></div>
+                    </div>
+                    <a href="#">Delivery mode</a>
+                </div>
+                <div class="step">
+                    <div class="cmx-step-icon cmx-step-disabled">
+                        2
+                        <div class="bottom-connector"></div>
+                    </div>
+                    <a href="#">Product line</a>
+                </div>
+                <div class="step">
+                    <div class="cmx-step-icon cmx-step-disabled">
+                        3
+                        <div class="bottom-connector"></div>
+                    </div>
+                    <a href="#">Specifications</a>
+                </div>
+                <div class="step">
+                    <div class="cmx-step-icon cmx-step-disabled">4</div>
+                    <a href="#">Summary</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

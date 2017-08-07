@@ -1,6 +1,10 @@
+@import "~bootstrap/scss/bootstrap-grid.scss";
 $link-blue: #3FA9F5;
 .layout {
     padding: 34px 17px 34px 26px;
+    @include media-breakpoint-down(sm) {
+        padding: 34px 17px 34px 17px;
+    }
 }
 
 ul.title-nav {
@@ -16,14 +20,16 @@ ul.title-nav {
             font-size: 1.625rem;
             line-height: 2rem;
             font-weight: 400;
-            &:after {
+        }
+        &:not(:first-child) {
+            &:before {
                 content: '\25CF';
                 font-size: 12px;
                 border-radius: 50%;
                 line-height: 2rem;
                 vertical-align: middle;
-                padding-left: 11px;
-                padding-right: 8px;
+                padding-left: 8px;
+                padding-right: 11px;
                 color: #002A59;
             }
         }
@@ -35,10 +41,6 @@ ul.title-nav {
     padding-bottom: 16px;
     h1 {
         display: inline;
-    }
-    #cto {
-        align-items: center;
-        margin-top: 8px;
     }
     .icon-down-single-black {
         height: 8px;
@@ -61,5 +63,17 @@ ul.title-nav {
         color: #FFFFFF;
         font-size: 16px;
         line-height: 18px;
+    }
+}
+
+.cto-container {
+    &.center-with-steps a {
+        margin-bottom: 16px;
+    }
+    a:not(:last-child) {
+        margin-right: 8px;
+    }
+    @include media-breakpoint-down(sm) {
+        margin-top: 16px;
     }
 }
