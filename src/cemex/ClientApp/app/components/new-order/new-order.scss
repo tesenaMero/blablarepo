@@ -63,9 +63,9 @@ ul.title-nav {
 }
 
 .jobsite-map-container {
-    margin: 58px 36px;
+    padding: 58px 36px;
     @include media-breakpoint-down(sm) {
-        margin: 20px 0;
+        padding: 20px 0;
     }
 }
 
@@ -135,6 +135,48 @@ select {
     border: 1px solid #ACAEBA;
     border-radius: 3px;
     height: 48px !important;
+}
+
+.select-product {
+    color: #001C3B;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 50px;
+}
+
+.products {
+    margin-top: 12px;
+}
+
+.products div {
+    height: 135px;
+    min-width: 350px;
+    padding: 0px 23px;
+    &:not(:last-child) {
+        margin-bottom: 35px;
+    }
+}
+
+.product-desc {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    color: #001C3B;
+    font-size: 20px;
+    line-height: 26px;
+    border: 1px solid #D1D1D1;
+    cursor: pointer;
+    .icon {
+        font-size: 40px;
+        margin-bottom: 17px;
+        margin-right: 27px;
+    }
+    &:hover {
+        border: 1px solid #3FA9F5;
+    }
+    &:active {
+        border: 1px solid #2684c7;
+    }
 }
 
 // Floating button
