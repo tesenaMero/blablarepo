@@ -6,6 +6,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component'
 import { OrdersComponent } from './components/orders/orders.component'
 import { OrdersTableComponent } from './components/orders-table/orders-table.component'
 import { NewOrderComponent } from './components/new-order/new-order.component'
+import { CartComponent } from './components/cart/cart.component';
 
 export const sharedConfig: NgModule = {
     bootstrap: [ AppComponent ],
@@ -15,6 +16,7 @@ export const sharedConfig: NgModule = {
         DashboardComponent,
         OrdersComponent,
         NewOrderComponent,
+        CartComponent,
 
         // Regular components
         OrdersTableComponent
@@ -23,11 +25,14 @@ export const sharedConfig: NgModule = {
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full' },
             { path: 'orders', redirectTo:'app', pathMatch:'full' },
-            { path: 'app', component:  DashboardComponent, children: [
-                { path: '', redirectTo: 'orders', pathMatch:'full' },
-                { path: 'orders', component: OrdersComponent },
-                { path: 'new', component: NewOrderComponent }
-            ]},
+            { path: 'app', component:  DashboardComponent, 
+                children: [
+                    { path: '', redirectTo: 'orders', pathMatch:'full' },
+                    { path: 'orders', component: OrdersComponent },
+                    { path: 'new', component: NewOrderComponent },
+                    { path: 'cart', component: CartComponent },
+                ]
+            },
             { path: '**', redirectTo: 'app' }
         ])
     ]
