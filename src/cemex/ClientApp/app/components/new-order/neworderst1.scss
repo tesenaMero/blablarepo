@@ -1,0 +1,372 @@
+//ok sm md
+//no ok xs xl
+@import "~bootstrap/scss/bootstrap-grid.scss";
+
+$link-blue: #3FA9F5;
+.layout {
+    padding: 34px 17px 34px 26px;
+}
+
+ul.title-nav {
+    list-style-type: none;
+    padding: 0;
+    li {
+        display: inline;
+        color: #4D4D4D;
+        font-size: 26px;
+        line-height: 2rem;
+        &:first-child {
+            color: $link-blue;
+            font-size: 1.625rem;
+            line-height: 2rem;
+            font-weight: 400;
+        }
+    }
+}
+
+.li-order {
+    display: none !important;
+}
+
+.title-container {
+    padding-top: 7px;
+    padding-bottom: 16px;
+    h1 {
+        display: inline;
+    }
+    #cto {
+        align-items: center;
+        margin-top: 8px;
+    }
+}
+
+.progress-bar-edit {    
+    margin-left: 15%;
+    font-family: Roboto;	
+    font-size: 15px;	
+    line-height: 16px;	
+    text-align: center;
+}
+
+.cmx-stepper.cmx-stepper-4 .cmx-step {
+    width: 20%;
+}
+
+.cmx-progress {
+    width: 60% !important;
+    margin-left: 10%;
+}
+
+.button-style {
+    position: relative;
+    float: left;
+    //float: right;
+    background: #F4F6F9;
+    
+}
+
+.oval1 {
+    margin-left: 18%;
+    margin-top: 10%;
+
+    //sizing
+    box-sizing: border-box;	
+    height: 263px;	
+    width: 263px;	
+    border: 2px solid #3FA9F5;
+
+    //text
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+
+    //rounded
+    border-radius: 120px;
+    height: 243px;
+    width: 243px;   
+
+    float: left;
+
+}
+
+.line {	
+    margin-left: 11%;
+    margin-top: 5%;
+    float: left;
+    box-sizing: border-box;	
+    height: 346px;	
+    width: 2px;	
+    border: 1px solid #D6D7E0;
+
+    //text
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+
+}
+
+.line-text-span {
+    background: #F4F6F9;
+}
+
+.oval2 {
+    margin-left: 9%;
+    margin-top: 10%;
+
+    //sizing
+    box-sizing: border-box;	
+    height: 263px;	
+    width: 263px;	
+    border: 2px solid #3FA9F5;
+
+    //text
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+
+    //rounded
+    border-radius: 120px;
+    height: 233px;
+    width: 233px;   
+
+    float: left;
+
+}
+
+.ovals {
+    display: flex;   
+    flex-wrap: nowrap;
+}
+
+.figure-cart {
+    float: right;
+}
+
+.row-text {
+    display: none;
+}
+
+// Floating button
+.floating-button {
+    cursor: pointer;
+    border-radius: 50%;
+    position: fixed;
+    height: 70px;
+    width: 70px;
+    background-color: #3FA9F5;
+    box-shadow: 0 8px 9px 0 rgba(17, 71, 109, 0.22);
+    bottom: 20px;
+    right: 20px;
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -o-transition: all .3s;
+    transition: all .3s;
+    &:hover {
+        -webkit-transform: scale(1.2);
+        -moz-transform: scale(1.2);
+        -o-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+    >i {
+        top: 20px;
+        left: 20px;
+        color: white;
+        position: absolute;
+        font-size: 30px;
+    }
+    .float-badge {
+        text-align: center;
+        white-space: nowrap;
+        border-radius: 50%;
+        height: 30.92px;
+        width: 30.92px;
+        background-color: #EE3D42;
+        margin-top: -8px;
+        margin-left: 42px;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 32px;
+    }
+    @include media-breakpoint-down(sm) {
+        bottom: 64px;
+    }
+}
+
+
+@include media-breakpoint-down(md) {
+    ul.title-nav {
+        list-style-type: none;
+        padding: 0;
+        li {
+            display: inline;
+            color: #4D4D4D;
+            font-size: 1.1rem;
+            line-height: 2rem;
+            &:first-child {
+                color: $link-blue;
+                font-size: 1.1rem;
+                line-height: 2rem;
+                font-weight: 400;
+                &:after {
+                    content: '\25CF';
+                    font-size: 12px;
+                    border-radius: 50%;
+                    line-height: 2rem;
+                    vertical-align: middle;
+                    padding-left: 11px;
+                    padding-right: 8px;
+                    color: #002A59;
+                }
+            }
+        }
+    }
+    .title-container {
+        h1 {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        width: 215px;   
+        display: inline;  
+        float: left; 
+        //background: red;
+    }    
+
+    .li-order {
+        display: inline-block !important;
+    }
+    
+    .oval1{
+        margin-left: 10%;
+        margin-top: 15%;
+
+        //sizing
+        box-sizing: border-box;	
+        border: 2px solid #3FA9F5;
+
+        //text
+        display: flex;
+        align-items: center;    
+        justify-content: center;
+
+        //rounded
+        border-radius: 120px;
+        height: 163px;
+        width: 163px;   
+
+        float: left;
+
+    }
+
+    .line {	        
+        margin-left: 10%;
+        margin-top: 10%;
+        float: left;
+        box-sizing: border-box;	
+        height: 226px;	
+        width: 2px;	
+        border: 1px solid #D6D7E0;
+
+        //text
+        display: flex;
+        align-items: center;    
+        justify-content: center;
+
+    }
+
+    .line-text-span {
+        background: #F4F6F9;
+    }
+
+    .oval2 {
+        margin-left: 76px;
+        margin-top: 15%;
+
+        //sizing
+        box-sizing: border-box;	
+        border: 2px solid #3FA9F5;
+
+        //text
+        display: flex;
+        align-items: center;    
+        justify-content: center;
+
+        //rounded
+        border-radius: 120px;
+        height: 163px;
+        width: 163px;   
+
+        float: left;
+
+    }
+
+    .floating-button {
+        display: none; 
+    }
+
+   .cmx-step {
+       display: none;
+   }
+   
+   .cmx-progress {
+       display: none;
+   }    
+    
+   .button-style {     
+        display: block;
+        float: right; 
+        min-width:110px;
+   }   
+
+   .cmx-step.col-sm-3.button-style {
+       display: none;
+   }
+
+   .cmx-step.col-sm-3.button-style {
+        display: block;
+        min-width: 105%;
+   }
+
+    .cmx-stepper{
+        float: left;
+        width: 30%;
+    }
+
+    .master-container {
+        clear: both;
+        display: flex;   
+        flex-wrap: nowrap;
+        min-width: 400px;
+    }
+    
+    .ovals {
+        clear: both;
+        vertical-align: bottom;
+        display: flex;   
+        flex-wrap: nowrap;
+        min-width: 525px;
+    }    
+
+    .row-text-container {
+        display: block;
+        padding-top: 30px;
+        margin-left: 25%;
+        max-width: 252px;
+        
+    } 
+    
+    .row-text {
+
+        display: block;
+        width: 40%; 
+        margin: 0 auto; 
+        min-width: 222px;
+        max-width: 402px;
+        text-align: center;
+    }        
+}
+/*
+div{
+    border: 1px solid black;
+}
+*/
