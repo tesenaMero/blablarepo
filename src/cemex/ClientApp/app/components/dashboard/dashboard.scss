@@ -1,20 +1,49 @@
 @import "~bootstrap/scss/bootstrap-grid.scss";
 $sidebar-width: 160px;
-$header-height: 56px;
+$header-height: 54px;
+$dashboard-index: 9999;
 nav.fixed {
     position: fixed;
-    z-index: 999;
+    z-index: $dashboard-index;
 }
 
 nav.side-nav-bar {
     position: fixed;
     top: $header-height;
     height: 100%;
+    z-index: $dashboard-index;
+    transition: all 0.25s ease-in-out;
+    &.moved {
+        transform: translateX(-$sidebar-width);
+    }
 }
 
 .content {
     padding-left: $sidebar-width;
     padding-top: $header-height;
+    transition: all 0.25s ease-in-out;
+    &.moved {
+        padding-left: 0px;
+    }
+}
+
+.side-nav-bar ul li .active {
+    background-image: linear-gradient(90deg, #021A35 43px, #092448 0);
+}
+
+.side-nav-bar ul li a+ul li a {
+    font-size: 14px;
+    line-height: 16px;
+    padding-top: 4px;
+    padding-bottom: 30px;
+}
+
+.side-nav-bar ul li .active+ul li a {
+    background-color: #092448;
+}
+
+.side-nav-bar ul .side-subnav li {
+    border-bottom: 0;
 }
 
 // Outside of classes to optimize a little
@@ -25,5 +54,11 @@ nav.side-nav-bar {
     .content {
         padding-left: 0;
         padding-top: $header-height;
+    }
+}
+
+@include media-breakpoint-down(xs) {
+    .cmx-logo {
+        display: none;
     }
 }

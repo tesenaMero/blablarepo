@@ -2,201 +2,589 @@
 <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
 <div class="table-responsive-vertical shadow-z-1">
     <!-- Table starts here -->
-    <table id="table" class="table table-hover table-striped">
+    <table id="table" class="table table-fixed main table-hover table-striped">
         <thead>
             <tr>
-                <th width="30px"></th>
-                <th>
+                <th width="4%"></th>
+                <th width="15%">
                     Submitted
                     <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                 </th>
-                <th>
+                <th width="20%">
                     Submitted by
                     <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                 </th>
-                <th>
+                <th width="10%">
                     Items
                     <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                 </th>
-                <th>
+                <th width="10%">
                     Products
                     <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                 </th>
-                <th>
+                <th width="20%">
                     Status
                     <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                 </th>
-                <th>
+                <th width="15%">
                     Total amount
                     <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                 </th>
-                <th>
-                    <i class="star fa fa-star" aria-hidden="true"></i>
+                <th width="7%">
+                    <i class="star cmx-icon-favourite-active" aria-hidden="true"></i>
                     <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                 </th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td class="hidden-sm-down expand">+</td>
+                <td data-toggle="collapse" data-target="#details1" class="hidden-md-down expand collapsed"></td>
                 <td data-title="Submitted">09/24/2017, 08:30</td>
                 <td data-title="Submitted by">Nettie Oliver</td>
                 <td data-title="Items">
                     2
                 </td>
                 <td data-title="Products" class="products">
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
                 </td>
                 <td data-title="Status"><span class="status in-progress"></span> In Progress</td>
                 <td data-title="Total amount">$22387.48</td>
-                <td data-title="Favorite"><i class="star active fa fa-star" aria-hidden="true"></i></td>
+                <td data-title="Favorite">
+                    <i class="star active cmx-icon-favourite-active" aria-hidden="true"></i>
+                </td>
             </tr>
+            <tr class="hidden-md-down sub sub-row">
+                <td colspan="8">
+                    <div class="collapse details" id="details1">
+                        <div class="content">
+                            <table class="table table-fixed details-table">
+                                <thead>
+                                    <th width="15%">Order Number</th>
+                                    <th width="15%">Location</th>
+                                    <th width="10%">Product</th>
+                                    <th width="10%">Amount</th>
+                                    <th width="25%">Delivery date</th>
+                                    <th width="10%">Payment</th>
+                                    <th width="10%">Payment</th>
+                                </thead>
+                                <tbody>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="hidden-md-down sub separator"></tr>
             <tr>
-                <td class="hidden-sm-down expand">+</td>
+                <td data-toggle="collapse" data-target="#details2" class="hidden-md-down expand collapsed"></td>
                 <td data-title="Submitted">09/24/2017, 08:30</td>
                 <td data-title="Submitted by">Nettie Oliver</td>
                 <td data-title="Items">
                     2
                 </td>
                 <td data-title="Products" class="products">
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
                 </td>
                 <td data-title="Status"><span class="status completed"></span> Completed</td>
                 <td data-title="Total amount">$22387.48</td>
-                <td data-title="Favorite"><i class="star fa fa-star" aria-hidden="true"></i></td>
+                <td data-title="Favorite"><i class="star cmx-icon-favourite-active" aria-hidden="true"></i></td>
             </tr>
+            <tr class="hidden-md-down sub sub-row">
+                <td colspan="8">
+                    <div class="collapse details" id="details2">
+                        <div class="content">
+                            <table class="table table-fixed details-table">
+                                <thead>
+                                    <th width="15%">Order Number</th>
+                                    <th width="15%">Location</th>
+                                    <th width="10%">Product</th>
+                                    <th width="10%">Amount</th>
+                                    <th width="25%">Delivery date</th>
+                                    <th width="10%">Payment</th>
+                                    <th width="10%">Payment</th>
+                                </thead>
+                                <tbody>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="hidden-md-down sub separator"></tr>
             <tr>
-                <td class="hidden-sm-down expand">+</td>
+                <td data-toggle="collapse" data-target="#details3" class="hidden-md-down expand collapsed"></td>
                 <td data-title="Submitted">09/24/2017, 08:30</td>
                 <td data-title="Submitted by">Nettie Oliver</td>
                 <td data-title="Items">
                     2
                 </td>
                 <td data-title="Products" class="products">
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                </td>
-                <td data-title="Status"><span class="status in-progress"></span> In Progress</td>
-                <td data-title="Total amount">$22387.48</td>
-                <td data-title="Favorite"><i class="star active fa fa-star" aria-hidden="true"></i></td>
-            </tr>
-            <tr>
-                <td class="hidden-sm-down expand">+</td>
-                <td data-title="Submitted">09/24/2017, 08:30</td>
-                <td data-title="Submitted by">Nettie Oliver</td>
-                <td data-title="Items">
-                    2
-                </td>
-                <td data-title="Products" class="products">
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
                 </td>
                 <td data-title="Status"><span class="status draft"></span> Draft</td>
                 <td data-title="Total amount">$22387.48</td>
-                <td data-title="Favorite"><i class="star active fa fa-star" aria-hidden="true"></i></td>
+                <td data-title="Favorite"><i class="star active cmx-icon-favourite-active" aria-hidden="true"></i></td>
             </tr>
+            <tr class="hidden-md-down sub sub-row">
+                <td colspan="8">
+                    <div class="collapse details" id="details3">
+                        <div class="content">
+                            <table class="table table-fixed details-table">
+                                <thead>
+                                    <th width="15%">Order Number</th>
+                                    <th width="15%">Location</th>
+                                    <th width="10%">Product</th>
+                                    <th width="10%">Amount</th>
+                                    <th width="25%">Delivery date</th>
+                                    <th width="10%">Payment</th>
+                                    <th width="10%">Payment</th>
+                                </thead>
+                                <tbody>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="hidden-md-down sub separator"></tr>
             <tr>
-                <td class="hidden-sm-down expand">+</td>
+                <td data-toggle="collapse" data-target="#details4" class="hidden-md-down expand collapsed"></td>
                 <td data-title="Submitted">09/24/2017, 08:30</td>
                 <td data-title="Submitted by">Nettie Oliver</td>
                 <td data-title="Items">
                     2
                 </td>
                 <td data-title="Products" class="products">
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
                 </td>
                 <td data-title="Status"><span class="status in-progress"></span> In Progress</td>
                 <td data-title="Total amount">$22387.48</td>
-                <td data-title="Favorite"><i class="star fa fa-star" aria-hidden="true"></i></td>
+                <td data-title="Favorite">
+                    <i class="star active cmx-icon-favourite-active" aria-hidden="true"></i>
+                </td>
             </tr>
+            <tr class="hidden-md-down sub sub-row">
+                <td colspan="8">
+                    <div class="collapse details" id="details4">
+                        <div class="content">
+                            <table class="table table-fixed details-table">
+                                <thead>
+                                    <th width="15%">Order Number</th>
+                                    <th width="15%">Location</th>
+                                    <th width="10%">Product</th>
+                                    <th width="10%">Amount</th>
+                                    <th width="25%">Delivery date</th>
+                                    <th width="10%">Payment</th>
+                                    <th width="10%">Payment</th>
+                                </thead>
+                                <tbody>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="hidden-md-down sub separator"></tr>
             <tr>
-                <td class="hidden-sm-down expand">+</td>
+                <td data-toggle="collapse" data-target="#details5" class="hidden-md-down expand collapsed"></td>
                 <td data-title="Submitted">09/24/2017, 08:30</td>
                 <td data-title="Submitted by">Nettie Oliver</td>
                 <td data-title="Items">
                     2
                 </td>
                 <td data-title="Products" class="products">
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                </td>
-                <td data-title="Status"><span class="status in-progress"></span> In Progress</td>
-                <td data-title="Total amount">$22387.48</td>
-                <td data-title="Favorite"><i class="star active fa fa-star" aria-hidden="true"></i></td>
-            </tr>
-            <tr>
-                <td class="hidden-sm-down expand">+</td>
-                <td data-title="Submitted">09/24/2017, 08:30</td>
-                <td data-title="Submitted by">Nettie Oliver</td>
-                <td data-title="Items">
-                    2
-                </td>
-                <td data-title="Products" class="products">
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
                 </td>
                 <td data-title="Status"><span class="status completed"></span> Completed</td>
                 <td data-title="Total amount">$22387.48</td>
-                <td data-title="Favorite"><i class="star fa fa-star" aria-hidden="true"></i></td>
+                <td data-title="Favorite"><i class="star cmx-icon-favourite-active" aria-hidden="true"></i></td>
             </tr>
+            <tr class="hidden-md-down sub sub-row">
+                <td colspan="8">
+                    <div class="collapse details" id="details5">
+                        <div class="content">
+                            <table class="table table-fixed details-table">
+                                <thead>
+                                    <th width="15%">Order Number</th>
+                                    <th width="15%">Location</th>
+                                    <th width="10%">Product</th>
+                                    <th width="10%">Amount</th>
+                                    <th width="25%">Delivery date</th>
+                                    <th width="10%">Payment</th>
+                                    <th width="10%">Payment</th>
+                                </thead>
+                                <tbody>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="hidden-md-down sub separator"></tr>
             <tr>
-                <td class="hidden-sm-down expand">+</td>
+                <td data-toggle="collapse" data-target="#details6" class="hidden-md-down expand collapsed"></td>
                 <td data-title="Submitted">09/24/2017, 08:30</td>
                 <td data-title="Submitted by">Nettie Oliver</td>
                 <td data-title="Items">
                     2
                 </td>
                 <td data-title="Products" class="products">
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                </td>
-                <td data-title="Status"><span class="status in-progress"></span> In Progress</td>
-                <td data-title="Total amount">$22387.48</td>
-                <td data-title="Favorite"><i class="star active fa fa-star" aria-hidden="true"></i></td>
-            </tr>
-            <tr>
-                <td class="hidden-sm-down expand">+</td>
-                <td data-title="Submitted">09/24/2017, 08:30</td>
-                <td data-title="Submitted by">Nettie Oliver</td>
-                <td data-title="Items">
-                    2
-                </td>
-                <td data-title="Products" class="products">
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
                 </td>
                 <td data-title="Status"><span class="status draft"></span> Draft</td>
                 <td data-title="Total amount">$22387.48</td>
-                <td data-title="Favorite"><i class="star active fa fa-star" aria-hidden="true"></i></td>
+                <td data-title="Favorite"><i class="star active cmx-icon-favourite-active" aria-hidden="true"></i></td>
             </tr>
+            <tr class="hidden-md-down sub sub-row">
+                <td colspan="8">
+                    <div class="collapse details" id="details6">
+                        <div class="content">
+                            <table class="table table-fixed details-table">
+                                <thead>
+                                    <th width="15%">Order Number</th>
+                                    <th width="15%">Location</th>
+                                    <th width="10%">Product</th>
+                                    <th width="10%">Amount</th>
+                                    <th width="25%">Delivery date</th>
+                                    <th width="10%">Payment</th>
+                                    <th width="10%">Payment</th>
+                                </thead>
+                                <tbody>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="hidden-md-down sub separator"></tr>
             <tr>
-                <td class="hidden-sm-down expand">+</td>
+                <td data-toggle="collapse" data-target="#details7" class="hidden-md-down expand collapsed"></td>
                 <td data-title="Submitted">09/24/2017, 08:30</td>
                 <td data-title="Submitted by">Nettie Oliver</td>
                 <td data-title="Items">
                     2
                 </td>
                 <td data-title="Products" class="products">
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
-                    <i class="fa fa-truck" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
                 </td>
                 <td data-title="Status"><span class="status in-progress"></span> In Progress</td>
                 <td data-title="Total amount">$22387.48</td>
-                <td data-title="Favorite"><i class="star fa fa-star" aria-hidden="true"></i></td>
+                <td data-title="Favorite">
+                    <i class="star active cmx-icon-favourite-active" aria-hidden="true"></i>
+                </td>
             </tr>
+            <tr class="hidden-md-down sub sub-row">
+                <td colspan="8">
+                    <div class="collapse details" id="details7">
+                        <div class="content">
+                            <table class="table table-fixed details-table">
+                                <thead>
+                                    <th width="15%">Order Number</th>
+                                    <th width="15%">Location</th>
+                                    <th width="10%">Product</th>
+                                    <th width="10%">Amount</th>
+                                    <th width="25%">Delivery date</th>
+                                    <th width="10%">Payment</th>
+                                    <th width="10%">Payment</th>
+                                </thead>
+                                <tbody>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="hidden-md-down sub separator"></tr>
+            <tr>
+                <td data-toggle="collapse" data-target="#details8" class="hidden-md-down expand collapsed"></td>
+                <td data-title="Submitted">09/24/2017, 08:30</td>
+                <td data-title="Submitted by">Nettie Oliver</td>
+                <td data-title="Items">
+                    2
+                </td>
+                <td data-title="Products" class="products">
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                </td>
+                <td data-title="Status"><span class="status completed"></span> Completed</td>
+                <td data-title="Total amount">$22387.48</td>
+                <td data-title="Favorite"><i class="star cmx-icon-favourite-active" aria-hidden="true"></i></td>
+            </tr>
+            <tr class="hidden-md-down sub sub-row">
+                <td colspan="8">
+                    <div class="collapse details" id="details8">
+                        <div class="content">
+                            <table class="table table-fixed details-table">
+                                <thead>
+                                    <th width="15%">Order Number</th>
+                                    <th width="15%">Location</th>
+                                    <th width="10%">Product</th>
+                                    <th width="10%">Amount</th>
+                                    <th width="25%">Delivery date</th>
+                                    <th width="10%">Payment</th>
+                                    <th width="10%">Payment</th>
+                                </thead>
+                                <tbody>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="hidden-md-down sub separator"></tr>
+            <tr>
+                <td data-toggle="collapse" data-target="#details9" class="hidden-md-down expand collapsed"></td>
+                <td data-title="Submitted">09/24/2017, 08:30</td>
+                <td data-title="Submitted by">Nettie Oliver</td>
+                <td data-title="Items">
+                    2
+                </td>
+                <td data-title="Products" class="products">
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                    <i class="cmx-icon-driver" aria-hidden="true"></i>
+                </td>
+                <td data-title="Status"><span class="status draft"></span> Draft</td>
+                <td data-title="Total amount">$22387.48</td>
+                <td data-title="Favorite"><i class="star active cmx-icon-favourite-active" aria-hidden="true"></i></td>
+            </tr>
+            <tr class="hidden-md-down sub sub-row">
+                <td colspan="8">
+                    <div class="collapse details" id="details9">
+                        <div class="content">
+                            <table class="table table-fixed details-table">
+                                <thead>
+                                    <th width="15%">Order Number</th>
+                                    <th width="15%">Location</th>
+                                    <th width="10%">Product</th>
+                                    <th width="10%">Amount</th>
+                                    <th width="25%">Delivery date</th>
+                                    <th width="10%">Payment</th>
+                                    <th width="10%">Payment</th>
+                                </thead>
+                                <tbody>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                    <tr class="order">
+                                        <td class="number">7543189021</td>
+                                        <td>054 Gilberto Ford</td>
+                                        <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
+                                        <td>10 Tons</td>
+                                        <td>31/12/2017, 15:00</td>
+                                        <td>Cash</td>
+                                        <td class="payment">$7,557.66</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="hidden-md-down sub separator"></tr>
         </tbody>
     </table>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="pagination">
+            <li class="pagination-prev hide">
+                <a href="#">
+                    <svg class="icon-straight-arrow-left">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-straight-arrow-left"></use>
+                    </svg>
+                </a>
+            </li>
+            <li><a class="current" href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><span>...</span></li>
+            <li><a href="#">12</a></li>
+            <li class="pagination-next">
+                <a href="#">
+                    <svg class="icon-straight-arrow-right">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-straight-arrow-right"></use>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+        <!-- <div class="pagination">
+            <span class="active">1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+            <span>5</span>
+            <span>
+                <svg class="icon-right-single-blue">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-single"></use>
+                </svg>
+            </span>
+        </div> -->
+    </div>
 </div>

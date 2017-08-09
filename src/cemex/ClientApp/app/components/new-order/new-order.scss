@@ -1,0 +1,227 @@
+@import "~bootstrap/scss/bootstrap-grid.scss";
+$link-blue: #3FA9F5;
+.layout {
+    padding: 34px 17px 34px 26px;
+    @include media-breakpoint-down(sm) {
+        padding: 34px 17px 34px 17px;
+    }
+}
+
+ul.title-nav {
+    list-style-type: none;
+    padding: 0;
+    li {
+        display: inline;
+        color: #4D4D4D;
+        font-size: 26px;
+        line-height: 2rem;
+        &:first-child {
+            color: $link-blue;
+            font-size: 1.625rem;
+            line-height: 2rem;
+            font-weight: 400;
+        }
+        &:not(:first-child) {
+            &:before {
+                content: '\25CF';
+                font-size: 12px;
+                border-radius: 50%;
+                line-height: 2rem;
+                vertical-align: middle;
+                padding-left: 8px;
+                padding-right: 11px;
+                color: #002A59;
+            }
+        }
+    }
+}
+
+.title-container {
+    padding-top: 7px;
+    padding-bottom: 16px;
+    h1 {
+        display: inline;
+    }
+    .icon-down-single-black {
+        height: 8px;
+        width: 17px;
+        vertical-align: 10px;
+        margin-left: 11px;
+    }
+}
+
+.cto-container {
+    &.center-with-steps a {
+        margin-bottom: 16px;
+    }
+    a:not(:last-child) {
+        margin-right: 8px;
+    }
+    @include media-breakpoint-down(sm) {
+        margin-top: 16px;
+    }
+}
+
+.jobsite-map-container {
+    padding: 58px 36px;
+    @include media-breakpoint-down(sm) {
+        padding: 20px 0;
+    }
+}
+
+// Down here the component stuff
+//
+//
+// Stepper
+//============================================
+// Overrides on garbage DLS CSS
+.cmx-stepper.center-md-up {
+    margin: 0 128px;
+    @include media-breakpoint-down(md) {
+        margin: 0;
+    }
+}
+
+.cmx-stepper.cmx-stepper-4 .cmx-progress {
+    width: 76%;
+    margin-left: 0;
+    transform: translateX(16%);
+}
+
+.cmx-stepper {
+    .cmx-step p {
+        word-break: break-word;
+    }
+}
+
+.mobile-stepper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+.stepper-container {
+    padding: 30px;
+    min-height: 160px;
+}
+
+.stepper-open {
+    width: 100%;
+    min-height: 0;
+    background: #003876;
+    border-bottom: 1px solid #fff;
+    position: absolute;
+    bottom: 48px;
+    color: #fff;
+    font-size: 1rem;
+    padding: 0;
+}
+
+// Jobsite selection
+// ============================================
+.select-label {
+    color: #001C3B;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: left;
+    @include media-breakpoint-down(sm) {
+        &:not(:first-child) {
+            margin-top: 26px;
+        }
+    }
+}
+
+select {
+    border: 1px solid #ACAEBA;
+    border-radius: 3px;
+    height: 48px !important;
+}
+
+.select-product {
+    color: #001C3B;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 50px;
+}
+
+.products {
+    margin-top: 12px;
+}
+
+.products div {
+    height: 135px;
+    min-width: 350px;
+    padding: 0px 23px;
+    &:not(:last-child) {
+        margin-bottom: 35px;
+    }
+}
+
+.product-desc {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    color: #001C3B;
+    font-size: 20px;
+    line-height: 26px;
+    border: 1px solid #D1D1D1;
+    cursor: pointer;
+    .icon {
+        font-size: 40px;
+        margin-bottom: 17px;
+        margin-right: 27px;
+    }
+    &:hover {
+        border: 1px solid #3FA9F5;
+    }
+    &:active {
+        border: 1px solid #2684c7;
+    }
+}
+
+// Floating button
+.floating-button {
+    cursor: pointer;
+    border-radius: 50%;
+    position: fixed;
+    height: 70px;
+    width: 70px;
+    background-color: #3FA9F5;
+    box-shadow: 0 8px 9px 0 rgba(17, 71, 109, 0.22);
+    bottom: 20px;
+    right: 20px;
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -o-transition: all .3s;
+    transition: all .3s;
+    &:hover {
+        -webkit-transform: scale(1.2);
+        -moz-transform: scale(1.2);
+        -o-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+    >i {
+        top: 20px;
+        left: 20px;
+        color: white;
+        position: absolute;
+        font-size: 30px;
+    }
+    .float-badge {
+        text-align: center;
+        white-space: nowrap;
+        border-radius: 50%;
+        height: 30.92px;
+        width: 30.92px;
+        background-color: #EE3D42;
+        margin-top: -8px;
+        margin-left: 42px;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 32px;
+    }
+    @include media-breakpoint-down(sm) {
+        bottom: 64px;
+    }
+}

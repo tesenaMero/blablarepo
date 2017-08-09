@@ -17,3 +17,79 @@
 .status.draft:before {
     background-color: #E45C00;
 }
+
+.sub-row {
+    background-color: #E7EBEE;
+    td {
+        padding: 0 !important;
+    }
+}
+
+.expand {
+    text-align: center !important;
+    cursor: pointer;
+    &:after {
+        content: '-';
+    }
+    &.collapsed:after {
+        content: '+';
+    }
+}
+
+.details {
+    .content {
+        padding: 14px 42px 13px 42px;
+    }
+}
+
+.star {
+    color: #C8D0DC;
+    &.active {
+        color: #F1C40F;
+    }
+}
+
+.products {
+    .cmx-icon-driver {
+        font-size: 18px;
+    }
+}
+
+// Inside table
+.details-table {
+    margin-left: 1%;
+    background-color: inherit !important;
+    thead {
+        th {
+            font-weight: 700;
+            color: #001C3B;
+            border-bottom: 0;
+            font-size: 12px;
+            line-height: 16px;
+            padding-left: 0;
+        }
+    }
+    tbody {
+        td {
+            border: 0;
+            padding: 14px 0px !important;
+            padding-right: 8px !important;
+        }
+        .order {
+            background-color: inherit !important;
+            font-size: 14px;
+            line-height: 16px;
+            .number {
+                color: #37A7F8;
+                font-size: 14px;
+                font-weight: bold;
+            }
+            .payment {
+                font-weight: bold;
+            }
+            .product {
+                font-size: 18px;
+            }
+        }
+    }
+}

@@ -3,7 +3,7 @@
 // ---------------------
 $table-header-font-weight: 700;
 $table-header-font-color: #001C3B;
-$table-cell-padding: 13px;
+$table-cell-padding: 15px;
 $table-condensed-cell-padding: $table-cell-padding/2;
 $table-bg: #fff;
 $table-bg-accent: #E7EAEE;
@@ -27,40 +27,18 @@ $table-border-color: #e0e0e0;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
 }
 
-.separator {
-    height: 8px;
-}
-
-.table thead th {
-    border: 0;
-}
-
-// Hacks to fix the table
-.table-fixed {
-    table-layout: fixed;
-    th,
-    td {
-        overflow: hidden;
-        word-break: break-all;
-        // new below
-        -webkit-box-flex: 1;
-        -ms-flex-positive: 1;
-        flex-grow: 1;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-}
-
 // Tables
-// ------------------------
+//
+// -----------------
 // Baseline styles
-.table.main {
+.table {
     width: 100%;
     max-width: 100%;
     margin-bottom: 2rem;
     background-color: $table-bg;
     background-color: inherit;
+    border-collapse: separate;
+    border-spacing: 0 5px;
     >thead,
     >tbody,
     >tfoot {
@@ -82,13 +60,6 @@ $table-border-color: #e0e0e0;
                     line-height: 24px;
                 }
             }
-        }
-    }
-    >tbody,
-    >tfoot {
-        >tr:not(.sub) {
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
-            border-radius: 2px;
         }
     }
     >thead>tr {
@@ -170,28 +141,13 @@ $table-border-color: #e0e0e0;
 //
 // Default zebra-stripe styles (alternating gray and transparent backgrounds)
 .table-striped {
-    >tbody>tr:not(.sub):nth-child(even) {
+    >tbody>tr:nth-child(even) {
         >td,
         >th {
             background-color: $table-bg-accent;
         }
     }
-    >tbody>tr:not(.sub):nth-child(odd) {
-        >td,
-        >th {
-            background-color: $table-bg;
-        }
-    }
-}
-
-.table-striped {
-    >tbody>tr.sub:nth-child(odd) {
-        >td,
-        >th {
-            background-color: $table-bg-accent;
-        }
-    }
-    >tbody>tr.sub:nth-child(even) {
+    >tbody>tr:nth-child(odd) {
         >td,
         >th {
             background-color: $table-bg;
@@ -200,15 +156,15 @@ $table-border-color: #e0e0e0;
 }
 
 // Hover effect
-.table-hover {
-    >tbody>tr:hover {
-        >td,
-        >th {
-            background-color: $table-bg-hover;
-        }
-    }
-}
-
+//
+// .table-hover {
+//     >tbody>tr:hover {
+//         >td,
+//         >th {
+//             background-color: $table-bg-hover;
+//         }
+//     }
+// }
 // Responsive tables (vertical)
 // =================================================
 // Wrap your tables in `.table-responsive-vertical` and we'll make them mobile friendly
@@ -290,28 +246,5 @@ $table-border-color: #e0e0e0;
                 }
             }
         }
-    }
-}
-
-// Pagination
-.pagination {
-    float: right;
-    span {
-        cursor: pointer;
-        // border-radius: 2px;
-        // text-align: center;
-        // color: #5C6570;
-        // font-size: 15px;
-        // line-height: 20px;
-        // padding: 3px 9px;
-        // &.active {
-        //     border: 1px solid #29A6F3;
-        //     color: #29A6F3;
-        //     font-weight: bold;
-        // }
-        // svg {
-        //     width: 13px;
-        //     height: 13px;
-        // }
     }
 }
