@@ -18,7 +18,7 @@ export const sharedConfig: NgModule = {
         OrdersComponent,
         NewOrderComponent,
         CartComponent,
-	NewOrderComponentSt1,
+	    NewOrderComponentSt1,
 
         // Regular components
         OrdersTableComponent
@@ -29,11 +29,11 @@ export const sharedConfig: NgModule = {
             { path: 'orders', redirectTo:'app', pathMatch:'full' },
             { path: 'app', component:  DashboardComponent, children: [
                 	{ path: '', redirectTo: 'orders', pathMatch:'full' },
-		        { path: 'orders', component: OrdersComponent },
-		        { path: 'newst1', component: NewOrderComponentSt1 },		    
-	        	{ path: 'new', component: NewOrderComponent },
-		        { path: 'cart', component: CartComponent },
-		]
+                    { path: 'orders', component: OrdersComponent },
+                    { path: 'newst1', component: NewOrderComponentSt1 },		    
+                    { path: 'new', component: NewOrderComponent },
+                    { path: 'cart', component: CartComponent },
+		        ]
             },
             { path: '**', redirectTo: 'app' }
         ])
