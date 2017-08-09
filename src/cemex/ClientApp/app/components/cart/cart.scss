@@ -1,0 +1,77 @@
+@import "~bootstrap/scss/bootstrap-grid.scss";
+$link-blue: #3FA9F5;
+.layout {
+    padding: 34px 17px 34px 26px;
+    @include media-breakpoint-down(sm) {
+        padding: 34px 17px 34px 17px;
+    }
+}
+
+ul.title-nav {
+    list-style-type: none;
+    padding: 0;
+    li {
+        display: inline;
+        color: #4D4D4D;
+        font-size: 26px;
+        line-height: 2rem;
+        &:first-child {
+            color: $link-blue;
+            font-size: 1.625rem;
+            line-height: 2rem;
+            font-weight: 400;
+        }
+        &:not(:first-child) {
+            &:before {
+                content: '\25CF';
+                font-size: 12px;
+                border-radius: 50%;
+                line-height: 2rem;
+                vertical-align: middle;
+                padding-left: 8px;
+                padding-right: 11px;
+                color: #002A59;
+            }
+        }
+    }
+}
+
+.title-container {
+    padding-top: 7px;
+    padding-bottom: 16px;
+    h1 {
+        display: inline;
+        @include media-breakpoint-down(sm) {
+            font-size: 24px;
+        }
+    }
+}
+
+.cto-container {
+    &.center-with-steps a {
+        margin-bottom: 16px;
+    }
+    a:not(:last-child) {
+        margin-right: 8px;
+    }
+    @include media-breakpoint-down(sm) {
+        margin-top: 16px;
+    }
+}
+
+.cart-items-container {
+    .payment-method {
+        margin: 20px 0;
+    }
+    .cart-item-container {
+        .product-type {
+            color: #001C3B;
+            font-weight: bold;
+            line-height: 50px;
+        }
+    }
+}
+
+.button-ghost, .button {
+    margin-bottom: 10px;
+}
