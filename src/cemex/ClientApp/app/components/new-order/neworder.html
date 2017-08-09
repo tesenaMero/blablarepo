@@ -1,42 +1,46 @@
 <div class="layout">
     <ul class="title-nav">
         <li>Orders</li>
+        <li class="li-order">New Order</li>
     </ul>
-    <div class="title-container row">
-        <div class="col-sm-8">
-            <h1>New Order</h1>
-        </div>
-    </div>    
+    <div class="master-container">
+        <div class="title-container row">
+            <div class="col-sm-8">
+                <h1>New Order</h1>  
+            </div>
+        </div>    
 
-    <div class="cmx-stepper cmx-stepper-5 progress-bar-edit">
-        <div class="cmx-progress">
-            <div class="cmx-progress-line"></div>
-        </div>
-        
-        <div class="cmx-step active">
-            <div class="cmx-step-icon">1</div>
-            <p>Delivery mode</p>
-        </div>
-
-        <div class="cmx-step inactive">
-            <div class="cmx-step-icon">2</div>
-            <p>Product line</p>
-        </div>
+        <div class="cmx-stepper cmx-stepper-4 progress-bar-edit">
+            <div class="cmx-progress">
+                <div class="cmx-progress-line"></div>
+            </div>
             
-            <div class="cmx-step inactive">
-            <div class="cmx-step-icon">3</div>
-            <p>Specifications</p>
-        </div>
+            <div class="cmx-step active">
+                <div class="cmx-step-icon">1</div>
+                <p>Delivery mode</p>
+            </div>
 
-        <div class="cmx-step inactive">
-            <div class="cmx-step-icon">4</div>
-            <p>Summary</p>
-        </div>
-        <div id="exit" class="cmx-step col-sm-3 button-style">
-            <a class="button-ghost float-sm-right" href="#">EXIT</a>
+            <div class="cmx-step inactive">
+                <div class="cmx-step-icon">2</div>
+                <p>Product line</p>
+            </div>
+                
+                <div class="cmx-step inactive">
+                <div class="cmx-step-icon">3</div>
+                <p>Specifications</p>
+            </div>
+
+            <div class="cmx-step inactive">
+                <div class="cmx-step-icon">4</div>
+                <p>Summary</p>
+            </div>
+            <div id="exit" class="cmx-step col-sm-3 button-style">
+                <a class="button-ghost float-sm-right" href="#">EXIT</a>
+            </div>
         </div>
     </div>
-    <div>
+
+    <div class="row ovals">
         <div class="oval1">
             Delivery
         </div>
@@ -45,12 +49,15 @@
         </div>    
         <div class="oval2">
             PICKUP
-        </div>        
-            <div class="figure-cart">        
-                <svg class="icon-down-single-black">
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-magnifier-glass"></use>
-                </svg>
-            </div>    
-        
+        </div>          
+    </div>
+    <div class="row-text-container">      
+        <a routerLink="../cart" class="floating-button">
+            <div class="float-badge">1</div>
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+        </a>        
+        <div class="row-text">
+            <span>Please select how will you be <br />a receiving the product?</span>
+        </div>    
     </div>
 </div>
