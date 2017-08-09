@@ -12,6 +12,9 @@ if [ "$1" == "clean" ]; then
     printf "Cleaning ${CYAN}webpack${NC} dist\n"
     rm -rf ClientApp/dist/
     rm -rf wwwroot/dist/
+
+    printf "Cleaning ${CYAN}dls submodule${NC} dist\n"
+    rm -rf submodules/dls/node_modules
 fi
 
 printf ".NET Environment: ${CYAN}Development${NC}\n"
