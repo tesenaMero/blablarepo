@@ -117,6 +117,7 @@ ul.title-nav {
     padding: 0;
 }
 
+// Step 1
 // Jobsite selection
 // ============================================
 .select-label {
@@ -144,6 +145,14 @@ select {
     line-height: 50px;
 }
 
+#map {
+    height: 417px;
+    margin-top: 27px;
+}
+
+// Step 2. 
+// Product selection
+// ============================================
 .products {
     margin-top: 12px;
 }
