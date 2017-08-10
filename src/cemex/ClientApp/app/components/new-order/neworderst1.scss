@@ -133,6 +133,16 @@ ul.title-nav {
 
 }
 
+.box-order {
+    stroke: #3FA9F5;
+    stroke-width: .5px;
+    //stroke-linecap: butt;
+    background: F4F6F9;
+    -ms-transform: rotate(240deg); /* IE 9 */
+    -webkit-transform: rotate(240deg); /* Chrome, Safari, Opera */
+    transform: rotate(240deg);    
+}
+
 .ovals {
     display: flex;   
     flex-wrap: nowrap;
