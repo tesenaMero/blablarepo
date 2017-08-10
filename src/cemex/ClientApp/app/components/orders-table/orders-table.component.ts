@@ -12,4 +12,9 @@ export class OrdersTableComponent implements OnInit {
   ngOnInit() {
   }
 
+  changePage(page) {
+    // TODO
+    console.log('handle pagination', page);
+  }
+
 }
