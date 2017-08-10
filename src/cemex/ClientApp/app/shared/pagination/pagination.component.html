@@ -1,0 +1,21 @@
+<ul class="pagination">
+    <li *ngIf="currentPage != 1" class="pagination-prev">
+        <a (click)="setPage(currentPage - 1)">
+            <svg class="icon-straight-arrow-left">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-straight-arrow-left"></use>
+            </svg>
+        </a>
+    </li>
+    <li *ngFor="let page of pages | async" >
+        <a [class.current]="page == currentPage" (click)="setPage(page)">
+            {{page}}
+        </a>
+    </li>
+     <li *ngIf="pages.length != currentPage" class="pagination-next">
+        <a (click)="setPage(currentPage + 1)">
+            <svg class="icon-straight-arrow-right">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-straight-arrow-right"></use>
+            </svg>
+        </a>
+    </li> 
+</ul>

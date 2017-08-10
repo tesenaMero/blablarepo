@@ -7,6 +7,7 @@ import { OrdersComponent } from './components/orders/orders.component'
 import { OrdersTableComponent } from './components/orders-table/orders-table.component'
 import { NewOrderComponent } from './components/new-order/new-order.component'
 import { CartComponent } from './components/cart/cart.component';
+import { PaginationComponent } from './shared/pagination/pagination.component';
 
 export const sharedConfig: NgModule = {
     bootstrap: [ AppComponent ],
@@ -19,7 +20,10 @@ export const sharedConfig: NgModule = {
         CartComponent,
 
         // Regular components
-        OrdersTableComponent
+        OrdersTableComponent,
+
+        // Shared
+        PaginationComponent,
     ],
     imports: [
         RouterModule.forRoot([
