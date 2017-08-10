@@ -8,9 +8,11 @@ import { OrdersTableComponent } from './components/orders-table/orders-table.com
 import { NewOrderComponent } from './components/new-order/new-order.component'
 import { CartComponent } from './components/cart/cart.component';
 import { PaginationComponent } from './shared/pagination/pagination.component';
+import { SpecificationsTableComponent } from './components/specifications-table/specifications-table.component'
+import { ProductSelectionComponent } from './components/product-selection/product-selection.component'
 
 export const sharedConfig: NgModule = {
-    bootstrap: [ AppComponent ],
+    bootstrap: [AppComponent],
     declarations: [
         // Hosts (page route parents)
         AppComponent,
@@ -21,17 +23,20 @@ export const sharedConfig: NgModule = {
 
         // Regular components
         OrdersTableComponent,
+        SpecificationsTableComponent,
+        ProductSelectionComponent,
 
         // Shared
-        PaginationComponent,
+        PaginationComponent
     ],
     imports: [
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full' },
-            { path: 'orders', redirectTo:'app', pathMatch:'full' },
-            { path: 'app', component:  DashboardComponent, 
+            { path: 'orders', redirectTo: 'app', pathMatch: 'full' },
+            {
+                path: 'app', component: DashboardComponent,
                 children: [
-                    { path: '', redirectTo: 'orders', pathMatch:'full' },
+                    { path: '', redirectTo: 'orders', pathMatch: 'full' },
                     { path: 'orders', component: OrdersComponent },
                     { path: 'new', component: NewOrderComponent },
                     { path: 'cart', component: CartComponent },

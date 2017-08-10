@@ -16,7 +16,7 @@ export class NewOrderComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
-        GoogleMapsHelper.lazyLoadMap("map", (map) => {
+        GoogleMapsHelper.lazyLoadMap("jobsite-selection-map", (map) => {
             this.map = map;
             map.setOptions({ zoom: 14, center: { lat: 50.077626, lng: 14.424686 } });
         });

@@ -1,0 +1,15 @@
+// DLS CSS mods
+.control>a {
+    &:hover {
+        border: 1px solid transparent;
+    }
+}
+
+// Fix when <a> shows black text when there's not a href
+a.current:hover {
+    color: white;
+}
+
+.pagination li {
+    cursor: pointer;
+}

@@ -5,7 +5,7 @@
  * @param: string: The <div> id
  * @callback: (): map instance
  * 
- * Example:
+ * Example adding default options and a marker:
  * GoogleMapsHelper.lazyLoadMap("map", (map) => {
  *     map.setOptions(GoogleMapsHelper.mapOptions);
  *     var marker = new google.maps.Marker({
@@ -36,7 +36,6 @@ export class GoogleMapsHelper {
         }
         else {
             // Script already added
-            console.log("Already loaded script")
             let map = new google.maps.Map(document.getElementById(id));
             callback(map);
         }
