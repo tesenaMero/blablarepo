@@ -39,10 +39,14 @@ ul.title-nav {
 .title-container {
     padding-top: 7px;
     padding-bottom: 16px;
+    margin-bottom: 76px;
+    @include media-breakpoint-down(sm) {
+        margin-bottom: 36px;
+    }
     h1 {
         display: inline;
         @include media-breakpoint-down(sm) {
-            font-size: 24px;
+            font-size: 30px;
         }
     }
 }
@@ -72,6 +76,13 @@ ul.title-nav {
     }
 }
 
-.button-ghost, .button {
+.special-separate {
+    margin-right: 8px;
     margin-bottom: 10px;
+    margin-left: 8px;
+}
+
+// Mods con DLS CSS
+.button-ghost {
+    color: #3fa9f5 !important;
 }
