@@ -1,3 +1,17 @@
+Setup project
+=================
+1. Clone this repository (with submodules)
+```sh
+> git clone --recursive -b development https://danielcardeenas@bitbucket.org/cemex/rewebapporderproductcust2.git
+```
+2. Run the compilation script
+```sh
+> cd src/cemex
+> bash compile.sh
+```
+
+Thats it you are ready to go
+
 Project Workflow and Conventions
 =================
 
