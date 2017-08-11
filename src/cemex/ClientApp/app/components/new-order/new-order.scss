@@ -131,6 +131,8 @@ ul.title-nav {
     // }
 }
 
+// Hack for iPhone 5 resolution
+$really-sm: 376px;
 .circle {
     border: 2px solid #3FA9F5;
     border-radius: 50%;
@@ -148,12 +150,39 @@ ul.title-nav {
     color: #3FA9F5;
     font-weight: 500;
     cursor: pointer;
-    -webkit-transition: all .3s;
-    -moz-transition: all .3s;
-    -o-transition: all .3s;
-    transition: all .3s;
+    -webkit-transition: -webkit-transform .2s;
+    -moz-transition: -moz-transform .2s;
+    -o-transition: -o-transform .2s;
+    transition: transform .2s;
+    @media (max-width: $really-sm) {
+        margin: 0;
+    }
     &:hover {
         transform: scale(1.1);
+    }
+    .icon {
+        font-size: 50px;
+        width: 70px;
+        height: 55px;
+    }
+}
+
+.or-divider {
+    height: 23vw;
+    width: 2px;
+    min-height: 130px;
+    max-height: 358.97px;
+    background-color: #D6D7E0;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    span {
+        color: #001C3B;
+        font-family: Roboto;
+        font-size: 12px;
+        background-color: #F4F6F9;
+        align-self: center;
     }
 }
 

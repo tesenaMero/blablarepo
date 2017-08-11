@@ -45,9 +45,8 @@ export class GoogleMapsHelper {
     static removeFontImport() {
         let head = document.getElementsByTagName('head')[0];
         let insertBefore = head.insertBefore;
-        head.insertBefore = (newChild: any, referenceElement:any): any => {
+        head.insertBefore = (newChild: any, referenceElement: any): any => {
             if (newChild.href && newChild.href.indexOf('//fonts.googleapis.com/css?family=Roboto') > -1) {
-                //console.info('Prevented Roboto from loading!');
                 return;
             }
             insertBefore.call(head, newChild, referenceElement);
