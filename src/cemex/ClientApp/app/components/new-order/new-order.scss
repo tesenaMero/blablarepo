@@ -165,6 +165,17 @@ $really-sm: 376px;
         width: 70px;
         height: 55px;
     }
+    @include media-breakpoint-down(sm) {
+        background-color: #E5E7EF;
+        color: #9096AB;
+        border: 0;
+        font-size: 18px;
+        box-shadow: 0 6px 9px 0 rgba(17, 71, 109, 0.22);
+        .icon {
+            visibility: hidden;
+            display: none;
+        }
+    }
 }
 
 .or-divider {
