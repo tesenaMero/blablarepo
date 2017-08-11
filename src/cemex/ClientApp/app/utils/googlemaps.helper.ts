@@ -21,9 +21,10 @@ export class GoogleMapsHelper {
     private static src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCpk_GAvrtS8yi-y6Dx8k5hltS18uxjUPI"
     private static scriptId = "googlemapsapi"
 
-    static lazyLoadMap(id = "map", callback: (map) => any) : void {
+    static lazyLoadMap(id = "map", callback: (map) => any): void {
         if (!document.getElementById(this.scriptId)) {
             // Appends script into html
+            GoogleMapsHelper.removeFontImport()
             document.body.appendChild(Object.assign(document.createElement('script'), {
                 type: 'text/javascript',
                 id: this.scriptId,
@@ -39,6 +40,18 @@ export class GoogleMapsHelper {
             let map = new google.maps.Map(document.getElementById(id));
             callback(map);
         }
+    }
+
+    static removeFontImport() {
+        let head = document.getElementsByTagName('head')[0];
+        let insertBefore = head.insertBefore;
+        head.insertBefore = (newChild: any, referenceElement:any): any => {
+            if (newChild.href && newChild.href.indexOf('//fonts.googleapis.com/css?family=Roboto') > -1) {
+                //console.info('Prevented Roboto from loading!');
+                return;
+            }
+            insertBefore.call(head, newChild, referenceElement);
+        };
     }
 
     // Google map options
