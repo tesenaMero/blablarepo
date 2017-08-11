@@ -10,6 +10,7 @@ import { CartComponent } from './components/cart/cart.component';
 import { PaginationComponent } from './shared/pagination/pagination.component';
 import { SpecificationsTableComponent } from './components/specifications-table/specifications-table.component'
 import { ProductSelectionComponent } from './components/product-selection/product-selection.component'
+import { BreadcrumbsComponent, BreadcrumbsItemComponent } from './shared/breadcrumbs'
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
@@ -27,7 +28,9 @@ export const sharedConfig: NgModule = {
         ProductSelectionComponent,
 
         // Shared
-        PaginationComponent
+        PaginationComponent,
+        BreadcrumbsComponent,
+        BreadcrumbsItemComponent
     ],
     imports: [
         RouterModule.forRoot([
