@@ -154,9 +154,9 @@ $really-sm: 376px;
     -moz-transition: -moz-transform .2s;
     -o-transition: -o-transform .2s;
     transition: transform .2s;
-    @media (max-width: $really-sm) {
-        margin: 0;
-    }
+    // @media (max-width: $really-sm) {
+    //     margin: 0;
+    // }
     &:hover {
         transform: scale(1.1);
     }
