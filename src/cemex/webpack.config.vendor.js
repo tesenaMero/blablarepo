@@ -109,7 +109,8 @@ module.exports = (env) => {
                 jQuery: "jquery",
                 "window.jQuery": "jquery",
                 Tether: "tether",
-                "window.Tether": "tether" // Because Bootstrap complains
+                "window.Tether": "tether",
+                Popper: ['popper.js', 'default'],
             }),
         ].concat(isDevBuild ? [] : [
             new webpack.optimize.UglifyJsPlugin()

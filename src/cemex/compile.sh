@@ -14,6 +14,9 @@ if [ "$1" == "clean" ]; then
     rm -rf wwwroot/dist/
 fi
 
+printf "Cleaning ${CYAN}dls submodule${NC} dist\n"
+rm -rf submodules/dls/node_modules
+
 printf ".NET Environment: ${CYAN}Development${NC}\n"
 export ASPNETCORE_ENVIRONMENT=Development
 

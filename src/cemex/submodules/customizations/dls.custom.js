@@ -4,7 +4,8 @@ import 'jquery';
 
 $(document).ready(function() {
 
-    // the toggle 
+    // Better sidebar collapse toogle
+    // ---------------------------------------------------------------------------
     $('.collapse-trigger').on("click", function() {
         if ($(this).hasClass('opened-nav')) {
             $('#sidebar-wrapper').find('.side-nav-bar.can-hide').addClass('moved');

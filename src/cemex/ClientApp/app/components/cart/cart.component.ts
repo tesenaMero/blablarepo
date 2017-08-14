@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'cart-page',
@@ -8,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 
 export class CartComponent implements OnInit {
   
-  constructor() {}
+  constructor(private location: Location) {}
 
   ngOnInit() {
     
+  }
+
+  back() {
+    this.location.back();
   }
 }
