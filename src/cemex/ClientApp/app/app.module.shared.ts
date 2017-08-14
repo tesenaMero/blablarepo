@@ -13,6 +13,7 @@ import { PaginationComponent } from './shared/pagination/pagination.component';
 import { SpecificationsTableComponent } from './components/specifications-table/specifications-table.component'
 import { ProductSelectionComponent } from './components/product-selection/product-selection.component'
 
+//exports
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
     declarations: [
