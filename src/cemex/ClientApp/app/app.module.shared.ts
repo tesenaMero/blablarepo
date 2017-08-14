@@ -8,6 +8,7 @@ import { OrdersTableComponent } from './components/orders-table/orders-table.com
 import { NewOrderComponent } from './components/new-order/new-order.component'
 import { CartComponent } from './components/cart/cart.component';
 import { NewOrderComponentSt1 } from './components/new-order/neworderst1.component'
+import { NewProjectProfile } from './components/new-project-profile/new-project-profile.component'
 
 export const sharedConfig: NgModule = {
     bootstrap: [ AppComponent ],
@@ -18,7 +19,8 @@ export const sharedConfig: NgModule = {
         OrdersComponent,
         NewOrderComponent,
         CartComponent,
-	    NewOrderComponentSt1,
+        NewOrderComponentSt1,
+        NewProjectProfile,
 
         // Regular components
         OrdersTableComponent
@@ -33,6 +35,7 @@ export const sharedConfig: NgModule = {
                     { path: 'newst1', component: NewOrderComponentSt1 },		    
                     { path: 'new', component: NewOrderComponent },
                     { path: 'cart', component: CartComponent },
+                    { path: 'newproj', component: NewProjectProfile },
 		        ]
             },
             { path: '**', redirectTo: 'app' }
