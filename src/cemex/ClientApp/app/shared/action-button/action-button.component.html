@@ -1,6 +1,6 @@
 <button 
   [disabled]="disabled" 
-  [ngClass]="{disabled : disabled, button: true, solid: solid, ghost: ghost, green: color == 'green'}" 
+  [ngClass]="{disabled : disabled, button: !isLink, solid: solid, ghost: ghost, green: color == 'green', buttonLink: isLink, buttonLinkMedium: !small}" 
   (click)="onConfirm()"
 >
   <span

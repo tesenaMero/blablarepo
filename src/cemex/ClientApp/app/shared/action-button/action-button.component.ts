@@ -18,6 +18,8 @@ import 'rxjs/add/operator/toPromise';
 })
 export class ActionButtonComponent implements OnInit, AfterContentInit {
   styles = {};
+  @Input() small: boolean;
+  @Input() isLink: boolean;
   @Input() solid: boolean;
   @Input() ghost: boolean;
   @Input() showIcon: boolean;
