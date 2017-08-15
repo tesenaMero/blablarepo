@@ -11,6 +11,7 @@ import { PaginationComponent } from './shared/pagination/pagination.component';
 import { BreadcrumbsComponent, BreadcrumbsItemComponent } from './shared/breadcrumbs'
 import { SpecificationsTableComponent } from './components/specifications-table/specifications-table.component'
 import { ProductSelectionComponent } from './components/product-selection/product-selection.component'
+import { OrderBuilderComponent } from './components/order-builder/order-builder.component'
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
@@ -24,6 +25,7 @@ export const sharedConfig: NgModule = {
 
         // Regular components
         OrdersTableComponent,
+        OrderBuilderComponent,
         SpecificationsTableComponent,
         ProductSelectionComponent,
 

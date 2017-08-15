@@ -1,0 +1,172 @@
+@import "~bootstrap/scss/bootstrap-grid.scss";
+// Stepper
+// Overrides on garbage DLS CSS
+//============================================
+.cmx-stepper.center-md-up {
+    margin: 0 128px;
+    @include media-breakpoint-down(md) {
+        margin: 0;
+    }
+}
+
+.cmx-stepper.cmx-stepper-4 .cmx-progress {
+    width: 76%;
+    margin-left: 0;
+    transform: translateX(16%);
+}
+
+.cmx-stepper {
+    .cmx-step p {
+        word-break: break-word;
+    }
+}
+
+.mobile-stepper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+.stepper-container {
+    padding: 30px;
+    min-height: 160px;
+}
+
+.stepper-open {
+    width: 100%;
+    min-height: 0;
+    background: #003876;
+    border-bottom: 1px solid #fff;
+    position: absolute;
+    bottom: 48px;
+    color: #fff;
+    font-size: 1rem;
+    padding: 0;
+}
+
+.cto-container {
+    &.center-with-steps a {
+        margin-bottom: 16px;
+    }
+    a:not(:first-child) {
+        margin-left: 8px;
+    }
+    @include media-breakpoint-down(sm) {
+        margin-top: 16px;
+    }
+}
+
+.jobsite-builder-container {
+    margin: 58px 0;
+    @include media-breakpoint-down(sm) {
+        margin: 20px 0;
+    }
+}
+
+// Step 0
+// Type selection
+// ===========================================
+.circle-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 60px;
+    margin-bottom: 30px;
+    // @include media-breakpoint-down(sm) {
+    //     margin-top: 35px;
+    // }
+}
+
+// Hack for iPhone 5 resolution
+$really-sm: 376px;
+.circle {
+    border: 2px solid #3FA9F5;
+    border-radius: 50%;
+    width: 23vw;
+    height: 23vw;
+    min-width: 130px;
+    min-height: 130px;
+    max-height: 340px;
+    max-width: 340px;
+    margin: 0.5vw auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: #3FA9F5;
+    font-weight: 500;
+    cursor: pointer;
+    -webkit-transition: -webkit-transform .2s;
+    -moz-transition: -moz-transform .2s;
+    -o-transition: -o-transform .2s;
+    transition: transform .2s;
+    // @media (max-width: $really-sm) {
+    //     margin: 0;
+    // }
+    &:hover {
+        transform: scale(1.1);
+    }
+    .icon {
+        font-size: 50px;
+        width: 70px;
+        height: 55px;
+    }
+    @include media-breakpoint-down(sm) {
+        background-color: #E5E7EF;
+        color: #9096AB;
+        border: 0;
+        font-size: 18px;
+        box-shadow: 0 6px 9px 0 rgba(17, 71, 109, 0.22);
+        .icon {
+            visibility: hidden;
+            display: none;
+        }
+    }
+}
+
+.or-divider {
+    height: 23vw;
+    width: 2px;
+    min-height: 130px;
+    max-height: 358.97px;
+    background-color: #D6D7E0;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    span {
+        color: #001C3B;
+        font-family: Roboto;
+        font-size: 12px;
+        background-color: #F4F6F9;
+        align-self: center;
+    }
+}
+
+// Step 1
+// Jobsite selection
+// ============================================
+.select-label {
+    color: #001C3B;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+    margin-bottom: 0;
+    @include media-breakpoint-down(sm) {
+        margin-bottom: .25rem;
+        &:not(:first-child) {
+            margin-top: 26px;
+        }
+    }
+}
+
+select {
+    border: 1px solid #ACAEBA;
+    border-radius: 3px;
+    height: 48px !important;
+}
+
+#jobsite-selection-map {
+    height: 417px;
+    margin-top: 27px;
+}

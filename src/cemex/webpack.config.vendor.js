@@ -121,7 +121,9 @@ module.exports = (env) => {
                 "window.Tether": "tether",
                 Popper: ['popper.js', 'default'],
             }),
-        ].concat(isDevBuild ? [] : [])
+        ].concat(isDevBuild ? [] : [
+            new webpack.optimize.UglifyJsPlugin()
+        ])
     }
 
     return [bootstrapBundle, clientBundleConfig, serverBundleConfig];

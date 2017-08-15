@@ -7,15 +7,15 @@
         <div class="col-md-8 col-sm-12">
             <h1>New Order</h1>
         </div>
-        <div class="cto-container hidden-sm-down col-md-4 col-sm-12">
+        <!-- <div class="cto-container hidden-sm-down col-md-4 col-sm-12">
             <div class="float-md-right">
                 <a class="button-ghost" routerLink="../orders">Back</a>
                 <a class="button bright-green" href="#steps-slider" role="button" data-slide="next">Next</a>
             </div>
-        </div>
+        </div> -->
     </div>
 
-    <div class="cmx-stepper center-md-up cmx-stepper-4 hidden-sm-down">
+    <!-- <div class="cmx-stepper center-md-up cmx-stepper-4 hidden-sm-down">
         <div class="cmx-progress">
             <div class="cmx-progress-line"></div>
         </div>
@@ -37,173 +37,12 @@
             <div class="cmx-step-icon">4</div>
             <p>Summary</p>
         </div>
-    </div>
-
-    <!-- <div class="row align-items-center no-gutters justify-content-md-center hidden-sm-down">
-        <div class="col col-lg-2">
-        </div>
-        <div class="col-12 col-md-8">
-            <div class="cmx-stepper cmx-stepper-4">
-                <div class="cmx-progress">
-                    <div class="cmx-progress-line"></div>
-                </div>
-                <div class="cmx-step completed">
-                    <div class="cmx-step-icon">
-                        <svg class="icon-completed-checkmark">
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-completed-checkmark"></use>
-                </svg>
-                    </div>
-                    <p>Delivery mode</p>
-                </div>
-
-                <div class="cmx-step active">
-                    <div class="cmx-step-icon">2</div>
-                    <p>Product line</p>
-                </div>
-
-                <div class="cmx-step inactive">
-                    <div class="cmx-step-icon">3</div>
-                    <p>Specifications</p>
-                </div>
-
-                <div class="cmx-step inactive">
-                    <div class="cmx-step-icon">4</div>
-                    <p>Summary</p>
-                </div>
-            </div>
-        </div>
-        <div class="col col-lg-2">
-            <div class="cto-container center-with-steps" id="cto">
-                <a class="button-ghost float-md-right" href="#">Back</a>
-                <a class="button bright-green float-md-right" href="#">Next</a>
-            </div>
-        </div>
     </div> -->
 
-    <div class="jobsite-map-container">
-        <div id="steps-slider" class="carousel slide" data-ride="carousel" data-interval="0">
-            <div class="carousel-inner" role="listbox">
-                <div class="carousel-item active">
-                    <div class="w-100">
-                        <div class="circle-container">
-                            <div class="circle">
-                                <span class="icon cmx-icon-control-center"></span>
-                                <span>Delivery</span>
-                            </div>
-                            <div class="or-divider">
-                                <span>or</span>
-                            </div>
-                            <div class="circle">
-                                <span class="icon cmx-icon-track"></span>
-                                <span>Pickup</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="w-100">
-                        <div class="row align-items-center">
-                            <div class="col-md-2 col-sm-12 select-label">
-                                <label for="pod-select" class="select-label">Select from existing jobiste</label>
-                            </div>
-                            <div class="col-md-4 col-sm-12">
-                                <select id="country-field" class="form-control">
-                                <option>Riderback Eastern River Valley</option>
-                            </select>
-                            </div>
-                            <div class="col-md-2 col-sm-12 select-label">
-                                <label for="pod-select" class="select-label">Select from existing point of delivery</label>
-                            </div>
-                            <div class="col-md-4 col-sm-12">
-                                <select id="pod-select" class="form-control">
-                                <option>Riderback Eastern River Valley</option>
-                            </select>
-                            </div>
-                        </div>
-                        <div id="jobsite-selection-map"></div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <product-selection></product-selection>
-                </div>
-                <div class="carousel-item">
-                    <!-- Specifications -->
-                    <specifications-table></specifications-table>
-                </div>
-                <div class="carousel-item">
-                    Fourth step
-                </div>
-            </div>
-            <!-- <a class="carousel-control-prev" href="#steps-slider" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#steps-slider" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a> -->
-        </div>
-    </div>
+    <order-builder></order-builder>
 
     <a routerLink="../cart" class="floating-button">
         <div class="float-badge">1</div>
         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
     </a>
-
-    <div class="mobile-stepper hidden-md-up">
-        <div class="prev hidden-arrow">
-            <a href="#">
-                <svg class="icon-left-single">
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-left-single"></use>
-                </svg>
-            </a>
-        </div>
-        <div class="current">
-            <a data-toggle="collapse" href="#collapse-steps">
-                Step 1
-                <svg class="icon-up-single">
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-up-single"></use>
-                </svg>
-            </a>
-        </div>
-        <div class="next">
-            <a href="#steps-slider" role="button" data-slide="next">
-                <svg class="icon-right-single">
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-single"></use>
-                </svg>
-            </a>
-        </div>
-        <div class="stepper-open collapse" id="collapse-steps">
-            <div class="stepper-container">
-                <div class="step">
-                    <div class="cmx-step-icon">
-                        <!-- <svg class="icon-completed-checkmark">
-                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-completed-checkmark"></use>
-                        </svg> -->
-                        1
-                        <div class="bottom-connector"></div>
-                    </div>
-                    <a href="#">Delivery mode</a>
-                </div>
-                <div class="step">
-                    <div class="cmx-step-icon cmx-step-disabled">
-                        2
-                        <div class="bottom-connector"></div>
-                    </div>
-                    <a href="#">Product line</a>
-                </div>
-                <div class="step">
-                    <div class="cmx-step-icon cmx-step-disabled">
-                        3
-                        <div class="bottom-connector"></div>
-                    </div>
-                    <a href="#">Specifications</a>
-                </div>
-                <div class="step">
-                    <div class="cmx-step-icon cmx-step-disabled">4</div>
-                    <a href="#">Summary</a>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>

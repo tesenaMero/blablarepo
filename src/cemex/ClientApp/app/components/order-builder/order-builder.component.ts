@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-order-builder',
-  templateUrl: './order-builder.component.html',
-  styleUrls: ['./order-builder.component.css']
+  selector: 'order-builder',
+  templateUrl: './order-builder.html',
+  styleUrls: ['./order-builder.scss']
 })
 export class OrderBuilderComponent implements OnInit {
 
