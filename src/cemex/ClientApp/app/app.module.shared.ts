@@ -12,6 +12,7 @@ import { BreadcrumbsComponent, BreadcrumbsItemComponent } from './shared/breadcr
 import { SpecificationsTableComponent } from './components/specifications-table/specifications-table.component'
 import { ProductSelectionComponent } from './components/product-selection/product-selection.component'
 import { OrderBuilderComponent } from './components/order-builder/order-builder.component'
+import { StepComponent } from './components/order-builder/step.component'
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
@@ -26,6 +27,7 @@ export const sharedConfig: NgModule = {
         // Regular components
         OrdersTableComponent,
         OrderBuilderComponent,
+        StepComponent,
         SpecificationsTableComponent,
         ProductSelectionComponent,
 

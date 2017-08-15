@@ -44,65 +44,8 @@
 <div class="jobsite-builder-container">
     <div id="steps-slider" class="carousel slide" data-ride="carousel" data-interval="0">
         <div class="carousel-inner" role="listbox">
-            <div class="carousel-item active">
-                <div class="w-100">
-                    <div class="circle-container">
-                        <div class="circle">
-                            <span class="icon cmx-icon-control-center"></span>
-                            <span>Delivery</span>
-                        </div>
-                        <div class="or-divider">
-                            <span>or</span>
-                        </div>
-                        <div class="circle">
-                            <span class="icon cmx-icon-track"></span>
-                            <span>Pickup</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <div class="w-100">
-                    <div class="row align-items-center">
-                        <div class="col-md-2 col-sm-12 select-label">
-                            <label for="pod-select" class="select-label">Select from existing jobiste</label>
-                        </div>
-                        <div class="col-md-4 col-sm-12">
-                            <select id="country-field" class="form-control">
-                                <option>Riderback Eastern River Valley</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2 col-sm-12 select-label">
-                            <label for="pod-select" class="select-label">Select from existing point of delivery</label>
-                        </div>
-                        <div class="col-md-4 col-sm-12">
-                            <select id="pod-select" class="form-control">
-                                <option>Riderback Eastern River Valley</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div id="jobsite-selection-map"></div>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <product-selection></product-selection>
-            </div>
-            <div class="carousel-item">
-                <!-- Specifications -->
-                <specifications-table></specifications-table>
-            </div>
-            <div class="carousel-item">
-                Fourth step
-            </div>
+            <ng-content></ng-content>
         </div>
-        <!-- <a class="carousel-control-prev" href="#steps-slider" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#steps-slider" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a> -->
     </div>
 </div>
 
