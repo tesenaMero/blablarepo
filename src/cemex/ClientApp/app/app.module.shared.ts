@@ -1,5 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { CmxNavHeaderModule } from '@cemex/cmx-nav-header-v1/dist';
 
 import { AppComponent } from './components/app/app.component'
 import { DashboardComponent } from './components/dashboard/dashboard.component'
@@ -30,6 +35,8 @@ export const sharedConfig: NgModule = {
         PaginationComponent
     ],
     imports: [
+        FlexLayoutModule,
+        CmxNavHeaderModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full' },
             { path: 'orders', redirectTo: 'app', pathMatch: 'full' },
