@@ -113,15 +113,12 @@ module.exports = (env) => {
             ]
         },
         plugins: [
-                new ExtractTextPlugin("dls.bundle.css"),
-                new webpack.ProvidePlugin({
-                    $: "jquery",
-                    jQuery: "jquery",
-                }),
-            ]
-            // .concat(isDevBuild ? [] : [
-            //     new webpack.optimize.UglifyJsPlugin()
-            // ])
+            new ExtractTextPlugin("dls.bundle.css"),
+            new webpack.ProvidePlugin({
+                $: "jquery",
+                jQuery: "jquery",
+            }),
+        ].concat(isDevBuild ? [] : [])
     }
 
     return [clientBundleConfig, serverBundleConfig, dlsBundleConfig];

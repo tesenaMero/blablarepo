@@ -112,19 +112,16 @@ module.exports = (env) => {
             filename: '[name].bundle.js',
         },
         plugins: [
-                new ExtractTextPlugin("bootstrap.css"),
-                new webpack.ProvidePlugin({
-                    $: "jquery",
-                    jQuery: "jquery",
-                    "window.jQuery": "jquery",
-                    Tether: "tether",
-                    "window.Tether": "tether",
-                    Popper: ['popper.js', 'default'],
-                }),
-            ]
-            // .concat(isDevBuild ? [] : [
-            //     new webpack.optimize.UglifyJsPlugin()
-            // ])
+            new ExtractTextPlugin("bootstrap.css"),
+            new webpack.ProvidePlugin({
+                $: "jquery",
+                jQuery: "jquery",
+                "window.jQuery": "jquery",
+                Tether: "tether",
+                "window.Tether": "tether",
+                Popper: ['popper.js', 'default'],
+            }),
+        ].concat(isDevBuild ? [] : [])
     }
 
     return [bootstrapBundle, clientBundleConfig, serverBundleConfig];
