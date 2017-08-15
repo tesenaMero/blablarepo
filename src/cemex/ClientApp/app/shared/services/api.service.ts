@@ -23,17 +23,17 @@ export class ApiService {
         return this._http.post(`${this.apiRoot}/${url}`, body, options);
     }
 
-    public put(url: string, body: any, options?: RequestOptionsArgs): Observable<Response> {
+    public put(url: string, body: any, options: RequestOptionsArgs = {}): Observable<Response> {
         options.headers = this.getHeaders();
         return this._http.post(`${this.apiRoot}/${url}`, body, options);
     }
 
-    public patch(url: string, body: any, options?: RequestOptionsArgs): Observable<Response> {
+    public patch(url: string, body: any, options: RequestOptionsArgs = {}): Observable<Response> {
         options.headers = this.getHeaders();
         return this._http.patch(`${this.apiRoot}/${url}`, body, options);
     }
 
-    public delete(url: string, options?: RequestOptionsArgs): Observable<Response> {
+    public delete(url: string, options: RequestOptionsArgs = {}): Observable<Response> {
         options.headers = this.getHeaders();
         return this._http.delete(`${this.apiRoot}/${url}`, options);
     }

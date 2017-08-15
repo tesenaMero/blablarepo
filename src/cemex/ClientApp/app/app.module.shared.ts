@@ -21,6 +21,7 @@ import {
 
 // Services
 import { ApiService } from './shared/services/api.service';
+import { OrdersApiService } from './shared/services/orders-api.service';
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
@@ -64,5 +65,8 @@ export const sharedConfig: NgModule = {
             { path: '**', redirectTo: 'app' }
         ])
     ],
-    providers: [ApiService]
+    providers: [
+        ApiService,
+        OrdersApiService
+    ]
 };
