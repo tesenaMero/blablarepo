@@ -1,2 +1,2 @@
-export { BreadcrumbsComponent } from './breadcrumbs.component.ts';
-export { BreadcrumbsItemComponent } from './breadcrumbs-item.component.ts';
+export { BreadcrumbsComponent } from './breadcrumbs.component';
+export { BreadcrumbsItemComponent } from './breadcrumbs-item.component';
