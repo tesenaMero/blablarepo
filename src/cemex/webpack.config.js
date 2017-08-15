@@ -118,9 +118,7 @@ module.exports = (env) => {
                 $: "jquery",
                 jQuery: "jquery",
             }),
-        ].concat(isDevBuild ? [] : [
-            new webpack.optimize.UglifyJsPlugin()
-        ])
+        ].concat(isDevBuild ? [] : [])
     }
 
     return [clientBundleConfig, serverBundleConfig, dlsBundleConfig];

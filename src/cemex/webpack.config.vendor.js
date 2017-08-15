@@ -11,7 +11,7 @@ module.exports = (env) => {
         resolve: { extensions: ['.js'] },
         module: {
             rules: [
-                { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' }
+                { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader' }
             ]
         },
         entry: {
@@ -25,7 +25,7 @@ module.exports = (env) => {
                 '@angular/platform-browser',
                 '@angular/platform-browser-dynamic',
                 '@angular/router',
-                'bootstrap/dist/css/bootstrap.css',
+                //'bootstrap/dist/css/bootstrap.css',
                 'es6-shim',
                 'es6-promise',
                 'event-source-polyfill',
@@ -84,26 +84,35 @@ module.exports = (env) => {
 
     const bootstrapBundle = {
         stats: { modules: false },
-        resolve: { extensions: ['.js'] },
         module: {
             rules: [
-                { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' },
-                { test: /\.css(\?|$)/, use: ['to-string-loader', isDevBuild ? 'css-loader' : 'css-loader?minimize'] }
+                { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader' },
+                {
+                    test: /\.css(\?|$)/,
+                    use: ExtractTextPlugin.extract({
+                        fallback: "style-loader",
+                        use: [
+                            { loader: 'css-loader', options: { minimize: true } },
+                        ],
+                    })
+                }
             ]
         },
         entry: {
-            vendor: [
+            bootstrap: [
                 'jquery',
                 // 'tether',
                 'bootstrap'
             ],
+            bootstrapcss: 'bootstrap/dist/css/bootstrap.min.css'
         },
         output: {
             path: path.join(__dirname, './wwwroot/dist'),
             publicPath: '/dist/',
-            filename: 'bootstrap.bundle.js',
+            filename: '[name].bundle.js',
         },
         plugins: [
+            new ExtractTextPlugin("bootstrap.css"),
             new webpack.ProvidePlugin({
                 $: "jquery",
                 jQuery: "jquery",
@@ -112,9 +121,7 @@ module.exports = (env) => {
                 "window.Tether": "tether",
                 Popper: ['popper.js', 'default'],
             }),
-        ].concat(isDevBuild ? [] : [
-            new webpack.optimize.UglifyJsPlugin()
-        ])
+        ].concat(isDevBuild ? [] : [])
     }
 
     return [bootstrapBundle, clientBundleConfig, serverBundleConfig];
