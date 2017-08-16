@@ -10,10 +10,14 @@ import { CartComponent } from './components/cart/cart.component';
 import { PaginationComponent } from './shared/pagination/pagination.component';
 import { BreadcrumbsComponent, BreadcrumbsItemComponent } from './shared/breadcrumbs'
 import { ActionButtonComponent } from './shared/action-button/action-button.component';
-import { SpecificationsTableComponent } from './components/specifications-table/specifications-table.component'
-import { ProductSelectionComponent } from './components/product-selection/product-selection.component'
 import { OrderBuilderComponent } from './components/order-builder/order-builder.component'
-import { StepComponent } from './components/order-builder/step.component'
+import { StepperComponent, Step } from './shared/stepper';
+import { 
+    LocationStepComponent, 
+    ProductSelectionStepComponent, 
+    SpecificationsTableStepComponent, 
+    TypeStepComponent 
+}  from './components/order-builder/order-steps'
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
@@ -28,15 +32,18 @@ export const sharedConfig: NgModule = {
         // Regular components
         OrdersTableComponent,
         OrderBuilderComponent,
-        StepComponent,
-        SpecificationsTableComponent,
-        ProductSelectionComponent,
+        LocationStepComponent,
+        ProductSelectionStepComponent,
+        SpecificationsTableStepComponent,
+        TypeStepComponent,
 
         // Shared
         PaginationComponent,
         BreadcrumbsComponent,
         BreadcrumbsItemComponent,
-        ActionButtonComponent,
+        StepperComponent,
+        Step,
+        ActionButtonComponent
     ],
     imports: [
         RouterModule.forRoot([
