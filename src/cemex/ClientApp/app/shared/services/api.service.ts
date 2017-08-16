@@ -2,16 +2,18 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 
+import { WindowRef } from './window-ref.service';
+
 @Injectable()
 export class ApiService {
-    private apiRoot = window['API_HOST'] || 'https://api.us.apiconnect.ibmcloud.com/cnx-gbl-apiconnect-org-development/dev';
-    private clientId = window['CLIENT_ID'] || 'e2824d38-9871-4d41-9d36-466993d97ee5';
+    private apiRoot = this.winRef['API_HOST'] || 'https://api.us.apiconnect.ibmcloud.com/cnx-gbl-apiconnect-org-development/dev';
+    private clientId = this.winRef['CLIENT_ID'] || 'e2824d38-9871-4d41-9d36-466993d97ee5';
     private appId = 'DCMWebTool_App';
     private acceptLanguage = 'en-US';
     private jwt = null;
     private authorization = null;
 
-    constructor(private _http: Http) { }
+    constructor(private _http: Http, private winRef: WindowRef) { }
 
     public get(url: string, options: RequestOptionsArgs = {}): Observable<Response> {
         options.headers = this.getHeaders();

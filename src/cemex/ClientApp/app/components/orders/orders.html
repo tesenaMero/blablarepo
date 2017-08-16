@@ -20,6 +20,12 @@
     <!-- <div class="table-header hidden-lg-up">
         <span class="roboto-bold date-text">JANUARY  15 - 21, 2017</span>
     </div> -->
-
+    <!-- <div>
+        {{orders | json}}
+    </div> -->
+    <p>{{isLoading | async}}</p>
+     <ul>
+        <li *ngFor="let item of orders | async">{{item | json}} {{item.isCanceled()}}</li>
+    </ul> 
     <orders-table></orders-table>
 </div>
