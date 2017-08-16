@@ -43,8 +43,8 @@
 <!-- Mobile stepper -->
 <!-- ============== -->
 <div class="mobile-stepper hidden-md-up">
-    <div class="prev hidden-arrow">
-        <a href="#">
+    <div class="prev" [ngClass]="{ 'hidden-arrow': !backAvailable, 'hidden-arrow': !activeStep.showControls }">
+        <a (click)="prev()">
             <svg class="icon-left-single">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-left-single"></use>
             </svg>
@@ -58,8 +58,8 @@
             </svg>
         </a>
     </div>
-    <div class="next">
-        <a href="#steps-slider" role="button" data-slide="next">
+    <div *ngIf="nextAvailable && activeStep.showControls" class="next">
+        <a (click)="next()" role="button" data-slide="next">
             <svg class="icon-right-single">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-single"></use>
             </svg>
