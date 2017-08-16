@@ -2,6 +2,11 @@
 // Stepper
 // Overrides on garbage DLS CSS
 //============================================
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+
 .cmx-stepper.center-md-up {
     margin: 0 128px;
     @include media-breakpoint-down(md) {

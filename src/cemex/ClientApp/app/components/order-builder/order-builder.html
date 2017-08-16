@@ -1,14 +1,19 @@
 <stepper>
-    <step title="Delivery mode">
-        <type-step></type-step>
+    <step [showControls]="false" [showExit]="true" [inLine]="false" title="Delivery mode">
+        <mode-step (onCompleted)="modeStepCompleted()"></mode-step>
     </step>
-    <step>
+    <step title="Delivery mode">
         <location-step></location-step>
     </step>
-    <step>
+    <step title="Product line">
         <product-selection-step></product-selection-step>
     </step>
-    <step>
+    <step title="Specifications">
         <specifications-table></specifications-table>
+    </step>
+    <step title="Summary">
+        <p>
+            Summary stuff
+        </p>
     </step>
 </stepper>

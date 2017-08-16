@@ -16,7 +16,7 @@ import {
     LocationStepComponent, 
     ProductSelectionStepComponent, 
     SpecificationsTableStepComponent, 
-    TypeStepComponent 
+    ModeStepComponent 
 }  from './components/order-builder/order-steps'
 
 export const sharedConfig: NgModule = {
@@ -35,7 +35,7 @@ export const sharedConfig: NgModule = {
         LocationStepComponent,
         ProductSelectionStepComponent,
         SpecificationsTableStepComponent,
-        TypeStepComponent,
+        ModeStepComponent,
 
         // Shared
         PaginationComponent,

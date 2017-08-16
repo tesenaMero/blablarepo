@@ -2,40 +2,31 @@
     <div class="col col-lg-1">
     </div>
     <div class="col-12 col-md-9">
-        <div class="cmx-stepper cmx-stepper-4">
+        <div class="cmx-stepper {{makeStepperClass(filterVisible(steps).length)}}">
             <div class="cmx-progress">
                 <div class="cmx-progress-line"></div>
             </div>
-            <div class="cmx-step completed">
+            <div *ngFor="let step of filterVisible(steps); let l = count; let i = index" class="cmx-step" [ngClass]="{ 'active': step.active, 'completed': step.completed }">
                 <div class="cmx-step-icon">
-                    <svg class="icon-completed-checkmark">
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-completed-checkmark"></use>
-                </svg>
+                    <svg *ngIf="step.completed" class="icon-completed-checkmark">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-completed-checkmark"></use>
+                    </svg>
+                    <div *ngIf="!step.completed">
+                        {{i + 1}}
+                    </div>
                 </div>
-                <p>Delivery mode</p>
-            </div>
-
-            <div class="cmx-step active">
-                <div class="cmx-step-icon">2</div>
-                <p>Product line</p>
-            </div>
-
-            <div class="cmx-step inactive">
-                <div class="cmx-step-icon">3</div>
-                <p>Specifications</p>
-            </div>
-
-            <div class="cmx-step inactive">
-                <div class="cmx-step-icon">4</div>
-                <p>Summary</p>
+                <p>{{step.title}}</p>
             </div>
         </div>
     </div>
     <div class="col col-lg-2">
         <div class="cto-container center-with-steps">
             <div class="float-md-right text-right">
-                <button class="button-ghost mb-2 " routerLink="app/orders">Back</button>
-                <button class="button bright-green" data-target="#steps-slider" role="button" data-slide="next">Next</button>
+                <button (click)="prev()" *ngIf="activeStep.showControls" class="button-ghost mb-2" [ngClass]="{ 'disabled': !backAvailable }">Back</button>
+                <button (click)="next()" *ngIf="activeStep.showControls" class="button bright-green" [ngClass]="{ 'disabled': !nextAvailable }">Next</button>
+                <button *ngIf="activeStep.showExit" class="button-ghost mb-2 " routerLink="app/orders">Exit</button>
+                <button class="hidden" #controlNext data-target="#steps-slider" role="button" data-slide="next">Next</button>
+                <button class="hidden" #controlPrev data-target="#steps-slider" role="button" data-slide="prev">Back</button>
             </div>
         </div>
     </div>
@@ -61,48 +52,32 @@
     </div>
     <div class="current">
         <a data-toggle="collapse" href="#collapse-steps">
-                Step 1
-                <svg class="icon-up-single">
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-up-single"></use>
-                </svg>
-            </a>
+            {{activeStep.title}}
+            <svg class="icon-up-single">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-up-single"></use>
+            </svg>
+        </a>
     </div>
     <div class="next">
         <a href="#steps-slider" role="button" data-slide="next">
             <svg class="icon-right-single">
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-single"></use>
-                </svg>
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-single"></use>
+            </svg>
         </a>
     </div>
     <div class="stepper-open collapse" id="collapse-steps">
         <div class="stepper-container">
-            <div class="step">
-                <div class="cmx-step-icon">
-                    <!-- <svg class="icon-completed-checkmark">
-                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-completed-checkmark"></use>
-                        </svg> -->
-                    1
-                    <div class="bottom-connector"></div>
+            <div *ngFor="let step of filterVisible(steps); let last = last; let i = index" class="step">
+                <div class="cmx-step-icon" [ngClass]="{ 'cmx-step-disabled': !step.active, 'cmx-step-completed': step.completed }">
+                    <svg *ngIf="step.completed" class="icon-completed-checkmark">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-completed-checkmark"></use>
+                    </svg>
+                    <div *ngIf="!step.completed">
+                        {{i + 1}}
+                    </div>
+                    <div *ngIf="!last" class="bottom-connector"></div>
                 </div>
-                <a href="#">Delivery mode</a>
-            </div>
-            <div class="step">
-                <div class="cmx-step-icon cmx-step-disabled">
-                    2
-                    <div class="bottom-connector"></div>
-                </div>
-                <a href="#">Product line</a>
-            </div>
-            <div class="step">
-                <div class="cmx-step-icon cmx-step-disabled">
-                    3
-                    <div class="bottom-connector"></div>
-                </div>
-                <a href="#">Specifications</a>
-            </div>
-            <div class="step">
-                <div class="cmx-step-icon cmx-step-disabled">4</div>
-                <a href="#">Summary</a>
+                <a href="#">{{step.title}}</a>
             </div>
         </div>
     </div>
