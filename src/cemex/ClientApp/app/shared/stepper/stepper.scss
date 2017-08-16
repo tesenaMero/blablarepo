@@ -45,7 +45,7 @@
 }
 
 .cto-container {
-    a:not(:first-child) {
+    button:not(:first-child) {
         margin-left: 8px;
     }
     @include media-breakpoint-down(sm) {

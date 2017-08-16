@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-    selector: 'stepper',
-    template: `<ng-content></ng-content>`
+    selector: 'step',
+    template: `<ng-content></ng-content>`,
+    host: {'class': 'carousel-item', '[class.active]': 'active' }
 })
-export class StepperComponent {
+export class Step {
+    @Input() title?: string;
+    @Input() active? = false;
 
     constructor() { }
-
-    ngOnInit() {
-    }
-
 }
