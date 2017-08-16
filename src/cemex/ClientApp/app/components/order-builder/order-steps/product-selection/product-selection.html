@@ -3,34 +3,10 @@
         <div class="select-product">Select a product</div>
     </div>
     <div class="row products">
-        <div class="col-md-4">
-            <div class="product-desc align-items-center">
+        <div *ngFor="let product of products" class="col-md-4">
+            <div class="product-desc align-items-center" [ngClass]="{ 'selected': isSelected(product) }" (click)="select(product)">
                 <span class="icon cmx-icon-driver"></span>
-                <span>ReadyMix</span>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="product-desc align-items-center">
-                <span class="icon cmx-icon-driver"></span>
-                <span>Cement Bulk</span>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="product-desc align-items-center">
-                <span class="icon cmx-icon-driver"></span>
-                <span>Cement Package</span>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="product-desc align-items-center">
-                <span class="icon cmx-icon-driver"></span>
-                <span>Aggregates</span>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="product-desc align-items-center">
-                <span class="icon cmx-icon-driver"></span>
-                <span>Multiproducts</span>
+                <span>{{product}}</span>
             </div>
         </div>
     </div>

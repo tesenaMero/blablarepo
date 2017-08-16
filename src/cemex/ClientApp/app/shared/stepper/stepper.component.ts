@@ -20,7 +20,7 @@ export class StepperComponent implements AfterContentInit {
     @ContentChildren(Step) steps: QueryList<Step>;
     @Output() onFinish = new EventEmitter<any>();
 
-    activeStep: any;
+    currentStep: any;
     constructor() { }
 
     // Content children are set
@@ -46,6 +46,8 @@ export class StepperComponent implements AfterContentInit {
     // Controls
     // ==============================================================
     next() {
+        if (!this.currentStep.completed) { return; }
+
         let currentIndex = this.getActiveStepIndex();
         // If last step or index not found
         if (currentIndex >= this.steps.length - 1) { return; }
@@ -62,6 +64,7 @@ export class StepperComponent implements AfterContentInit {
     }
 
     complete() {
+        this.currentStep.completed = true;
         this.nextAvailable = true;
     }
 
@@ -86,13 +89,18 @@ export class StepperComponent implements AfterContentInit {
     private selectStep(step: Step) {
         // Deactivate all steps except one
         this.steps.toArray().forEach(step => step.active = false);
-        this.activeStep = step;
+        this.currentStep = step;
         step.active = true;
     }
 
     private selectStepByIndex(index: number) {
         let step = this.steps.toArray()[index];
         if (step) { this.selectStep(step); }
+
+        if (!this.currentStep.completed)
+            this.nextAvailable = false;
+        else
+            this.nextAvailable = true;
     }
 
 }

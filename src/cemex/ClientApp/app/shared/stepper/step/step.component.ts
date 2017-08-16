@@ -13,9 +13,13 @@ export class Step {
     @Input() showControls? = true; // Show back/next control buttons
     //@Input() automatic? = false; // Moves to next step automatically once its completed
 
-    completed: boolean;
+    completed: boolean = false;
 
     constructor() { }
+}
+
+export interface StepEvents {
+    onViewShowed(): void;
 }
 
 export abstract class _Step {

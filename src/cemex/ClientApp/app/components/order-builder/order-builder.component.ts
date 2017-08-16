@@ -12,7 +12,16 @@ export class OrderBuilderComponent {
     constructor() { }
 
     modeStepCompleted(mode: DeliveryMode) {
+        this.stepper.complete();
         this.stepper.next();
+    }
+
+    locationStepCompleted(event: any) {
+        this.stepper.complete();
+    }
+
+    productStepCompleted(product: any) {
+        this.stepper.complete();
     }
 
 }
