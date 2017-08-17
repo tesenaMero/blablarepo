@@ -168,34 +168,11 @@ $table-border-color: #e0e0e0;
 }
 
 // Zebra-striping
-//
-// Default zebra-stripe styles (alternating gray and transparent backgrounds)
 .table-striped {
-    >tbody>tr:not(.sub):nth-child(even) {
-        >td,
-        >th {
+    >tbody>tr {
+        background-color: $table-bg;
+        &.zebra {
             background-color: $table-bg-accent;
-        }
-    }
-    >tbody>tr:not(.sub):nth-child(odd) {
-        >td,
-        >th {
-            background-color: $table-bg;
-        }
-    }
-}
-
-.table-striped {
-    >tbody>tr.sub:nth-child(odd) {
-        >td,
-        >th {
-            background-color: $table-bg-accent;
-        }
-    }
-    >tbody>tr.sub:nth-child(even) {
-        >td,
-        >th {
-            background-color: $table-bg;
         }
     }
 }

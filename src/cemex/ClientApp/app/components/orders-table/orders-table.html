@@ -12,85 +12,75 @@
         <table id="table" class="table table-fixed main table-hover table-striped">
             <thead>
                 <tr>
-                    <th width="4%"></th>
+                    <th width="5%">
+                        <i class="star cmx-icon-favourite-active" aria-hidden="true"></i>
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <th width="10%">
+                        Order No
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
                     <th width="15%">
                         Submitted
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
                     <th width="20%">
-                        Submitted by
+                        Location
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
-                    <th width="10%">
-                        Items
+                    <th width="20%">
+                        Purchase Order Number
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
                     <th width="10%">
                         Products
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
+                    <th width="10%">
+                        Amount
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
                     <th width="20%">
+                        Requested date
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <th width="13%">
                         Status
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
-                    <th width="15%">
+                    <th width="13%">
                         Total amount
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
-                    <th width="7%">
-                        <i class="star cmx-icon-favourite-active" aria-hidden="true"></i>
-                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    <th width="5%">
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <ng-container *ngFor="let order of orders">
-                    <tr>
-                        <td data-toggle="collapse" data-target="#details1" class="hidden-md-down expand collapsed"></td>
-                        <td data-title="Submitted">{{order.orderRequest.viewedAt}}</td>
-                        <td data-title="Submitted by">{{order.orderRequest.orderRequestedBy}}</td>
-                        <td data-title="Items">{{order.orderRequest.orderRequestItems.length}}</td>
+                <ng-container *ngFor="let order of orders; let index = index">
+                    <tr class="order" [ngClass]="{ 'zebra': isOdd(index) }">
+                        <td data-title="Favorite">
+                            <i class="star cmx-icon-favourite-active" [class.active]="order.orderRequest.isFavorite" aria-hidden="true"></i>
+                        </td>
+                        <td class="number" data-title="Order No">7543189</td>
+                        <td data-title="Submitted">08/13/2017 {{order.orderRequest.viewedAt}}</td>
+                        <td data-title="Location">0864 Lonnie Parks</td>
+                        <td data-title="Purchase Order Number">7755-KJ120/00011</td>
                         <td data-title="Products" class="products">
                             <i *ngIf="order.isReadyMix()" class="cmx-icon-driver" aria-hidden="true"></i>
                             <!-- TODO add cement packed/bagged icons -->
                             <i *ngIf="order.isCement()" class="cmx-icon-track" aria-hidden="true"></i>
                             <i *ngIf="order.isAggregates()" class="cmx-icon-user-profile" aria-hidden="true"></i>
                         </td>
-                        <td data-title="Status"><span class="status in-progress"></span>{{order.orderRequest.orderRequestStatus.statusDesc}}</td>
+                        <td data-title="Amount">{{order.orderRequest.orderRequestItems.length}}</td>
+                        <td valign="bottom" data-title="Requested date">31/12/2017, 15:00 - 16:00</td>
+                        <td data-title="Status" class="p9-13">
+                            <div class="status in-progress {{ order.orderRequest.orderRequestStatus.statusDesc | lowercase }}">{{order.orderRequest.orderRequestStatus.statusDesc}}</div>
+                        </td>
                         <!-- TODO numberal parser -->
                         <td data-title="Total amount">${{order.orderRequest.totalAmount}}</td>
-                        <td data-title="Favorite">
-                            <i class="star cmx-icon-favourite-active" [class.active]="order.orderRequest.isFavorite" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr class="hidden-md-down sub sub-row">
-                        <td colspan="8">
-                            <div class="collapse details" id="details1">
-                                <div class="content">
-                                    <table class="table table-fixed details-table">
-                                        <thead>
-                                            <th width="15%">Order Number</th>
-                                            <th width="15%">Location</th>
-                                            <th width="10%">Product</th>
-                                            <th width="10%">Amount</th>
-                                            <th width="25%">Delivery date</th>
-                                            <th width="10%">Payment</th>
-                                            <th width="10%">Payment</th>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let orderRequestItem of order.orderRequest.orderRequestItems" class="order">
-                                                <td class="number">{{orderRequestItem.orderRequestItemId}}</td>
-                                                <td>{{orderRequestItem.pointOfDelivery.pointOfDeliveryDesc}}</td>
-                                                <td class="product"><i class="cmx-icon-driver" aria-hidden="true"></i></td>
-                                                <td>10 Tons</td>
-                                                <td>31/12/2017, 15:00</td>
-                                                <td>Cash</td>
-                                                <td class="payment">${{orderRequestItem.itemAmount}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                        <td data-title="Repeat">
+                            <i class="cmx-icon-repeat"></i>
                         </td>
                     </tr>
                     <tr class="hidden-md-down sub separator"></tr>

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-
 import { OrderRequest } from '../../shared/models/order-request';
+import { NoSpacePipe } from '../../pipes/nospace.pipe'
 
 @Component({
     selector: 'orders-table',
@@ -17,6 +17,10 @@ export class OrdersTableComponent implements OnInit {
     }
 
     changePage(page) {
+    }
+
+    isOdd(n: number): boolean {
+        return (n & 1) == 1;
     }
 
 }
