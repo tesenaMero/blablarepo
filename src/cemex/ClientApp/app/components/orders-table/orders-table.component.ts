@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+
+import { OrderRequest } from '../../shared/models/order-request';
 
 @Component({
     selector: 'orders-table',
@@ -6,6 +8,9 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./orders-table.scss', './orders-table.specific.scss']
 })
 export class OrdersTableComponent implements OnInit {
+
+    @Input() orders: OrderRequest;
+    @Input() isLoading: boolean;
 
     constructor() { }
 
