@@ -9,9 +9,23 @@ import { NewOrderComponent } from './components/new-order/new-order.component'
 import { OrderDetailComponent } from './components/order-detail/order-detail.component'
 import { CartComponent } from './components/cart/cart.component';
 import { NewProjectProfile } from './components/new-project-profile/new-project-profile.component'
-import { PaginationComponent } from './shared/pagination/pagination.component';
-import { SpecificationsTableComponent } from './components/specifications-table/specifications-table.component'
-import { ProductSelectionComponent } from './components/product-selection/product-selection.component'
+import { PaginationComponent } from './shared/components/pagination/pagination.component';
+import { BreadcrumbsComponent, BreadcrumbsItemComponent } from './shared/components/breadcrumbs'
+import { ActionButtonComponent } from './shared/components/action-button/action-button.component';
+import { OrderBuilderComponent } from './components/order-builder/order-builder.component'
+import { StepperComponent, Step } from './shared/components/stepper';
+import { 
+    LocationStepComponent, 
+    ProductSelectionStepComponent, 
+    SpecificationsTableStepComponent, 
+    ModeStepComponent 
+}  from './components/order-builder/order-steps'
+
+// Services
+import { WindowRef } from './shared/services/window-ref.service';
+import { ApiService } from './shared/services/api.service';
+import { OrdersApiService } from './shared/services/orders-api.service';
+import { OrdersService } from './shared/services/orders.service';
 
 //exports
 export const sharedConfig: NgModule = {
@@ -28,11 +42,19 @@ export const sharedConfig: NgModule = {
 
         // Regular components
         OrdersTableComponent,
-        SpecificationsTableComponent,
-        ProductSelectionComponent,
+        OrderBuilderComponent,
+        LocationStepComponent,
+        ProductSelectionStepComponent,
+        SpecificationsTableStepComponent,
+        ModeStepComponent,
 
         // Shared
-        PaginationComponent
+        PaginationComponent,
+        BreadcrumbsComponent,
+        BreadcrumbsItemComponent,
+        StepperComponent,
+        Step,
+        ActionButtonComponent
     ],
     imports: [
         RouterModule.forRoot([
@@ -51,5 +73,11 @@ export const sharedConfig: NgModule = {
             },
             { path: '**', redirectTo: 'app' }
         ])
+    ],
+    providers: [
+        WindowRef,
+        ApiService,
+        OrdersApiService,
+        OrdersService
     ]
 };

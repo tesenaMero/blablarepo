@@ -1,8 +1,8 @@
 <div class="layout">
-    <ul class="title-nav">
-        <li>Orders</li>
-        <li>History</li>
-    </ul>
+    <breadcrumbs>
+        <breadcrumbs-item link="../orders">Orders</breadcrumbs-item>
+        <breadcrumbs-item>History</breadcrumbs-item>
+    </breadcrumbs>
     <div class="title-container row align-items-center">
         <div class="col-sm-8">
             <h1>All locations</h1>
@@ -20,6 +20,12 @@
     <!-- <div class="table-header hidden-lg-up">
         <span class="roboto-bold date-text">JANUARY  15 - 21, 2017</span>
     </div> -->
-
-    <orders-table></orders-table>
+    <!-- <div>
+        {{orders | json}}
+    </div> -->
+    <!-- <p>{{isLoading | async}}</p>
+     <ul>
+        <li *ngFor="let item of orders | async">{{item | json}} {{item.isCanceled()}}</li>
+    </ul>  -->
+    <orders-table [orders]="orders | async" [isLoading]="isLoading | async"></orders-table>
 </div>

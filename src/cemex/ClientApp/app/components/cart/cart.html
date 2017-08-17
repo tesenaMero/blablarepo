@@ -1,7 +1,7 @@
 <div class="layout">
-    <ul class="title-nav">
-        <li>Orders</li>
-    </ul>
+    <breadcrumbs>
+        <breadcrumbs-item link="../orders">Orders</breadcrumbs-item>
+    </breadcrumbs>
     <div class="title-container row align-items-center">
         <div class="col-sm-8">
             <h1>Shopping cart</h1>
@@ -11,9 +11,6 @@
                 <a class="button-ghost mb-2" (click)="back()">Back</a>
                 <a class="button-ghost" routerLink="app/orders" role="button" aria-hidden="true">Orders history</a>
             </div>
-            <!-- <a class="button-ghost float-sm-right" routerLink="../">Back</a>
-            <a class="button-ghost float-sm-right special-separate" routerLink="../">Orders History</a>
-            <a class="button bright-green float-sm-right" routerLink="/app/new">Add another product line</a> -->
         </div>
     </div>
     <div class="cart-items-container">
