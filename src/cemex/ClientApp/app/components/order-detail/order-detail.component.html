@@ -1,0 +1,152 @@
+<div class="layout">
+    <ul class="title-nav">
+        <li>Orders</li>
+        <li>Detail</li>
+    </ul>   
+
+    <div class="title-container row align-items-center">
+        <div class="col-md-4 col-sm-12">
+            <h1>Order #{{order}}</h1>
+        </div>
+        <div class="cto-container col-md-4 col-sm-12">
+            <div class="float-lg-left">
+                <label for="request-date">Request date: </label>
+                <span>{{requestDate}}</span>                
+            </div>
+        </div>        
+        <div class="cto-container col-md-4 col-sm-12">
+            <div class="float-md-right">
+                <a class="button-ghost" routerLink="../order-detail">Back</a>
+                <a class="button-ghost" routerLink="../order-detail">Repeat</a>
+            </div>
+        </div>
+    </div>    
+
+    <div class="row location-container">
+        <div class="col-md-4 col-sm-12 float-md-left">
+            <span>Location: </span><br/>
+            <span class="span-one-style">Southwest 68th Street Building</span><br/>
+            <span>15 SW 68th Street, Chicago, Illinois, 60602</span>
+        </div>
+        <div class="col-md-3 col-sm-12 float-md-left">
+            <span>Point of delivery</span><br/>
+            <span class="span-one-style">Backstreet yard</span><br/>
+            <span>N: 50°46’ 23.92” E: 14°07’ 18.85”</span> 
+        </div>        
+        <div class="col-md-5 col-sm-12 float-md-left">
+            <div class="col-md-6 col-sm-12 float-left">
+                <span>Submitted: </span><br/>
+                <span>Submitted by: </span><br/>
+                <span>Purchase order: </span><br/>
+                <span>Status: </span>           
+            </div>
+            <div class="col-md-6 col-sm-12 float-left">
+                <span>08/12/2017</span><br/>
+                <span>Andrew Zacek</span><br/>
+                <span>7755-KJ120/00011</span><br/>
+                <a class="button bright-green" routerLink="../order-detail">Complete</a>
+                <!--<a class="button bright-green" href="#" role="button" data-slide="next">Complete</a> -->
+            </div>            
+        </div>
+    </div>
+
+    <div class="row nav-tab-container">
+        <ul class="nav nav-tabs nav-justified tabs-style">
+            <li role="presentation" class="active"><a href="#">Products</a></li>
+            <li role="presentation"><a href="#">Action log</a></li>
+            <li role="presentation"><a href="#">Comments</a></li>
+        </ul>
+    </div>    
+
+    <div class="row table-responsive-vertical shadow-z-1 detail-container">
+        <!-- Table starts here -->
+        <table id="table" class="table table-fixed main table-hover table-striped">
+            <thead>
+                <tr>
+                    <th width="4%"></th>
+                    <th width="15%">
+                        Product description 
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <th width="15%">
+                        Product line
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <th width="15%">
+                        Point of delivery
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <th width="10%">
+                        Quantity
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <th width="15%">
+                        Payment
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <th width="15%">
+                        Delivery model
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <th width="12%">
+                        Material value
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-toggle="collapse" data-target="#details1" class="hidden-md-down expand collapsed"></td>
+                    <td data-title="Submitted">Product description</td>
+                    <td data-title="Submitted by">Product line</td>
+                    <td data-title="Items">Point of delivery</td>
+                    <td data-title="Products" class="products">14 Tons</td>
+                    <td data-title="Status">Credit</td>
+                    <td data-title="Total amount">Delivery</td>
+                    <td data-title="Favorite">$20,000.00</td>
+                </tr>
+                <tr class="hidden-md-down sub sub-row">
+                    <td colspan="8">
+                        <div class="collapse details" id="details1">
+                            <div class="content">
+                                <table class="table table-fixed details-table">
+                                    <thead>
+                                        <th width="15%">info</th>
+                                        <th width="15%">info</th>
+                                        <th width="10%">info</th>
+                                        <th width="10%">info</th>
+                                        <th width="25%">info</th>
+                                        <th width="10%">info</th>
+                                        <th width="10%">info</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="order">
+                                            <td>info</td>
+                                            <td>info</td>
+                                            <td>info</td>
+                                            <td>info</td>
+                                            <td>info</td>
+                                            <td>info</td>
+                                            <td>info</td>
+                                        </tr>
+                                        <tr class="order">
+                                            <td>info</td>
+                                            <td>info</td>
+                                            <td>info</td>
+                                            <td>info</td>
+                                            <td>info</td>
+                                            <td>info</td>
+                                            <td>info</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="hidden-md-down sub separator"></tr>                
+            </tbody>
+        </table>
+    </div>
+
+</div>

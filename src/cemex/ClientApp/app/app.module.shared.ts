@@ -6,6 +6,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component'
 import { OrdersComponent } from './components/orders/orders.component'
 import { OrdersTableComponent } from './components/orders-table/orders-table.component'
 import { NewOrderComponent } from './components/new-order/new-order.component'
+import { OrderDetailComponent } from './components/order-detail/order-detail.component'
 import { CartComponent } from './components/cart/cart.component';
 import { NewProjectProfile } from './components/new-project-profile/new-project-profile.component'
 import { PaginationComponent } from './shared/pagination/pagination.component';
@@ -23,6 +24,7 @@ export const sharedConfig: NgModule = {
         NewOrderComponent,
         CartComponent,
         NewProjectProfile,
+        OrderDetailComponent,
 
         // Regular components
         OrdersTableComponent,
@@ -43,7 +45,8 @@ export const sharedConfig: NgModule = {
                     { path: 'orders', component: OrdersComponent },		    
                     { path: 'new', component: NewOrderComponent },
                     { path: 'cart', component: CartComponent },
-                    { path: 'newproj', component: NewProjectProfile },
+                    { path: 'new-project', component: NewProjectProfile },
+                    { path: 'order-detail', component: OrderDetailComponent },
 		        ]
             },
             { path: '**', redirectTo: 'app' }
