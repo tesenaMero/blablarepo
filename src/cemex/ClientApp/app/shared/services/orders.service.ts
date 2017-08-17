@@ -31,14 +31,17 @@ interface OrdersState {
 export class OrdersService {
     private _orders: BehaviorSubject<OrdersState>;
     private _isLoading:  BehaviorSubject<boolean>;
+    private _error: BehaviorSubject<string | null>;
 
     constructor(private OrdersApiService: OrdersApiService) {
-        this._orders = <BehaviorSubject<OrdersState>>new BehaviorSubject({ byId: {}, allIds: []});
-        this._isLoading = <BehaviorSubject<boolean>>new BehaviorSubject(false);
+        this._orders = <BehaviorSubject<OrdersState>> new BehaviorSubject({ byId: {}, allIds: []});
+        this._isLoading = <BehaviorSubject<boolean>> new BehaviorSubject(false);
+        this._error = <BehaviorSubject<string | null>> new BehaviorSubject(null);
     }
     
     public fetchAllOrders() {
         this._isLoading.next(true);
+        this._error.next(null);
 
         // // TODO depend on user service for customerId
         this.OrdersApiService.all("4169", 100)
@@ -47,8 +50,9 @@ export class OrdersService {
             .subscribe(response => {
                 this._orders.next({ allIds: response.result, byId: response.entities.orderRequests });
                 this._isLoading.next(false);
-            }, err => { // TODO
-                console.log(err);
+                console.log(this._orders.getValue());
+            }, err => {
+                this._error.next("Failed fetching orders");
             })
     }
 

@@ -23,9 +23,9 @@
     <!-- <div>
         {{orders | json}}
     </div> -->
-    <p>{{isLoading | async}}</p>
+    <!-- <p>{{isLoading | async}}</p>
      <ul>
         <li *ngFor="let item of orders | async">{{item | json}} {{item.isCanceled()}}</li>
-    </ul> 
-    <orders-table></orders-table>
+    </ul>  -->
+    <orders-table [orders]="orders | async" [isLoading]="isLoading | async"></orders-table>
 </div>
