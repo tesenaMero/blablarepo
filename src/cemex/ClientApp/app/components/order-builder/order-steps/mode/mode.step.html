@@ -1,13 +1,13 @@
 <div class="w-100">
     <div class="circle-container">
-        <div class="circle">
+        <div (click)="selectMode(MODE.Delivery)" class="circle">
             <span class="icon cmx-icon-control-center"></span>
             <span>Delivery</span>
         </div>
         <div class="or-divider">
             <span>or</span>
         </div>
-        <div class="circle">
+        <div (click)="selectMode(MODE.Pickup)" class="circle">
             <span class="icon cmx-icon-track"></span>
             <span>Pickup</span>
         </div>

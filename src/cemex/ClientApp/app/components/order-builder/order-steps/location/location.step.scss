@@ -2,9 +2,23 @@
 // Step 1
 // Jobsite selection
 // ============================================
+.first-container {
+    border-bottom: 1px solid #DDE0E6;
+    padding-bottom: 51px;
+    // @include media-breakpoint-up(md) {
+    // }
+}
+
+.second-container {
+    padding-top: 42px;
+    @include media-breakpoint-down(sm) {
+        padding-bottom: 42px;
+    }
+}
+
 .select-label {
     color: #001C3B;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
     text-align: left;
     margin-bottom: 0;
@@ -20,9 +34,28 @@ select {
     border: 1px solid #ACAEBA;
     border-radius: 3px;
     height: 48px !important;
+    &:invalid {
+        color: #666666;
+    }
+}
+
+.instructions-area {
+    height: 217px;
+    border: 1px solid #ACAEBA;
+    border-radius: 3px;
+    background-color: #FFFFFF;
 }
 
 #jobsite-selection-map {
-    height: 417px;
-    margin-top: 27px;
+    height: 100%;
+    min-height: 491px;
+    //margin-top: 27px;
+}
+
+.nice-selection {
+    color: #032549
+}
+
+.mb-21px {
+    margin-bottom: 21px;
 }
