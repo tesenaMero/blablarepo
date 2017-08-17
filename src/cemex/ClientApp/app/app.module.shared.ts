@@ -7,11 +7,11 @@ import { OrdersComponent } from './components/orders/orders.component'
 import { OrdersTableComponent } from './components/orders-table/orders-table.component'
 import { NewOrderComponent } from './components/new-order/new-order.component'
 import { CartComponent } from './components/cart/cart.component';
-import { PaginationComponent } from './shared/pagination/pagination.component';
-import { BreadcrumbsComponent, BreadcrumbsItemComponent } from './shared/breadcrumbs'
-import { ActionButtonComponent } from './shared/action-button/action-button.component';
+import { PaginationComponent } from './shared/components/pagination/pagination.component';
+import { BreadcrumbsComponent, BreadcrumbsItemComponent } from './shared/components/breadcrumbs'
+import { ActionButtonComponent } from './shared/components/action-button/action-button.component';
 import { OrderBuilderComponent } from './components/order-builder/order-builder.component'
-import { StepperComponent, Step } from './shared/stepper';
+import { StepperComponent, Step } from './shared/components/stepper';
 import { 
     LocationStepComponent, 
     ProductSelectionStepComponent, 

@@ -7,7 +7,7 @@
                         <label for="pod-select" class="select-label">Select from existing jobiste</label>
                     </div>
                     <div class="col-md-8 col-sm-12">
-                        <select id="country-field" class="form-control" (ngModelChange)="jobsiteSelected($event)" [ngModel]="jobsite" [ngClass]="{ 'nice-selection': nice }">
+                        <select id="country-field" class="form-control" (change)="jobsiteSelected($event)" [ngClass]="{ 'nice-selection': nice }">
                             <option value="" selected disabled hidden>Select existing POD</option>
                             <option value="1">Riderback Eastern River Valley</option>
                             <option value="2">Monterrey, Nuevo Leon</option>
