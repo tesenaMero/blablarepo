@@ -19,6 +19,12 @@ import {
     ModeStepComponent 
 }  from './components/order-builder/order-steps'
 
+// Services
+import { WindowRef } from './shared/services/window-ref.service';
+import { ApiService } from './shared/services/api.service';
+import { OrdersApiService } from './shared/services/orders-api.service';
+import { OrdersService } from './shared/services/orders.service';
+
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
     declarations: [
@@ -60,5 +66,11 @@ export const sharedConfig: NgModule = {
             },
             { path: '**', redirectTo: 'app' }
         ])
+    ],
+    providers: [
+        WindowRef,
+        ApiService,
+        OrdersApiService,
+        OrdersService
     ]
 };
