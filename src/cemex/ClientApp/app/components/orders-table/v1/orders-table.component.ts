@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { OrderRequest } from '../../shared/models/order-request';
+import { OrderRequest } from '../../../shared/models/order-request';
 
 @Component({
     selector: 'orders-table',
