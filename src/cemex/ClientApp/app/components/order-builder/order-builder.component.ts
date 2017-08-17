@@ -12,7 +12,6 @@ export class OrderBuilderComponent {
     constructor() { }
 
     modeStepCompleted(mode: DeliveryMode) {
-        this.stepper.complete();
         this.stepper.next();
     }
 

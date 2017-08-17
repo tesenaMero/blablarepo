@@ -46,6 +46,7 @@ export class StepperComponent implements AfterContentInit {
     // Controls
     // ==============================================================
     next() {
+        if (this.currentStep.automatic) { this.complete(); }
         if (!this.currentStep.completed) { return; }
 
         let currentIndex = this.getActiveStepIndex();
@@ -91,6 +92,7 @@ export class StepperComponent implements AfterContentInit {
         this.steps.toArray().forEach(step => step.active = false);
         this.currentStep = step;
         step.active = true;
+        step.show();
     }
 
     private selectStepByIndex(index: number) {

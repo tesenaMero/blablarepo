@@ -68,7 +68,7 @@
     <div class="stepper-open collapse" id="collapse-steps">
         <div class="stepper-container">
             <div *ngFor="let step of filterVisible(steps); let last = last; let i = index" class="step">
-                <div class="cmx-step-icon" [ngClass]="{ 'cmx-step-disabled': !step.active, 'cmx-step-completed': step.completed }">
+                <div class="cmx-step-icon" [ngClass]="{ 'cmx-step-disabled': !step.active && !step.completed, 'cmx-step-completed': step.completed }">
                     <svg *ngIf="step.completed" class="icon-completed-checkmark">
                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-completed-checkmark"></use>
                     </svg>

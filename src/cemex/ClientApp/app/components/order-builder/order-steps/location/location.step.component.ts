@@ -1,13 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
-
+import { Step, StepEventsListener } from '../../../../shared/stepper/'
 @Component({
     selector: 'location-step',
     templateUrl: './location.step.html',
     styleUrls: ['./location.step.scss'],
     host: { 'class': 'w-100' }
 })
-export class LocationStepComponent implements OnInit {
+export class LocationStepComponent implements StepEventsListener {
     @Input() mapOptions?: google.maps.MapOptions;
     @Output() onCompleted = new EventEmitter<any>();
     map: any; // Map instance
@@ -15,7 +15,14 @@ export class LocationStepComponent implements OnInit {
     jobsite = "";
     nice = false;
 
-    constructor() { }
+    constructor(@Inject(Step) private step: Step) {
+        this.step.setEventsListener(this);
+    }
+
+    onShowed() {
+        console.log("resize");
+        google.maps.event.trigger(this.map, "resize");
+    }
 
     jobsiteSelected(event: any){
         this.nice = true;
