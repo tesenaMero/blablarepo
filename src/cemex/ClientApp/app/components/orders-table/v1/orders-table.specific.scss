@@ -1,3 +1,8 @@
+$table-bg: #fff;
+$table-bg-accent: #E7EAEE;
+$table-bg-hover: rgba(0, 0, 0, .12);
+$table-bg-active: $table-bg-hover;
+$table-border-color: #e0e0e0;
 .status:before {
     content: ' ';
     border-radius: 3px;
@@ -36,12 +41,6 @@
     }
 }
 
-.details {
-    .content {
-        padding: 14px 42px 13px 42px;
-    }
-}
-
 .star {
     color: #C8D0DC;
     &.active {
@@ -56,6 +55,27 @@
 }
 
 // Inside table
+.details {
+    .content {
+        padding: 14px 42px 13px 42px;
+    }
+}
+
+.table-striped {
+    >tbody>tr.sub:nth-child(odd) {
+        >td,
+        >th {
+            background-color: $table-bg-accent;
+        }
+    }
+    >tbody>tr.sub:nth-child(even) {
+        >td,
+        >th {
+            background-color: $table-bg;
+        }
+    }
+}
+
 .details-table {
     margin-left: 1%;
     background-color: inherit !important;

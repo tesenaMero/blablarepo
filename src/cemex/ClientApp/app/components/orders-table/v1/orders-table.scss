@@ -1,4 +1,5 @@
 @import "~bootstrap/scss/bootstrap-grid.scss";
+@import "../../scss/responsive.scss";
 // Variables
 // ---------------------
 $table-header-font-weight: 700;
@@ -177,21 +178,6 @@ $table-border-color: #e0e0e0;
         }
     }
     >tbody>tr:not(.sub):nth-child(odd) {
-        >td,
-        >th {
-            background-color: $table-bg;
-        }
-    }
-}
-
-.table-striped {
-    >tbody>tr.sub:nth-child(odd) {
-        >td,
-        >th {
-            background-color: $table-bg-accent;
-        }
-    }
-    >tbody>tr.sub:nth-child(even) {
         >td,
         >th {
             background-color: $table-bg;

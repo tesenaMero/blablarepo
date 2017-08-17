@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+// Components
 import { AppComponent } from './components/app/app.component'
 import { DashboardComponent } from './components/dashboard/dashboard.component'
 import { OrdersComponent } from './components/orders/orders.component'
@@ -25,6 +26,9 @@ import { ApiService } from './shared/services/api.service';
 import { OrdersApiService } from './shared/services/orders-api.service';
 import { OrdersService } from './shared/services/orders.service';
 
+// Pipies
+import { NoSpacePipe } from './pipes/nospace.pipe'
+
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
     declarations: [
@@ -34,6 +38,9 @@ export const sharedConfig: NgModule = {
         OrdersComponent,
         NewOrderComponent,
         CartComponent,
+
+        // Pipes
+        NoSpacePipe,
 
         // Regular components
         OrdersTableComponent,
