@@ -1,0 +1,162 @@
+.specs-content{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 3px;
+}
+
+.prod-card {
+    display: flex;
+    width: 95%;
+    height: 276px;
+    border-radius: 3px;
+    background-color: #FFF;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.08);
+    margin: 5px;
+}
+
+.prod-set {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 15px;
+
+
+    div {
+        display: flex;
+        flex-direction: column;
+        margin: 5px;
+    
+        input {
+            width: 100%;
+            border: 1px solid #D7D7D7;
+            border-radius: 2px;
+        }
+    
+        span {
+            width: auto;
+            color: #9CA4AE;
+            font-family: Roboto;
+            font-size: 12px;
+            line-height: 16px;
+            margin-bottom: 5px;
+        }
+
+        .additional-services-div {
+            flex-direction: row;
+            align-items: center;
+
+            .checkAdditional {
+                display: block;
+                width: 10%;
+            }
+
+            .additional-value {
+                color: #2A2A2A;
+                font-size: 14px;
+                line-height: 19px;
+                font-family: Roboto;
+                align-content: baseline;
+                margin-top: 5px;
+            }
+
+        }
+
+        .prod-field-value {
+            color: #2A2A2A;
+            font-size: 14px;
+            line-height: 19px;
+            font-family: Roboto;
+            align-content: baseline;
+            margin-top: 5px;
+        }
+    }
+
+    .div-sep {
+        width: 5px;
+        margin: 0px;
+
+        .separator {
+            border-left: 1px solid #D2D2D2;
+            height: 20px;
+            margin-top: 30px;
+            align-self: center;
+        }
+
+    }
+    
+}
+
+
+.description {
+    width: 25%;
+}
+
+.quantity {
+    width: 14%;
+}
+
+.unit {
+    width: 10%;
+}
+
+.requestdate {
+    width: 15%;
+}
+
+.requesttime {
+    width: 15%;
+}
+
+.payment {
+    width: 10%;
+}
+
+.contract {
+    width: 27%;
+}
+
+.purchase-order {
+    width: 27%;
+}
+
+.max-capacity {
+    width: 14%;
+    .max-capacity-value {
+        color: #2A2A2A!important;
+        font-size: 14px!important;
+        line-height: 19px!important;
+        align-content: baseline;
+        margin-top: 5px;
+    }
+}
+
+
+.additional-services {
+    width: 30%;
+}
+
+/*.additional-services-div {
+    flex-direction: row;
+    align-items: center;
+}
+
+.additional-services-div .checkAdditional {
+    display: block;
+    width: 10%;
+}*/
+/*
+.additional-value {
+    color: #2A2A2A!important;
+    font-size: 14px!important;
+    line-height: 19px!important;
+    font-family: Roboto;
+    align-content: baseline;
+    margin-top: 5px;
+}*/
+
+.transport-method {
+    width: 30%;
+}
