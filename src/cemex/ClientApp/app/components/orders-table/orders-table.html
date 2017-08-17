@@ -12,7 +12,7 @@
         <table id="table" class="table table-fixed main table-hover table-striped">
             <thead>
                 <tr>
-                    <th width="5%">
+                    <th class="i-column" width="5%">
                         <i class="star cmx-icon-favourite-active" aria-hidden="true"></i>
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
@@ -59,7 +59,7 @@
             <tbody>
                 <ng-container *ngFor="let order of orders; let index = index">
                     <tr class="order" [ngClass]="{ 'zebra': isOdd(index) }">
-                        <td data-title="Favorite">
+                        <td class="i-column" data-title="Favorite">
                             <i class="star cmx-icon-favourite-active" [class.active]="order.orderRequest.isFavorite" aria-hidden="true"></i>
                         </td>
                         <td class="number" data-title="Order No">7543189</td>
@@ -79,7 +79,7 @@
                         </td>
                         <!-- TODO numberal parser -->
                         <td data-title="Total amount">${{order.orderRequest.totalAmount}}</td>
-                        <td data-title="Repeat">
+                        <td class="i-column" data-title="Repeat">
                             <i class="cmx-icon-repeat"></i>
                         </td>
                     </tr>

@@ -28,6 +28,11 @@ $table-border-color: #e0e0e0;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
 }
 
+.i-column {
+    text-overflow: initial !important;
+    font-size: 14px;
+}
+
 .separator {
     height: 8px;
 }
@@ -172,7 +177,9 @@ $table-border-color: #e0e0e0;
     >tbody>tr {
         background-color: $table-bg;
         &.zebra {
-            background-color: $table-bg-accent;
+            @include media-breakpoint-up(md) {
+                background-color: $table-bg;
+            }
         }
     }
 }
