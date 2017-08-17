@@ -1,13 +1,12 @@
-
 <!-- Responsive table starts here -->
 <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
 <div *ngIf="isLoading">
     <p>Loading...</p>
 </div>
-<div *ngIf="!isLoading && orders.length == 0">
+<div *ngIf="!isLoading && orders?.length == 0">
     <p>No orders found</p>
 </div>
-<div class="orders" *ngIf="!isLoading && orders.length > 0">
+<div class="orders" *ngIf="!isLoading && orders?.length > 0">
     <div class="table-responsive-vertical shadow-z-1">
         <!-- Table starts here -->
         <table id="table" class="table table-fixed main table-hover table-striped">
@@ -54,8 +53,8 @@
                         <td data-title="Products" class="products">
                             <i *ngIf="order.isReadyMix()" class="cmx-icon-driver" aria-hidden="true"></i>
                             <!-- TODO add cement packed/bagged icons -->
-                             <i *ngIf="order.isCement()" class="cmx-icon-track" aria-hidden="true"></i>
-                            <i *ngIf="order.isAggregates()" class="cmx-icon-user-profile" aria-hidden="true"></i> 
+                            <i *ngIf="order.isCement()" class="cmx-icon-track" aria-hidden="true"></i>
+                            <i *ngIf="order.isAggregates()" class="cmx-icon-user-profile" aria-hidden="true"></i>
                         </td>
                         <td data-title="Status"><span class="status in-progress"></span>{{order.orderRequest.orderRequestStatus.statusDesc}}</td>
                         <!-- TODO numberal parser -->
