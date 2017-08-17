@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
-import { Step, StepEventsListener } from '../../../../shared/stepper/'
+import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 @Component({
     selector: 'location-step',
     templateUrl: './location.step.html',
