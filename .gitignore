@@ -34,6 +34,10 @@ x86/
 /src/cemex/wwwroot/dist/
 /src/cemex/ClientApp/dist/
 
+
+# dls files
+/src/cemex/submodules/dls
+
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
