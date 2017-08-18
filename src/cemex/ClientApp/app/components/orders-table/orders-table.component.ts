@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { OrderRequest } from '../../shared/models/order-request';
-import { NoSpacePipe, ZeroPadPipe } from '../../pipes'
+import { OrdersService } from '../../shared/services/orders.service';
 
 @Component({
     selector: 'orders-table',
@@ -11,7 +11,7 @@ export class OrdersTableComponent implements OnInit {
     @Input() orders: OrderRequest;
     @Input() isLoading: boolean;
 
-    constructor() { }
+    constructor(private OrdersService: OrdersService) {}
 
     ngOnInit() {
     }
@@ -28,4 +28,8 @@ export class OrdersTableComponent implements OnInit {
         while (s.length < size) s = "0" + s;
         return s;
     }
+    favorite(orderRequestId, isFavorite) {
+        this.OrdersService.favoriteOrder(orderRequestId, isFavorite);
+    }
+
 }
