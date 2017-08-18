@@ -10,14 +10,14 @@
 .prod-card {
     display: flex;
     width: 95%;
-    height: 276px;
+    height: 35%;
     border-radius: 3px;
     background-color: #FFF;
     box-shadow: 0 1px 3px 0 rgba(0,0,0,0.08);
     margin: 5px;
 }
 
-.prod-set {
+.prod-card .product-cement-mexico {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -47,6 +47,7 @@
         .additional-services-div {
             flex-direction: row;
             align-items: center;
+            margin-top: 0px;
 
             .checkAdditional {
                 display: block;
@@ -86,7 +87,98 @@
         }
 
     }
+
+    .action-remove {
+        display: flex;
+        justify-content: flex-start;
+        flex-grow: 2;
+        align-items: flex-end;
+        margin-top: 20px;
     
+        .button-remove {
+            width: 50%;
+        }
+    }
+    
+    
+}
+
+.prod-card .product-cement-mexico-lt-sm {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 15px;
+
+    div {
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+        margin: 5px;
+        width: 100%;
+
+        input {
+            border: 1px solid #D7D7D7;
+            border-radius: 2px;
+            width: 100%;
+            height: 48px;
+        }
+    
+        span {
+            width: auto;
+            color: #9CA4AE;
+            font-family: Roboto;
+            font-size: 12px;
+            line-height: 16px;
+            margin-bottom: 5px;
+        }
+
+        .additional-services-div {
+            flex-direction: row;
+            align-items: center;
+            margin-top: 0px;
+
+            .checkAdditional {
+                display: block;
+                width: 10%;
+            }
+
+            .additional-value {
+                color: #2A2A2A;
+                font-size: 14px;
+                line-height: 19px;
+                font-family: Roboto;
+                align-content: baseline;
+                margin-top: 5px;
+            }
+
+        }
+
+        .prod-field-value {
+            color: #2A2A2A;
+            font-size: 14px;
+            line-height: 19px;
+            font-family: Roboto;
+            align-content: baseline;
+            margin-top: 5px;
+        }
+        
+    }
+
+    .div-sep {
+        width: 100%;
+        height: 1px;
+        margin: 3px;
+
+        .separator {
+            border-bottom: 1px solid #D2D2D2;
+            height: 1px;
+            width: 100%;
+            /*margin-top: 30px;*/
+            align-self: center;
+        }
+
+    }
 }
 
 
@@ -95,7 +187,7 @@
 }
 
 .quantity {
-    width: 14%;
+    width: 15%;
 }
 
 .unit {
@@ -103,23 +195,20 @@
 }
 
 .requestdate {
-    width: 15%;
+    width: 21%;
 }
 
 .requesttime {
-    width: 15%;
+    width: 21%;
+}
+
+
+.contract {
+    width: 27.5%;
 }
 
 .payment {
-    width: 10%;
-}
-
-.contract {
-    width: 27%;
-}
-
-.purchase-order {
-    width: 27%;
+    width: 27.5%;
 }
 
 .max-capacity {
@@ -160,3 +249,5 @@
 .transport-method {
     width: 30%;
 }
+
+
