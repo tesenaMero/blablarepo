@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CmxNavHeaderModule } from '@cemex/cmx-nav-header-v1/dist';
+import { CmxButtonModule } from '@cemex/cmx-button-v1/dist';
 
 import { AppComponent } from './components/app/app.component'
 import { DashboardComponent } from './components/dashboard/dashboard.component'
@@ -59,6 +60,7 @@ export const sharedConfig: NgModule = {
     imports: [
         FlexLayoutModule,
         CmxNavHeaderModule,
+        CmxButtonModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full' },
             { path: 'orders', redirectTo: 'app', pathMatch: 'full' },

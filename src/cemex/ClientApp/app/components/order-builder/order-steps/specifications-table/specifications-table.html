@@ -1,28 +1,28 @@
 <div class="specs-content">
-    <div class="prod-card">
+    <div class="prod-card" *ngFor="let specification of _cementPackageList">
         <div class="product-cement-mexico" class.lt-sm="product-cement-mexico-lt-sm">
             <div class="description">
                 <span>Product Description</span>
-                <input/>
+                <input [(ngModel)]="specification.productDescription"/>
             </div>
             <div class="quantity">
                 <span>Quantity</span>
-                <input/>
+                <input [(ngModel)]="specification.quantity"/>
             </div>
             <div class="prod-field unit">
                 <span>Unit</span>
-                <input/>
+                <input [(ngModel)]="specification.unit"/>
             </div>
             <div class="div-sep">
                 <div class="separator"></div>
             </div>
             <div class="requestdate">
                 <span>Requested Date</span>
-                <input/>
+                <input [(ngModel)]="specification.requestDate"/>
             </div>
             <div class="requesttime">
                 <span>Requested Time</span>
-                <input/>
+                <input [(ngModel)]="specification.requestTime"/>
             </div>
             <!--div class="div-sep">
                 <div class="separator"></div>
@@ -30,19 +30,19 @@
             <!--             -->
             <div class="description">
                 <span>Product ID</span>
-                <input/>
+                <input [(ngModel)]="specification.productId"/>
             </div>
             <div class="max-capacity">
                 <span>Maximum Capacity</span>
-                <span class="prod-field-value">1000 tons</span>
+                <span class="prod-field-value">{{specification.maximumCapacity}} tons</span>
             </div>
             <div class="contract">
                 <span>Contract</span>
-                <input/>
+                <input [(ngModel)]="specification.contract"/>
             </div>
             <div class="payment">
                 <span>Payment</span>
-                <input/>
+                <input [(ngModel)]="specification.payment"/>
             </div>
             <div class="additional-services">
                 <span>Additional Services</span>
@@ -53,10 +53,10 @@
             </div>
             <div class="transport-method">
                 <span>Transport Method</span>
-                <span class="prod-field-value">Delivery</span>
+                <span class="prod-field-value">{{specification.deliveryMode}}</span>
             </div>
             <div class="action-remove">
-                <button class="button">REMOVE PRODUCT</button>
+                <button cmx-button-link >REMOVE PRODUCT</button>
             </div>
         </div>
     </div>
