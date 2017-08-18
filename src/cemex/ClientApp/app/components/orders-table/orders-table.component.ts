@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { OrderRequest } from '../../shared/models/order-request';
-import { NoSpacePipe } from '../../pipes/nospace.pipe'
+import { NoSpacePipe, ZeroPadPipe } from '../../pipes'
 
 @Component({
     selector: 'orders-table',
@@ -23,4 +23,9 @@ export class OrdersTableComponent implements OnInit {
         return (n & 1) == 1;
     }
 
+    pad(text: any, size: number): string {
+        var s = text + "";
+        while (s.length < size) s = "0" + s;
+        return s;
+    }
 }

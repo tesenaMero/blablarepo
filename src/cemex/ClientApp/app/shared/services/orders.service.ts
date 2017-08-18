@@ -50,7 +50,7 @@ export class OrdersService {
             .subscribe(response => {
                 this._orders.next({ allIds: response.result, byId: response.entities.orderRequests });
                 this._isLoading.next(false);
-                console.log(this._orders.getValue());
+                //console.log(this._orders.getValue());
             }, err => {
                 this._error.next("Failed fetching orders");
             })

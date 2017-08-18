@@ -7,7 +7,7 @@ $table-header-font-color: #001C3B;
 $table-cell-padding: 13px;
 $table-condensed-cell-padding: $table-cell-padding/2;
 $table-bg: #fff;
-$table-bg-accent: #E7EAEE;
+$table-bg-accent: #E7EBEE;
 $table-bg-hover: rgba(0, 0, 0, .12);
 $table-bg-active: $table-bg-hover;
 $table-border-color: #e0e0e0;
@@ -30,7 +30,7 @@ $table-border-color: #e0e0e0;
 
 .i-column {
     text-overflow: initial !important;
-    font-size: 14px;
+    font-size: 14px !important;
 }
 
 .separator {
@@ -76,8 +76,9 @@ $table-border-color: #e0e0e0;
             >td {
                 text-align: left;
                 padding: $table-cell-padding;
-                vertical-align: top;
+                padding-top: 15px; // Center fix
                 border-top: 0;
+                vertical-align: middle;
                 @include transition(all .3s ease);
                 &[data-title="Total amount"] {
                     font-weight: bold;
@@ -178,7 +179,7 @@ $table-border-color: #e0e0e0;
         background-color: $table-bg;
         &.zebra {
             @include media-breakpoint-up(md) {
-                background-color: $table-bg;
+                background-color: $table-bg-accent;
             }
         }
     }

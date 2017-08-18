@@ -19,6 +19,10 @@
     border: 1px solid #C6C6C6;
 }
 
+.status.pending {
+    border: 1px solid #C6C6C6;
+}
+
 .status.complete {
     background-color: #77CB38;
     color: white;
@@ -76,8 +80,9 @@
     }
 }
 
-.p9-13 {
+.status-block-position {
     @include media-breakpoint-up(md) {
         padding: 9px 13px !important;
+        padding-top: 11px !important;
     }
 }

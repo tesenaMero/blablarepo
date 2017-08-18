@@ -20,14 +20,14 @@ import {
     ModeStepComponent 
 }  from './components/order-builder/order-steps'
 
+// Pipes
+import { NoSpacePipe, ZeroPadPipe } from './pipes/index'
+
 // Services
 import { WindowRef } from './shared/services/window-ref.service';
 import { ApiService } from './shared/services/api.service';
 import { OrdersApiService } from './shared/services/orders-api.service';
 import { OrdersService } from './shared/services/orders.service';
-
-// Pipies
-import { NoSpacePipe } from './pipes/nospace.pipe'
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
@@ -40,6 +40,7 @@ export const sharedConfig: NgModule = {
         CartComponent,
 
         // Pipes
+        ZeroPadPipe,
         NoSpacePipe,
 
         // Regular components

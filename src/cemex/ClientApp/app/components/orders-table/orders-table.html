@@ -62,7 +62,7 @@
                         <td class="i-column" data-title="Favorite">
                             <i class="star cmx-icon-favourite-active" [class.active]="order.orderRequest.isFavorite" aria-hidden="true"></i>
                         </td>
-                        <td class="number" data-title="Order No">7543189</td>
+                        <td class="number" data-title="Order No">{{ order.orderRequest.orderRequestId | zeropad: 7}}</td>
                         <td data-title="Submitted">08/13/2017 {{order.orderRequest.viewedAt}}</td>
                         <td data-title="Location">0864 Lonnie Parks</td>
                         <td data-title="Purchase Order Number">7755-KJ120/00011</td>
@@ -72,10 +72,10 @@
                             <i *ngIf="order.isCement()" class="cmx-icon-track" aria-hidden="true"></i>
                             <i *ngIf="order.isAggregates()" class="cmx-icon-user-profile" aria-hidden="true"></i>
                         </td>
-                        <td data-title="Amount">{{order.orderRequest.orderRequestItems.length}}</td>
+                        <td data-title="Amount">{{order.orderRequest.orderRequestItems.length}} tons</td>
                         <td valign="bottom" data-title="Requested date">31/12/2017, 15:00 - 16:00</td>
-                        <td data-title="Status" class="p9-13">
-                            <div class="status in-progress {{ order.orderRequest.orderRequestStatus.statusDesc | lowercase }}">{{order.orderRequest.orderRequestStatus.statusDesc}}</div>
+                        <td data-title="Status" class="status-block-position">
+                            <div class="status {{ order.orderRequest.orderRequestStatus.statusDesc | lowercase }}">{{order.orderRequest.orderRequestStatus.statusDesc}}</div>
                         </td>
                         <!-- TODO numberal parser -->
                         <td data-title="Total amount">${{order.orderRequest.totalAmount}}</td>
