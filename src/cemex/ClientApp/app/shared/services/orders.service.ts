@@ -43,16 +43,32 @@ export class OrdersService {
         this._isLoading.next(true);
         this._error.next(null);
 
-        // // TODO depend on user service for customerId
+        // TODO depend on user service for customerId
         this.OrdersApiService.all("4169", 100)
             .map(response => response.json())
             .map(orders => normalize(orders.orderRequests, [ schema.orderRequests ]))
             .subscribe(response => {
                 this._orders.next({ allIds: response.result, byId: response.entities.orderRequests });
                 this._isLoading.next(false);
-                console.log(this._orders.getValue());
             }, err => {
                 this._error.next("Failed fetching orders");
+            })
+    }
+
+    private _favorite(orderRequestId, isFavorite) {
+        const orderRequest = this._orders.getValue().byId[orderRequestId];
+        orderRequest && orderRequest.setFavorite(isFavorite);
+    }
+
+    public favoriteOrder(orderRequestId, isFavorite) {
+        this._favorite(orderRequestId, isFavorite);
+        this.OrdersApiService.favoriteOrder(orderRequestId, isFavorite)
+            .map(response => response.json())
+            .subscribe(response => {
+                // success do nothing
+            }, err => {
+                // favoring failed, restore favorite state
+                this._favorite(orderRequestId, !isFavorite);
             })
     }
 
