@@ -2,12 +2,12 @@ Setup project
 =================
 1. Clone this repository (with submodules)
 ```sh
-> git clone --recursive -b development https://danielcardeenas@bitbucket.org/cemex/rewebapporderproductcust2.git
+> git clone --recursive -b development https://bitbucket.org/cemex/rewebapporderproductcust2.git
 ```
 2. Run the compilation script
 ```sh
 > cd src/cemex
-> bash compile.sh
+> ./compile.sh
 ```
 
 Thats it you are ready to go

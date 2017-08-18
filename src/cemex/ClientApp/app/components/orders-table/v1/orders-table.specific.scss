@@ -1,0 +1,115 @@
+$table-bg: #fff;
+$table-bg-accent: #E7EAEE;
+$table-bg-hover: rgba(0, 0, 0, .12);
+$table-bg-active: $table-bg-hover;
+$table-border-color: #e0e0e0;
+.status:before {
+    content: ' ';
+    border-radius: 3px;
+    background-color: #333;
+    padding: 0px 12px;
+    margin-right: 8px;
+}
+
+.status.in-progress:before {
+    background-color: #277BAA;
+}
+
+.status.completed:before {
+    background-color: #7AC944;
+}
+
+.status.draft:before {
+    background-color: #E45C00;
+}
+
+.sub-row {
+    background-color: #E7EBEE;
+    td {
+        padding: 0 !important;
+    }
+}
+
+.expand {
+    text-align: center !important;
+    cursor: pointer;
+    &:after {
+        content: '-';
+    }
+    &.collapsed:after {
+        content: '+';
+    }
+}
+
+.star {
+    color: #C8D0DC;
+    &.active {
+        color: #F1C40F;
+    }
+}
+
+.products {
+    .cmx-icon-driver {
+        font-size: 18px;
+    }
+}
+
+// Inside table
+.details {
+    .content {
+        padding: 14px 42px 13px 42px;
+    }
+}
+
+.table-striped {
+    >tbody>tr.sub:nth-child(odd) {
+        >td,
+        >th {
+            background-color: $table-bg-accent;
+        }
+    }
+    >tbody>tr.sub:nth-child(even) {
+        >td,
+        >th {
+            background-color: $table-bg;
+        }
+    }
+}
+
+.details-table {
+    margin-left: 1%;
+    background-color: inherit !important;
+    thead {
+        th {
+            font-weight: 700;
+            color: #001C3B;
+            border-bottom: 0;
+            font-size: 12px;
+            line-height: 16px;
+            padding-left: 0;
+        }
+    }
+    tbody {
+        td {
+            border: 0;
+            padding: 14px 0px !important;
+            padding-right: 8px !important;
+        }
+        .order {
+            background-color: inherit !important;
+            font-size: 14px;
+            line-height: 16px;
+            .number {
+                color: #37A7F8;
+                font-size: 14px;
+                font-weight: bold;
+            }
+            .payment {
+                font-weight: bold;
+            }
+            .product {
+                font-size: 18px;
+            }
+        }
+    }
+}

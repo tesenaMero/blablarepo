@@ -1,28 +1,41 @@
-.status:before {
-    content: ' ';
-    border-radius: 3px;
-    background-color: #333;
-    padding: 0px 12px;
-    margin-right: 8px;
-}
-
-.status.in-progress:before {
-    background-color: #277BAA;
-}
-
-.status.completed:before {
-    background-color: #7AC944;
-}
-
-.status.draft:before {
-    background-color: #E45C00;
-}
-
-.sub-row {
-    background-color: #E7EBEE;
-    td {
-        padding: 0 !important;
+@import "~bootstrap/scss/bootstrap-grid.scss";
+.status {
+    display: flex;
+    max-width: 78px;
+    max-height: 28px;
+    min-height: 28px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+    font-size: 13px;
+    overflow: hidden;
+    @include media-breakpoint-down(md) {
+        display: inline-flex;
+        min-width: 78px;
     }
+}
+
+.status.in-progress {
+    border: 1px solid #C6C6C6;
+}
+
+.status.pending {
+    border: 1px solid #C6C6C6;
+}
+
+.status.complete {
+    background-color: #77CB38;
+    color: white;
+}
+
+.status.block {
+    background-color: #FF243F;
+    color: white;
+}
+
+.status.draft {
+    background-color: #FF243F;
+    color: white;
 }
 
 .expand {
@@ -33,12 +46,6 @@
     }
     &.collapsed:after {
         content: '+';
-    }
-}
-
-.details {
-    .content {
-        padding: 14px 42px 13px 42px;
     }
 }
 
@@ -55,41 +62,27 @@
     }
 }
 
-// Inside table
-.details-table {
-    margin-left: 1%;
-    background-color: inherit !important;
-    thead {
-        th {
-            font-weight: 700;
-            color: #001C3B;
-            border-bottom: 0;
-            font-size: 12px;
-            line-height: 16px;
-            padding-left: 0;
-        }
+.order {
+    color: #333333;
+    font-family: Roboto;
+    font-size: 14px;
+    .number {
+        color: #37A7F8;
+        font-weight: bold;
+        cursor: pointer;
     }
-    tbody {
-        td {
-            border: 0;
-            padding: 14px 0px !important;
-            padding-right: 8px !important;
-        }
-        .order {
-            background-color: inherit !important;
-            font-size: 14px;
-            line-height: 16px;
-            .number {
-                color: #37A7F8;
-                font-size: 14px;
-                font-weight: bold;
-            }
-            .payment {
-                font-weight: bold;
-            }
-            .product {
-                font-size: 18px;
-            }
-        }
+    .payment {
+        font-weight: bold;
+        text-align: right;
+    }
+    .product {
+        font-size: 18px;
+    }
+}
+
+.status-block-position {
+    @include media-breakpoint-up(md) {
+        padding: 9px 13px !important;
+        padding-top: 11px !important;
     }
 }

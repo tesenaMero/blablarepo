@@ -7,6 +7,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { CmxNavHeaderModule } from '@cemex/cmx-nav-header-v1/dist';
 import { CmxButtonModule } from '@cemex/cmx-button-v1/dist';
 
+// Components
 import { AppComponent } from './components/app/app.component'
 import { DashboardComponent } from './components/dashboard/dashboard.component'
 import { OrdersComponent } from './components/orders/orders.component'
@@ -25,6 +26,9 @@ import {
     ModeStepComponent 
 }  from './components/order-builder/order-steps'
 
+// Pipes
+import { NoSpacePipe, ZeroPadPipe } from './pipes/index'
+
 // Services
 import { WindowRef } from './shared/services/window-ref.service';
 import { ApiService } from './shared/services/api.service';
@@ -40,6 +44,10 @@ export const sharedConfig: NgModule = {
         OrdersComponent,
         NewOrderComponent,
         CartComponent,
+
+        // Pipes
+        ZeroPadPipe,
+        NoSpacePipe,
 
         // Regular components
         OrdersTableComponent,
