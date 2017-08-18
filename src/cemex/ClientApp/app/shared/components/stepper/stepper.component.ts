@@ -46,7 +46,6 @@ export class StepperComponent implements AfterContentInit {
     // Controls
     // ==============================================================
     next() {
-        if (this.currentStep.automatic) { this.complete(); }
         if (!this.currentStep.completed) { return; }
 
         let currentIndex = this.getActiveStepIndex();
@@ -66,6 +65,7 @@ export class StepperComponent implements AfterContentInit {
 
     complete() {
         this.currentStep.completed = true;
+        if (this.currentStep.automatic) { this.next(); }
         this.nextAvailable = true;
     }
 
