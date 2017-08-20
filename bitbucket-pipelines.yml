@@ -43,6 +43,6 @@ pipelines:
               - tar xvfJ node-v6.10.0-linux-x64.tar.xz
               - ls
               - mv node-v6.10.0-linux-x64 node
-              - cf set-env ordertaking-dev2 PATH "/bin:/usr/bin:/home/vcap/app/node/bin"
+              - cf set-env ngx42 PATH "/bin:/usr/bin:/home/vcap/app/node/bin"
               - ls
-              - cf push ordertaking-dev2
+              - cf push ngx42

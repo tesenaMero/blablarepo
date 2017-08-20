@@ -2,7 +2,17 @@
     ViewData["Title"] = "Home Page";
 }
 
-<app>Loading...</app>
+<!-- <app asp-prerender-module="ClientApp/dist/main-server">Loading...</app> -->
+<app>
+    <div style="
+        background: url(cemex-loading.gif) no-repeat 0 0;
+        background-position: center;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        background-color: white;">
+    </div>
+</app>
 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" crossorigin="anonymous"></script> -->
 <script src="~/dist/vendor.js" asp-append-version="true"></script>

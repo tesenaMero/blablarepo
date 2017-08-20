@@ -12,7 +12,7 @@ export class OrderBuilderComponent {
     constructor() { }
 
     modeStepCompleted(mode: DeliveryMode) {
-        this.stepper.next();
+        this.stepper.complete();
     }
 
     locationStepCompleted(event: any) {
@@ -23,4 +23,7 @@ export class OrderBuilderComponent {
         this.stepper.complete();
     }
 
+    modeStepShowed() {
+        console.log("Mode step showed");
+    }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'step',
@@ -12,6 +12,7 @@ export class Step {
     @Input() showExit? = false; // Show exit action button
     @Input() showControls? = true; // Show back/next control buttons
     @Input() automatic? = false; // Moves to next step automatically once its completed
+    @Output() onShowed = new EventEmitter<any>();
 
     completed: boolean = false;
     private stepEventsListener: StepEventsListener = null;
@@ -23,6 +24,7 @@ export class Step {
     }
 
     show() {
+        this.onShowed.emit();
         if (this.stepEventsListener)
             this.stepEventsListener.onShowed();
     }

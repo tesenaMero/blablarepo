@@ -20,7 +20,6 @@ export class LocationStepComponent implements StepEventsListener {
     }
 
     onShowed() {
-        console.log("resize");
         google.maps.event.trigger(this.map, "resize");
     }
 
