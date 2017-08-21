@@ -1,4 +1,5 @@
 @import "~bootstrap/scss/bootstrap-grid.scss";
+@import "../../scss/responsive.scss";
 $link-blue: #3FA9F5;
 .layout {
     padding: 34px 26px 34px 26px;
@@ -22,10 +23,10 @@ $link-blue: #3FA9F5;
 }
 
 .table-header {
-    height: 32px;
+    height: 54px;
     border-radius: 2px;
     margin-bottom: 16px;
-    background-color: #003876;
+    background-color: #002a59;
     display: flex;
     justify-content: center;
     flex-direction: column;

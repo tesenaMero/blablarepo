@@ -32,11 +32,18 @@ nav.side-nav-bar {
     background-image: linear-gradient(90deg, #021A35 43px, #092448 0);
 }
 
+.side-nav-bar ul .side-subnav li a {
+    padding: 14px 12px;
+}
+
 .side-nav-bar ul li a+ul li a {
     font-size: 14px;
     line-height: 16px;
-    padding-top: 4px;
-    padding-bottom: 30px;
+    padding-right: 10px;
+}
+
+.side-nav-bar ul li a+ul li:last-child a {
+    padding-bottom: 20px;
 }
 
 .side-nav-bar ul li .active+ul li a {

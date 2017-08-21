@@ -5,7 +5,7 @@
     <step title="Delivery mode">
         <location-step (onCompleted)="locationStepCompleted()"></location-step>
     </step>
-    <step title="Product line">
+    <step [automatic]="true" title="Product line">
         <product-selection-step (onCompleted)="productStepCompleted(product)"></product-selection-step>
     </step>
     <step title="Specifications">
