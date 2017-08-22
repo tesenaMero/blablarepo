@@ -23,130 +23,139 @@
     </div>    
 
     <div class="row location-container">
-        <div class="col-md-4 col-sm-12 float-md-left">
+        <div class="float-md-left location-style">
             <span>Location: </span><br/>
             <span class="span-one-style">Southwest 68th Street Building</span><br/>
             <span>15 SW 68th Street, Chicago, Illinois, 60602</span>
         </div>
-        <div class="col-md-3 col-sm-12 float-md-left">
+        <div class="float-md-left location-style">
             <span>Point of delivery</span><br/>
             <span class="span-one-style">Backstreet yard</span><br/>
             <span>N: 50°46’ 23.92” E: 14°07’ 18.85”</span> 
         </div>        
-        <div class="col-md-5 col-sm-12 float-md-left">
-            <div class="col-md-6 col-sm-12 float-left">
-                <span>Submitted: </span><br/>
-                <span>Submitted by: </span><br/>
-                <span>Purchase order: </span><br/>
-                <span>Status: </span>           
-            </div>
-            <div class="col-md-6 col-sm-12 float-left">
-                <span>08/12/2017</span><br/>
-                <span>Andrew Zacek</span><br/>
-                <span>7755-KJ120/00011</span><br/>
-                <a class="button bright-green" routerLink="../order-detail">Complete</a>
-                <!--<a class="button bright-green" href="#" role="button" data-slide="next">Complete</a> -->
-            </div>            
+        <div class="row col-md-6 float-md-left table-responsive-vertical">
+            <table id="table" class="table table-fixed">
+                <thead>
+                    <tr>
+                        <th width="20%">Submitted:</th>
+                        <th width="20%">Submitted by:</th>
+                        <th width="20%">Purchase order:</th>
+                        <th width="20%">Status:</th>
+                    </tr>
+                </thead>
+                <tbody>                    
+                    <tr>
+                        <td data-title="Submitted:">08/12/2017</td>
+                        <td data-title="Submitted by:">Andrew Zacek</td>
+                        <td data-title="Purchase order">7755-KJ120/00011</td>
+                        <td data-title="Status:"><a class="button bright-green" routerLink="../order-detail">Complete</a></td>
+                    </tr>                
+                </tbody>                
+            </table>     
         </div>
     </div>
 
-    <div class="row nav-tab-container">
-        <ul class="nav nav-tabs nav-justified tabs-style">
-            <li role="presentation" class="active"><a href="#">Products</a></li>
-            <li role="presentation"><a href="#">Action log</a></li>
-            <li role="presentation"><a href="#">Comments</a></li>
+    <div class="row nav-tab-container col-md-9">
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link active" href="#../order-detail">Products</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Action log</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Comments</a></li>
         </ul>
     </div>    
 
-    <div class="row table-responsive-vertical shadow-z-1 detail-container">
-        <!-- Table starts here -->
-        <table id="table" class="table table-fixed main table-hover table-striped">
-            <thead>
-                <tr>
-                    <th width="4%"></th>
-                    <th width="15%">
-                        Product description 
-                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                    </th>
-                    <th width="15%">
-                        Product line
-                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                    </th>
-                    <th width="15%">
-                        Point of delivery
-                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                    </th>
-                    <th width="10%">
-                        Quantity
-                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                    </th>
-                    <th width="15%">
-                        Payment
-                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                    </th>
-                    <th width="15%">
-                        Delivery model
-                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                    </th>
-                    <th width="12%">
-                        Material value
-                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td data-toggle="collapse" data-target="#details1" class="hidden-md-down expand collapsed"></td>
-                    <td data-title="Submitted">Product description</td>
-                    <td data-title="Submitted by">Product line</td>
-                    <td data-title="Items">Point of delivery</td>
-                    <td data-title="Products" class="products">14 Tons</td>
-                    <td data-title="Status">Credit</td>
-                    <td data-title="Total amount">Delivery</td>
-                    <td data-title="Favorite">$20,000.00</td>
-                </tr>
-                <tr class="hidden-md-down sub sub-row">
-                    <td colspan="8">
-                        <div class="collapse details" id="details1">
-                            <div class="content">
-                                <table class="table table-fixed details-table">
-                                    <thead>
-                                        <th width="15%">info</th>
-                                        <th width="15%">info</th>
-                                        <th width="10%">info</th>
-                                        <th width="10%">info</th>
-                                        <th width="25%">info</th>
-                                        <th width="10%">info</th>
-                                        <th width="10%">info</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="order">
-                                            <td>info</td>
-                                            <td>info</td>
-                                            <td>info</td>
-                                            <td>info</td>
-                                            <td>info</td>
-                                            <td>info</td>
-                                            <td>info</td>
-                                        </tr>
-                                        <tr class="order">
-                                            <td>info</td>
-                                            <td>info</td>
-                                            <td>info</td>
-                                            <td>info</td>
-                                            <td>info</td>
-                                            <td>info</td>
-                                            <td>info</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="hidden-md-down sub separator"></tr>                
-            </tbody>
-        </table>
+    <div class="row products-detail-container col-md-12">
+        <div class="row left-detail-container col-md-3">
+            ReadyMix CHM89
+        </div>    
+        <div class="divider"></div>
+        <div class="row table-responsive-vertical detail-container col-md-9">         
+            <table id="table" class="table table-fixed">
+                <thead>
+                    <tr>
+                        <th width="20%">Quantity</th>
+                        <th width="20%">Units</th>
+                        <th width="20%">Requested date</th>
+                        <th width="20%" colspan="2">Requested time</th>
+                    </tr>
+                </thead>
+                <tbody>                    
+                    <tr>
+                        <td data-title="Quantity">Product description</td>
+                        <td data-title="Units">Product line</td>
+                        <td data-title="Requested date">Point of delivery</td>
+                        <td data-title="Requested time">14 Tons</td>
+                    </tr>
+                
+                </tbody>
+                <thead>
+                    <tr>
+                        <th width="20%" colspan="2">Product ID</th>
+                        <th width="20%" colspan="2">Contract</th>
+                    </tr>
+                </thead>    
+                <tbody>                    
+                    <tr>
+                        <td data-title="Product ID" colspan="2">20939302/10292/20102</td>
+                        <td data-title="Contract" colspan="3">10-201702189034    Remaining volume: 180</td> 
+                    </tr>                   
+                </tbody>       
+                <thead>         
+                    <tr>       
+                        <th width="20%" colspan="2">Project profile</th>
+                        <th width="20%">Discharge Time</th>
+                        <th width="20%">Transport Method</th>
+                        <th width="20%">Unload Type</th>
+                    </tr>
+                </thead>         
+                <tbody>
+                    <tr>
+                        <td data-title="Project profile" colspan="2" rowspan="5"><p>My Project Profile with quite long<br/> technical title, that it must be for more<br/> rows</p></td>
+                        <td data-title="Discharge Time">60min</td> 
+                        <td data-title="Transport Method">Truck</td>
+                        <td data-title="Unload Type">Pump</td>   
+                    </tr>
+                </tbody> 
+                <thead>
+                    <tr>
+                        <th width="20%">Pump Capacity Min</th>
+                        <th width="20%">Pump Frequency Max</th>
+                        <th width="20%">Pump Capacity Min</th>
+                    </tr>
+                </thead>   
+                <tbody>
+                    <tr>
+                        <td data-title="Pump Capacity Min">30 m3/s</td>
+                        <td data-title="Pump Frequency Max">Weekly</td>
+                        <td data-title="Pump Capacity Min">Roof</td>
+                    </tr>
+                </tbody>   
+                <thead>
+                    <tr>
+                        <th width="20%">Load size</th>
+                        <th width="20%">Spacing</th>
+                    </tr>
+                </thead>   
+                <tbody>
+                    <tr>
+                        <td data-title="Load size">10 ton</td>
+                        <td data-title="Spacing">10 min</td>
+                    </tr>
+                </tbody>      
+                <thead>
+                    <tr>
+                        <th width="20%" colspan="2">Additional services</th>
+                        <th width="20%">Delivery Mode</th>
+                        <th width="20%">Kicker</th>
+                    </tr>
+                </thead>   
+                <tbody>
+                    <tr>
+                        <td data-title="Additional services" colspan="2">Extra Hours, Sunday / Holiday Service, Pipeline</td>
+                        <td data-title="Delivery Mode">Delivery</td>
+                        <td data-title="Kicker">Yes</td>
+                    </tr>
+                </tbody>                      
+            </table>                          
+        </div>        
     </div>
-
 </div>
