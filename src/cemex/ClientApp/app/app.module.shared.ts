@@ -38,6 +38,7 @@ import { WindowRef } from './shared/services/window-ref.service';
 import { ApiService } from './shared/services/api.service';
 import { OrdersApiService } from './shared/services/orders-api.service';
 import { OrdersService } from './shared/services/orders.service';
+import { CreateOrderService } from './shared/services/create-order.service';
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
@@ -96,6 +97,7 @@ export const sharedConfig: NgModule = {
         WindowRef,
         ApiService,
         OrdersApiService,
-        OrdersService
+        OrdersService,
+        CreateOrderService
     ]
 };

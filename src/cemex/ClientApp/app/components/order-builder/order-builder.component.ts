@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { StepperComponent } from '../../shared/components/stepper/'
-import { DeliveryMode } from '../../models/delivery.model'
+import { StepperComponent } from '../../shared/components/stepper/';
+import { DeliveryMode } from '../../models/delivery.model';
 
 @Component({
     selector: 'order-builder',
