@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ETypeProduct, CementPackageSpecification } from '../../../../models/index'
+import { ETypeProduct, CementPackageSpecification, ReadymixSpecification } from '../../../../models/index'
 
 @Component({
     selector: 'specifications-table',
@@ -13,6 +13,7 @@ export class SpecificationsTableStepComponent implements OnInit {
     typeProduct:ETypeProduct;
     
     _cementPackageList:CementPackageSpecification[] = [];
+    _readymix:ReadymixSpecification[] = [];
 
     constructor() { }
 
@@ -34,6 +35,32 @@ export class SpecificationsTableStepComponent implements OnInit {
 
             this._cementPackageList.push(dto);
         }
+
+        // if (!this.typeProduct) {
+        //     this.typeProduct = ETypeProduct.READY_MIX;
+        //     let dto:ReadymixSpecification = {
+        //         productDescription:"RMX - SCAH - CHM89",
+        //         quantity:7,
+        //         unit: "m3",
+        //         requestDate: "13/07/2017",
+        //         requestTime: "15:00",
+        //         productId: "20939302/10292/10102",
+        //         maximumCapacity: 1000,
+        //         contract: "10-201702189034 Remaining volume: 180",
+        //         payment: "Credit",
+        //         deliveryMode: "Delivery",
+        //         projectProfile: {
+        //             id: 1,
+        //             name: 'Hotel',
+        //             aplication: 'Base',
+        //             loadSize: '20 m3',
+        //             spacing: '10 min',
+        //             slump: '',
+        //         },
+        //     };
+
+        //     this._readymix.push(dto);
+        // }
     }
 
 }
