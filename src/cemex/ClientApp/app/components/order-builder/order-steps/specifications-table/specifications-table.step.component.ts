@@ -11,7 +11,7 @@ export class SpecificationsTableStepComponent implements OnInit {
 
     @Input()
     typeProduct:ETypeProduct;
-
+    
     _cementPackageList:CementPackageSpecification[] = [];
 
     constructor() { }
@@ -27,7 +27,7 @@ export class SpecificationsTableStepComponent implements OnInit {
                 requestTime: "15:00",
                 productId: "20939302/10292/10102",
                 maximumCapacity: 1000,
-                contract: "10-201702189034     Remaining volume: 180",
+                contract: "10-201702189034 Remaining volume: 180",
                 payment: "Credit",
                 deliveryMode: "Delivery"
             };

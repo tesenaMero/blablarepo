@@ -2,16 +2,50 @@
     <div class="prod-card" *ngFor="let specification of _cementPackageList">
         <div class="product-cement-mexico" class.lt-sm="product-cement-mexico-lt-sm">
             <div class="description">
-                <span>Product Description</span>
-                <input [(ngModel)]="specification.productDescription"/>
+                <div class="form-group">
+                    <label for="product">Product Description</label>
+                    <select id="product" 
+                        class="form-control"
+                        [ngClass]="{ 'nice-selection': nice }"
+                        [(ngModel)]="specification.productDescription"
+                        >
+                        <option value={{specification.productDescription}}>{{specification.productDescription}}</option>
+                    </select>
+                </div>
             </div>
             <div class="quantity">
-                <span>Quantity</span>
-                <input [(ngModel)]="specification.quantity"/>
+                <div class="form-group">			
+                    <div class="number-field-wrapper">
+                        <label for="number-field">Quantity</label>
+                        <input id="number-field" class="form-control number-control" [(ngModel)]="specification.quantity" type="number" value="" placeholder="0" min="" max="" />
+                        <span class="number-field-btn minus-btn">
+                            <button type="button">
+                                <svg class="icon-minus-basic">
+                                    <use xlink:href="#icon-minus-basic"></use>
+                                </svg>
+                            </button>
+                        </span>
+                        <span class="number-field-btn plus-btn">
+                            <button type="button">
+                                <svg class="icon-plus-basic">
+                                    <use xlink:href="#icon-plus-basic"></use>
+                                </svg>
+                            </button>
+                        </span>
+                    </div>
+                </div>
             </div>
             <div class="prod-field unit">
-                <span>Unit</span>
-                <input [(ngModel)]="specification.unit"/>
+                <div class="form-group">
+                    <label for="country-field">Unit</label>
+                    <select id="country-field" 
+                        class="form-control"
+                        [(ngModel)]="specification.unit"
+                        >
+                        <option value="1" selected>tons</option>
+                        <option value="2">m3</option>
+                    </select>
+                </div>
             </div>
             <div class="div-sep">
                 <div class="separator"></div>
@@ -37,12 +71,28 @@
                 <span class="prod-field-value">{{specification.maximumCapacity}} tons</span>
             </div>
             <div class="contract">
-                <span>Contract</span>
-                <input [(ngModel)]="specification.contract"/>
+                <div class="form-group">
+                    <label for="contract">Contract</label>
+                    <select id="contract" 
+                        class="form-control"
+                        [ngClass]="{ 'nice-selection': nice }"
+                        [(ngModel)]="specification.contract"
+                        >
+                        <option value={{specification.contract}}>{{specification.contract}}</option>
+                    </select>
+                </div>
             </div>
             <div class="payment">
-                <span>Payment</span>
-                <input [(ngModel)]="specification.payment"/>
+                <div class="form-group">
+                    <label for="payment">Payment</label>
+                    <select id="payment" 
+                        class="form-control"
+                        [ngClass]="{ 'nice-selection': nice }"
+                        [(ngModel)]="specification.payment"
+                        >
+                        <option value={{specification.payment}}>{{specification.payment}}</option>
+                    </select>
+                </div>
             </div>
             <div class="additional-services">
                 <span>Additional Services</span>
