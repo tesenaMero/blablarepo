@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular
 import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 
+import { CreateOrderService } from '../../../../shared/services/create-order.service';
+
 @Component({
     selector: 'location-step',
     templateUrl: './location.step.html',
@@ -15,8 +17,9 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     jobsite = "";
     nice = false;
+    model = this.createOrder
 
-    constructor(@Inject(Step) private step: Step) {
+    constructor(@Inject(Step) private step: Step, public createOrder: CreateOrderService) {
         this.step.setEventsListener(this);
     }
 
@@ -29,8 +32,19 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     jobsiteSelected(event: any) {
+        this.createOrder.selectJobsite({ jobsiteId: 1 });
         this.nice = true;
         this.onCompleted.emit(event);
+    }
+
+    pointOfDeliverySelected(event: any) {
+        this.createOrder.selectPointOfDelivery({ pointOfDeliveryId: 1 });
+        this.nice = true;
+        this.onCompleted.emit(event);
+    }
+
+    contactSelected(event: any) {
+        this.createOrder.selectContact({ contactName: 'demo', contactPhone: '777888999' });
     }
 
     ngOnInit() {
