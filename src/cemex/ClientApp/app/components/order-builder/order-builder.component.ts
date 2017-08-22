@@ -23,7 +23,8 @@ export class OrderBuilderComponent {
         this.stepper.complete();
     }
 
-    modeStepShowed() {
-        console.log("Mode step showed");
+    specificationsStepShowed() {
+        // Remove this one when the step is ready
+        this.stepper.complete();
     }
 }

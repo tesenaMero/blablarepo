@@ -16,6 +16,7 @@
  */
 
 import { } from '@types/googlemaps';
+declare var google: any;
 
 export class GoogleMapsHelper {
     private static src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCpk_GAvrtS8yi-y6Dx8k5hltS18uxjUPI"

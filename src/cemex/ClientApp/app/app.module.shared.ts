@@ -12,6 +12,8 @@ import { CmxButtonModule } from '@cemex/cmx-button-v1/dist';
 import { AppComponent } from './components/app/app.component'
 import { DashboardComponent } from './components/dashboard/dashboard.component'
 import { OrdersComponent } from './components/orders/orders.component'
+import { DraftsComponent } from './components/drafts/drafts.component'
+import { ProjectProfilesComponent } from './components/project-profiles/project-profiles.component'
 import { OrdersTableComponent } from './components/orders-table/orders-table.component'
 import { NewOrderComponent } from './components/new-order/new-order.component'
 import { CartComponent } from './components/cart/cart.component';
@@ -24,7 +26,8 @@ import {
     LocationStepComponent, 
     ProductSelectionStepComponent, 
     SpecificationsTableStepComponent, 
-    ModeStepComponent 
+    ModeStepComponent,
+    SummaryStepComponent
 }  from './components/order-builder/order-steps'
 
 // Pipes
@@ -41,6 +44,8 @@ export const sharedConfig: NgModule = {
     declarations: [
         // Hosts (page route parents)
         AppComponent,
+        ProjectProfilesComponent,
+        DraftsComponent,
         DashboardComponent,
         OrdersComponent,
         NewOrderComponent,
@@ -57,6 +62,7 @@ export const sharedConfig: NgModule = {
         ProductSelectionStepComponent,
         SpecificationsTableStepComponent,
         ModeStepComponent,
+        SummaryStepComponent,
 
         // Shared
         PaginationComponent,
@@ -79,6 +85,8 @@ export const sharedConfig: NgModule = {
                     { path: 'orders', component: OrdersComponent },
                     { path: 'new', component: NewOrderComponent },
                     { path: 'cart', component: CartComponent },
+                    { path: 'project-profiles', component: ProjectProfilesComponent },
+                    { path: 'drafts', component: DraftsComponent },
                 ]
             },
             { path: '**', redirectTo: 'app' }

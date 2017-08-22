@@ -1,13 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
+
 @Component({
     selector: 'location-step',
     templateUrl: './location.step.html',
     styleUrls: ['./location.step.scss'],
     host: { 'class': 'w-100' }
 })
-export class LocationStepComponent implements StepEventsListener {
+export class LocationStepComponent implements OnInit, StepEventsListener {
     @Input() mapOptions?: google.maps.MapOptions;
     @Output() onCompleted = new EventEmitter<any>();
     map: any; // Map instance
