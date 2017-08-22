@@ -23,7 +23,8 @@
         <div class="cto-container center-with-steps">
             <div class="float-md-right text-right">
                 <button (click)="prev()" *ngIf="currentStep.showControls" class="button mb-2" [ngClass]="{ 'disabled': !backAvailable, 'button-ghost': backAvailable }">Back</button>
-                <button (click)="next()" *ngIf="currentStep.showControls" class="button" [ngClass]="{ 'disabled': !nextAvailable, 'bright-green': nextAvailable }">Next</button>
+                <button (click)="next()" *ngIf="currentStep.showControls && !isLastStep()" class="button" [ngClass]="{ 'disabled': !nextAvailable, 'bright-green': nextAvailable }">Next</button>
+                <button (click)="next()" *ngIf="currentStep.showControls && isLastStep()" class="button" [ngClass]="{ 'disabled': !nextAvailable, 'bright-green': nextAvailable }">{{ finishText }}</button>
                 <button *ngIf="currentStep.showExit" class="button-ghost mb-2 " routerLink="app/orders">Exit</button>
                 <button class="hidden" #controlNext data-target="#steps-slider" role="button" data-slide="next">Next</button>
                 <button class="hidden" #controlPrev data-target="#steps-slider" role="button" data-slide="prev">Back</button>
