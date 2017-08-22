@@ -43,20 +43,20 @@ export interface Customer {
 
 export interface ShippingCondition {
     shippingConditionId: number;
-    shippingConditionCode: string;
-    shippingConditionDesc: string;
+    shippingConditionCode?: string;
+    shippingConditionDesc?: string;
 }
 
 export interface Jobsite {
     jobsiteId: number;
-    jobsiteCode: string;
-    jobsiteDesc: string;
+    jobsiteCode?: string;
+    jobsiteDesc?: string;
 }
 
 export interface PointOfDelivery {
     pointOfDeliveryId: number;
-    pointOfDeliveryCode: string;
-    pointOfDeliveryDesc: string;
+    pointOfDeliveryCode?: string;
+    pointOfDeliveryDesc?: string;
 }
 
 export interface Contact {
@@ -72,8 +72,8 @@ export interface User {
 
 export interface ProductType {
     productTypeId: number;
-    productTypeCode: string;
-    productTypeDesc: string;
+    productTypeCode?: string;
+    productTypeDesc?: string;
 }
 
 export interface Product {
@@ -88,14 +88,14 @@ export interface Product {
 
 export interface Uom {
     unitId: number;
-    unitCode: string;
-    unitDesc: string;
+    unitCode?: string;
+    unitDesc?: string;
 }
 
 export interface Element {
     elementId: number;
-    elementCode: string;
-    elementDesc: string;
+    elementCode?: string;
+    elementDesc?: string;
 }
 
 export interface TimePerLoad {
@@ -229,7 +229,7 @@ export interface OrderItem {
     loadItem: LoadItem;
 }
 
-type Items = OrderItem[];
+export type Items = OrderItem[];
 
 export interface CounterOffer {
     proposedDateTimeId: number;
@@ -275,4 +275,4 @@ export interface Load {
     requestDateTimes: RequestDateTime[];
 }
 
-type Loads = Load;
+export type Loads = Load;
