@@ -1,4 +1,6 @@
+@import "~bootstrap/scss/bootstrap-grid.scss";
 #summary-map {
+    min-height: 352px;
     height: 100%;
 }
 
@@ -27,5 +29,72 @@
         color: #8FA4BB;
         font-size: 14px;
         line-height: 16px;
+    }
+}
+
+.title-spearator {
+    margin-top: 47px;
+    margin-bottom: 36px;
+    color: #001C3B;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 26px;
+}
+
+.card-container {
+    border-radius: 3px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07);
+    margin-bottom: 80px;
+    //height: 434px;
+}
+
+.product {
+    .left-container {
+        margin-top: 33px;
+        margin-bottom: 33px;
+        padding-left: 33px;
+        padding-right: 33px;
+        border-right: 1px solid #DFE4EB;
+        @include media-breakpoint-down(sm) {
+            margin-bottom: 0;
+        }
+        .name {
+            color: #2A2A2A;
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 37px;
+        }
+    }
+    .right-container {
+        padding: 33px;
+        @include media-breakpoint-down(sm) {
+            .col-xs-6 {
+                width: 50%;
+            }
+        }
+        @include media-breakpoint-up(md) {
+            .row {
+                margin-top: 25px;
+            }
+        }
+        .group {
+            .title {
+                color: #9CA4AE;
+                font-size: 12px;
+                line-height: 16px;
+                margin-bottom: 3px;
+            }
+            .value {
+                color: #2A2A2A;
+                font-family: Roboto;
+                font-size: 14px;
+                line-height: 19px;
+            }
+            min-width: 80px;
+            @include media-breakpoint-down(sm) {
+                margin-top: 20px;
+            }
+        }
     }
 }

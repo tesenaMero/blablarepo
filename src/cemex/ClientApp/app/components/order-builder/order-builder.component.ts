@@ -23,6 +23,10 @@ export class OrderBuilderComponent {
         this.stepper.complete();
     }
 
+    summaryStepCompleted() {
+        this.stepper.complete();
+    }
+
     specificationsStepShowed() {
         // Remove this one when the step is ready
         this.stepper.complete();

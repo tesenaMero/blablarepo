@@ -49,8 +49,13 @@ export class StepperComponent implements AfterContentInit {
         if (!this.currentStep.completed) { return; }
 
         let currentIndex = this.getActiveStepIndex();
-        // If last step or index not found
-        if (currentIndex >= this.steps.length - 1) { return; }
+        
+        // If last step
+        if (currentIndex >= this.steps.length - 1) { 
+            return;
+        }
+
+        // If invalid index step
         if (currentIndex <= -1) { return; }
 
         this.animateNext(currentIndex + 1);

@@ -19,9 +19,10 @@ export class SummaryStepComponent implements StepEventsListener {
     }
 
     onShowed() {
+        this.onCompleted.emit({});
         GoogleMapsHelper.lazyLoadMap("summary-map", (map) => {
             this.map = map;
-            map.setOptions({ zoom: 14, center: { lat: 50.077626, lng: 14.424686 } });
+            map.setOptions({ zoom: 14, center: { lat: 25.6487281, lng: -100.4431818 } });
         });
     }
 }

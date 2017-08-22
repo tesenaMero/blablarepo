@@ -1,4 +1,7 @@
 <stepper>
+    <step title="Summary">
+        <summary-step (onCompleted)="summaryStepCompleted()"></summary-step>
+    </step>
     <step [automatic]="true" [showControls]="false" [showExit]="true" [inLine]="false" title="Delivery mode">
         <mode-step (onCompleted)="modeStepCompleted(mode)"></mode-step>
     </step>
@@ -11,7 +14,7 @@
     <step (onShowed)="specificationsStepShowed()" title="Specifications">
         <specifications-table></specifications-table>
     </step>
-    <step title="Summary">
+    <!-- <step title="Summary">
         <summary-step></summary-step>
-    </step>
+    </step> -->
 </stepper>

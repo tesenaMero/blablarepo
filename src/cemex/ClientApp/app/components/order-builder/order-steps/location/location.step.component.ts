@@ -21,19 +21,19 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     onShowed() {
-        google.maps.event.trigger(this.map, "resize");
+        GoogleMapsHelper.lazyLoadMap("jobsite-selection-map", (map) => {
+            this.map = map;
+            map.setOptions({ zoom: 14, center: { lat: 50.077626, lng: 14.424686 } });
+            google.maps.event.trigger(this.map, "resize");
+        });
     }
 
-    jobsiteSelected(event: any){
+    jobsiteSelected(event: any) {
         this.nice = true;
         this.onCompleted.emit(event);
     }
 
     ngOnInit() {
-        GoogleMapsHelper.lazyLoadMap("jobsite-selection-map", (map) => {
-            this.map = map;
-            map.setOptions({ zoom: 14, center: { lat: 50.077626, lng: 14.424686 } });
-        });
     }
 
 }
