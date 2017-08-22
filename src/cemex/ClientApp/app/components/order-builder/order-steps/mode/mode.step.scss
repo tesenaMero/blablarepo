@@ -6,7 +6,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    margin-top: 60px;
+    margin-top: 50px;
     margin-bottom: 30px;
     // @include media-breakpoint-down(sm) {
     //     margin-top: 35px;
@@ -20,8 +20,8 @@ $really-sm: 376px;
     border-radius: 50%;
     width: 23vw;
     height: 23vw;
-    min-width: 130px;
-    min-height: 130px;
+    min-width: 110px;
+    min-height: 110px;
     max-height: 340px;
     max-width: 340px;
     margin: 0.5vw auto;
@@ -63,7 +63,7 @@ $really-sm: 376px;
 .or-divider {
     height: 23vw;
     width: 2px;
-    min-height: 130px;
+    min-height: 110px;
     max-height: 358.97px;
     background-color: #D6D7E0;
     display: flex;

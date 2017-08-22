@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { StepperComponent } from '../../shared/components/stepper/'
-import { DeliveryMode } from '../../models/delivery.model'
+import { StepperComponent } from '../../shared/components/stepper/';
+import { DeliveryMode } from '../../models/delivery.model';
 
 @Component({
     selector: 'order-builder',
@@ -23,7 +23,12 @@ export class OrderBuilderComponent {
         this.stepper.complete();
     }
 
-    modeStepShowed() {
-        console.log("Mode step showed");
+    summaryStepCompleted() {
+        this.stepper.complete();
+    }
+
+    specificationsStepShowed() {
+        // Remove this one when the step is ready
+        this.stepper.complete();
     }
 }

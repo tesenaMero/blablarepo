@@ -1,0 +1,115 @@
+@import "~bootstrap/scss/bootstrap-grid.scss";
+#summary-map {
+    min-height: 352px;
+    height: 100%;
+}
+
+.details-container {
+    padding: 28px 40px;
+    border: 1px solid #DAE3E9;
+    border-radius: 3px;
+}
+
+.item {
+    &:not(:first-child) {
+        margin-top: 20px;
+    }
+    .title {
+        color: #9DA4AD;
+        font-size: 14px;
+        line-height: 19px;
+    }
+    .description {
+        color: #001C3B;
+        font-size: 23px;
+        font-weight: 500;
+        line-height: 32px;
+    }
+    .details {
+        color: #8FA4BB;
+        font-size: 14px;
+        line-height: 16px;
+    }
+}
+
+.title-spearator {
+    margin-top: 47px;
+    margin-bottom: 36px;
+    color: #001C3B;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 26px;
+}
+
+.card-container {
+    border-radius: 3px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07);
+    margin-bottom: 80px;
+    //height: 434px;
+}
+
+.product {
+    .left-container {
+        margin-top: 33px;
+        margin-bottom: 33px;
+        padding-left: 33px + 15px;
+        padding-right: 33px + 15px;
+        border-right: 1px solid #DFE4EB;
+        @include media-breakpoint-down(sm) {
+            margin-bottom: 0;
+        }
+        .name {
+            color: #2A2A2A;
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 37px;
+        }
+    }
+    .right-container {
+        padding: 33px;
+        @include media-breakpoint-down(sm) {
+            .col-xs-6 {
+                width: 50%;
+            }
+        }
+        .row:not(.no-mt) {
+            @include media-breakpoint-up(md) {
+                margin-top: 25px;
+            }
+        }
+        .group {
+            max-width: 340px;
+            min-width: 115px;
+            margin-top: 10px;
+            .title {
+                color: #9CA4AE;
+                font-size: 12px;
+                line-height: 16px;
+                margin-bottom: 3px;
+            }
+            .value {
+                color: #2A2A2A;
+                font-family: Roboto;
+                font-size: 14px;
+                line-height: 19px;
+            }
+            &.flex-6 {
+                min-width: 115px + 115px;
+            }
+            @include media-breakpoint-down(sm) {
+                margin-top: 20px;
+                min-width: 115px;
+                &.flex-6 {
+                    min-width: 115px + 115;
+                }
+            }
+            @include media-breakpoint-only(md) {
+                min-width: 100px;
+                &.flex-6 {
+                    min-width: 100px + 100;
+                }
+            }
+        }
+    }
+}

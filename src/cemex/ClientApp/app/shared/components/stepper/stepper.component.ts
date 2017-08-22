@@ -2,7 +2,17 @@
  * Supoprts from 2 steps to 5 steps visually
  */
 
-import { Component, OnInit, ContentChildren, QueryList, AfterContentInit, EventEmitter, Output, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ContentChildren,
+    QueryList,
+    AfterContentInit,
+    EventEmitter,
+    Output,
+    ViewChild,
+    Input
+} from '@angular/core';
 import { Step } from './step/step.component'
 
 @Component({
@@ -11,6 +21,8 @@ import { Step } from './step/step.component'
     styleUrls: ['./stepper.scss']
 })
 export class StepperComponent implements AfterContentInit {
+    @Input() finishText?: string = "Finish";
+
     @ViewChild('controlNext') controlNext;
     @ViewChild('controlPrev') controlBack;
 
@@ -47,10 +59,12 @@ export class StepperComponent implements AfterContentInit {
     // ==============================================================
     next() {
         if (!this.currentStep.completed) { return; }
-
         let currentIndex = this.getActiveStepIndex();
-        // If last step or index not found
-        if (currentIndex >= this.steps.length - 1) { return; }
+
+        // If last step
+        if (this.isLastStep()) { return; }
+
+        // If invalid index step
         if (currentIndex <= -1) { return; }
 
         this.animateNext(currentIndex + 1);
@@ -71,6 +85,11 @@ export class StepperComponent implements AfterContentInit {
 
     finish(result: any) {
         this.onFinish.emit(result);
+    }
+
+    private isLastStep() {
+        let currentIndex = this.getActiveStepIndex();
+        return currentIndex >= this.steps.length - 1;
     }
 
     private animateNext(toIndex: number) {

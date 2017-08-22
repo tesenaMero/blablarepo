@@ -4,13 +4,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { CmxNavHeaderModule } from '@cemex/cmx-nav-header-v1/dist';
+
+// Cemex components
 import { CmxButtonModule } from '@cemex/cmx-button-v1/dist';
 
 // Components
 import { AppComponent } from './components/app/app.component'
 import { DashboardComponent } from './components/dashboard/dashboard.component'
 import { OrdersComponent } from './components/orders/orders.component'
+import { DraftsComponent } from './components/drafts/drafts.component'
+import { ProjectProfilesComponent } from './components/project-profiles/project-profiles.component'
 import { OrdersTableComponent } from './components/orders-table/orders-table.component'
 import { NewOrderComponent } from './components/new-order/new-order.component'
 import { CartComponent } from './components/cart/cart.component';
@@ -23,7 +26,8 @@ import {
     LocationStepComponent, 
     ProductSelectionStepComponent, 
     SpecificationsTableStepComponent, 
-    ModeStepComponent 
+    ModeStepComponent,
+    SummaryStepComponent
 }  from './components/order-builder/order-steps'
 
 // Pipes
@@ -34,12 +38,15 @@ import { WindowRef } from './shared/services/window-ref.service';
 import { ApiService } from './shared/services/api.service';
 import { OrdersApiService } from './shared/services/orders-api.service';
 import { OrdersService } from './shared/services/orders.service';
+import { CreateOrderService } from './shared/services/create-order.service';
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
     declarations: [
         // Hosts (page route parents)
         AppComponent,
+        ProjectProfilesComponent,
+        DraftsComponent,
         DashboardComponent,
         OrdersComponent,
         NewOrderComponent,
@@ -56,6 +63,7 @@ export const sharedConfig: NgModule = {
         ProductSelectionStepComponent,
         SpecificationsTableStepComponent,
         ModeStepComponent,
+        SummaryStepComponent,
 
         // Shared
         PaginationComponent,
@@ -67,7 +75,6 @@ export const sharedConfig: NgModule = {
     ],
     imports: [
         FlexLayoutModule,
-        CmxNavHeaderModule,
         CmxButtonModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full' },
@@ -79,6 +86,8 @@ export const sharedConfig: NgModule = {
                     { path: 'orders', component: OrdersComponent },
                     { path: 'new', component: NewOrderComponent },
                     { path: 'cart', component: CartComponent },
+                    { path: 'project-profiles', component: ProjectProfilesComponent },
+                    { path: 'drafts', component: DraftsComponent },
                 ]
             },
             { path: '**', redirectTo: 'app' }
@@ -88,6 +97,7 @@ export const sharedConfig: NgModule = {
         WindowRef,
         ApiService,
         OrdersApiService,
-        OrdersService
+        OrdersService,
+        CreateOrderService
     ]
 };
