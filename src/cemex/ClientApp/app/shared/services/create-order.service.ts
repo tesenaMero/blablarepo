@@ -1,48 +1,6 @@
 import { Injectable } from '@angular/core';
 
-interface Status {
-    statusId: number;
-    statusDesc: string;
-}
-
-interface BusinessLine {
-    businessLineId: number;
-    businessLineCode: string;
-    businessLineDesc: string;
-}
-
-interface SalesArea {
-    salesAreaId: number;
-    salesOrganizationCode: string;
-    countryCode: string;
-    divisionCode: string;
-    channelCode: string;
-    businessLine: BusinessLine;
-}
-
-interface OrderType {
-    orderTypeId: number;
-    orderTypeDesc: string;
-}
-
-interface CustomerSegment {
-    customerSegmentId: number;
-    customerSegmentCode: string;
-    customerSegmentDesc: string;
-}
-
-interface Customer {
-    customerId: number;
-    customerCode: string;
-    customerDesc: string;
-    customerSegment: CustomerSegment;
-}
-
-interface ShippingCondition {
-    shippingConditionId: number;
-    shippingConditionCode: string;
-    shippingConditionDesc: string;
-}
+import * as types from '../../shared/types/CreateOrder';
 
 /**
  * Create an order for API V2
@@ -59,11 +17,11 @@ export class CreateOrder {
         public requestedDateTime;
         public draftDateTime;
         public purchaseOrder;
-        public status: Status;
-        public salesArea: SalesArea;
-        public orderType: OrderType;
-        public customer: Customer;
-        public shippingCondition: ShippingCondition;
+        public status: types.Status;
+        public salesArea: types.SalesArea;
+        public orderType: types.OrderType;
+        public customer: types.Customer;
+        public shippingCondition: types.ShippingCondition;
 
     constructor(
         orderId,
@@ -75,11 +33,11 @@ export class CreateOrder {
         requestedDateTime,
         draftDateTime,
         purchaseOrder,
-        status: Status,
-        salesArea: SalesArea,
-        orderType: OrderType,
-        customer: Customer,
-        shippingCondition: ShippingCondition,
+        status: types.Status,
+        salesArea: types.SalesArea,
+        orderType: types.OrderType,
+        customer: types.Customer,
+        shippingCondition: types.ShippingCondition,
     ) {
         this.orderId = orderId;
         this.orderCode = orderCode;
