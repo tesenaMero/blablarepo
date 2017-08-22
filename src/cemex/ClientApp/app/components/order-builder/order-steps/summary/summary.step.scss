@@ -1,0 +1,31 @@
+#summary-map {
+    height: 100%;
+}
+
+.details-container {
+    padding: 28px 40px;
+    border: 1px solid #DAE3E9;
+    border-radius: 3px;
+}
+
+.item {
+    &:not(:first-child) {
+        margin-top: 20px;
+    }
+    .title {
+        color: #9DA4AD;
+        font-size: 14px;
+        line-height: 19px;
+    }
+    .description {
+        color: #001C3B;
+        font-size: 23px;
+        font-weight: 500;
+        line-height: 32px;
+    }
+    .details {
+        color: #8FA4BB;
+        font-size: 14px;
+        line-height: 16px;
+    }
+}

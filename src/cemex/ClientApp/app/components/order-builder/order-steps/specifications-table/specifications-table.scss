@@ -1,0 +1,81 @@
+.specs-content {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    padding-top: 3px;
+}
+
+.prod-card {
+    display: flex;
+    width: 100%;
+    height: 35%;
+    border-radius: 3px;
+    background-color: #FFF;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+    margin: 5px;
+    padding: 10px 20px;
+}
+
+.prod-card.readymix {
+    display: flex;
+    flex-direction: column;
+    .row {
+        display: flex;
+        flex-direction: row;
+        & > div {
+            display: flex;
+        }
+    }
+    .form-group {
+        width: 100%;
+        select {
+            height: 48px !important;
+        }
+    }
+    .additional-services,
+    .transport-method  {
+        flex-direction: column;
+    }
+    .Kicker {
+        flex-direction: row;
+    }
+    .additional-services, .transport-method, .Kicker {
+        .form-group {
+            margin-bottom: 0 !important;
+        }
+        input {
+            display: block;
+            margin: 4px 10px;
+        }
+    }
+}
+
+.prod-card.cement {
+    display: flex;
+    flex-direction: column;
+    .row {
+        display: flex;
+        flex-direction: row;
+        & > div {
+            display: flex;
+        }
+    }
+    .form-group {
+        width: 100%;
+        select {
+            height: 48px !important;
+        }
+    }
+    .max-capacity {
+        flex-direction: column;
+    }
+    .additional-services, .transport-method, .Kicker {
+        .form-group {
+            margin-bottom: 0 !important;
+        }
+        input {
+            display: block;
+            margin: 4px 10px;
+        }
+    }
+}

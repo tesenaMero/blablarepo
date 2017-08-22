@@ -1,0 +1,34 @@
+// Mixins
+// -----------------
+// Transition
+@mixin transition($transition...) {
+    -moz-transition: $transition;
+    -o-transition: $transition;
+    -webkit-transition: $transition;
+    transition: $transition;
+}
+
+// Keyframes
+@mixin keyframes($name) {
+    @-webkit-keyframes #{$name} {
+        @content;
+    }
+    @-moz-keyframes #{$name} {
+        @content;
+    }
+    @-ms-keyframes #{$name} {
+        @content;
+    }
+    @keyframes #{$name} {
+        @content;
+    }
+}
+
+// Animation
+@mixin animation($animaiton) {
+    -webkit-animation: #{$animaiton};
+    -moz-animation: #{$animaiton};
+    -ms-animation: #{$animaiton};
+    -o-animation: #{$animaiton};
+    animation: #{$animaiton};
+}

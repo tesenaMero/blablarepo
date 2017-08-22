@@ -1,3 +1,4 @@
+@import "~bootstrap/scss/bootstrap-grid.scss";
 .status {
     display: flex;
     max-width: 78px;
@@ -8,9 +9,17 @@
     border-radius: 2px;
     font-size: 13px;
     overflow: hidden;
+    @include media-breakpoint-down(md) {
+        display: inline-flex;
+        min-width: 78px;
+    }
 }
 
 .status.in-progress {
+    border: 1px solid #C6C6C6;
+}
+
+.status.pending {
     border: 1px solid #C6C6C6;
 }
 
@@ -71,6 +80,9 @@
     }
 }
 
-.p9-13 {
-    padding: 9px 13px !important;
+.status-block-position {
+    @include media-breakpoint-up(md) {
+        padding: 9px 13px !important;
+        padding-top: 11px !important;
+    }
 }

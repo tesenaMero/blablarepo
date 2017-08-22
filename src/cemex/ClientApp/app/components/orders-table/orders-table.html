@@ -1,21 +1,15 @@
 <!-- Responsive table starts here -->
 <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
 <div *ngIf="isLoading">
-    <p>Loading...</p>
-</div>
-<div *ngIf="!isLoading && orders?.length == 0">
-    <p>No orders found</p>
-</div>
-<div class="orders" *ngIf="!isLoading && orders?.length > 0">
     <div class="table-responsive-vertical shadow-z-1">
         <!-- Table starts here -->
-        <table id="table" class="table table-fixed main table-hover table-striped">
+        <table id="table" class="table table-fixed main loading-table">
             <thead>
                 <tr>
-                    <th width="5%">
+                    <!-- <th class="i-column" width="5%">
                         <i class="star cmx-icon-favourite-active" aria-hidden="true"></i>
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                    </th>
+                    </th> -->
                     <th width="10%">
                         Order No
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
@@ -24,7 +18,7 @@
                         Submitted
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
-                    <th width="20%">
+                    <th width="25%">
                         Location
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
@@ -40,7 +34,7 @@
                         Amount
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
-                    <th width="20%">
+                    <th width="25%">
                         Requested date
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
@@ -52,19 +46,100 @@
                         Total amount
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
-                    <th width="5%">
+                    <!-- <th width="5%">
+                    </th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let order of [1,2,3,4,5,6,7,8]">
+                    <tr class="order">
+                        <!-- <td class="i-column" data-title="Favorite">
+                        </td> -->
+                        <td class="number" data-title="Order No"></td>
+                        <td data-title="Submitted"></td>
+                        <td data-title="Location"></td>
+                        <td data-title="Purchase Order Number"></td>
+                        <td data-title="Products" class="products">
+                        </td>
+                        <td data-title="Amount"></td>
+                        <td valign="bottom" data-title="Requested date"></td>
+                        <td data-title="Status" class="status-block-position">
+                            <div class="status"></div>
+                        </td>
+                        <!-- TODO numberal parser -->
+                        <td data-title="Total amount"></td>
+                        <!-- <td class="i-column" data-title="Repeat">
+                        </td> -->
+                    </tr>
+                    <tr class="hidden-md-down sub separator "></tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div *ngIf="!isLoading && orders?.length == 0 ">
+    <p>No orders found</p>
+</div>
+<div class="orders " *ngIf="!isLoading && orders?.length > 0">
+    <div class="table-responsive-vertical shadow-z-1">
+        <!-- Table starts here -->
+        <table id="table" class="table table-fixed main table-hover table-striped">
+            <thead>
+                <tr>
+                    <!-- <th class="i-column" width="5%">
+                        <i class="star cmx-icon-favourite-active" aria-hidden="true"></i>
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th> -->
+                    <th width="10%">
+                        Order No
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
+                    <th width="15%">
+                        Submitted
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <th width="25%">
+                        Location
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <th width="20%">
+                        Purchase Order Number
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <th width="10%">
+                        Products
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <th width="10%">
+                        Amount
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <th width="25%">
+                        Requested date
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <th width="13%">
+                        Status
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <th width="13%">
+                        Total amount
+                        <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    </th>
+                    <!-- <th width="5%">
+                    </th> -->
                 </tr>
             </thead>
             <tbody>
                 <ng-container *ngFor="let order of orders; let index = index">
                     <tr class="order" [ngClass]="{ 'zebra': isOdd(index) }">
-                        <td data-title="Favorite">
-                            <i class="star cmx-icon-favourite-active" [class.active]="order.orderRequest.isFavorite" aria-hidden="true"></i>
+                        <!-- <td class="i-column" data-title="Favorite">
+                            <i class="star cmx-icon-favourite-active" [class.active]="order.orderRequest.isFavorite" aria-hidden="true" (click)="favorite(order.orderRequest.orderRequestId, !order.orderRequest.isFavorite)"></i>
+                        </td> -->
+                        <td class="number" data-title="Order No">{{ order.orderRequest.orderRequestId | zeropad: 7 }}</td>
+                        <td data-title="Submitted">08/13/2017 {{order.orderRequest.viewedAt }}</td>
+                        <td data-title="Location">{{ makeLocation(order) }}
                         </td>
-                        <td class="number" data-title="Order No">7543189</td>
-                        <td data-title="Submitted">08/13/2017 {{order.orderRequest.viewedAt}}</td>
-                        <td data-title="Location">0864 Lonnie Parks</td>
                         <td data-title="Purchase Order Number">7755-KJ120/00011</td>
                         <td data-title="Products" class="products">
                             <i *ngIf="order.isReadyMix()" class="cmx-icon-driver" aria-hidden="true"></i>
@@ -72,16 +147,16 @@
                             <i *ngIf="order.isCement()" class="cmx-icon-track" aria-hidden="true"></i>
                             <i *ngIf="order.isAggregates()" class="cmx-icon-user-profile" aria-hidden="true"></i>
                         </td>
-                        <td data-title="Amount">{{order.orderRequest.orderRequestItems.length}}</td>
-                        <td valign="bottom" data-title="Requested date">31/12/2017, 15:00 - 16:00</td>
-                        <td data-title="Status" class="p9-13">
-                            <div class="status in-progress {{ order.orderRequest.orderRequestStatus.statusDesc | lowercase }}">{{order.orderRequest.orderRequestStatus.statusDesc}}</div>
+                        <td data-title="Amount">{{ order.orderRequest.orderRequestItems.length }} tons</td>
+                        <td valign="bottom" data-title="Requested date">{{ order.orderRequest.orderRequestedOn | date:"dd/MM/y HH:mm" }}</td>
+                        <td data-title="Status" class="status-block-position">
+                            <div class="status {{ order.orderRequest.orderRequestStatus.statusDesc | lowercase }}">{{ order.orderRequest.orderRequestStatus.statusDesc }}</div>
                         </td>
                         <!-- TODO numberal parser -->
-                        <td data-title="Total amount">${{order.orderRequest.totalAmount}}</td>
-                        <td data-title="Repeat">
+                        <td data-title="Total amount">${{ order.orderRequest.totalAmount }}</td>
+                        <!-- <td class="i-column" data-title="Repeat">
                             <i class="cmx-icon-repeat"></i>
-                        </td>
+                        </td> -->
                     </tr>
                     <tr class="hidden-md-down sub separator"></tr>
                 </ng-container>

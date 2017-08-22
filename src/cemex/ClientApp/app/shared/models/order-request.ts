@@ -28,4 +28,8 @@ export class OrderRequest {
         return !!this.orderRequest.orderRequestItems.find((item) => 
             item.productType.productTypeCode === '0006');
     }
+
+    setFavorite(favorite) {
+        this.orderRequest.isFavorite = favorite;
+    }
 }
