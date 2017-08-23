@@ -15,6 +15,7 @@ import { OrdersComponent } from './components/orders/orders.component'
 import { DraftsComponent } from './components/drafts/drafts.component'
 import { ProjectProfilesComponent } from './components/project-profiles/project-profiles.component'
 import { OrdersTableComponent } from './components/orders-table/orders-table.component'
+import { LoadingTableComponent } from './components/orders-table/loading-table/loading-table.component'
 import { NewOrderComponent } from './components/new-order/new-order.component'
 import { CartComponent } from './components/cart/cart.component';
 import { PaginationComponent } from './shared/components/pagination/pagination.component';
@@ -58,6 +59,7 @@ export const sharedConfig: NgModule = {
 
         // Regular components
         OrdersTableComponent,
+        LoadingTableComponent,
         OrderBuilderComponent,
         LocationStepComponent,
         ProductSelectionStepComponent,

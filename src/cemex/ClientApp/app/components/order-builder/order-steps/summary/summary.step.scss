@@ -58,6 +58,7 @@
         border-right: 1px solid #DFE4EB;
         @include media-breakpoint-down(sm) {
             margin-bottom: 0;
+            padding-left: 30px
         }
         .name {
             color: #2A2A2A;
