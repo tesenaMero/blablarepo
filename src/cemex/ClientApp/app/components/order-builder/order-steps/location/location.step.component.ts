@@ -15,8 +15,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     @Output() onCompleted = new EventEmitter<any>();
     map: any; // Map instance
 
-    jobsite = "";
-    nice = false;
+    jobsite: any;
+    nice: boolean = false;
     model = this.createOrder
 
     constructor(@Inject(Step) private step: Step, public createOrder: CreateOrderService) {
@@ -32,6 +32,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     jobsiteSelected(event: any) {
+        console.log(event);
         this.createOrder.selectJobsite({ jobsiteId: 1 });
         this.nice = true;
         this.onCompleted.emit(event);

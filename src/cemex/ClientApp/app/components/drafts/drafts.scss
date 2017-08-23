@@ -49,3 +49,11 @@ $link-blue: #3FA9F5;
         margin-top: 16px;
     }
 }
+
+// Table
+/deep/.action-button {
+    color: #51A4F4;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}

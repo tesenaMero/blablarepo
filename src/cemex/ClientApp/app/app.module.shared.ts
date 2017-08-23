@@ -18,11 +18,7 @@ import { OrdersTableComponent } from './components/orders-table/orders-table.com
 import { LoadingTableComponent } from './components/orders-table/loading-table/loading-table.component'
 import { NewOrderComponent } from './components/new-order/new-order.component'
 import { CartComponent } from './components/cart/cart.component';
-import { PaginationComponent } from './shared/components/pagination/pagination.component';
-import { BreadcrumbsComponent, BreadcrumbsItemComponent } from './shared/components/breadcrumbs'
-import { ActionButtonComponent } from './shared/components/action-button/action-button.component';
 import { OrderBuilderComponent } from './components/order-builder/order-builder.component'
-import { StepperComponent, Step } from './shared/components/stepper';
 import { 
     LocationStepComponent, 
     ProductSelectionStepComponent, 
@@ -33,6 +29,13 @@ import {
 
 // Pipes
 import { NoSpacePipe, ZeroPadPipe } from './pipes/index'
+
+// Shared components
+import { StepperComponent, Step } from './shared/components/stepper';
+import { ActionButtonComponent } from './shared/components/action-button/action-button.component';
+import { BreadcrumbsComponent, BreadcrumbsItemComponent } from './shared/components/breadcrumbs'
+import { PaginationComponent } from './shared/components/pagination/pagination.component';
+import { DLSTableComponent } from './shared/components/table/table.component';
 
 // Services
 import { WindowRef } from './shared/services/window-ref.service';
@@ -73,7 +76,8 @@ export const sharedConfig: NgModule = {
         BreadcrumbsItemComponent,
         StepperComponent,
         Step,
-        ActionButtonComponent
+        ActionButtonComponent,
+        DLSTableComponent
     ],
     imports: [
         FlexLayoutModule,
