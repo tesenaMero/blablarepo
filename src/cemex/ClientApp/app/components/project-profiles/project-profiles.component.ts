@@ -37,7 +37,7 @@ export class ProjectProfilesComponent implements OnInit {
                 { inner: "Pump" },
                 { inner: "Yes" },
                 { inner: "Extra hourts, Sundaly / Holiday" },
-                { inner: "EDIT", class: "action-button", click: this.edit },
+                { inner: "EDIT", class: "action-button" },
                 { inner: "DELETE", class: "action-button" },
             ],
             [ 
@@ -47,13 +47,9 @@ export class ProjectProfilesComponent implements OnInit {
                 { inner: "Pump" },
                 { inner: "No" },
                 { inner: "Extra hourts, Sundaly / Holiday" },
-                { inner: "EDIT", class: "action-button", click: () => { console.log("Edit clicked"); } },
+                { inner: "EDIT", class: "action-button" },
                 { inner: "DELETE", class: "action-button" },
             ]
         ]
-    }
-
-    public edit() {
-        
     }
 }

@@ -38,7 +38,7 @@ export class DraftsComponent implements OnInit {
                 { inner: "10 tons" },
                 { inner: "31/12/2017, 15:00 - 16:00" },
                 { inner: "$72394.99" },
-                { inner: "EDIT", class: "action-button", click: () => { console.log("Edit clicked"); } },
+                { inner: "EDIT", class: "action-button" },
             ],
             [ 
                 { inner: "11/30/2017" }, 
@@ -48,7 +48,7 @@ export class DraftsComponent implements OnInit {
                 { inner: "11 tons" },
                 { inner: "31/12/2017, 15:00 - 16:00" },
                 { inner: "$35998.81", class: "roboto-bold" },
-                { inner: "EDIT", class: "action-button", click: () => { console.log("Edit clicked"); } },
+                { inner: "EDIT", class: "action-button" },
             ]
         ]
     }

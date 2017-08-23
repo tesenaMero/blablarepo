@@ -14,6 +14,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component'
 import { OrdersComponent } from './components/orders/orders.component'
 import { DraftsComponent } from './components/drafts/drafts.component'
 import { ProjectProfilesComponent } from './components/project-profiles/project-profiles.component'
+import { ProjectProfileCreatorComponent } from './components/project-profile-creator/project-profile-creator.component'
 import { OrdersTableComponent } from './components/orders-table/orders-table.component'
 import { LoadingTableComponent } from './components/orders-table/loading-table/loading-table.component'
 import { NewOrderComponent } from './components/new-order/new-order.component'
@@ -69,6 +70,7 @@ export const sharedConfig: NgModule = {
         SpecificationsTableStepComponent,
         ModeStepComponent,
         SummaryStepComponent,
+        ProjectProfileCreatorComponent,
 
         // Shared
         PaginationComponent,

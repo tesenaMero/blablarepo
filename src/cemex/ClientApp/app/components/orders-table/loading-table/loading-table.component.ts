@@ -6,7 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
     styleUrls: ['./loading-table.scss']
 })
 export class LoadingTableComponent {
-    @Input() rows: number = 1;
+    @Input() rows: number = 2;
     
     range = [];
     columns = [
