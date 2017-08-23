@@ -15,8 +15,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     @Output() onCompleted = new EventEmitter<any>();
     map: any; // Map instance
 
-    jobsite = "";
-    nice = false;
+    jobsite: any;
+    nice: boolean = false;
     model = this.createOrder
 
     constructor(@Inject(Step) private step: Step, public createOrder: CreateOrderService) {
@@ -24,10 +24,15 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     onShowed() {
-        google.maps.event.trigger(this.map, "resize");
+        GoogleMapsHelper.lazyLoadMap("jobsite-selection-map", (map) => {
+            this.map = map;
+            map.setOptions({ zoom: 14, center: { lat: 50.077626, lng: 14.424686 } });
+            google.maps.event.trigger(this.map, "resize");
+        });
     }
 
     jobsiteSelected(event: any) {
+        console.log(event);
         this.createOrder.selectJobsite({ jobsiteId: 1 });
         this.nice = true;
         this.onCompleted.emit(event);
@@ -44,10 +49,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     ngOnInit() {
-        GoogleMapsHelper.lazyLoadMap("jobsite-selection-map", (map) => {
-            this.map = map;
-            map.setOptions({ zoom: 14, center: { lat: 50.077626, lng: 14.424686 } });
-        });
     }
 
 }

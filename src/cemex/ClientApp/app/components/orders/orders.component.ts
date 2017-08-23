@@ -9,8 +9,8 @@ import { ApiService } from '../../shared/services/api.service';
   styleUrls: ['./orders.scss']
 })
 export class OrdersComponent implements OnInit {
-  orders;
-  isLoading;;
+  orders: any;
+  isLoading: any;
 
   constructor(private OrdersService: OrdersService, private ApiService: ApiService) {
     this.orders = OrdersService.getOrders();

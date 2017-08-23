@@ -1,12 +1,6 @@
-<!-- Responsive table starts here -->
-<!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
-<loading-table *ngIf="isLoading" [rows]="ordersQty"></loading-table>
-<div *ngIf="!isLoading && orders?.length == 0 ">
-    <p>No orders found</p>
-</div>
-<div *ngIf="!isLoading && orders?.length > 0" class="table-responsive-vertical shadow-z-1">
+<div class="table-responsive-vertical shadow-z-1">
     <!-- Table starts here -->
-    <table id="table" class="table table-fixed main table-hover table-striped">
+    <table id="table" class="table table-fixed main loading-table">
         <thead>
             <tr>
                 <!-- <th class="i-column" width="5%">
@@ -54,43 +48,28 @@
             </tr>
         </thead>
         <tbody>
-            <ng-container *ngFor="let order of orders; let index = index">
-                <tr class="order" [ngClass]="{ 'zebra': isOdd(index) }">
+            <ng-container *ngFor="let row of range">
+                <tr class="order">
                     <!-- <td class="i-column" data-title="Favorite">
-                        <i class="star cmx-icon-favourite-active" [class.active]="order.orderRequest.isFavorite" aria-hidden="true" (click)="favorite(order.orderRequest.orderRequestId, !order.orderRequest.isFavorite)"></i>
                     </td> -->
-                    <td class="number" data-title="Order No">{{ order.orderRequest.orderRequestId | zeropad: 7 }}</td>
-                    <td data-title="Submitted">08/13/2017 {{order.orderRequest.viewedAt }}</td>
-                    <td data-title="Location">{{ makeLocation(order) }}
-                    </td>
-                    <td data-title="Purchase Order Number">7755-KJ120/00011</td>
+                    <td class="number" data-title="Order No"></td>
+                    <td data-title="Submitted"></td>
+                    <td data-title="Location"></td>
+                    <td data-title="Purchase Order Number"></td>
                     <td data-title="Products" class="products">
-                        <i *ngIf="order.isReadyMix()" class="cmx-icon-driver" aria-hidden="true"></i>
-                        <!-- TODO add cement packed/bagged icons -->
-                        <i *ngIf="order.isCement()" class="cmx-icon-track" aria-hidden="true"></i>
-                        <i *ngIf="order.isAggregates()" class="cmx-icon-user-profile" aria-hidden="true"></i>
                     </td>
-                    <td data-title="Amount">{{ order.orderRequest.orderRequestItems.length }} tons</td>
-                    <td valign="bottom" data-title="Requested date">{{ order.orderRequest.orderRequestedOn | date:"dd/MM/y HH:mm" }}</td>
+                    <td data-title="Amount"></td>
+                    <td valign="bottom" data-title="Requested date"></td>
                     <td data-title="Status" class="status-block-position">
-                        <div class="status {{ order.orderRequest.orderRequestStatus.statusDesc | lowercase }}">{{ order.orderRequest.orderRequestStatus.statusDesc }}</div>
+                        <div class="status"></div>
                     </td>
                     <!-- TODO numberal parser -->
-                    <td data-title="Total amount">${{ order.orderRequest.totalAmount }}</td>
+                    <td data-title="Total amount"></td>
                     <!-- <td class="i-column" data-title="Repeat">
-                        <i class="cmx-icon-repeat"></i>
                     </td> -->
                 </tr>
-                <tr class="hidden-md-down sub separator"></tr>
+                <tr class="hidden-md-down sub separator "></tr>
             </ng-container>
         </tbody>
     </table>
-</div>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="pagination">
-            <pagination [totalPages]="10" [currentPage]="1" (changePage)="changePage($event)"></pagination>
-        </div>
-    </div>
 </div>
