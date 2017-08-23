@@ -102,7 +102,7 @@ ul.title-nav {
     >.location-style {
         padding-left: 25px;
         @include media-breakpoint-down(md) {            
-            padding: 0px;           
+            padding: 15px;           
         }        
     }
 
@@ -269,6 +269,84 @@ ul.title-nav {
                     cursor: none;
                 }
             }
+        }
+    }
+}
+
+.card{
+    background: #FFFFFF;
+    margin-left: -1%;
+    margin-top: 2.5%;
+    padding-left: 1%;
+
+    .card-header {
+        background: none;
+        border: 0;
+    }
+
+    .comments-container {
+        display: -webkit-inline-box;
+        white-space: nowrap;
+        overflow: hidden;
+    
+        .person-comments {
+            padding: 0% 3%;
+            font-weight: bold;
+        }
+
+        .date-comments {
+            padding: 0% 3%;
+        }        
+
+        .divider {
+            height: 1rem;
+            width: 2px;
+            background-color: #D6D7E0;
+            //background-color: red;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            flex-direction: column;
+        }
+    }
+}
+
+
+.card-odd{
+    margin-left: -1%;
+    margin-top: 2.5%;
+    padding-left: 1%;
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
+    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
+
+    .card-header {
+        background: none;
+        border: 0;
+    }
+
+    .comments-container {
+        display: -webkit-inline-box;
+        white-space: nowrap;
+        overflow: hidden;
+    
+        .person-comments {
+            padding: 0% 3%;
+            font-weight: bold;
+        }
+
+        .date-comments {
+            padding: 0% 3%;
+        }        
+
+        .divider {
+            height: 1rem;
+            width: 2px;
+            background-color: #D6D7E0;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            flex-direction: column;
         }
     }
 }

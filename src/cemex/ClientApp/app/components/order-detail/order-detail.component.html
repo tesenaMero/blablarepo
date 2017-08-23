@@ -57,13 +57,13 @@
 
     <div class="row nav-tab-container col-md-9">
         <ul class="nav nav-tabs">
-            <li class="nav-item"><a class="nav-link active" href="#../order-detail">Products</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Action log</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Comments</a></li>
+            <li class="nav-item" (click)="changeTabProducts($event)"><a class="nav-link active" id="products">Products</a></li>
+            <li class="nav-item"><a class="nav-link" id="action">Action log</a></li>
+            <li class="nav-item" (click)="changeTabComments($event)"><a class="nav-link" id="comments">Comments</a></li>
         </ul>
     </div>    
 
-    <div class="row products-detail-container col-md-12">
+    <div class="row products-detail-container col-md-12" id="products-id">
         <div class="row left-detail-container col-md-3">
             ReadyMix CHM89
         </div>    
@@ -158,4 +158,72 @@
             </table>                          
         </div>        
     </div>
+
+    <div *ngIf="show" id="comments-id">
+        <div>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="comments-container">
+                                <div class="person-comments">CEMEX Margaret Webster</div>
+                                <div class="divider"></div>
+                                <div class="date-comments">Tue May 30, 2017</div>
+                            </div>
+                        </div>
+                        <!-- end .row -->
+                    </div>
+                    <!-- end .card-header -->            
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p> Computers have become ubiquitous in almost every facet of our lives. 
+                                    At work, desk jockeys spend hours in front of their desktops, 
+                                    while delivery people scan bar codes with handhelds and workers 
+                                    in the field stay in touch with the central office via their notebooks. 
+                                    At home, we rely on our desktops and notebooks to do our shopping, 
+                                    to entertain us, and to keep us abreast of world events. 
+                                    We may not see our email servers, but we count on them to deliver our email 
+                                    whenever and wherever we want it.
+                                </p> 										
+                            </div>
+                            <!-- end .col-md-9 -->
+                        </div>
+                        <!-- end .row -->
+                    </div>
+                </div>
+                <!-- end .card -->
+            </div>
+            <div class="col-md-12">
+                <div class="card-odd">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="comments-container">
+                                <div class="person-comments">Andrew Customjoe</div>
+                                <div class="divider"></div>
+                                <div class="date-comments">Tue May 30, 2017</div>
+                            </div>
+                        </div>
+                        <!-- end .row -->
+                    </div>
+                    <!-- end .card-header -->            
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p> At home, we rely on our desktops and notebooks to do our shopping, 
+                                    to entertain us, and to keep us abreast of world events. 
+                                    We may not see our email servers, but we count on them to deliver our 
+                                    email whenever and wherever we want it.
+                                </p> 										
+                            </div>
+                            <!-- end .col-md-9 -->
+                        </div>
+                        <!-- end .row -->
+                    </div>
+                </div>
+                <!-- end .card -->
+            </div>
+        </div> 
+    </div>  
+    <!-- end ngif -->  
 </div>
