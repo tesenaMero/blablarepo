@@ -2,11 +2,11 @@
     <step [automatic]="true" [showControls]="false" [showExit]="true" [inLine]="false" title="Delivery mode">
         <mode-step (onCompleted)="modeStepCompleted(mode)"></mode-step>
     </step>
-    <step title="Delivery mode">
-        <location-step (onCompleted)="locationStepCompleted()"></location-step>
-    </step>
     <step [automatic]="true" title="Product line">
         <product-selection-step (onCompleted)="productStepCompleted(product)"></product-selection-step>
+    </step>
+    <step title="Delivery mode">
+        <location-step (onCompleted)="locationStepCompleted()"></location-step>
     </step>
     <step (onShowed)="specificationsStepShowed()" title="Specifications">
         <specifications-table></specifications-table>

@@ -54,8 +54,8 @@
             </tr>
         </thead>
         <tbody>
-            <ng-container *ngFor="let order of orders; let index = index">
-                <tr class="order" [ngClass]="{ 'zebra': isOdd(index) }">
+            <ng-container *ngFor="let order of orders; let index = index; let odd = odd">
+                <tr class="order" [ngClass]="{ 'zebra': odd }">
                     <!-- <td class="i-column" data-title="Favorite">
                         <i class="star cmx-icon-favourite-active" [class.active]="order.orderRequest.isFavorite" aria-hidden="true" (click)="favorite(order.orderRequest.orderRequestId, !order.orderRequest.isFavorite)"></i>
                     </td> -->
