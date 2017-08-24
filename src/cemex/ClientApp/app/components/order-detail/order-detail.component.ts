@@ -5,7 +5,8 @@ import { Component, OnInit, Input } from '@angular/core';
     templateUrl: './order-detail.component.html',
     styleUrls:  ['./order-detail.component.scss',
                  '../orders-table/orders-table.scss',
-                 '../orders-table/orders-table.specific.scss'
+                 '../orders-table/orders-table.specific.scss',
+                 '../order-builder/order-steps/summary/summary.step.scss'                      
                 ]
 })
 export class OrderDetailComponent implements OnInit {
@@ -20,7 +21,6 @@ export class OrderDetailComponent implements OnInit {
 
 
     changeTabComments(){
-        var elem = document.getElementById('products-id').style.display = 'none';
         document.getElementById("products").classList.remove('active');
         document.getElementById("comments").classList.add('active');  
         this.show = true;
@@ -29,8 +29,11 @@ export class OrderDetailComponent implements OnInit {
     changeTabAction(){
     }     
 */    
+
+    testTab(){
+        
+    }
     changeTabProducts(){
-        var elem = document.getElementById('products-id').style.display = 'inline-flex';
         document.getElementById("comments").classList.remove('active');
         document.getElementById("products").classList.add('active'); 
         this.show = false;

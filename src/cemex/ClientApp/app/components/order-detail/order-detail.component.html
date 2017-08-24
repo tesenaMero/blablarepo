@@ -16,8 +16,8 @@
         </div>        
         <div class="cto-container col-md-4 col-sm-12">
             <div class="float-md-right">
+                <a class="button" routerLink="../order-detail">Cancel order</a>
                 <a class="button-ghost" routerLink="../order-detail">Back</a>
-                <a class="button-ghost" routerLink="../order-detail">Repeat</a>
             </div>
         </div>
     </div>    
@@ -48,7 +48,8 @@
                         <td data-title="Submitted:">08/12/2017</td>
                         <td data-title="Submitted by:">Andrew Zacek</td>
                         <td data-title="Purchase order">7755-KJ120/00011</td>
-                        <td data-title="Status:"><a class="button bright-green" routerLink="../order-detail">Complete</a></td>
+                        <td data-title="Status" class="status-block-position"><div class="flag-status flag-green"></div>Complete</td>
+                        <!--<td data-title="Status:"><a class="button bright-green" routerLink="../order-detail">Complete</a></td> -->
                     </tr>                
                 </tbody>                
             </table>     
@@ -63,6 +64,199 @@
         </ul>
     </div>    
 
+    <div *ngIf="!show" class="card-container row product" id="products-id">
+        <div class="col-md-4 col-sm-12 left-container">
+            <div class="name">
+                ReadyMix CHM89
+            </div>
+        </div>
+        <div class="col-md-8 right-container">
+            <div class="row">
+                <div class="col-md-3 col-xs-6">
+                    <div class="group">
+                        <div class="title">
+                            Quantity
+                        </div>
+                        <div class="value">
+                            10
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-6">
+                    <div class="group">
+                        <div class="title">
+                            Unit
+                        </div>
+                        <div class="value">
+                            tons
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-6">
+                    <div class="group">
+                        <div class="title">
+                            Requested date
+                        </div>
+                        <div class="value">
+                            13.07.2017
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-6">
+                    <div class="group">
+                        <div class="title">
+                            Requested time
+                        </div>
+                        <div class="value">
+                            15.00 - 16.00
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="group">
+                        <div class="title">
+                            Product ID
+                        </div>
+                        <div class="value">
+                            20939302/10292/20102
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="group">
+                        <div class="title">
+                            Contract
+                        </div>
+                        <div class="value">
+                            10-201702189034 Remaining volume: 180
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="group">
+                        <div class="title">
+                            Projet profile
+                        </div>
+                        <div class="value">
+                            My Project Profile with quite long technical title, that it must be for more rows
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <!-- Flex way -->
+                    <div class="d-flex flex-wrap">
+                        <div class="group">
+                            <div class="title">
+                                Discharge Time
+                            </div>
+                            <div class="value">
+                                60min
+                            </div>
+                        </div>
+                        <div class="group">
+                            <div class="title">
+                                Transport Method
+                            </div>
+                            <div class="value">
+                                Truck
+                            </div>
+                        </div>
+                        <div class="group">
+                            <div class="title">
+                                Unload Type
+                            </div>
+                            <div class="value">
+                                Pump
+                            </div>
+                        </div>
+                        <div class="group">
+                            <div class="title">
+                                Pump Capacity Min
+                            </div>
+                            <div class="value">
+                                30 m3/s
+                            </div>
+                        </div>
+                        <div class="group">
+                            <div class="title">
+                                Pump Capacity Max
+                            </div>
+                            <div class="value">
+                                40 m<sup>3</sup>/s
+                            </div>
+                        </div>
+                        <div class="group">
+                            <div class="title">
+                                Application
+                            </div>
+                            <div class="value">
+                                Roof
+                            </div>
+                        </div>
+                        <div class="group">
+                            <div class="title">
+                                Load Size
+                            </div>
+                            <div class="value">
+                                10 tons
+                            </div>
+                        </div>
+                        <div class="group">
+                            <div class="title">
+                                Spacing
+                            </div>
+                            <div class="value">
+                                10 min
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="group">
+                        <div class="title">
+                            Product ID
+                        </div>
+                        <div class="value">
+                            20939302/10292/20102
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="d-flex flex-wrap">
+                        <div class="group flex-6">
+                            <div class="title">
+                                Delivery mode
+                            </div>
+                            <div class="value">
+                                Delivery
+                            </div>
+                        </div>
+                        <div class="group">
+                            <div class="title">
+                                Kicker
+                            </div>
+                            <div class="value">
+                                Yes
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+<!--    
     <div class="row products-detail-container col-md-12" id="products-id">
         <div class="row left-detail-container col-md-3">
             ReadyMix CHM89
@@ -158,7 +352,7 @@
             </table>                          
         </div>        
     </div>
-
+-->
     <div *ngIf="show" id="comments-id">
         <div>
             <div class="col-md-12">
