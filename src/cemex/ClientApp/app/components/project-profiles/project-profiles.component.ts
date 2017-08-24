@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
+let $ = require("jquery");
+
 @Component({
     selector: 'page-project-profiles',
     templateUrl: './project-profiles.html',
     styleUrls: ['./project-profiles.scss']
 })
-export class ProjectProfilesComponent implements OnInit {
+export class ProjectProfilesComponent {
     columns: any;
     rows: any;
 
@@ -13,7 +15,12 @@ export class ProjectProfilesComponent implements OnInit {
         this.initData();
     }
 
-    ngOnInit() {
+    openModal() {
+        $("#app-content").addClass("blur");
+    }
+
+    closeModal() {
+        $("#app-content").removeClass("blur");
     }
 
     initData() {
