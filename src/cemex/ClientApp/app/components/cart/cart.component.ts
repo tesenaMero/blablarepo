@@ -1,21 +1,45 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
+import { ETypeProduct, CementPackageSpecification } from '../../models/index';
+
+interface CartProductGroup {
+    id: number;
+    products: CementPackageSpecification[];
+}
 
 @Component({
-  selector: 'cart-page',
-  templateUrl: './cart.html',
-  styleUrls: ['./cart.scss']
+    selector: 'cart-page',
+    templateUrl: './cart.html',
+    styleUrls: ['./cart.scss']
 })
-
 export class CartComponent implements OnInit {
-  
-  constructor(private location: Location) {}
 
-  ngOnInit() {
-    
-  }
+    _productGroups: CartProductGroup[];
+    constructor(private location: Location) { }
 
-  back() {
-    this.location.back();
-  }
+    ngOnInit() {
+        this._productGroups = [
+            {
+                id: 1,
+                products: [
+                    {
+                        contract: "",
+                        deliveryMode: "",
+                        maximumCapacity: 0,
+                        payment: "",
+                        productDescription: "",
+                        productId: "",
+                        quantity: 0,
+                        requestDate: "",
+                        requestTime: "",
+                        unit: ""
+                    }
+                ]
+            }
+        ]
+    }
+
+    back() {
+        this.location.back();
+    }
 }
