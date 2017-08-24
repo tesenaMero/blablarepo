@@ -19,10 +19,6 @@ export class ProjectProfilesComponent {
         $("#app-content").addClass("blur");
     }
 
-    closeModal() {
-        $("#app-content").removeClass("blur");
-    }
-
     initData() {
         this.columns = [
             //{ inner: '<i class="star cmx-icon-favourite-active" aria-hidden="true"></i>', width: 5 },
