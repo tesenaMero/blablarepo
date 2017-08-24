@@ -85,8 +85,4 @@ export class DLSTableComponent {
     tdClicked(fn) {
         if (fn) { fn(); }
     }
-
-    isOdd(n: number): boolean {
-        return (n & 1) == 1;
-    }
 }

@@ -11,9 +11,9 @@
             </tr>
         </thead>
         <tbody>
-            <ng-container *ngFor="let row of rows; let index = index">
-                <tr [ngClass]="{ 'zebra': isOdd(index) }">
-                    <td (click)="tdClicked(item.click)" [attr.data-title]="columns[keyIndex].name" *ngFor="let item of row; let keyIndex = index" class="{{ item.class }}" innerHTML="{{ item.inner }}"></td>
+            <ng-container *ngFor="let row of rows; let odd = odd">
+                <tr [ngClass]="{ 'zebra': odd }">
+                    <td (click)="tdClicked(item.click)" [attr.data-title]="columns[index].name" *ngFor="let item of row; let index = index" class="{{ item.class }}" innerHTML="{{ item.inner }}"></td>
                 </tr>
                 <tr class="hidden-md-down sub separator"></tr>
             </ng-container>

@@ -13,6 +13,15 @@ $link-blue: #3FA9F5;
     padding-bottom: 16px;
     h1 {
         display: inline;
+        // &:after {
+        //     content: "";
+        //     position: absolute;
+        //     background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='17' height='8' fill='@{bgColor}' stroke='none'><path class='icon-down-single' d='M15.83.26a.71.71,0,0,0-1-.09L8,5.86,1.17.17A.71.71,0,0,0,.26,1.26L7.54,7.33a.71.71,0,0,0,.91,0l7.29-6.08A.71.71,0,0,0,15.83.26Z' transform='translate(0 0)'></path></svg>") no-repeat;
+        //     height: 8px;
+        //     width: 17px;
+        //     margin-left: 15px;
+        //     top: 23px;
+        // }
     }
     .icon-down-single-black {
         height: 8px;

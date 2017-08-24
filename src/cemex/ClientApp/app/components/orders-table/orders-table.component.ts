@@ -44,10 +44,6 @@ export class OrdersTableComponent {
     changePage(page) {
     }
 
-    isOdd(n: number): boolean {
-        return (n & 1) == 1;
-    }
-
     favorite(orderRequestId, isFavorite) {
         this.OrdersService.favoriteOrder(orderRequestId, isFavorite);
     }
