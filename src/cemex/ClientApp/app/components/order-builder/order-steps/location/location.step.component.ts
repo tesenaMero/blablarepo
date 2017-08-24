@@ -32,7 +32,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     jobsiteSelected(event: any) {
-        console.log(event);
         this.createOrder.selectJobsite({ jobsiteId: 1 });
         this.nice = true;
         this.onCompleted.emit(event);
