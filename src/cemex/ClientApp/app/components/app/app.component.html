@@ -527,7 +527,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="">
-                <project-profile-creator (canceled)="closeModal()"></project-profile-creator>
+                <project-profile-creator (confirmed)="closeModal()" (canceled)="closeModal()"></project-profile-creator>
             </div>
         </div>
     </div>

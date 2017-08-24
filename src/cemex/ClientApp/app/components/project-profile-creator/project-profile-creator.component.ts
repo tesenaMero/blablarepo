@@ -7,8 +7,13 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class ProjectProfileCreatorComponent {
     @Output() canceled = new EventEmitter<any>();
+    @Output() confirmed = new EventEmitter<any>();
 
     constructor() {
+    }
+
+    confirm() {
+        this.confirmed.emit();
     }
 
     cancel() {

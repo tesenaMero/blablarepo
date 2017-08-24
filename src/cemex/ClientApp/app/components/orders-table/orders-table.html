@@ -76,7 +76,7 @@
                         <div class="status {{ order.orderRequest.orderRequestStatus.statusDesc | lowercase }}">{{ order.orderRequest.orderRequestStatus.statusDesc }}</div>
                     </td>
                     <!-- TODO numberal parser -->
-                    <td data-title="Total amount">${{ order.orderRequest.totalAmount }}</td>
+                    <td data-title="Total amount">${{ order.orderRequest.totalAmount | number:'.2-2' }}</td>
                     <!-- <td class="i-column" data-title="Repeat">
                         <i class="cmx-icon-repeat"></i>
                     </td> -->
