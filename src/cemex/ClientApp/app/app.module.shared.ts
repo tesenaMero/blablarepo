@@ -3,7 +3,6 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Cemex components
 import { CmxButtonModule } from '@cemex/cmx-button-v1/dist';
@@ -82,7 +81,6 @@ export const sharedConfig: NgModule = {
         DLSTableComponent
     ],
     imports: [
-        FlexLayoutModule,
         CmxButtonModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full' },
