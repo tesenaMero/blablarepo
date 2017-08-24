@@ -35,15 +35,6 @@ $link-blue: #3FA9F5;
 }
 
 .cart-items-container {
-<<<<<<< HEAD
-    border-radius: 3px;
-    background-color: #FFFFFF;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07);
-    margin: 0;
-    /*@include media-breakpoint-down(sm) {
-        margin: 0px 10px 10px 10px;
-    }*/
-=======
 
     border-radius: 3px;
     background-color: #FFFFFF;
@@ -54,7 +45,6 @@ $link-blue: #3FA9F5;
         margin: 0px 10px 10px 10px;
     }*/
 
->>>>>>> raffe
     .payment-method {
         margin: 20px 0;
     }
@@ -67,38 +57,23 @@ $link-blue: #3FA9F5;
     .cart-item-container {
         margin: 0;
         padding: 10px 15px;
-<<<<<<< HEAD
-        .product-field {
-            padding: 0px 5px;
-            margin: 10px 0px;
-=======
 
         .product-field {
             padding: 0px 5px;
             margin: 10px 0px;
 
->>>>>>> raffe
             .product-type {
                 color: #2A2A2A;
                 font-size: 14px;
                 line-height: 19px;
-<<<<<<< HEAD
-                word-break: break-all;
-            }
-=======
                 word-break:break-all;
             }
     
->>>>>>> raffe
             .label-field {
                 color: #9CA4AE;
                 font-size: 12px;
                 line-height: 16px;
             }
-<<<<<<< HEAD
-=======
-
->>>>>>> raffe
             @include media-breakpoint-down(sm) {
                 margin: 5px 0px
             }
@@ -145,8 +120,6 @@ $link-blue: #3FA9F5;
 
 .h3-group {
     margin: 20px 0 10px 0;
-<<<<<<< HEAD
-=======
 }
 
 .concepts-total {
@@ -160,5 +133,4 @@ $link-blue: #3FA9F5;
         text-align: right;
         color: #001C3B;
     }
->>>>>>> raffe
 }
