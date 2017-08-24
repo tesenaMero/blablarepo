@@ -85,6 +85,9 @@ ul.title-nav {
 }
 
 .location-container {
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
+    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);    
     background-color: #FFFFFF;
     margin-top: 25px;
     padding: 25px 0px;
@@ -134,10 +137,8 @@ ul.title-nav {
 
 .nav-tab-container {
     padding-top: 33px;
-    padding-left: .2%;
-    display: flex;
-    clear: both;
-    
+    padding-left: 0px;
+    display: flex;    
 }
 
 .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
@@ -148,7 +149,7 @@ ul.title-nav {
 }
 
 .nav-tabs .nav-link:hover {
-    color: red;
+    color: #3FA9F5;
 }
 
 .products-detail-container {
@@ -297,83 +298,84 @@ ul.title-nav {
     }
 }
 
-.card{
-    background: #FFFFFF;
-    margin-left: -1%;
-    margin-top: 2.5%;
-    padding-left: 1%;
-
-    .card-header {
-        background: none;
-        border: 0;
-    }
-
-    .comments-container {
-        display: -webkit-inline-box;
-        white-space: nowrap;
-        overflow: hidden;
-    
-        .person-comments {
-            padding: 0% 3%;
-            font-weight: bold;
-        }
-
-        .date-comments {
-            padding: 0% 3%;
-        }        
-
-        .divider {
-            height: 1rem;
-            width: 2px;
-            background-color: #D6D7E0;
-            //background-color: red;
-            display: flex;
-            justify-content: center;
-            align-content: center;
-            flex-direction: column;
-        }
-    }
+.card-container.row.product {
+    margin-top: 3.15%;
 }
 
-
-.card-odd{
-    margin-left: -1%;
-    margin-top: 2.5%;
-    padding-left: 1%;
+.card {
+    margin-top: 3.15%;
+    padding: 10px 13px;    
+    .title-card {
+        padding-left: 5px;
+        padding-right: 2px;
+        width: auto;
+        font-family: Roboto;	
+        font-size: 12px;        
+        > :first-child {
+            font-weight: bold;            
+        }
+    }
+    .text-card {
+        margin-top: 2%;
+        padding-left: 2px;
+        padding-left: 1.65%;
+        width: auto;
+        font-family: Roboto;	
+        font-size: 12px;    
+    }
+    .divider {
+        height: auto;
+        width: 2px;
+        background-color: #D6D7E0;
+        //background-color: red;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        flex-direction: column;
+    }    
+}
+.card-odd {
     -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
     -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
-
-    .card-header {
-        background: none;
-        border: 0;
+    margin-top: 1.2%;
+    padding: 10px 13px;    
+    .title-card {
+        padding-left: 5px;
+        padding-right: 2px;
+        width: auto;
+        font-family: Roboto;	
+        font-size: 12px;        
+        > :first-child {
+            font-weight: bold;            
+        }
     }
+    .text-card {
+        margin-top: 2%;
+        padding-left: 2px;
+        padding-left: 1.65%;
+        width: auto;
+        font-family: Roboto;	
+        font-size: 12px;    
+    }
+    .divider {
+        height: auto;
+        width: 2px;
+        background-color: #D6D7E0;
+        //background-color: red;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        flex-direction: column;
+    }    
+}
 
-    .comments-container {
-        display: -webkit-inline-box;
-        white-space: nowrap;
-        overflow: hidden;
-    
-        .person-comments {
-            padding: 0% 3%;
-            font-weight: bold;
-        }
-
-        .date-comments {
-            padding: 0% 3%;
-        }        
-
-        .divider {
-            height: 1rem;
-            width: 2px;
-            background-color: #D6D7E0;
-            display: flex;
-            justify-content: center;
-            align-content: center;
-            flex-direction: column;
-        }
+.cards {
+    > :last-child {
+        margin-bottom: 300px;
     }
 }
+
 
 /*
 table, th, td, tr, thead, tbody {

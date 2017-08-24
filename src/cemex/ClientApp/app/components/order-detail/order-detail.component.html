@@ -57,7 +57,7 @@
     </div>
 
     <div class="row nav-tab-container col-md-9">
-        <ul class="nav nav-tabs">
+        <ul class="row nav nav-tabs">
             <li class="nav-item" (click)="changeTabProducts($event)"><a class="nav-link active" id="products">Products</a></li>
             <li class="nav-item"><a class="nav-link" id="action">Action log</a></li>
             <li class="nav-item" (click)="changeTabComments($event)"><a class="nav-link" id="comments">Comments</a></li>
@@ -251,173 +251,42 @@
         </div>
     </div>
 
+    <div *ngIf="show" class="cards">
+        <div class="row card">           
+                <div class="row justify-content-start title-card">
+                    <div class="col-md-auto">CEMEX Margaret Webster</div>
+                    <div class="divider"></div>
+                    <div class="col-md-auto">Tue May 30, 2017</div>
+                </div>            
+                <div class="row justify-content-start text-card">
+                    <p> Computers have become ubiquitous in almost every facet of our lives. 
+                        At work, desk jockeys spend hours in front of their desktops, 
+                        while delivery people scan bar codes with handhelds and workers 
+                        in the field stay in touch with the central office via their notebooks. 
+                        At home, we rely on our desktops and notebooks to do our shopping, 
+                        to entertain us, and to keep us abreast of world events. 
+                        We may not see our email servers, but we count on them to deliver our email 
+                        whenever and wherever we want it.
+                    </p> 							
+                </div>                         
+        </div>
 
-
-
-
-
-<!--    
-    <div class="row products-detail-container col-md-12" id="products-id">
-        <div class="row left-detail-container col-md-3">
-            ReadyMix CHM89
+        <div class="row card-odd">           
+                <div class="row justify-content-start title-card">
+                    <div class="col-md-auto">Andrew Customjoe</div>
+                    <div class="divider"></div>
+                    <div class="col-md-auto">Tue May 30, 2017</div>
+                </div>            
+                <div class="row justify-content-start text-card">
+                    <p> At home, we rely on our desktops and notebooks to do our shopping, 
+                        to entertain us, and to keep us abreast of world events. 
+                        We may not see our email servers, but we count on them to deliver our 
+                        email whenever and wherever we want it.
+                    </p> 
+                </div>                         
         </div>    
-        <div class="divider"></div>
-        <div class="row table-responsive-vertical detail-container col-md-9">         
-            <table id="table" class="table table-fixed">
-                <thead>
-                    <tr>
-                        <th width="20%">Quantity</th>
-                        <th width="20%">Units</th>
-                        <th width="20%">Requested date</th>
-                        <th width="20%" colspan="2">Requested time</th>
-                    </tr>
-                </thead>
-                <tbody>                    
-                    <tr>
-                        <td data-title="Quantity">Product description</td>
-                        <td data-title="Units">Product line</td>
-                        <td data-title="Requested date">Point of delivery</td>
-                        <td data-title="Requested time">14 Tons</td>
-                    </tr>
-                
-                </tbody>
-                <thead>
-                    <tr>
-                        <th width="20%" colspan="2">Product ID</th>
-                        <th width="20%" colspan="2">Contract</th>
-                    </tr>
-                </thead>    
-                <tbody>                    
-                    <tr>
-                        <td data-title="Product ID" colspan="2">20939302/10292/20102</td>
-                        <td data-title="Contract" colspan="3">10-201702189034    Remaining volume: 180</td> 
-                    </tr>                   
-                </tbody>       
-                <thead>         
-                    <tr>       
-                        <th width="20%" colspan="2">Project profile</th>
-                        <th width="20%">Discharge Time</th>
-                        <th width="20%">Transport Method</th>
-                        <th width="20%">Unload Type</th>
-                    </tr>
-                </thead>         
-                <tbody>
-                    <tr>
-                        <td data-title="Project profile" colspan="2" rowspan="5"><p>My Project Profile with quite long<br/> technical title, that it must be for more<br/> rows</p></td>
-                        <td data-title="Discharge Time">60min</td> 
-                        <td data-title="Transport Method">Truck</td>
-                        <td data-title="Unload Type">Pump</td>   
-                    </tr>
-                </tbody> 
-                <thead>
-                    <tr>
-                        <th width="20%">Pump Capacity Min</th>
-                        <th width="20%">Pump Frequency Max</th>
-                        <th width="20%">Pump Capacity Min</th>
-                    </tr>
-                </thead>   
-                <tbody>
-                    <tr>
-                        <td data-title="Pump Capacity Min">30 m3/s</td>
-                        <td data-title="Pump Frequency Max">Weekly</td>
-                        <td data-title="Pump Capacity Min">Roof</td>
-                    </tr>
-                </tbody>   
-                <thead>
-                    <tr>
-                        <th width="20%">Load size</th>
-                        <th width="20%">Spacing</th>
-                    </tr>
-                </thead>   
-                <tbody>
-                    <tr>
-                        <td data-title="Load size">10 ton</td>
-                        <td data-title="Spacing">10 min</td>
-                    </tr>
-                </tbody>      
-                <thead>
-                    <tr>
-                        <th width="20%" colspan="2">Additional services</th>
-                        <th width="20%">Delivery Mode</th>
-                        <th width="20%">Kicker</th>
-                    </tr>
-                </thead>   
-                <tbody>
-                    <tr>
-                        <td data-title="Additional services" colspan="2">Extra Hours, Sunday / Holiday Service, Pipeline</td>
-                        <td data-title="Delivery Mode">Delivery</td>
-                        <td data-title="Kicker">Yes</td>
-                    </tr>
-                </tbody>                      
-            </table>                          
-        </div>        
-    </div>
--->
-    <div *ngIf="show" id="comments-id">
-        <div>
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="comments-container">
-                                <div class="person-comments">CEMEX Margaret Webster</div>
-                                <div class="divider"></div>
-                                <div class="date-comments">Tue May 30, 2017</div>
-                            </div>
-                        </div>
-                        <!-- end .row -->
-                    </div>
-                    <!-- end .card-header -->            
-                    <div class="card-content">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p> Computers have become ubiquitous in almost every facet of our lives. 
-                                    At work, desk jockeys spend hours in front of their desktops, 
-                                    while delivery people scan bar codes with handhelds and workers 
-                                    in the field stay in touch with the central office via their notebooks. 
-                                    At home, we rely on our desktops and notebooks to do our shopping, 
-                                    to entertain us, and to keep us abreast of world events. 
-                                    We may not see our email servers, but we count on them to deliver our email 
-                                    whenever and wherever we want it.
-                                </p> 										
-                            </div>
-                            <!-- end .col-md-9 -->
-                        </div>
-                        <!-- end .row -->
-                    </div>
-                </div>
-                <!-- end .card -->
-            </div>
-            <div class="col-md-12">
-                <div class="card-odd">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="comments-container">
-                                <div class="person-comments">Andrew Customjoe</div>
-                                <div class="divider"></div>
-                                <div class="date-comments">Tue May 30, 2017</div>
-                            </div>
-                        </div>
-                        <!-- end .row -->
-                    </div>
-                    <!-- end .card-header -->            
-                    <div class="card-content">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p> At home, we rely on our desktops and notebooks to do our shopping, 
-                                    to entertain us, and to keep us abreast of world events. 
-                                    We may not see our email servers, but we count on them to deliver our 
-                                    email whenever and wherever we want it.
-                                </p> 										
-                            </div>
-                            <!-- end .col-md-9 -->
-                        </div>
-                        <!-- end .row -->
-                    </div>
-                </div>
-                <!-- end .card -->
-            </div>
-        </div> 
-    </div>  
-    <!-- end ngif -->  
+    </div>    
+
+
+
 </div>
