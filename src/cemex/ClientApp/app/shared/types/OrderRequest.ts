@@ -22,6 +22,8 @@ interface Optional {
   viewedAt: string;
   isFavorite: boolean;
   totalAmount: number;
+  businessLine: string;
+  statusCode: string;
   user: {
     fullname: string;
   };

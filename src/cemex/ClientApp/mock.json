@@ -1,0 +1,340 @@
+{
+  "count": 1,
+  "orders": [
+    {
+      "orderId": 2,
+      "orderCode": "0000224530",
+      "orderName": "string",
+      "createdDateTime": "2016-12-20 15:02:52.000",
+      "updatedDateTime": "2017-06-05 18:28:16.000",
+      "programmedDateTime": "2016-12-20 06:00:00.000",
+      "requestedDateTime": "2017-08-21T16:17:20.681Z",
+      "draftDateTime": "2017-08-21T16:17:20.681Z",
+      "purchaseOrder": "1",
+      "status": {
+        "statusId": 22,
+        "statusDesc": "Completed - Hdr"
+      },
+      "salesArea": {
+        "salesAreaId": 2,
+        "salesOrganizationCode": "7180",
+        "countryCode": "MX",
+        "divisionCode": "02",
+        "channelCode": "00",
+        "businessLine": {
+          "businessLineId": 2,
+          "businessLineCode": "CEM",
+          "businessLineDesc": "2"
+        }
+      },
+      "orderType": {
+        "orderTypeId": 264,
+        "orderTypeDesc": "548"
+      },
+      "customer": {
+        "customerId": 16,
+        "customerCode": "0050160879",
+        "customerDesc": "Don Quintin.",
+        "customerSegment": {
+          "customerSegmentId": 2,
+          "customerSegmentCode": "ABCD",
+          "customerSegmentDesc": "a test"
+        }
+      },
+      "shippingCondition": {
+        "shippingConditionId": 1,
+        "shippingConditionCode": "10",
+        "shippingConditionDesc": "619"
+      },
+      "jobsite": {
+        "jobsiteId": 20,
+        "jobsiteCode": "0065012158",
+        "jobsiteDesc": "Test30"
+      },
+      "pointOfDelivery": {
+        "pointOfDeliveryId": 402,
+        "pointOfDeliveryCode": "0065012158",
+        "pointOfDeliveryDesc": "Test30"
+      },
+      "instructions": "string",
+      "contact": {
+        "contactName": "string",
+        "contactPhone": "string"
+      },
+      "user": {
+        "userId": 3,
+        "userAccount": "CJENNINGS",
+        "email": "string"
+      },
+      "totalAmount": 260,
+      "totalQuantity": 123,
+      "items": [
+        {
+          "orderItemId": 4,
+          "quantity": 20,
+          "extendedPrice": 30,
+          "unitPrice": 10,
+          "totalPrice": 200,
+          "product": {
+            "productId": 1,
+            "productCode": "10000917",
+            "productDesc": "CPO 40 GRANEL",
+            "productHierarchy": "645",
+            "isFinished": true,
+            "availabilityCheck": true,
+            "productType": {
+              "productTypeId": 1,
+              "productTypeCode": "0001",
+              "productTypeDesc": "Bulk Cement"
+            }
+          },
+          "uom": {
+            "unitId": 262,
+            "unitCode": "TO",
+            "unitDesc": "1067"
+          },
+          "orderItemProfile": {
+            "slump": 0,
+            "kicker": true,
+            "element": {
+              "elementId": 0,
+              "elementCode": "string",
+              "elementDesc": "string"
+            },
+            "timePerLoad": {
+              "timePerLoadId": 0,
+              "timePerLoadCode": "string",
+              "timePerLoadDesc": "string"
+            },
+            "loadSize": {
+              "loadSizeId": 0,
+              "loadSizeCode": "string",
+              "loadSizeDesc": "string"
+            },
+            "unloadType": {
+              "unloadTypeId": 0,
+              "unloadTypeCode": "string",
+              "unloadTypeDesc": "string"
+            },
+            "pumpCapacity": {
+              "pumpCapacityId": 0,
+              "pumpCapacityCode": "string",
+              "pumpCapacityDesc": "string"
+            },
+            "transportMethod": {
+              "transportMethodId": 0,
+              "transportMethodCode": "string",
+              "transportMethodDesc": "string"
+            },
+            "dischargeTime": {
+              "dischargeTimeId": 0,
+              "timePerDischargeDesc": "string"
+            },
+            "reccurence": {
+              "reccurenceId": 0,
+              "reccurenceDesc": "string"
+            },
+            "additionalServices": [
+              {
+                "additionalServiceId": 0,
+                "additionalServiceCode": "string",
+                "additionalServiceDesc": "string"
+              }
+            ]
+          },
+          "agreement": {
+            "agreementId": 0,
+            "agreementCode": "string",
+            "currency": {
+              "currencyId": 0,
+              "currencyCode": "string",
+              "currencyDesc": "string"
+            }
+          },
+          "paymentTerm": {
+            "paymentTermId": 1,
+            "paymentTermCode": "X1  ",
+            "paymentTermDesc": "1282"
+          },
+          "shippingSource": {
+            "shippingSourceId": 387,
+            "shippingSourceCode": "EA20",
+            "shippingSourceDesc": "MX-PTA. MONTERREY",
+            "address": {
+              "addressId": 394,
+              "addressCode": "137224",
+              "cityDesc": "MONTERREY",
+              "countryCode": "MX",
+              "domicileNum": "No. 901A",
+              "postalCode": "64520",
+              "regionCode": "NL",
+              "regionDesc": "Nuevo León",
+              "settlementDesc": "COL. CEMENTOS",
+              "streetName": "AV. INDEPENDENCIA",
+              "geoPlace": {
+                "geoFenceRadius": "200",
+                "longitude": "77.620677540000000",
+                "latitude": "13.049317890000000",
+                "geoPlaceType": "R"
+              }
+            }
+          },
+          "loadItem": [
+            {
+              "loadItemId": 0,
+              "loadItemCode": "string",
+              "itemSeqNum": 0,
+              "quantity": 0,
+              "deliveryGroup": 0,
+              "product": {
+                "productId": 0,
+                "productCode": "string",
+                "productDesc": "string",
+                "productHierarchy": "string",
+                "isFinished": true,
+                "availabilityCheck": true,
+                "productType": {
+                  "productTypeId": 0,
+                  "productTypeCode": "string",
+                  "productTypeDesc": "string"
+                }
+              },
+              "uom": {
+                "unitId": 262,
+                "unitCode": "TO",
+                "unitDesc": "1067"
+              }
+            }
+          ]
+        }
+      ],
+      "loads": [
+        {
+          "loadId": 0,
+          "loadCode": "string",
+          "loadDateTime": "2017-08-21T16:17:20.682Z",
+          "programmedDateTime": "2017-08-21T16:17:20.682Z",
+          "loadNumber": "string",
+          "items": [
+            {
+              "loadItemId": 0,
+              "loadItemCode": "string",
+              "itemSeqNum": 0,
+              "quantity": 0,
+              "deliveryGroup": 0,
+              "product": {
+                "productId": 0,
+                "productCode": "string",
+                "productDesc": "string",
+                "productHierarchy": "string",
+                "isFinished": true,
+                "availabilityCheck": true,
+                "productType": {
+                  "productTypeId": 0,
+                  "productTypeCode": "string",
+                  "productTypeDesc": "string"
+                }
+              },
+              "uom": {
+                "unitId": 262,
+                "unitCode": "TO",
+                "unitDesc": "1067"
+              }
+            }
+          ],
+          "counterOffers": [
+            {
+              "proposedDateTimeId": 0,
+              "proposedDate": "2017-08-21T16:17:20.682Z",
+              "proposedTimeFrom": "2017-08-21T16:17:20.682Z",
+              "proposedTimeTo": "2017-08-21T16:17:20.682Z"
+            }
+          ],
+          "shipment": {
+            "shipmentId": 0,
+            "shipmentCode": "string",
+            "shipmentTime": 0,
+            "shipmentDistance": 0,
+            "shippingSource": {
+              "shippingSourceId": 0,
+              "shippingSourceCode": "string",
+              "shippingSourceDesc": "string",
+              "address": {
+                "addressId": 0,
+                "addressCode": "string",
+                "cityDesc": "string",
+                "countryCode": "string",
+                "domicileNum": "string",
+                "postalCode": "string",
+                "regionCode": "string",
+                "regionDesc": "string",
+                "settlementDesc": "string",
+                "streetName": "string",
+                "geoPlace": {
+                  "geoFenceRadius": "string",
+                  "longitude": "string",
+                  "latitude": "string",
+                  "geoPlaceType": "string"
+                }
+              }
+            },
+            "shippingLocation": {
+              "shippingLocationId": 0,
+              "shippingLocationCode": "string",
+              "shippingLocationDesc": "string",
+              "address": {
+                "addressId": 0,
+                "addressCode": "string",
+                "cityDesc": "string",
+                "countryCode": "string",
+                "domicileNum": "string",
+                "postalCode": "string",
+                "regionCode": "string",
+                "regionDesc": "string",
+                "settlementDesc": "string",
+                "streetName": "string",
+                "geoPlace": {
+                  "geoFenceRadius": "string",
+                  "longitude": "string",
+                  "latitude": "string",
+                  "geoPlaceType": "string"
+                }
+              },
+              "shippingLocationType": {
+                "shippingLocationTypeId": 0,
+                "shippingLocationTypeCode": "string"
+              }
+            },
+            "shippingCondition": {
+              "shippingConditionId": 0,
+              "shippingConditionCode": "string",
+              "shippingConditionDesc": "string"
+            },
+            "shippingMethod": {
+              "shippingMethodId": 0,
+              "shippingMethodCode": "string",
+              "shippingMethodDesc": "string",
+              "shippingMethodType": {
+                "shippingMethodTypeId": 0,
+                "shippingMethodTypeCode": "string"
+              }
+            }
+          },
+          "isCapable": true,
+          "status": {
+            "statusId": 0,
+            "statusDesc": "string"
+          },
+          "requestDateTimes": [
+            {
+              "requestedDateTimeId": 0,
+              "requestedDate": "2017-08-21T16:17:20.682Z",
+              "requestedTime": "2017-08-21T16:17:20.682Z",
+              "dateTimePriority": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

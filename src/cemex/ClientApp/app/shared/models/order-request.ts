@@ -4,29 +4,30 @@ import { OrderRequest as OrderRequestType } from '../types';
 
 export class OrderRequest {
     orderRequest: OrderRequestType;
+    buisnessLIneCodes = {
+        rmx: 'RMX',
+        cem: 'CEM',
+        aggr: 'AGR'
+    }
 
     constructor(orderRequest: OrderRequestType) {
         this.orderRequest = orderRequest;
     }
     
     isCanceled() {
-        return _.get(this.orderRequest, 'orderRequestStatus.statusId') === 'CNCL';
+        return this.orderRequest.statusCode === 'CNCL';
     }
 
     isReadyMix() {
-        return !!this.orderRequest.orderRequestItems.find((item) => 
-            item.productType.productTypeCode === '0006');
+        return this.orderRequest.businessLine === this.buisnessLIneCodes.rmx;
     }
 
     isCement() {
-        const cementCodes = ['0002', '0001'];
-        return !!this.orderRequest.orderRequestItems.find((item) => 
-            !!cementCodes.find((code) => item.productType.productTypeCode === code));
+        return this.orderRequest.businessLine === this.buisnessLIneCodes.cem;
     }
 
     isAggregates() {
-        return !!this.orderRequest.orderRequestItems.find((item) => 
-            item.productType.productTypeCode === '0006');
+        return this.orderRequest.businessLine === this.buisnessLIneCodes.aggr;
     }
 
     setFavorite(favorite) {

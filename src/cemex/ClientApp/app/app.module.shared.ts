@@ -26,7 +26,6 @@ import {
     ProductSelectionStepComponent, 
     SpecificationsTableStepComponent, 
     ModeStepComponent,
-    SummaryStepComponent
 }  from './components/order-builder/order-steps'
 import { SearchProductComponent } from './components/search-product/search-product.component';
 
@@ -55,6 +54,7 @@ import { ProjectProfileApiService } from './shared/services/project-profile-api.
 import { ContractsApiService } from './shared/services/contracts-api.service';
 import { JobsiteApiService } from './shared/services/jobsites-api.service';
 import { NguiDatetimePickerModule } from './shared/components/datetimepicker';
+import { OrderRequestHelper } from './utils/order-request.helper';
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
@@ -83,7 +83,6 @@ export const sharedConfig: NgModule = {
         ProductSelectionStepComponent,
         SpecificationsTableStepComponent,
         ModeStepComponent,
-        SummaryStepComponent,
         ProjectProfileCreatorComponent,
         SearchProductComponent,
 
@@ -127,6 +126,7 @@ export const sharedConfig: NgModule = {
         LoginApiService,
         ProjectProfileApiService,
         ContractsApiService,
-        JobsiteApiService
+        JobsiteApiService,
+        OrderRequestHelper,
     ]
 };
