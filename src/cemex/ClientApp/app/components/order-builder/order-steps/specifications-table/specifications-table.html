@@ -45,12 +45,14 @@
             <div class="col-md-2 requestdate">
                 <div class="form-group">
                     <label for="request-date">Request Date</label>
+                    <input type="text" [(ngModel)]="myDate" ngui-datetime-picker date-only="true" />
                     <input type="text" class="form-control" id="request-date" [(ngModel)]="specification.requestDate" />
                 </div>
             </div>
             <div class="col-md-2 requesttime">
                 <div class="form-group">
                     <label for="request-date">Request Time</label>
+                    <input type="text" [(ngModel)]="myTime" ngui-datetime-picker time-only="true"/>
                     <input type="text" class="form-control" id="request-date" [(ngModel)]="specification.requestTime" />
                 </div>
             </div>
