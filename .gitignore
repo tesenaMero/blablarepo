@@ -239,3 +239,5 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+/src/cemex/package-lock.json

@@ -13,53 +13,53 @@
             </div>
         </div>
     </div>
-    <div class="cart-group">
-        <h3 class="h3-group roboto-bold">Group 1</h3>
-        <div class="row cart-items-container">
+    <div class="cart-group" *ngFor="let group  of _productGroups">
+        <h3 class="h3-group roboto-bold">Group {{group.id}}</h3>
+        <div class="row cart-items-container" *ngFor="let productDto of group.products">
             <div class="cart-item-container col-md-10 row">
                 <div class="product-field col-md-4">
                     <div class="label-field roboto">Product Description</div>
-                    <p class="product-type roboto-bold">Cement</p>
+                    <p class="product-type roboto-bold">{{productDto.productDescription}}</p>
                 </div>
                 <div class="product-field col-md-2">
                     <div class="label-field roboto">Quantity</div>
-                    <p class="product-type">8</p>
+                    <p class="product-type">{{productDto.quantity}}</p>
                 </div>
                 <div class="product-field col-md-1">
                     <div class="label-field roboto">Unit</div>
-                    <p class="product-type">tons</p>
+                    <p class="product-type">{{productDto.unit}}</p>
                 </div>
                 <div class="product-field col-md-2">
                     <div class="label-field roboto">Requested Date</div>
-                    <p class="product-type">13/07/2017</p>
+                    <p class="product-type">{{productDto.requestDate}}</p>
                 </div>
                 <div class="product-field col-md-2">
                     <div class="label-field roboto">Requested Time</div>
-                    <p class="product-type">15:00 - 16:00</p>
+                    <p class="product-type">{{productDto.requestTime}}</p>
                 </div>
                 <div class="product-field col-md-1">
                     <div class="label-field roboto">Payment</div>
-                    <p class="product-type">Credit</p>
+                    <p class="product-type">productDto.payment</p>
                 </div>
                 <div class="product-field col-md-4">
                     <div class="label-field roboto">Location</div>
-                    <p class="product-type roboto-bold">Southwest 68th Street building</p>
+                    <p class="product-type roboto-bold">{{productDto.location}}</p>
                 </div>
                 <div class="product-field col-md-2">
                     <div class="label-field roboto">Product ID</div>
-                    <div class="product-type">20939302/10292/10102</div>
+                    <div class="product-type">{{productDto.productId}}</div>
                 </div>
                 <div class="product-field col-md-3">
                     <div class="label-field roboto">Maximum Capacity</div>
-                    <p class="product-type">10 tons</p>
+                    <p class="product-type">{{productDto.maximumCapacity}} {{productDto.unit}}</p>
                 </div>
                 <div class="product-field col-md-3">
                     <div class="label-field roboto">Contract</div>
-                    <p class="product-type">10-201702189034 Remaining volume: 180 </p>
+                    <p class="product-type">{{productDto.contract}}</p>
                 </div>
                 <div class="product-field col-md-4">
                     <div class="label-field roboto">Point of Delivery</div>
-                    <p class="product-type">Backstreet yard</p>
+                    <p class="product-type">{{productDto.pointDelivery}}</p>
                 </div>
                 <div class="product-field col-md-3">
                     <div class="label-field roboto">Additional Services</div>
@@ -67,7 +67,7 @@
                 </div>
                 <div class="product-field col-md-5">
                     <div class="label-field roboto">Delivery Mode</div>
-                    <p class="product-type">Delivery</p>
+                    <p class="product-type">{{productDto.deliveryMode}}</p>
                 </div>
 
 
@@ -77,10 +77,10 @@
             <div class="cart-item-container with-sepatator col-md-2">
                 <div class="amount-container">
                     <div class="label-amount roboto">Unitary Price</div>
-                    <p class="value-amount roboto-bold">$2,000.00</p>
+                    <p class="value-amount roboto-bold">{{productDto.unitaryPrice | currency : 'USD' : true}}</p>
                     <div class="spacer-16"></div>
                     <div class="label-amount roboto">Material Value</div>
-                    <div class="value-amount roboto-bold">$20,000.00</div>
+                    <div class="value-amount roboto-bold">{{productDto.unitaryPrice * productDto.quantity | currency : 'USD' : true}}</div>
                 </div>
             </div>
         </div>
