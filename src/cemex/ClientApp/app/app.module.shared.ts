@@ -47,6 +47,7 @@ import { CreateOrderService } from './shared/services/create-order.service';
 import { LoginApiService } from './shared/services/login-api.service';
 import { ProjectProfileApiService } from './shared/services/project-profile-api.service';
 import { ContractsApiService } from './shared/services/contracts-api.service';
+import { JobsiteApiService } from './shared/services/jobsites-api.service';
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
@@ -112,6 +113,7 @@ export const sharedConfig: NgModule = {
         CreateOrderService,
         LoginApiService,
         ProjectProfileApiService,
-        ContractsApiService
+        ContractsApiService,
+        JobsiteApiService
     ]
 };
