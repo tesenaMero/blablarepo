@@ -29,3 +29,8 @@ export interface ReadymixSpecification {
     deliveryMode: string;
     projectProfile: ProjectProfile;
 }
+
+export interface CartProductGroup {
+    id: number;
+    products: CementPackageSpecification[];
+}
