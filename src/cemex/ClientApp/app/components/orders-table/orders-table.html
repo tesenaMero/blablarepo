@@ -2,7 +2,10 @@
 <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
 <loading-table *ngIf="isLoading" [rows]="ordersQty"></loading-table>
 <div *ngIf="!isLoading && orders?.length == 0 ">
-    <p>No orders found</p>
+    <p style="text-align: center;
+    color: #9CA4AE;
+    padding: 80px 0;
+    font-size: 40px;">No orders found</p>
 </div>
 <div *ngIf="!isLoading && orders?.length > 0" class="table-responsive-vertical shadow-z-1">
     <!-- Table starts here -->

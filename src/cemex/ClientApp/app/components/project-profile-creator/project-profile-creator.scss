@@ -1,6 +1,29 @@
 @import "~bootstrap/scss/bootstrap-grid.scss";
+.close {
+    position: absolute;
+    top: 30px;
+    right: 32px;
+    cursor: pointer;
+    @include media-breakpoint-down(sm) {
+        position: absolute;
+        top: 17px;
+        right: 17px;
+        cursor: pointer;
+    }
+}
+
 .container-layout {
     padding: 50px 58px;
+    padding-top: 50px;
+    padding-bottom: 30px;
+    padding-left: 58px;
+    padding-right: 58px;
+    @include media-breakpoint-down(sm) {
+        padding-top: 60px;
+        padding-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
 }
 
 .title {
@@ -10,6 +33,9 @@
 }
 
 .form-container {
+    @include media-breakpoint-down(sm) {
+        margin-top: 23px;
+    }
     margin-top: 47px;
     label {
         color: #001C3B;
@@ -72,6 +98,6 @@ label {
         margin-left: 8px;
     }
     @include media-breakpoint-down(sm) {
-        margin-top: 16px;
+        margin-top: 26px;
     }
 }
