@@ -9,14 +9,17 @@ export class ProjectProfileCreatorComponent {
     @Output() canceled = new EventEmitter<any>();
     @Output() confirmed = new EventEmitter<any>();
 
+    private finishedOrder: boolean;
+
     constructor() {
     }
 
     confirm() {
-        this.confirmed.emit();
+        this.finishedOrder = true;
     }
 
     cancel() {
+        this.finishedOrder = false;
         this.canceled.emit();
     }
 }
