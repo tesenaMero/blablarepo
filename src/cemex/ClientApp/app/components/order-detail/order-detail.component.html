@@ -1,249 +1,300 @@
 <div class="layout">
-    <ul class="title-nav">
-        <li>Orders</li>
-        <li>Detail</li>
-    </ul>   
+    <breadcrumbs>
+        <breadcrumbs-item link="../orders">Orders</breadcrumbs-item>
+        <breadcrumbs-item>Detail</breadcrumbs-item>
+    </breadcrumbs>
 
     <div class="title-container row align-items-center">
         <div class="col-md-4 col-sm-12">
             <h1>Order #{{order}}</h1>
         </div>
-        <div class="cto-container col-md-4 col-sm-12">
-            <div class="float-lg-left">
-                <label for="request-date">Request date: </label>
-                <span>{{requestDate}}</span>                
+        <div class="col-md-4 col-sm-12">
+            <div class="float-lg-left request-date">
+                <span class="title">Request date:</span>
+                <span class="value">{{requestDate}}</span>
             </div>
-        </div>        
+        </div>
         <div class="cto-container col-md-4 col-sm-12">
             <div class="float-md-right">
-                <a class="button" routerLink="../order-detail">Cancel order</a>
+                <a class="button red" routerLink="../order-detail">Cancel order</a>
                 <a class="button-ghost" routerLink="../order-detail">Back</a>
             </div>
         </div>
-    </div>    
+    </div>
 
-    <div class="row location-container">
-        <div class="col-md-4 float-md-left location-style">
-            <span>Location: </span><br/>
-            <span class="span-one-style">Southwest 68th Street Building</span><br/>
-            <span>15 SW 68th Street, Chicago, Illinois, 60602</span>
-        </div>
-        <div class="col-md-3 float-md-left location-style">
-            <span>Point of delivery</span><br/>
-            <span class="span-one-style">Backstreet yard</span><br/>
-            <span>N: 50°46’ 23.92” E: 14°07’ 18.85”</span> 
-        </div>        
-        <div class="row col-md-4 col-sm-4 float-md-left">
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <td>Submitted:</td>
-                        <th>08/12/2017</th>
-                    </tr>
-                    <tr>
-                        <td>Submitted by:</td>
-                        <th>Andrew Zacek</th>
-                    </tr>
-                    <tr>
-                        <td>Purchase order:</td>
-                        <th>7755-KJ120/00011</th>
-                    </tr>
-                    <tr>
-                        <td>Status:</td>
-                        <th><div class="flag-status flag-green"></div>Complete</th>
-                    </tr>
-                </tbody>
-            </table>    
+    <div class="location">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="group">
+                    <div class="title">
+                        Location:
+                    </div>
+                    <div class="desc">
+                        Southwest 68th Street Building
+                    </div>
+                    <div class="detail">
+                        15 SW 68th Street, Chicago, Illinois, 60602
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="group">
+                    <div class="title">
+                        Point of Delivery:
+                    </div>
+                    <div class="desc">
+                        Backstreet yard
+                    </div>
+                    <div class="detail">
+                        N: 50°46’ 23.92” E: 14°07’ 18.85”
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
         </div>
     </div>
 
-    <div class="row nav-tab-container col-md-9">
-        <ul class="row nav nav-tabs">
+    <!-- <div class="location-container">
+        <div class="row w-100">
+            <div class="col-md-4 float-md-left">
+                <span>Location: </span><br/>
+                <span class="span-one-style">Southwest 68th Street Building</span><br/>
+                <span>15 SW 68th Street, Chicago, Illinois, 60602</span>
+            </div>
+            <div class="col-md-3 float-md-left">
+                <span>Point of delivery</span><br/>
+                <span class="span-one-style">Backstreet yard</span><br/>
+                <span>N: 50°46’ 23.92” E: 14°07’ 18.85”</span>
+            </div>
+            <div class="col-md-5 col-sm-12 float-md-left">
+                <table class="table table-responsive">
+                    <tbody>
+                        <tr>
+                            <td>Submitted:</td>
+                            <th>08/12/2017</th>
+                        </tr>
+                        <tr>
+                            <td>Submitted by:</td>
+                            <th>Andrew Zacek</th>
+                        </tr>
+                        <tr>
+                            <td>Purchase order:</td>
+                            <th>7755-KJ120/00011</th>
+                        </tr>
+                        <tr>
+                            <td>Status:</td>
+                            <th>
+                                <div class="flag-status flag-green"></div>Complete</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="nav-tab-container">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" id="products" (click)="changeTabProducts($event)">Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link">Action log</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="comments" (click)="changeTabComments($event)">Comments</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- <div class="row nav-tab-container">
+        <ul class="nav nav-tabs">
             <li class="nav-item" (click)="changeTabProducts($event)"><a class="nav-link active" id="products">Products</a></li>
             <li class="nav-item"><a class="nav-link" id="action">Action log</a></li>
             <li class="nav-item" (click)="changeTabComments($event)"><a class="nav-link" id="comments">Comments</a></li>
         </ul>
-    </div>    
+    </div> -->
 
-    <div *ngIf="!show" class="card-container row product" id="products-id">
-        <div class="col-md-4 col-sm-12 left-container">
-            <div class="name">
-                ReadyMix CHM89
-            </div>
-        </div>
-        <div class="col-md-8 right-container">
-            <div class="row">
-                <div class="col-md-3 col-xs-6">
-                    <div class="group">
-                        <div class="title">
-                            Quantity
-                        </div>
-                        <div class="value">
-                            10
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-xs-6">
-                    <div class="group">
-                        <div class="title">
-                            Unit
-                        </div>
-                        <div class="value">
-                            tons
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-xs-6">
-                    <div class="group">
-                        <div class="title">
-                            Requested date
-                        </div>
-                        <div class="value">
-                            13.07.2017
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-xs-6">
-                    <div class="group">
-                        <div class="title">
-                            Requested time
-                        </div>
-                        <div class="value">
-                            15.00 - 16.00
-                        </div>
-                    </div>
+    <div *ngIf="!show" class="card-container product" id="products-id">
+        <div class="row">
+            <div class="col-md-4 col-sm-12 left-container">
+                <div class="name">
+                    ReadyMix CHM89
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="group">
-                        <div class="title">
-                            Product ID
-                        </div>
-                        <div class="value">
-                            20939302/10292/20102
+            <div class="col-md-8 right-container">
+                <div class="row">
+                    <div class="col-md-3 col-xs-6">
+                        <div class="group">
+                            <div class="title">
+                                Quantity
+                            </div>
+                            <div class="value">
+                                10
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="group">
-                        <div class="title">
-                            Contract
-                        </div>
-                        <div class="value">
-                            10-201702189034 Remaining volume: 180
+                    <div class="col-md-3 col-xs-6">
+                        <div class="group">
+                            <div class="title">
+                                Unit
+                            </div>
+                            <div class="value">
+                                tons
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="group">
-                        <div class="title">
-                            Projet profile
-                        </div>
-                        <div class="value">
-                            My Project Profile with quite long technical title, that it must be for more rows
+                    <div class="col-md-3 col-xs-6">
+                        <div class="group">
+                            <div class="title">
+                                Requested date
+                            </div>
+                            <div class="value">
+                                13.07.2017
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-6">
-                    <!-- Flex way -->
-                    <div class="d-flex flex-wrap">
+                    <div class="col-md-3 col-xs-6">
                         <div class="group">
                             <div class="title">
-                                Discharge Time
+                                Requested time
                             </div>
                             <div class="value">
-                                60min
-                            </div>
-                        </div>
-                        <div class="group">
-                            <div class="title">
-                                Transport Method
-                            </div>
-                            <div class="value">
-                                Truck
-                            </div>
-                        </div>
-                        <div class="group">
-                            <div class="title">
-                                Unload Type
-                            </div>
-                            <div class="value">
-                                Pump
-                            </div>
-                        </div>
-                        <div class="group">
-                            <div class="title">
-                                Pump Capacity Min
-                            </div>
-                            <div class="value">
-                                30 m3/s
-                            </div>
-                        </div>
-                        <div class="group">
-                            <div class="title">
-                                Pump Capacity Max
-                            </div>
-                            <div class="value">
-                                40 m<sup>3</sup>/s
-                            </div>
-                        </div>
-                        <div class="group">
-                            <div class="title">
-                                Application
-                            </div>
-                            <div class="value">
-                                Roof
-                            </div>
-                        </div>
-                        <div class="group">
-                            <div class="title">
-                                Load Size
-                            </div>
-                            <div class="value">
-                                10 tons
-                            </div>
-                        </div>
-                        <div class="group">
-                            <div class="title">
-                                Spacing
-                            </div>
-                            <div class="value">
-                                10 min
+                                15.00 - 16.00
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="group">
-                        <div class="title">
-                            Product ID
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="group">
+                            <div class="title">
+                                Product ID
+                            </div>
+                            <div class="value">
+                                20939302/10292/20102
+                            </div>
                         </div>
-                        <div class="value">
-                            20939302/10292/20102
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="group">
+                            <div class="title">
+                                Contract
+                            </div>
+                            <div class="value">
+                                10-201702189034 Remaining volume: 180
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="d-flex flex-wrap">
-                        <div class="group flex-6">
-                            <div class="title">
-                                Delivery mode
-                            </div>
-                            <div class="value">
-                                Delivery
-                            </div>
-                        </div>
+                <div class="row">
+                    <div class="col-sm-6">
                         <div class="group">
                             <div class="title">
-                                Kicker
+                                Projet profile
                             </div>
                             <div class="value">
-                                Yes
+                                My Project Profile with quite long technical title, that it must be for more rows
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <!-- Flex way -->
+                        <div class="d-flex flex-wrap">
+                            <div class="group">
+                                <div class="title">
+                                    Discharge Time
+                                </div>
+                                <div class="value">
+                                    60min
+                                </div>
+                            </div>
+                            <div class="group">
+                                <div class="title">
+                                    Transport Method
+                                </div>
+                                <div class="value">
+                                    Truck
+                                </div>
+                            </div>
+                            <div class="group">
+                                <div class="title">
+                                    Unload Type
+                                </div>
+                                <div class="value">
+                                    Pump
+                                </div>
+                            </div>
+                            <div class="group">
+                                <div class="title">
+                                    Pump Capacity Min
+                                </div>
+                                <div class="value">
+                                    30 m3/s
+                                </div>
+                            </div>
+                            <div class="group">
+                                <div class="title">
+                                    Pump Capacity Max
+                                </div>
+                                <div class="value">
+                                    40 m<sup>3</sup>/s
+                                </div>
+                            </div>
+                            <div class="group">
+                                <div class="title">
+                                    Application
+                                </div>
+                                <div class="value">
+                                    Roof
+                                </div>
+                            </div>
+                            <div class="group">
+                                <div class="title">
+                                    Load Size
+                                </div>
+                                <div class="value">
+                                    10 tons
+                                </div>
+                            </div>
+                            <div class="group">
+                                <div class="title">
+                                    Spacing
+                                </div>
+                                <div class="value">
+                                    10 min
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="group">
+                            <div class="title">
+                                Product ID
+                            </div>
+                            <div class="value">
+                                20939302/10292/20102
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-flex flex-wrap">
+                            <div class="group flex-6">
+                                <div class="title">
+                                    Delivery mode
+                                </div>
+                                <div class="value">
+                                    Delivery
+                                </div>
+                            </div>
+                            <div class="group">
+                                <div class="title">
+                                    Kicker
+                                </div>
+                                <div class="value">
+                                    Yes
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -252,42 +303,31 @@
         </div>
     </div>
 
-    <div *ngIf="show" class="row cards">
-        <div class="card">           
-                <div class="row justify-content-start title-card">
-                    <div class="col-auto">CEMEX Margaret Webster</div>
-                    <div class="divider"></div>
-                    <div class="col-auto">Tue May 30, 2017</div>
-                </div>            
-                <div class="justify-content-start text-card">
-                    <p> Computers have become ubiquitous in almost every facet of our lives. 
-                        At work, desk jockeys spend hours in front of their desktops, 
-                        while delivery people scan bar codes with handhelds and workers 
-                        in the field stay in touch with the central office via their notebooks. 
-                        At home, we rely on our desktops and notebooks to do our shopping, 
-                        to entertain us, and to keep us abreast of world events. 
-                        We may not see our email servers, but we count on them to deliver our email 
-                        whenever and wherever we want it.
-                    </p> 							
-                </div>                         
+    <div *ngIf="show" class="cards">
+        <div class="card">
+            <div class="row justify-content-start from">
+                <div class="name col-auto"><strong>CEMEX</strong> Margaret Webster</div>
+                <div class="divider"></div>
+                <div class="date col-auto">Tue May 30, 2017</div>
+            </div>
+            <div class="comment-text">
+                <p>Computers have become ubiquitous in almost every facet of our lives. At work, desk jockeys spend hours in front of their desktops, while delivery people scan bar codes with handhelds and workers in the field stay in touch with the central
+                    office via their notebooks. At home, we rely on our desktops and notebooks to do our shopping, to entertain us, and to keep us abreast of world events. We may not see our email servers, but we count on them to deliver our email whenever
+                    and wherever we want it.
+                </p>
+            </div>
         </div>
 
-        <div class="card card-odd">           
-                <div class="row justify-content-start title-card">
-                    <div class="col-auto">Andrew Customjoe</div>
-                    <div class="divider"></div>
-                    <div class="col-auto">Tue May 30, 2017</div>
-                </div>            
-                <div class="justify-content-start text-card">
-                    <p> At home, we rely on our desktops and notebooks to do our shopping, 
-                        to entertain us, and to keep us abreast of world events. 
-                        We may not see our email servers, but we count on them to deliver our 
-                        email whenever and wherever we want it.
-                    </p> 
-                </div>                         
-        </div>    
-    </div>    
-
-
-
+        <div class="card">
+            <div class="row justify-content-start from">
+                <div class="name col-auto">Andrew Customjoe</div>
+                <div class="divider"></div>
+                <div class="date col-auto">Tue May 30, 2017</div>
+            </div>
+            <div class="comment-text">
+                <p> At home, we rely on our desktops and notebooks to do our shopping, to entertain us, and to keep us abreast of world events. We may not see our email servers, but we count on them to deliver our email whenever and wherever we want it.
+                </p>
+            </div>
+        </div>
+    </div>
 </div>

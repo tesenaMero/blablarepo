@@ -62,7 +62,7 @@
                     <!-- <td class="i-column" data-title="Favorite">
                         <i class="star cmx-icon-favourite-active" [class.active]="order.orderRequest.isFavorite" aria-hidden="true" (click)="favorite(order.orderRequest.orderRequestId, !order.orderRequest.isFavorite)"></i>
                     </td> -->
-                    <td class="number" data-title="Order No">{{ order.orderRequest.orderRequestId | zeropad: 7 }}</td>
+                    <td class="number" routerLink="../order-detail" data-title="Order No">{{ order.orderRequest.orderRequestId | zeropad: 7 }}</td>
                     <td data-title="Submitted">08/13/2017 {{order.orderRequest.viewedAt }}</td>
                     <td data-title="Location">{{ makeLocation(order) }}
                     </td>
