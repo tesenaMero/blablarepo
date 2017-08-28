@@ -1,5 +1,5 @@
 import { PipeTransform, Pipe } from '@angular/core';
-import { CartProductGroup } from '../models/index';
+import { CartProductGroup } from '../models';
 
 @Pipe({
     name: 'sumProduct'
