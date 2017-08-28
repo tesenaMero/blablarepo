@@ -23,36 +23,37 @@
     </div>    
 
     <div class="row location-container">
-        <div class="float-md-left location-style">
+        <div class="col-md-4 float-md-left location-style">
             <span>Location: </span><br/>
             <span class="span-one-style">Southwest 68th Street Building</span><br/>
             <span>15 SW 68th Street, Chicago, Illinois, 60602</span>
         </div>
-        <div class="float-md-left location-style">
+        <div class="col-md-3 float-md-left location-style">
             <span>Point of delivery</span><br/>
             <span class="span-one-style">Backstreet yard</span><br/>
             <span>N: 50°46’ 23.92” E: 14°07’ 18.85”</span> 
         </div>        
-        <div class="row col-md-6 float-md-left table-responsive-vertical">
-            <table id="table" class="table table-fixed">
-                <thead>
+        <div class="row col-md-4 col-sm-4 float-md-left">
+            <table class="table">
+                <tbody>
                     <tr>
-                        <th width="20%">Submitted:</th>
-                        <th width="20%">Submitted by:</th>
-                        <th width="20%">Purchase order:</th>
-                        <th width="20%">Status:</th>
+                        <td>Submitted:</td>
+                        <th>08/12/2017</th>
                     </tr>
-                </thead>
-                <tbody>                    
                     <tr>
-                        <td data-title="Submitted:">08/12/2017</td>
-                        <td data-title="Submitted by:">Andrew Zacek</td>
-                        <td data-title="Purchase order">7755-KJ120/00011</td>
-                        <td data-title="Status" class="status-block-position"><div class="flag-status flag-green"></div>Complete</td>
-                        <!--<td data-title="Status:"><a class="button bright-green" routerLink="../order-detail">Complete</a></td> -->
-                    </tr>                
-                </tbody>                
-            </table>     
+                        <td>Submitted by:</td>
+                        <th>Andrew Zacek</th>
+                    </tr>
+                    <tr>
+                        <td>Purchase order:</td>
+                        <th>7755-KJ120/00011</th>
+                    </tr>
+                    <tr>
+                        <td>Status:</td>
+                        <th><div class="flag-status flag-green"></div>Complete</th>
+                    </tr>
+                </tbody>
+            </table>    
         </div>
     </div>
 
@@ -251,14 +252,14 @@
         </div>
     </div>
 
-    <div *ngIf="show" class="cards">
-        <div class="row card">           
+    <div *ngIf="show" class="row cards">
+        <div class="card">           
                 <div class="row justify-content-start title-card">
-                    <div class="col-md-auto">CEMEX Margaret Webster</div>
+                    <div class="col-auto">CEMEX Margaret Webster</div>
                     <div class="divider"></div>
-                    <div class="col-md-auto">Tue May 30, 2017</div>
+                    <div class="col-auto">Tue May 30, 2017</div>
                 </div>            
-                <div class="row justify-content-start text-card">
+                <div class="justify-content-start text-card">
                     <p> Computers have become ubiquitous in almost every facet of our lives. 
                         At work, desk jockeys spend hours in front of their desktops, 
                         while delivery people scan bar codes with handhelds and workers 
@@ -271,13 +272,13 @@
                 </div>                         
         </div>
 
-        <div class="row card-odd">           
+        <div class="card card-odd">           
                 <div class="row justify-content-start title-card">
-                    <div class="col-md-auto">Andrew Customjoe</div>
+                    <div class="col-auto">Andrew Customjoe</div>
                     <div class="divider"></div>
-                    <div class="col-md-auto">Tue May 30, 2017</div>
+                    <div class="col-auto">Tue May 30, 2017</div>
                 </div>            
-                <div class="row justify-content-start text-card">
+                <div class="justify-content-start text-card">
                     <p> At home, we rely on our desktops and notebooks to do our shopping, 
                         to entertain us, and to keep us abreast of world events. 
                         We may not see our email servers, but we count on them to deliver our 
