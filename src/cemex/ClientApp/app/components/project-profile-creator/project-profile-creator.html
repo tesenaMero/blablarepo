@@ -1,3 +1,8 @@
+<div (click)="cancel()" data-dismiss="modal" class="close">
+    <svg class="icon-close-black">
+        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-close"></use>
+    </svg>
+</div>
 <div class="container-layout">
     <div class="title">
         New Project Profile
@@ -130,8 +135,8 @@
     </div>
     <div class="row actions text-right">
         <div class="col">
-            <button data-dismiss="modal" class="button-ghost mb-2">Cancel</button>
-            <button class="button bright-green">Confirm</button>
+            <button (click)="cancel()" data-dismiss="modal" class="button-ghost mb-2">Cancel</button>
+            <button (click)="confirm()" data-dismiss="modal" class="button bright-green">Confirm</button>
         </div>
     </div>
 </div>

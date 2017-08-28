@@ -6,6 +6,9 @@
 
 .details-container {
     padding: 28px 40px;
+    @include media-breakpoint-down(sm) {
+        padding: 28px 15px;
+    }
     border: 1px solid #DAE3E9;
     border-radius: 3px;
 }

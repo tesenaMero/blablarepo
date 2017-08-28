@@ -11,6 +11,7 @@ $link-blue: #3FA9F5;
     padding-top: 7px;
     padding-bottom: 16px;
     margin-bottom: 76px;
+    white-space: nowrap;
     @include media-breakpoint-down(sm) {
         margin-bottom: 36px;
     }
@@ -31,6 +32,12 @@ $link-blue: #3FA9F5;
     }
     @include media-breakpoint-down(sm) {
         margin-top: 16px;
+    }
+    .text-right-md {
+        text-align: left !important;
+        @include media-breakpoint-up(sm) {
+            text-align: right !important;
+        }
     }
 }
 
