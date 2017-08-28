@@ -11,6 +11,9 @@ export interface CementPackageSpecification {
     contract: string;
     payment: string;
     deliveryMode: string;
+    location?: string;
+    pointDelivery?: string;
+    unitaryPrice: number;
 }
 
 export interface ReadymixSpecification {
@@ -25,4 +28,9 @@ export interface ReadymixSpecification {
     payment: string;
     deliveryMode: string;
     projectProfile: ProjectProfile;
+}
+
+export interface CartProductGroup {
+    id: number;
+    products: CementPackageSpecification[];
 }

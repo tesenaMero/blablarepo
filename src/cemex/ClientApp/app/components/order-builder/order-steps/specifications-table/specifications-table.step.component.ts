@@ -30,7 +30,8 @@ export class SpecificationsTableStepComponent implements OnInit {
                 maximumCapacity: 1000,
                 contract: "10-201702189034 Remaining volume: 180",
                 payment: "Credit",
-                deliveryMode: "Delivery"
+                deliveryMode: "Delivery",
+                unitaryPrice: 1000
             };
 
             this._cementPackageList.push(dto);
