@@ -25,6 +25,7 @@ export class Step {
 
     show() {
         this.onShowed.emit();
+        //window.scrollTo(0, 0);
         if (this.stepEventsListener)
             this.stepEventsListener.onShowed();
     }

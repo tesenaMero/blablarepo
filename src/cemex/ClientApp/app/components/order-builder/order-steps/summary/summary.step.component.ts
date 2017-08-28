@@ -12,6 +12,9 @@ import { } from '@types/googlemaps';
 })
 export class SummaryStepComponent implements StepEventsListener {
     @Output() onCompleted = new EventEmitter<any>();
+
+    private isMapLoaded: boolean = false;
+
     map: any; // Map instance
 
     constructor(@Inject(Step) private step: Step) {
@@ -20,9 +23,12 @@ export class SummaryStepComponent implements StepEventsListener {
 
     onShowed() {
         this.onCompleted.emit({});
-        GoogleMapsHelper.lazyLoadMap("summary-map", (map) => {
-            this.map = map;
-            map.setOptions({ zoom: 14, center: { lat: 25.6487281, lng: -100.4431818 } });
-        });
+        if (!this.isMapLoaded) {
+            GoogleMapsHelper.lazyLoadMap("summary-map", (map) => {
+                this.isMapLoaded = true;
+                this.map = map;
+                map.setOptions({ zoom: 14, center: { lat: 25.6487281, lng: -100.4431818 } });
+            });
+        }
     }
 }

@@ -30,7 +30,11 @@ import {
 }  from './components/order-builder/order-steps'
 
 // Pipes
-import { NoSpacePipe, ZeroPadPipe } from './pipes/index'
+import { 
+    NoSpacePipe, 
+    ZeroPadPipe, 
+    SumGroupProductPipe 
+} from './pipes'
 
 // Shared components
 import { StepperComponent, Step } from './shared/components/stepper';
@@ -67,6 +71,7 @@ export const sharedConfig: NgModule = {
         // Pipes
         ZeroPadPipe,
         NoSpacePipe,
+        SumGroupProductPipe,
 
         // Regular components
         OrdersTableComponent,
