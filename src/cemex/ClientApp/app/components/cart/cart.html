@@ -16,8 +16,6 @@
     <div class="cart-group" *ngFor="let group  of _productGroups">
         <h3 class="h3-group roboto-bold">Group {{group.id}}</h3>
         <div class="row cart-items-container" *ngFor="let productDto of group.products">
-
-
             <div class="cart-item-container col-md-10 row">
                 <div class="product-field col-md-4">
                     <div class="label-field roboto">Product Description</div>
@@ -88,20 +86,127 @@
         </div>
         <div class="spacer-16"></div>
     </div>
+
+    <div class="row cart-items-container" *ngFor="let productDto of _productsReadymix">
+        <div class="cart-item-container col-md-10 row">
+            <div class="product-field col-md-3">
+                <div class="label-field roboto">Product Description</div>
+                <p class="product-type roboto-bold">{{productDto.productDescription}}</p>
+            </div>
+            <div class="product-field col-md-2">
+                <div class="label-field roboto">Quantity</div>
+                <p class="product-type">{{productDto.quantity}}</p>
+            </div>
+            <div class="product-field col-md-2">
+                <div class="label-field roboto">Unit</div>
+                <p class="product-type">{{productDto.unit}}</p>
+            </div>
+            <div class="product-field col-md-2">
+                <div class="label-field roboto">Requested Date</div>
+                <p class="product-type">{{productDto.requestDate}}</p>
+            </div>
+            <div class="product-field col-md-2">
+                <div class="label-field roboto">Requested Time</div>
+                <p class="product-type">{{productDto.requestTime}}</p>
+            </div>
+            <div class="product-field col-md-3">
+                <div class="label-field roboto">Location</div>
+                <p class="product-type roboto-bold">{{productDto.location}}</p>
+            </div>
+            <div class="product-field col-md-4">
+                <div class="label-field roboto">Product ID</div>
+                <div class="product-type">{{productDto.productId}}</div>
+            </div>
+            <div class="product-field col-md-4">
+                <div class="label-field roboto">Contract</div>
+                <p class="product-type">{{productDto.contract}}</p>
+            </div>
+            <div class="product-field col-md-3">
+                <div class="label-field roboto">Point of Delivery</div>
+                <p class="product-type roboto-bold">{{productDto.pointDelivery}}</p>
+            </div>
+            <div class="product-field col-md-4">
+                <div class="label-field roboto">Project profile</div>
+                <p class="product-type">{{productDto.projectProfile.name}}</p>
+            </div>
+            <div class="product-field col-md-2">
+                <div class="label-field roboto">Discharge Time</div>
+                <p class="product-type">{{productDto.dischargeTime}}</p>
+            </div>
+            <div class="product-field col-md-2">
+                <div class="label-field roboto">Transport method</div>
+                <p class="product-type">{{productDto.transportMethod}}</p>
+            </div>
+            <div class="product-field col-md-1">
+                <div class="label-field roboto">Unload type</div>
+                <p class="product-type">{{productDto.unloadType}}</p>
+            </div>
+            <div class="col-md-7">
+            </div>
+            <div class="product-field col-md-2">
+                <div class="label-field roboto">Pump Capacity Min</div>
+                <p class="product-type">{{productDto.pumpCapacityMin}}</p>
+            </div>
+            <div class="product-field col-md-2">
+                <div class="label-field roboto">Pump Capacity Max</div>
+                <p class="product-type">{{productDto.pumpCapacityMax}}</p>
+            </div>
+            <div class="product-field col-md-1">
+                <div class="label-field roboto">Application</div>
+                <p class="product-type">{{productDto.projectProfile.aplication}}</p>
+            </div>
+            <div class="col-md-7">
+            </div>
+            <div class="product-field col-md-2">
+                <div class="label-field roboto">Load Size</div>
+                <p class="product-type">{{productDto.loadSize}}</p>
+            </div>
+            <div class="product-field col-md-3">
+                <div class="label-field roboto">Spacing</div>
+                <p class="product-type">{{productDto.spacing}}</p>
+            </div>
+            <div class="col-md-3">
+            </div>
+            <div class="product-field col-md-4">
+                <div class="label-field roboto">Additional Services</div>
+                <p class="product-type">Extra Hours, Sunday / Holiday Service, Pipeline</p>
+            </div>
+            <div class="product-field col-md-2">
+                <div class="label-field roboto">Delivery Mode</div>
+                <p class="product-type">{{productDto.deliveryMode}}</p>
+            </div>
+            <div class="product-field col-md-3">
+                <div class="label-field roboto">Kicker</div>
+                <p class="product-type">{{productDto.kicker}}</p>
+            </div>
+
+            <!--div class="cart-item"></div>
+                <div class="spacer-16"></div-->
+        </div>
+        <div class="cart-item-container with-sepatator col-md-2">
+            <div class="amount-container">
+                <div class="label-amount roboto">Unitary Price</div>
+                <p class="value-amount roboto-bold">{{productDto.unitaryPrice | currency : 'USD' : true}}</p>
+                <div class="spacer-16"></div>
+                <div class="label-amount roboto">Material Value</div>
+                <div class="value-amount roboto-bold">{{productDto.unitaryPrice * productDto.quantity | currency : 'USD' : true}}</div>
+            </div>
+        </div>
+    </div>
     <div class="spacer-24"></div>
     <div class="row">
         <div class="col-md-12">
             <div class="order-total float-right text-right">
                 <div class="row concepts-total">
                     <h4 class="col-md-6">Subtotal:</h4>
-                    <p class="col-md-6 roboto-bold" >$40,000.00</p>
+                    <p class="col-md-6 roboto-bold">$40,000.00</p>
                 </div>
                 <div class="row concepts-total">
                     <h4 class="col-md-6">Taxes:</h4>
                     <p class="col-md-6 roboto-bold">$10,000.00</p>
                 </div>
                 <div class="spacer-24"></div>
-                <div class="size-48 roboto-bold">{{_productGroups | sumProduct | currency : 'USD' : true}}</div>
+                <div class="size-48 roboto-bold">{{ _products | sumGpoProduct | currency : 'USD' : true}}</div>
                 <button class="button bright-green">Order</button>
             </div>
         </div>
