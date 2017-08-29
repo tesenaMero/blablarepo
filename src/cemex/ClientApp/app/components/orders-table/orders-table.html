@@ -2,7 +2,10 @@
 <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
 <loading-table *ngIf="isLoading" [rows]="ordersQty"></loading-table>
 <div *ngIf="!isLoading && orders?.length == 0 ">
-    <p>No orders found</p>
+    <p style="text-align: center;
+    color: #9CA4AE;
+    padding: 80px 0;
+    font-size: 40px;">No orders found</p>
 </div>
 <div *ngIf="!isLoading && orders?.length > 0" class="table-responsive-vertical shadow-z-1">
     <!-- Table starts here -->
@@ -59,7 +62,7 @@
                     <!-- <td class="i-column" data-title="Favorite">
                         <i class="star cmx-icon-favourite-active" [class.active]="order.orderRequest.isFavorite" aria-hidden="true" (click)="favorite(order.orderRequest.orderRequestId, !order.orderRequest.isFavorite)"></i>
                     </td> -->
-                    <td class="number" data-title="Order No">{{ order.orderRequest.orderRequestId | zeropad: 7 }}</td>
+                    <td class="number" routerLink="../order-detail" data-title="Order No">{{ order.orderRequest.orderRequestId | zeropad: 7 }}</td>
                     <td data-title="Submitted">08/13/2017 {{order.orderRequest.viewedAt }}</td>
                     <td data-title="Location">{{ makeLocation(order) }}
                     </td>
@@ -72,11 +75,11 @@
                     </td>
                     <td data-title="Amount">{{ order.orderRequest.orderRequestItems.length }} tons</td>
                     <td valign="bottom" data-title="Requested date">{{ order.orderRequest.orderRequestedOn | date:"dd/MM/y HH:mm" }}</td>
-                    <td data-title="Status" class="status-block-position">
+                    <td data-title="Status" class="order-first status-block-position">
                         <div class="status {{ order.orderRequest.orderRequestStatus.statusDesc | lowercase }}">{{ order.orderRequest.orderRequestStatus.statusDesc }}</div>
                     </td>
                     <!-- TODO numberal parser -->
-                    <td data-title="Total amount">${{ order.orderRequest.totalAmount }}</td>
+                    <td data-title="Total amount">${{ order.orderRequest.totalAmount | number:'.2-2' }}</td>
                     <!-- <td class="i-column" data-title="Repeat">
                         <i class="cmx-icon-repeat"></i>
                     </td> -->

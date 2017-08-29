@@ -30,13 +30,56 @@
     color: #000000;
     font-size: 30px;
     line-height: 40px;
+
+    &.sub {
+        font-size: 20px;
+        line-height: 30px;
+    }
+}
+
+.modal-scrolling-content {
+    position: relative;
+    height: 424px;
+    overflow-y: scroll;
+}
+
+.modal-scrolling-content::-webkit-scrollbar {
+    width: 8px;
+    background-color: none; 
+}
+.modal-scrolling-content::-webkit-scrollbar-track {
+    background-color: none;
+    border-radius: 8px; 
+}
+.modal-scrolling-content::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: #3FA9F5; 
+}
+.modal-scrolling-content::-webkit-scrollbar-thumb:hover {
+    border-radius: 8px;
+    background: #003876;
+    transition: all 0.4s; 
+}
+
+.separator {
+    margin: 3rem 0;
+}
+
+.product-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+
+    li {
+        padding: 10px;
+        &:hover {
+            background-color: rgba(63, 169, 245, 0.3);
+        }
+    }
 }
 
 .form-container {
-    @include media-breakpoint-down(sm) {
-        margin-top: 23px;
-    }
-    margin-top: 47px;
+    margin-top: 23px;
     label {
         color: #001C3B;
         font-size: 12px;
@@ -93,40 +136,11 @@ label {
 }
 
 .actions {
-    margin-top: 73px;
+    margin-top: 40px;
     button:not(:first-child) {
         margin-left: 8px;
     }
     @include media-breakpoint-down(sm) {
         margin-top: 26px;
     }
-}
-
-// Sucess part
-.center-text {
-    text-align: center;
-}
-
-.center-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 60px 0;
-    @include media-breakpoint-down(sm) {
-        position: absolute;
-        padding: 0;
-        padding-right: 58px;
-        width: 100%;
-        height: 75%;
-    }
-}
-
-.cmx-icon-accepted-ok {
-    color: #7AC943;
-    font-size: 126px;
-}
-
-.success-text {
-    margin-top: 26px;
-    font-size: 26px;
 }

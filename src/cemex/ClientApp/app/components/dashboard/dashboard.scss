@@ -2,7 +2,7 @@
 @import "../../scss/responsive.scss";
 $sidebar-width: 160px;
 $header-height: 54px;
-$dashboard-index: 9999;
+$dashboard-index: 100;
 nav.fixed {
     position: fixed;
     z-index: $dashboard-index;
@@ -12,7 +12,7 @@ nav.side-nav-bar {
     position: fixed;
     top: $header-height;
     height: 100%;
-    z-index: $dashboard-index;
+    z-index: $dashboard-index + 1;
     transition: all 0.25s ease-in-out;
     &.moved {
         transform: translateX(-$sidebar-width);

@@ -1,5 +1,5 @@
 import { PipeTransform, Pipe } from '@angular/core';
-import { CartProductGroup,IProductSpecification } from '../models/index';
+import { CartProductGroup,IProductSpecification } from '../models';
 
 @Pipe({
     name: 'sumGpoProduct'

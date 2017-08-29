@@ -45,7 +45,6 @@ $table-border-color: #e0e0e0;
         -webkit-box-flex: 1;
         -ms-flex-positive: 1;
         flex-grow: 1;
-        overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
@@ -206,22 +205,40 @@ $table-border-color: #e0e0e0;
             >tbody {
                 display: block;
                 >tr {
-                    display: block;
+                    display: flex;
+                    flex-direction: column;
+                    // display: block;
                     border: 1px solid $table-border-color;
                     border-radius: 2px;
                     margin-bottom: $table-cell-padding;
+                    padding: 20px 13px;
                     >td {
                         background-color: $table-bg;
                         display: block;
                         //vertical-align: middle;
                         text-align: right;
+                        font-weight: bold;
+                        &[data-title="Purchase Order Number"] {
+                            &:before {
+                                content: 'Purchase Order' !important;
+                            }
+                        }
+                        &[data-title="Total amount"] {
+                            display: grid;
+                            font-size: 23px;
+                            margin-top: 10px;
+                            &:before {
+                                font-size: 14px !important;
+                                content: 'Total Material Value' !important;
+                            }
+                        }
                     }
                     >td[data-title]:before {
                         content: attr(data-title);
                         float: left;
                         font-size: inherit;
                         font-weight: $table-header-font-weight;
-                        color: $table-header-font-color;
+                        color: #ABB2BE;
                     }
                 }
             }
@@ -316,4 +333,8 @@ $table-border-color: #e0e0e0;
             content: "" !important;
         }
     }
+}
+
+.order-first {
+    order: -1;
 }

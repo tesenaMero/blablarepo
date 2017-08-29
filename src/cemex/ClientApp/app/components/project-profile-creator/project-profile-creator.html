@@ -1,19 +1,161 @@
-<div class="container">
-    <div class="title">
-        New Project Profile
-    </div>
-    <div class="form-container">
-        <div class="col-md-12 col-sm-12">
-            <label for="pp-name" class="">Select from existing jobiste</label>
+<div (click)="cancel()" data-dismiss="modal" class="close">
+    <svg class="icon-close-black">
+        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-close"></use>
+    </svg>
+</div>
+<div class="container-layout">
+    <ng-container *ngIf="!finishedOrder">
+        <div class="title">
+            New Project Profile
         </div>
-        <div class="col-md-12 col-sm-12">
-            <input type="text" class="form-control" id="pp-name" placeholder="Enter name" name="" value="">
-            <!-- <select id="pp-name" class="form-control">
-                <option value="" selected disabled hidden>Select existing POD</option>
-                <option value="1">Riderback Eastern River Valley</option>
-                <option value="2">Monterrey, Nuevo Leon</option>
-                <option value="3">Tokyo Shibuya</option>
-            </select> -->
+        <div class="form-container">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <label for="pp-name" class="">Define a Name for your Project Profile</label>
+                    <input type="text" class="form-control " id="pp-name" name="pp-name" value="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="pp-discharge" class="">Discharge Time</label>
+                    <select name="pp-discharge" id="pp-discharge" class="form-control">
+                        <option value="" selected disabled hidden></option>
+                        <option value="1">Riderback Eastern River Valley</option>
+                        <option value="2">Monterrey, Nuevo Leon</option>
+                        <option value="3">Tokyo Shibuya</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <label for="pp-transport" class="">Transport Method</label>
+                    <select name="pp-transport" id="pp-transport" class="form-control">
+                        <option value="" selected disabled hidden></option>
+                        <option value="1">Riderback Eastern River Valley</option>
+                        <option value="2">Monterrey, Nuevo Leon</option>
+                        <option value="3">Tokyo Shibuya</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="pp-discharge" class="">Unload Type</label>
+                    <select name="pp-discharge" id="pp-discharge" class="form-control">
+                        <option value="" selected disabled hidden></option>
+                        <option value="1">Riderback Eastern River Valley</option>
+                        <option value="2">Monterrey, Nuevo Leon</option>
+                        <option value="3">Tokyo Shibuya</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <label for="pp-transport" class="">Pump Capacity</label>
+                    <select name="pp-transport" id="pp-transport" class="form-control">
+                        <option value="" selected disabled hidden></option>
+                        <option value="1">Riderback Eastern River Valley</option>
+                        <option value="2">Monterrey, Nuevo Leon</option>
+                        <option value="3">Tokyo Shibuya</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="pp-discharge" class="">Pump Frequency</label>
+                    <select name="pp-discharge" id="pp-discharge" class="form-control">
+                        <option value="" selected disabled hidden></option>
+                        <option value="1">Riderback Eastern River Valley</option>
+                        <option value="2">Monterrey, Nuevo Leon</option>
+                        <option value="3">Tokyo Shibuya</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <div class="center-kicker">
+                        <input checked type="checkbox" id="kicker">
+                        <label for="kicker">
+                            <svg class="icon-checkbox-active">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
+                            </svg>
+                            <svg class="icon-checkbox-static">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                            </svg>
+                            <svg class="icon-checkbox-hover">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                            </svg>
+                            <span class="lh-19">Kicker</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row additional">
+            <div class="col-sm-12 mb-5">
+                <label class="">Additional Services</label>
+            </div>
+            <div class="col-sm-3">
+                <input checked type="checkbox" id="extra-hours">
+                <label for="extra-hours">
+                    <svg class="icon-checkbox-active">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
+                    </svg>
+                    <svg class="icon-checkbox-static">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                    </svg>
+                    <svg class="icon-checkbox-hover">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                    </svg>
+                    <span>Extra Hours</span>
+                </label>
+            </div>
+            <div class="col-sm-4">
+                <input type="checkbox" id="service">
+                <label for="service">
+                    <svg class="icon-checkbox-active">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
+                    </svg>
+                    <svg class="icon-checkbox-static">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                    </svg>
+                    <svg class="icon-checkbox-hover">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                    </svg>
+                    <span>Sunday / Holiday Service</span>
+                </label>
+            </div>
+            <div class="col-sm-3">
+                <input type="checkbox" id="pipeline">
+                <label for="pipeline">
+                    <svg class="icon-checkbox-active">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
+                    </svg>
+                    <svg class="icon-checkbox-static">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                    </svg>
+                    <svg class="icon-checkbox-hover">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                    </svg>
+                    <span>Pipeline</span>
+                </label>
+            </div>
+        </div>
+        <div class="row actions text-right">
+            <div class="col">
+                <button (click)="cancel()" data-dismiss="modal" class="button-ghost mb-2">Cancel</button>
+                <button (click)="confirm()" data-dismiss="modal" class="button bright-green">Confirm</button>
+            </div>
+        </div>
+    </ng-container>
+    <div *ngIf="finishedOrder" class="container-layout center-text center-content">
+        <div class="success-group">
+            <span class="cmx-icon-accepted-ok"></span>
+            <div class="success-text">
+                Project profile created succesfully #784915
+            </div>
         </div>
     </div>
 </div>
+
+<!-- <div *ngIf="!finishedOrder" class="container-layout center-text center-content">
+    <div class="success-group">
+        <span class="cmx-icon-accepted-ok"></span>
+        <div class="success-text">
+            Project profile created succesfully #784915
+        </div>
+    </div>
+</div> -->

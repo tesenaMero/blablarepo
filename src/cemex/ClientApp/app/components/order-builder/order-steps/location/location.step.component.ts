@@ -13,26 +13,30 @@ import { CreateOrderService } from '../../../../shared/services/create-order.ser
 export class LocationStepComponent implements OnInit, StepEventsListener {
     @Input() mapOptions?: google.maps.MapOptions;
     @Output() onCompleted = new EventEmitter<any>();
-    map: any; // Map instance
 
+    private isMapLoaded: boolean = false;
+
+    map: any; // Map instance
     jobsite: any;
     nice: boolean = false;
     model = this.createOrder
 
-    constructor(@Inject(Step) private step: Step, public createOrder: CreateOrderService) {
+    constructor( @Inject(Step) private step: Step, public createOrder: CreateOrderService) {
         this.step.setEventsListener(this);
     }
 
     onShowed() {
-        GoogleMapsHelper.lazyLoadMap("jobsite-selection-map", (map) => {
-            this.map = map;
-            map.setOptions({ zoom: 14, center: { lat: 50.077626, lng: 14.424686 } });
-            google.maps.event.trigger(this.map, "resize");
-        });
+        if (!this.isMapLoaded) {
+            GoogleMapsHelper.lazyLoadMap("jobsite-selection-map", (map) => {
+                this.isMapLoaded = true;
+                this.map = map;
+                map.setOptions({ zoom: 14, center: { lat: 50.077626, lng: 14.424686 } });
+                google.maps.event.trigger(this.map, "resize");
+            });
+        }
     }
 
     jobsiteSelected(event: any) {
-        console.log(event);
         this.createOrder.selectJobsite({ jobsiteId: 1 });
         this.nice = true;
         this.onCompleted.emit(event);

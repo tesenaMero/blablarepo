@@ -3,7 +3,6 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Cemex components
 import { CmxButtonModule } from '@cemex/cmx-button-v1/dist';
@@ -18,6 +17,8 @@ import { ProjectProfileCreatorComponent } from './components/project-profile-cre
 import { OrdersTableComponent } from './components/orders-table/orders-table.component'
 import { LoadingTableComponent } from './components/orders-table/loading-table/loading-table.component'
 import { NewOrderComponent } from './components/new-order/new-order.component'
+import { NewProjectProfile } from './components/new-project-profile/new-project-profile.component'
+import { OrderDetailComponent } from './components/order-detail/order-detail.component'
 import { CartComponent } from './components/cart/cart.component';
 import { OrderBuilderComponent } from './components/order-builder/order-builder.component'
 import { 
@@ -27,9 +28,14 @@ import {
     ModeStepComponent,
     SummaryStepComponent
 }  from './components/order-builder/order-steps'
+import { SearchProductComponent } from './components/search-product/search-product.component';
 
 // Pipes
-import { NoSpacePipe, ZeroPadPipe, SumGroupProductPipe } from './pipes/index'
+import { 
+    NoSpacePipe, 
+    ZeroPadPipe, 
+    SumGroupProductPipe 
+} from './pipes'
 
 // Shared components
 import { StepperComponent, Step } from './shared/components/stepper';
@@ -44,6 +50,10 @@ import { ApiService } from './shared/services/api.service';
 import { OrdersApiService } from './shared/services/orders-api.service';
 import { OrdersService } from './shared/services/orders.service';
 import { CreateOrderService } from './shared/services/create-order.service';
+import { LoginApiService } from './shared/services/login-api.service';
+import { ProjectProfileApiService } from './shared/services/project-profile-api.service';
+import { ContractsApiService } from './shared/services/contracts-api.service';
+import { JobsiteApiService } from './shared/services/jobsites-api.service';
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
@@ -56,6 +66,8 @@ export const sharedConfig: NgModule = {
         OrdersComponent,
         NewOrderComponent,
         CartComponent,
+        NewProjectProfile,
+        OrderDetailComponent,
 
         // Pipes
         ZeroPadPipe,
@@ -72,6 +84,7 @@ export const sharedConfig: NgModule = {
         ModeStepComponent,
         SummaryStepComponent,
         ProjectProfileCreatorComponent,
+        SearchProductComponent,
 
         // Shared
         PaginationComponent,
@@ -83,7 +96,6 @@ export const sharedConfig: NgModule = {
         DLSTableComponent
     ],
     imports: [
-        FlexLayoutModule,
         CmxButtonModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full' },
@@ -92,9 +104,11 @@ export const sharedConfig: NgModule = {
                 path: 'app', component: DashboardComponent,
                 children: [
                     { path: '', redirectTo: 'orders', pathMatch: 'full' },
-                    { path: 'orders', component: OrdersComponent },
+                    { path: 'orders', component: OrdersComponent },		    
                     { path: 'new', component: NewOrderComponent },
                     { path: 'cart', component: CartComponent },
+                    { path: 'new-project', component: NewProjectProfile },
+                    { path: 'order-detail', component: OrderDetailComponent },
                     { path: 'project-profiles', component: ProjectProfilesComponent },
                     { path: 'drafts', component: DraftsComponent },
                 ]
@@ -107,6 +121,10 @@ export const sharedConfig: NgModule = {
         ApiService,
         OrdersApiService,
         OrdersService,
-        CreateOrderService
+        CreateOrderService,
+        LoginApiService,
+        ProjectProfileApiService,
+        ContractsApiService,
+        JobsiteApiService
     ]
 };

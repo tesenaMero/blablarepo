@@ -11,6 +11,7 @@ $link-blue: #3FA9F5;
 .title-container {
     padding-top: 7px;
     padding-bottom: 16px;
+    white-space: nowrap;
     h1 {
         display: inline;
         // &:after {
@@ -22,6 +23,12 @@ $link-blue: #3FA9F5;
         //     margin-left: 15px;
         //     top: 23px;
         // }
+        @include media-breakpoint-down(sm) {
+            font-size: 30px;
+        }
+    }
+    @include media-breakpoint-down(sm) {
+        margin-bottom: 0;
     }
     .icon-down-single-black {
         height: 8px;
@@ -48,4 +55,8 @@ $link-blue: #3FA9F5;
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
+}
+
+/deep/.capitalize {
+    text-transform: capitalize;
 }
