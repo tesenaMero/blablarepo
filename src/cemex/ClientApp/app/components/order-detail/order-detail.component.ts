@@ -9,23 +9,8 @@ import { Component, OnInit, Input } from '@angular/core';
     ]
 })
 export class OrderDetailComponent {
-    @Input() show: boolean = false;
-
     order = 7543189;
     requestDate = "31/12/2017, 15:00 - 16:00";
-
+    
     constructor() { }
-
-    changeTabComments() {
-        document.getElementById("products").classList.remove('active');
-        document.getElementById("comments").classList.add('active');
-        this.show = true;
-    }
-
-    changeTabProducts() {
-        document.getElementById("comments").classList.remove('active');
-        document.getElementById("products").classList.add('active');
-        this.show = false;
-    }
-
 }
