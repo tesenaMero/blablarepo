@@ -28,6 +28,7 @@ import {
     ModeStepComponent,
     SummaryStepComponent
 }  from './components/order-builder/order-steps'
+import { SearchProductComponent } from './components/search-product/search-product.component';
 
 // Pipes
 import { 
@@ -83,6 +84,7 @@ export const sharedConfig: NgModule = {
         ModeStepComponent,
         SummaryStepComponent,
         ProjectProfileCreatorComponent,
+        SearchProductComponent,
 
         // Shared
         PaginationComponent,

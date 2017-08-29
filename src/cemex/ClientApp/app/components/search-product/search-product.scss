@@ -1,0 +1,146 @@
+@import "~bootstrap/scss/bootstrap-grid.scss";
+.close {
+    position: absolute;
+    top: 30px;
+    right: 32px;
+    cursor: pointer;
+    @include media-breakpoint-down(sm) {
+        position: absolute;
+        top: 17px;
+        right: 17px;
+        cursor: pointer;
+    }
+}
+
+.container-layout {
+    padding: 50px 58px;
+    padding-top: 50px;
+    padding-bottom: 30px;
+    padding-left: 58px;
+    padding-right: 58px;
+    @include media-breakpoint-down(sm) {
+        padding-top: 60px;
+        padding-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
+
+.title {
+    color: #000000;
+    font-size: 30px;
+    line-height: 40px;
+
+    &.sub {
+        font-size: 20px;
+        line-height: 30px;
+    }
+}
+
+.modal-scrolling-content {
+    position: relative;
+    height: 424px;
+    overflow-y: scroll;
+}
+
+.modal-scrolling-content::-webkit-scrollbar {
+    width: 8px;
+    background-color: none; 
+}
+.modal-scrolling-content::-webkit-scrollbar-track {
+    background-color: none;
+    border-radius: 8px; 
+}
+.modal-scrolling-content::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: #3FA9F5; 
+}
+.modal-scrolling-content::-webkit-scrollbar-thumb:hover {
+    border-radius: 8px;
+    background: #003876;
+    transition: all 0.4s; 
+}
+
+.separator {
+    margin: 3rem 0;
+}
+
+.product-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+
+    li {
+        padding: 10px;
+        &:hover {
+            background-color: rgba(63, 169, 245, 0.3);
+        }
+    }
+}
+
+.form-container {
+    margin-top: 23px;
+    label {
+        color: #001C3B;
+        font-size: 12px;
+        line-height: 16px;
+    }
+    input,
+    select {
+        height: 40px !important;
+        border: 1px solid #D7D7D7;
+        border-radius: 2px;
+    }
+    .center-kicker {
+        vertical-align: middle;
+        display: flex;
+        align-items: center;
+        margin-top: 42px;
+        @include media-breakpoint-down(sm) {
+            margin-top: 24px;
+        }
+    }
+    .col-sm-6 {
+        margin-top: 25px;
+    }
+}
+
+.additional {
+    margin-top: 46px;
+}
+
+input+label {
+    color: #2A2A2A !important;
+    span {
+        line-height: 16px;
+        font-size: 14px !important;
+    }
+    [class*=icon-] {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+label {
+    color: #001C3B;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.lh-19 {
+    line-height: 19px !important;
+}
+
+.mb-5 {
+    margin-bottom: 5px !important;
+}
+
+.actions {
+    margin-top: 40px;
+    button:not(:first-child) {
+        margin-left: 8px;
+    }
+    @include media-breakpoint-down(sm) {
+        margin-top: 26px;
+    }
+}
