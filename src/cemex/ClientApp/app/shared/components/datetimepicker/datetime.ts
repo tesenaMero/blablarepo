@@ -69,13 +69,14 @@ export class NguiDatetime {
     }
   });
 
-  static formatDate(d: Date, format?: string, dateOnly?: boolean): string {
+  static formatDate(d: Date, format?: string, dateOnly?: boolean, timeOnly?: boolean): string {
     let ret: string;
     if (d && !format) {
       // return d.toLocaleString('en-us', hash); // IE11 does not understand this
       let pad0 = number => ("0" + number).slice(-2);
       ret = d.getFullYear() + '-' + pad0(d.getMonth() + 1) + '-' + pad0(d.getDate());
       ret += dateOnly ? '' : ' ' + pad0(d.getHours()) + ':' + pad0(d.getMinutes());
+      ret = timeOnly ? pad0(d.getHours()) + ':' + pad0(d.getMinutes()) : ret;
       return ret;
     } else if (d && typeof moment !== 'undefined') {
       return moment(d).format(format);

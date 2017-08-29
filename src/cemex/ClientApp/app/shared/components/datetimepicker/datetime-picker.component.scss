@@ -15,9 +15,17 @@
       transform: translateY(0%);
     }
   }
+
+  ngui-datetime-picker{
+    outline: none;
+  }
   
   .ngui-datetime-picker-wrapper {
     position: relative;
+
+    input{
+      width: 100%;
+    }
   }
   
   .ngui-datetime-picker {
@@ -132,10 +140,13 @@
   }
   .ngui-datetime-picker .days .day.selected {
     color: #fff;
-    background-color: #3FA9F5;
-    border-radius: 50%;
-    width: 34px;
-    margin: 0 4px;
+
+    span{
+      background-color: #3FA9F5;
+      border-radius: 50%;
+      width: 34px;
+      display: inline-block;
+    }
   }
   .ngui-datetime-picker .days .day:not(.selected).selectable:hover {
     color: #3FA9F5;
@@ -208,9 +219,17 @@
     text-decoration: none;
   }
   
+  .timeLabel{
+    font-size: 1rem !important;
+  }
+
   @media (max-width: 767px) {
+    ngui-datetime-picker{
+      left: 0 !important;
+    }
+
     .ngui-datetime-picker {
-      position: fixed;
+      position: relative;
       bottom: 0;
       left: 0;
       right: 0;    

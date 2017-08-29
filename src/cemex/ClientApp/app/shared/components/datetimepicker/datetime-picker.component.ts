@@ -29,6 +29,7 @@ export class NguiDatetimePickerComponent {
   @Input('date-format') dateFormat: string;
   @Input('date-only') dateOnly: boolean;
   @Input('time-only') timeOnly: boolean;
+  @Input('right-side') rightSide: boolean;
   @Input('selected-date') selectedDate: Date;
   @Input('hour') hour: number;
   @Input('minute') minute: number;
@@ -184,8 +185,9 @@ export class NguiDatetimePickerComponent {
     //console.log('this.selectedDate', this.selectedDate)
 
     this.selectedDate.toString = () => {
-      return NguiDatetime.formatDate(this.selectedDate, this.dateFormat, this.dateOnly);
+      return NguiDatetime.formatDate(this.selectedDate, this.dateFormat, this.dateOnly, this.timeOnly);
     };
+
     this.selected$.emit(this.selectedDate);
   };
 

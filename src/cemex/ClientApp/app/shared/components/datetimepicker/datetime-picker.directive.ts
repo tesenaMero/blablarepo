@@ -37,6 +37,7 @@ export class NguiDatetimePickerDirective implements OnInit, OnChanges {
   @Input('parse-format')      parseFormat: string;
   @Input('date-only')         dateOnly: boolean;
   @Input('time-only')         timeOnly: boolean;
+  @Input('right-side')        rightSide: boolean;
   @Input('close-on-select')   closeOnSelect: boolean = true;
   @Input('default-value')     defaultValue: Date | string;
   @Input('minute-step')       minuteStep: number;
@@ -144,7 +145,7 @@ export class NguiDatetimePickerDirective implements OnInit, OnChanges {
     wrapper.appendChild(this.el);
 
     if (this.ngModel && this.ngModel.getTime) { // if it is a Date object given, set dateValue and toString method
-      this.ngModel.toString = () => NguiDatetime.formatDate(this.ngModel, this.dateFormat, this.dateOnly);
+      this.ngModel.toString = () => NguiDatetime.formatDate(this.ngModel, this.dateFormat, this.dateOnly, this.timeOnly);
     }
     setTimeout( () => { // after [(ngModel)] is applied
       if (this.el.tagName === 'INPUT') {
@@ -180,7 +181,7 @@ export class NguiDatetimePickerDirective implements OnInit, OnChanges {
       date = changes['ngModel'].currentValue;
 
       if (date && typeof date !== 'string') {
-        date.toString = () => NguiDatetime.formatDate(date, this.dateFormat, this.dateOnly);
+        date.toString = () => NguiDatetime.formatDate(date, this.dateFormat, this.dateOnly, this.timeOnly);
         this.setInputElDateValue(date);
         this.updateDatepicker();
       } else if (date && typeof date === 'string') {
@@ -188,7 +189,7 @@ export class NguiDatetimePickerDirective implements OnInit, OnChanges {
         if (!this.userModifyingValue) {
           setTimeout( () => {
             let dt = this.getDate(date);
-            dt.toString = () => NguiDatetime.formatDate(dt, this.dateFormat, this.dateOnly);
+            dt.toString = () => NguiDatetime.formatDate(dt, this.dateFormat, this.dateOnly, this.timeOnly);
             this.ngModel = dt;
             this.inputEl.value = ''+dt;
           })
@@ -273,6 +274,7 @@ export class NguiDatetimePickerDirective implements OnInit, OnChanges {
     component.dateFormat     = this.dateFormat;
     component.dateOnly       = this.dateOnly;
     component.timeOnly       = this.timeOnly;
+    component.rightSide      = this.rightSide;
     component.minuteStep     = this.minuteStep;
     component.minDate        = <Date>this.minDate;
     component.maxDate        = <Date>this.maxDate;
@@ -338,6 +340,11 @@ export class NguiDatetimePickerDirective implements OnInit, OnChanges {
     this.nguiDatetimePickerEl.style.transition = 'height 0.3s ease-in';
 
     this.nguiDatetimePickerEl.style.visibility = 'hidden';
+
+    if (this.rightSide) {
+      this.nguiDatetimePickerEl.style.left = 'inherit';
+      this.nguiDatetimePickerEl.style.right = '0';
+    }
 
     setTimeout(() => {
       let thisElBcr           = this.el.getBoundingClientRect();

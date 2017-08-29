@@ -1,5 +1,5 @@
 <div class="closing-layer" (click)="close()" *ngIf="showCloseLayer"></div>
-<div class="ngui-datetime-picker date-picker-container">
+<div class="ngui-datetime-picker date-picker-container" [ngClass]="{'right-side': rightSide}">
     <div class="close-button" *ngIf="showCloseButton" (click)="close()"></div>
 
     <!-- Month - Year  -->
@@ -48,7 +48,7 @@
                today: toDate(dayNum).getTime() === today.getTime(),
                weekend: isWeekend(dayNum, monthData.month)
              }">
-                {{dayNum}}
+                <span>{{dayNum}}</span>
             </div>
 
             <!-- Fill up blank days for this month -->
@@ -66,11 +66,14 @@
 
     <!-- Hour Minute -->
     <div class="time" id="time" *ngIf="!dateOnly">
-        <div class="select-current-time" (click)="selectCurrentTime()">{{locale.currentTime}}</div>
+        <!-- <div class="select-current-time" (click)="selectCurrentTime()">{{locale.currentTime}}</div> -->
+        <div class="date-picker-header">
         <label class="timeLabel">{{locale.time}}</label>
         <span class="timeValue">
-        {{convertHours(hour)}} : {{("0"+minute).slice(-2)}} {{timeSuffix}}
-      </span><br/>
+            {{convertHours(hour)}} : {{("0"+minute).slice(-2)}} {{timeSuffix}}
+        </span>
+        </div>
+        <br/>
         <div>
             <label class="hourLabel">{{locale.hour}}:</label>
             <input #hours class="hourInput" tabindex="90000" (change)="selectDateTime()" type="range" min="{{minHour || 0}}" max="{{maxHour || 23}}"
