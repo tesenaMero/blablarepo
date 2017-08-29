@@ -1,15 +1,25 @@
 import { PipeTransform, Pipe } from '@angular/core';
-import { CartProductGroup } from '../models';
+import { CartProductGroup,IProductSpecification } from '../models';
 
 @Pipe({
-    name: 'sumProduct'
+    name: 'sumGpoProduct'
 })
 export class SumGroupProductPipe implements PipeTransform {
 
-    transform(items: CartProductGroup[]) {
+    transform(items: any) {
         let sum:number = 0;
-        for (let group of items) {
-            for (let product of group.products) {
+        let itemsProductGroup:CartProductGroup[] = <CartProductGroup[]>items;
+        //Check if it's a CartProductGroup[]
+        if (itemsProductGroup.length && itemsProductGroup[0].products){
+            for (let group of items) {
+                for (let product of group.products) {
+                    sum += product.quantity * product.unitaryPrice;
+                }
+            }
+        } else {
+            let itemsProduct:IProductSpecification[] = <IProductSpecification[]>items;
+            //console.log("itemsProduct:", itemsProduct);
+            for (let product of itemsProduct) {
                 sum += product.quantity * product.unitaryPrice;
             }
         }
@@ -17,3 +27,5 @@ export class SumGroupProductPipe implements PipeTransform {
         return sum;
     }
 }
+
+
