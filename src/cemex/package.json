@@ -10,7 +10,6 @@
         "@angular/common": "4.3.2",
         "@angular/compiler": "4.3.2",
         "@angular/core": "4.3.2",
-        "@angular/flex-layout": "angular/flex-layout-builds",
         "@angular/forms": "4.3.2",
         "@angular/http": "4.3.2",
         "@angular/platform-browser": "4.3.2",

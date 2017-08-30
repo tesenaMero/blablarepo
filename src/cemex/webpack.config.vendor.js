@@ -25,12 +25,11 @@ module.exports = (env) => {
                 '@angular/platform-browser',
                 '@angular/platform-browser-dynamic',
                 '@angular/router',
-                //'bootstrap/dist/css/bootstrap.css',
                 'es6-shim',
                 'es6-promise',
                 'event-source-polyfill',
                 'font-awesome/css/font-awesome.css',
-                'localforage',
+                //'localforage',
                 'zone.js',
             ]
         },

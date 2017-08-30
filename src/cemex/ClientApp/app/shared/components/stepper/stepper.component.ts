@@ -94,14 +94,22 @@ export class StepperComponent implements AfterContentInit {
 
     private animateNext(toIndex: number) {
         this.controlNext.nativeElement.click();
+        this.nextAvailable = false;
+        this.backAvailable = false;
         setTimeout(() => {
+            this.nextAvailable = true;
+            this.backAvailable = true;
             this.selectStepByIndex(toIndex);
         }, 600);
     }
 
     private animatePrev(toIndex: number) {
         this.controlBack.nativeElement.click();
+        this.nextAvailable = false;
+        this.backAvailable = false;
         setTimeout(() => {
+            this.nextAvailable = true;
+            this.backAvailable = true;
             this.selectStepByIndex(toIndex);
         }, 600);
     }
