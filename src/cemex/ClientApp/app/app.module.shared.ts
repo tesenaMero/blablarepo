@@ -54,6 +54,7 @@ import { LoginApiService } from './shared/services/login-api.service';
 import { ProjectProfileApiService } from './shared/services/project-profile-api.service';
 import { ContractsApiService } from './shared/services/contracts-api.service';
 import { JobsiteApiService } from './shared/services/jobsites-api.service';
+import { NguiDatetimePickerModule } from './shared/components/datetimepicker';
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
@@ -97,6 +98,7 @@ export const sharedConfig: NgModule = {
     ],
     imports: [
         CmxButtonModule,
+        NguiDatetimePickerModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full' },
             { path: 'orders', redirectTo: 'app', pathMatch: 'full' },
