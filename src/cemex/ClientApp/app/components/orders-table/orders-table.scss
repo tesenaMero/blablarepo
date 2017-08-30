@@ -14,9 +14,9 @@ $table-bg-active: $table-bg-hover;
 $table-border-color: #e0e0e0;
 // Material Design shadows
 @mixin shadow-z-1() {
-    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
-    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
+    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
 // Icon column, always show
@@ -209,7 +209,7 @@ $table-border-color: #e0e0e0;
                     flex-direction: column;
                     // display: block;
                     border: 1px solid $table-border-color;
-                    border-radius: 2px;
+                    border-radius: 4px;
                     margin-bottom: $table-cell-padding;
                     padding: 20px 13px;
                     >td {
@@ -218,6 +218,10 @@ $table-border-color: #e0e0e0;
                         //vertical-align: middle;
                         text-align: right;
                         font-weight: bold;
+                        padding: 14px 17px;
+                        &.hide-in-mobile {
+                            display: none;
+                        }
                         &[data-title="Purchase Order Number"] {
                             &:before {
                                 content: 'Purchase Order' !important;
@@ -230,6 +234,13 @@ $table-border-color: #e0e0e0;
                             &:before {
                                 font-size: 14px !important;
                                 content: 'Total Material Value' !important;
+                                margin-bottom: 5px;
+                            }
+                        }
+                        &[data-title="Order No"] {
+                            color: #333333;
+                            &:before {
+                                content: 'Order Number' !important;
                             }
                         }
                     }

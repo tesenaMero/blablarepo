@@ -40,11 +40,11 @@
                     Amount
                     <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                 </th>
-                <th width="25%">
+                <th width="20%">
                     Requested date
                     <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                 </th>
-                <th width="13%">
+                <th width="18%">
                     Status
                     <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                 </th>
@@ -62,22 +62,25 @@
                     <!-- <td class="i-column" data-title="Favorite">
                         <i class="star cmx-icon-favourite-active" [class.active]="order.orderRequest.isFavorite" aria-hidden="true" (click)="favorite(order.orderRequest.orderRequestId, !order.orderRequest.isFavorite)"></i>
                     </td> -->
-                    <td class="number" routerLink="../order-detail" data-title="Order No">{{ order.orderRequest.orderRequestId | zeropad: 7 }}</td>
+                    <td data-title="Order No" class="number" routerLink="../order-detail">{{ order.orderRequest.orderRequestId | zeropad: 7 }}</td>
                     <td data-title="Submitted">08/13/2017 {{order.orderRequest.viewedAt }}</td>
                     <td data-title="Location">{{ makeLocation(order) }}
                     </td>
                     <td data-title="Purchase Order Number">7755-KJ120/00011</td>
-                    <td data-title="Products" class="products">
+                    <td data-title="Products" class="products hide-in-mobile">
                         <i *ngIf="order.isReadyMix()" class="cmx-icon-driver" aria-hidden="true"></i>
                         <!-- TODO add cement packed/bagged icons -->
                         <i *ngIf="order.isCement()" class="cmx-icon-track" aria-hidden="true"></i>
                         <i *ngIf="order.isAggregates()" class="cmx-icon-user-profile" aria-hidden="true"></i>
                     </td>
-                    <td data-title="Amount">{{ order.orderRequest.orderRequestItems.length }} tons</td>
-                    <td valign="bottom" data-title="Requested date">{{ order.orderRequest.orderRequestedOn | date:"dd/MM/y HH:mm" }}</td>
-                    <td data-title="Status" class="order-first status-block-position">
-                        <div class="status {{ order.orderRequest.orderRequestStatus.statusDesc | lowercase }}">{{ order.orderRequest.orderRequestStatus.statusDesc }}</div>
+                    <td data-title="Amount" class="hide-in-mobile">{{ order.orderRequest.orderRequestItems.length }} tons</td>
+                    <td data-title="Requested date" valign="bottom" class="hide-in-mobile">{{ order.orderRequest.orderRequestedOn | date:"dd/MM/y HH:mm" }}</td>
+                    <td data-title="Status" class="order-first">
+                        <span class="status {{ order.orderRequest.orderRequestStatus.statusDesc | lowercase }}"></span> {{order.orderRequest.orderRequestStatus.statusDesc}}
                     </td>
+                    <!-- <td data-title="Status" class="order-first status-block-position">
+                        <div class="status {{ order.orderRequest.orderRequestStatus.statusDesc | lowercase }}">{{ order.orderRequest.orderRequestStatus.statusDesc }}</div>
+                    </td> -->
                     <!-- TODO numberal parser -->
                     <td data-title="Total amount">${{ order.orderRequest.totalAmount | number:'.2-2' }}</td>
                     <!-- <td class="i-column" data-title="Repeat">
