@@ -9,8 +9,9 @@ export class OrdersApiService {
 
     constructor(private ApiService: ApiService) {}
     
-    all(customerId: string, take: number = 100): Observable<Response> {
-        return this.ApiService.get(`v1/sm/myorderrequests?include=requestitem&take=${take}&customerId=${customerId}`);
+    all(customerId: string, take: number = 100): Observable<any> {
+        // return Observable.of(true);
+        return this.ApiService.get(`v2/sm/orders`);
     }
 
     byId(orderRequestId: number): Observable<Response> {

@@ -222,27 +222,6 @@ $table-border-color: #e0e0e0;
                         &.hide-in-mobile {
                             display: none;
                         }
-                        &[data-title="Purchase Order Number"] {
-                            &:before {
-                                content: 'Purchase Order' !important;
-                            }
-                        }
-                        &[data-title="Total amount"] {
-                            display: grid;
-                            font-size: 23px;
-                            margin-top: 10px;
-                            &:before {
-                                font-size: 14px !important;
-                                content: 'Total Material Value' !important;
-                                margin-bottom: 5px;
-                            }
-                        }
-                        &[data-title="Order No"] {
-                            color: #333333;
-                            &:before {
-                                content: 'Order Number' !important;
-                            }
-                        }
                     }
                     >td[data-title]:before {
                         content: attr(data-title);
@@ -348,4 +327,37 @@ $table-border-color: #e0e0e0;
 
 .order-first {
     order: -1;
+}
+
+.col-orderRequestId {
+    color: #37A7F8;
+    font-weight: bold;
+}
+
+.sortAsc {
+    svg {
+        transform: rotate(180deg);
+    }
+}
+
+.status-ico {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-right: 5px;
+    border-radius: 2px;
+    background: #e8ebef;
+    &.statusConfirmed {
+        background: #77cb38;
+    }
+    &.statusCanceled {
+        background: #D6D6D6;
+    }
+    &.statusDraft {
+        background: #D6D6D6;
+    }
+    &.statusPending {
+        background: #FBB03B;
+    }
 }

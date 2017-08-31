@@ -1,6 +1,6 @@
 <!-- Responsive table starts here -->
 <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
-<loading-table *ngIf="isLoading" [rows]="ordersQty"></loading-table>
+
 <div *ngIf="!isLoading && orders?.length == 0 ">
     <p style="text-align: center;
     color: #9CA4AE;
@@ -12,83 +12,34 @@
     <table id="table" class="table table-fixed main table-hover table-striped">
         <thead>
             <tr>
-                <!-- <th class="i-column" width="5%">
-                    <i class="star cmx-icon-favourite-active" aria-hidden="true"></i>
-                    <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                </th> -->
-                <th width="10%">
-                    Order No
-                    <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                <th 
+                    *ngFor="let column of filteredColumns;"
+                    [width]="column.width + '%'"
+                    [ngClass]="{active: sortedBy == column.key, sortAsc: sortOrder[column.key]}"
+                    (click)="sortBy(column, sortOrder[column.key])"
+                    >
+                    {{column.title}}
+                    <svg *ngIf="column.sortable == true || column.sortable === undefined" class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                 </th>
-                <th width="15%">
-                    Submitted
-                    <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                </th>
-                <th width="25%">
-                    Location
-                    <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                </th>
-                <th width="20%">
-                    Purchase Order Number
-                    <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                </th>
-                <th width="10%">
-                    Products
-                    <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                </th>
-                <th width="10%">
-                    Amount
-                    <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                </th>
-                <th width="20%">
-                    Requested date
-                    <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                </th>
-                <th width="18%">
-                    Status
-                    <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                </th>
-                <th width="13%">
-                    Total amount
-                    <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
-                </th>
-                <!-- <th width="5%">
-                </th> -->
             </tr>
         </thead>
         <tbody>
-            <ng-container *ngFor="let order of orders; let index = index; let odd = odd">
-                <tr class="order" [ngClass]="{ 'zebra': odd }">
-                    <!-- <td class="i-column" data-title="Favorite">
-                        <i class="star cmx-icon-favourite-active" [class.active]="order.orderRequest.isFavorite" aria-hidden="true" (click)="favorite(order.orderRequest.orderRequestId, !order.orderRequest.isFavorite)"></i>
-                    </td> -->
-                    <td data-title="Order No" class="number" routerLink="../order-detail">{{ order.orderRequest.orderRequestId | zeropad: 7 }}</td>
-                    <td data-title="Submitted">08/13/2017 {{order.orderRequest.viewedAt }}</td>
-                    <td data-title="Location">{{ makeLocation(order) }}
+            <ng-container *ngFor="let order of orders; let odd = odd">
+                <tr [ngClass]="{ 'zebra': odd }" (click)="onRowClick(order)">
+                    <td 
+                        [attr.data-title]="column.title"
+                        class="{{ 'col-' + column.key }}"
+                        *ngFor="let column of filteredColumns; let i = index;">
+                        <span 
+                            class="status-ico"
+                            [ngClass]="{statusCanceled: order.isCanceled(), statusConfirmed: order.isConfirmed(), statusDraft: order.isDraft(), statusPending: order.isPending()}"
+                            *ngIf="column.key === 'status'"></span>
+                        {{ column.key !== 'businessLine' ? order.orderRequest[column.key] : '' }}
+                        <span class="cmx-icon-driver" *ngIf="showIcon(order.orderRequest[column.key])"></span>
                     </td>
-                    <td data-title="Purchase Order Number">7755-KJ120/00011</td>
-                    <td data-title="Products" class="products hide-in-mobile">
-                        <i *ngIf="order.isReadyMix()" class="cmx-icon-driver" aria-hidden="true"></i>
-                        <!-- TODO add cement packed/bagged icons -->
-                        <i *ngIf="order.isCement()" class="cmx-icon-track" aria-hidden="true"></i>
-                        <i *ngIf="order.isAggregates()" class="cmx-icon-user-profile" aria-hidden="true"></i>
-                    </td>
-                    <td data-title="Amount" class="hide-in-mobile">{{ order.orderRequest.orderRequestItems.length }} tons</td>
-                    <td data-title="Requested date" valign="bottom" class="hide-in-mobile">{{ order.orderRequest.orderRequestedOn | date:"dd/MM/y HH:mm" }}</td>
-                    <td data-title="Status" class="order-first">
-                        <span class="status {{ order.orderRequest.orderRequestStatus.statusDesc | lowercase }}"></span> {{order.orderRequest.orderRequestStatus.statusDesc}}
-                    </td>
-                    <!-- <td data-title="Status" class="order-first status-block-position">
-                        <div class="status {{ order.orderRequest.orderRequestStatus.statusDesc | lowercase }}">{{ order.orderRequest.orderRequestStatus.statusDesc }}</div>
-                    </td> -->
-                    <!-- TODO numberal parser -->
-                    <td data-title="Total amount">${{ order.orderRequest.totalAmount | number:'.2-2' }}</td>
-                    <!-- <td class="i-column" data-title="Repeat">
-                        <i class="cmx-icon-repeat"></i>
-                    </td> -->
                 </tr>
                 <tr class="hidden-md-down sub separator"></tr>
-            </ng-container>
+            </ng-container>        
         </tbody>
     </table>
 </div>

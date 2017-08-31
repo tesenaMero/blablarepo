@@ -2,12 +2,19 @@ import { Injectable } from '@angular/core';
 
 const moment = require('moment');
 
+export enum OrderBusinessLines {
+  RMX,
+  CEM,
+  AGR,
+  MPS
+}
+
 export interface OrderRequestColumnConfiguration {
   key: string;
   format: string;
   value: string | Array<string>;
   ignoreValue?: string;
-  defaultValue?: string;
+  defaultValue?: any;
   translateable?: boolean;
 }
 export interface OrderRequestTableComponentConfiguration {
@@ -34,6 +41,7 @@ export interface OrderRequestLayoutColumnConfiguration {
   width?: number;
   hidden?: boolean;
   title?: string;
+  sortable?: boolean;
 }
 
 export interface OrderRequestLayoutConfiguration {
@@ -135,6 +143,9 @@ export class OrderRequestHelper {
     };
     try {
       switch (format) {
+        case 'qty': { 
+          return value.replace('TO', Number(value.split(' ')[0]) > 1 ? 'tons' : 'ton');
+        }
         case 'array': {
           return value;
         }
