@@ -7,10 +7,7 @@
                         <label for="jobsite-select" class="select-label">Select from existing jobiste</label>
                     </div>
                     <div class="col-md-8 col-sm-12">
-                        <<<<<<< HEAD <select id="jobsite-select" class="form-control" [(ngModel)]="location" (change)="jobsiteChanged()" [ngClass]="{ 'nice-selection': nice }">
-                            =======
-                            <select id="country-field" class="form-control" (change)="validateFormElements($event, 'jobsite')" [ngClass]="{ 'nice-selection': nice }">
->>>>>>> d0068f5a540f049351ad60c361fb863b4bd7f4dd
+                        <select id="jobsite-select" class="form-control" [(ngModel)]="location" (change)="jobsiteChanged()" [ngClass]="{ 'nice-selection': nice }">
                             <option value="" selected disabled hidden>Select existing POD</option>
                             <ng-container *ngFor="let l of locations">
                                 <option [ngValue]='l'>{{ l.shipmentLocationDesc }}</option>
@@ -57,7 +54,7 @@
                         <label for="special-instructions-field" class="select-label">Special instructions</label>
                     </div>
                     <div class="col-md-8 col-sm-12">
-                        <textarea id="special-instructions-field" (change)="validateFormElements($event, 'instructions')" (blur)="validateFormElements($event, 'instructions')" [(ngModel)]="model.instructions" class="instructions-area form-control" placeholder="Comments belong here"></textarea>
+                        <textarea id="special-instructions-field" (change)="validateFormElements($event, 'instructions')" (blur)="validateFormElements($event, 'instructions')" [(ngModel)]="orderManager.instructions" class="instructions-area form-control" placeholder="Comments belong here"></textarea>
                         <span class="error-message">Address cannot be that short.</span>
                     </div>
                 </div>
