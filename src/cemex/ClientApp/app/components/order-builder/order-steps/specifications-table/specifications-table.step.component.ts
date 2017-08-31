@@ -14,10 +14,12 @@ export class SpecificationsTableStepComponent implements OnInit {
     
     _cementPackageList:CementPackageSpecification[] = [];
     _readymix:ReadymixSpecification[] = [];
-
+    isMx: boolean;
+    isUs: boolean;
     constructor() { }
 
     ngOnInit() {
+        this.isMx = true;
         if (!this.typeProduct) {
             this.typeProduct = ETypeProduct.CEMENT_PACKAGE;
             let dto:CementPackageSpecification = {
