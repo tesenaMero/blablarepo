@@ -70,3 +70,27 @@ input {
 .mb-21px {
     margin-bottom: 21px;
 }
+
+.required {
+    &:after {
+        content: "*";
+        color: #EE3D42;
+        margin-left: 4px;
+    }
+}
+
+.error-message {
+    display: none;
+}
+.error {
+    .error-message {
+        font-size: 0.75rem;
+        color: #EE3D41;
+        width: 100%;
+        display: block;
+        text-align: right;
+    }
+    .form-control {
+        border: 1px solid #EE3D41;
+    }
+}

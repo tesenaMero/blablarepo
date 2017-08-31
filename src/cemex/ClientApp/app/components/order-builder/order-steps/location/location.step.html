@@ -7,7 +7,11 @@
                         <label for="country-field" class="select-label">Select from existing jobiste</label>
                     </div>
                     <div class="col-md-8 col-sm-12">
-                        <select id="country-field" class="form-control" (change)="jobsiteSelected($event)" [ngClass]="{ 'nice-selection': nice }">
+                        <select 
+                            id="country-field"
+                            class="form-control"
+                            (change)="validateFormElements($event, 'jobsite')"
+                            [ngClass]="{ 'nice-selection': nice }">
                             <option value="" selected disabled hidden>Select existing POD</option>
                             <option value="1">Riderback Eastern River Valley</option>
                             <option value="2">Monterrey, Nuevo Leon</option>
@@ -20,7 +24,7 @@
                         <label for="pod-select" class="select-label">Select from existing point of delivery</label>
                     </div>
                     <div class="col-md-8 col-sm-12">
-                        <select id="pod-select" class="form-control" (change)="pointOfDeliverySelected($event)">
+                        <select id="pod-select" class="form-control" (change)="validateFormElements($event, 'pointOfDelivery')">
                             <option value="" selected disabled hidden>Select existing POD</option>
                             <option value="1">Riderback Eastern River Valley</option>
                             <option value="2">Monterrey, Nuevo Leon</option>
@@ -32,10 +36,11 @@
             <div class="second-container">
                 <div class="row align-items-center mb-21px">
                     <div class="col-md-4 col-sm-12 select-label">
-                        <label for="purchase-order" class="select-label" (change)="contactSelected($event)">Purchase order</label>
+                        <label for="purchase-order" class="select-label required" (change)="contactSelected($event)">Purchase order</label>
                     </div>
-                    <div class="col-md-8 col-sm-12">
-                        <input type="text" class="form-control dls" id="purchase-order" placeholder="Put your purchase order" name="purchase-order" />
+                    <div class="col-md-8 col-sm-12" [ngClass]="{error: !validationModel.purchaseOrder}">
+                        <input type="text" class="form-control dls required" (keyup)="validateFormElements($event, 'purchaseOrder')" (blur)="validateFormElements($event, 'purchaseOrder')" id="purchase-order" placeholder="Put your purchase order" name="purchase-order" />
+                        <span class="error-message">Address cannot be that short.</span>
                     </div>
                 </div>
                 <div class="row align-items-center mb-21px">
@@ -43,7 +48,7 @@
                         <label for="country-field" class="select-label" (change)="contactSelected($event)">Contact person</label>
                     </div>
                     <div class="col-md-8 col-sm-12">
-                        <select id="country-field" class="form-control">
+                        <select id="country-field" class="form-control" (change)="validateFormElements($event, 'country')">
                             <option value="" selected disabled hidden>Select contact</option>
                             <option value="1">Riderback Eastern River Valley</option>
                             <option value="2">Monterrey, Nuevo Leon</option>
@@ -56,7 +61,8 @@
                         <label for="special-instructions-field" class="select-label">Special instructions</label>
                     </div>
                     <div class="col-md-8 col-sm-12">
-                        <textarea id="special-instructions-field" [(ngModel)]="model.instructions" class="instructions-area form-control" placeholder="Comments belong here"></textarea>
+                        <textarea id="special-instructions-field" (change)="validateFormElements($event, 'instructions')" (blur)="validateFormElements($event, 'instructions')" [(ngModel)]="model.instructions" class="instructions-area form-control" placeholder="Comments belong here"></textarea>
+                        <span class="error-message">Address cannot be that short.</span>
                     </div>
                 </div>
             </div>
