@@ -39,6 +39,17 @@ select {
     }
 }
 
+input {
+    border: 1px solid #ACAEBA;
+    border-radius: 3px;
+    background-color: #FFFFFF;
+    font-size: 1rem;
+    line-height: 1rem;
+    border-radius: 3px;
+    height: 48px;
+    padding: 16px;
+}
+
 .instructions-area {
     height: 217px;
     border: 1px solid #ACAEBA;

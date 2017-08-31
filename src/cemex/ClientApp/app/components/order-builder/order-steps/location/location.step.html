@@ -32,6 +32,14 @@
             <div class="second-container">
                 <div class="row align-items-center mb-21px">
                     <div class="col-md-4 col-sm-12 select-label">
+                        <label for="purchase-order" class="select-label" (change)="contactSelected($event)">Purchase order</label>
+                    </div>
+                    <div class="col-md-8 col-sm-12">
+                        <input type="text" class="form-control dls" id="purchase-order" placeholder="Put your purchase order" name="purchase-order" />
+                    </div>
+                </div>
+                <div class="row align-items-center mb-21px">
+                    <div class="col-md-4 col-sm-12 select-label">
                         <label for="country-field" class="select-label" (change)="contactSelected($event)">Contact person</label>
                     </div>
                     <div class="col-md-8 col-sm-12">
