@@ -19,7 +19,10 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     map: any; // Map instance
     jobsite: any;
     nice: boolean = false;
-    model = this.createOrder
+    model = this.createOrder;
+    validationModel = {
+        purchaseOrder: true,
+    }
 
     constructor( @Inject(Step) private step: Step, public createOrder: CreateOrderService) {
         this.step.setEventsListener(this);
@@ -39,13 +42,17 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     jobsiteSelected(event: any) {
         this.createOrder.selectJobsite({ jobsiteId: 1 });
         this.nice = true;
-        this.onCompleted.emit(event);
+        if(this.validateFormElements(event)) {
+            this.onCompleted.emit(event);
+        }
     }
 
     pointOfDeliverySelected(event: any) {
         this.createOrder.selectPointOfDelivery({ pointOfDeliveryId: 1 });
         this.nice = true;
-        this.onCompleted.emit(event);
+        if(this.validateFormElements(event)) {
+            this.onCompleted.emit(event);
+        }
     }
 
     contactSelected(event: any) {
@@ -53,6 +60,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     ngOnInit() {
+    }
+
+    validateFormElements(e, key?: string) {
+        this.validationModel[key] = Boolean(e.target.value.length);
+        return e.target.value.length;
     }
 
 }
