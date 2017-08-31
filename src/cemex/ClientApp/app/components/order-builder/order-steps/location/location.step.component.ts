@@ -21,11 +21,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     nice: boolean = false;
     model = this.createOrder;
     validationModel = {
-        jobsite: true,
-        pointOfDelivery: true,
         purchaseOrder: true,
-        country: true,
-        instructions: true
     }
 
     constructor( @Inject(Step) private step: Step, public createOrder: CreateOrderService) {
