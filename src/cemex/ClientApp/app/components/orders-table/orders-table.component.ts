@@ -56,13 +56,13 @@ export class OrdersTableComponent {
             {
                 key: 'submitedOn',
                 title: 'Submitted',
-                width: 8,
+                width: 10,
                 sortable: true
             },
             {
                 key: 'pointOfDelivery',
                 title: 'Location',
-                width: 20,
+                width: 18,
                 sortable: true
             },
             {
@@ -104,6 +104,10 @@ export class OrdersTableComponent {
                 title: 'Total amount',
                 width: 10,
                 sortable: true
+            },
+            {
+                key: 'totalFilter',
+                hidden: true,
             },
             {
                 key: 'submittedOn',

@@ -60,7 +60,7 @@ export class OrdersService {
             },
             {
                 key: 'submitedOn',
-                format: 'getDate',
+                format: 'date',
                 value: 'createdDateTime',
             },
             {

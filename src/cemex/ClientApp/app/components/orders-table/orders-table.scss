@@ -222,6 +222,18 @@ $table-border-color: #e0e0e0;
                         &.hide-in-mobile {
                             display: none;
                         }
+                        &.total-col {
+                            display: grid;
+                            font-size: 23px;
+                            margin-top: 10px;
+                            &:before {
+                                font-size: 14px !important;
+                                margin-bottom: 5px;
+                            }
+                        }
+                        &.orderRequestId-col {
+                            color: #333333;
+                        }
                     }
                     >td[data-title]:before {
                         content: attr(data-title);

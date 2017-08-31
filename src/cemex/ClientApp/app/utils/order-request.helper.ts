@@ -252,36 +252,10 @@ export class OrderRequestHelper {
         }
         case 'date': {
           const country = this.getCountryCode();
-          const parsed = Date.parse(value);
-          if (isNaN(parsed)) {
-            throw new Error('Invalid date');
-          }
-          const date = new Date(parsed);
-          const pad2chars = leftPad(2);
           if (country === 'mx') {
-            return [
-              [
-                pad2chars(date.getDate()),
-                pad2chars(date.getMonth() + 1),
-                date.getFullYear()
-              ].join('/'),
-              [
-                pad2chars(date.getHours()),
-                pad2chars(date.getMinutes())
-              ].join(':')
-            ].join(' ');
+            return moment.utc(value).local().format('DD/MM/YYYY');
           } else {
-            return [
-              [
-                pad2chars(date.getMonth() + 1),
-                pad2chars(date.getDate()),
-                date.getFullYear()
-              ].join('/'),
-              [
-                pad2chars(date.getHours()),
-                pad2chars(date.getMinutes())
-              ].join(':')
-            ].join(' ');
+            return moment.utc(value).local().format('MM/DD/YYYY');
           }
         }
         case 'localDate': {
@@ -295,9 +269,9 @@ export class OrderRequestHelper {
         case 'getDate': {
           const country = this.getCountryCode();
           if (country === 'mx') {
-            return moment.utc(value).local().format('DD/MM/YYYY');
+            return moment.utc(value).local().format('DD/MM/YYYY, HH:mm');
           } else {
-            return moment.utc(value).local().format('MM/DD/YYYY');
+            return moment.utc(value).local().format('MM/DD/YYYY, HH:mm');
           }
         }
         default: {

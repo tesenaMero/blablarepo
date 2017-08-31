@@ -16,6 +16,7 @@
                     *ngFor="let column of filteredColumns;"
                     [width]="column.width + '%'"
                     [ngClass]="{active: sortedBy == column.key, sortAsc: sortOrder[column.key]}"
+                    [class]="column.key + '-col'"
                     (click)="sortBy(column, sortOrder[column.key])"
                     >
                     {{column.title}}
