@@ -27,6 +27,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     
     // H4x0R
     nice: boolean;
+    jobsite: any;
+
+    validationModel = {
+        purchaseOrder: true,
+    }
 
     constructor(@Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi) {
         this.step.setEventsListener(this);
@@ -67,8 +72,10 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.shipmentApi.contacts(this.location).subscribe((response => {
             this.contacts = response.json().contacts;
         }));
-
-        this.onCompleted.emit();
+        
+        if(this.validateFormElements(event)) {
+            this.onCompleted.emit(event);
+        }
     }
 
 
@@ -76,11 +83,18 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     pointOfDeliverySelected(event: any) {
         this.orderManager.selectPointOfDelivery({ pointOfDeliveryId: 1 });
         this.nice = true;
-        this.onCompleted.emit(event);
+        if(this.validateFormElements(event)) {
+            this.onCompleted.emit(event);
+        }
     }
 
     contactChanged() {
         this.orderManager.selectContact(this.contact);
+    }
+
+    validateFormElements(e, key?: string) {
+        this.validationModel[key] = Boolean(e.target.value.length);
+        return e.target.value.length;
     }
 
 }
