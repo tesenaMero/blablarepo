@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
-
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
+import { JobsiteApiService } from '../../../../shared/services/jobsites-api.service';
 
 @Component({
     selector: 'location-step',
@@ -21,8 +21,14 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     nice: boolean = false;
     model = this.createOrder
 
-    constructor( @Inject(Step) private step: Step, public createOrder: CreateOrderService) {
+    constructor(@Inject(Step) private step: Step, public createOrder: CreateOrderService, private jobsiteApi: JobsiteApiService) {
         this.step.setEventsListener(this);
+    }
+
+    ngOnInit() {
+        // this.jobsiteApi.all().subscribe(response => {
+
+        // })
     }
 
     onShowed() {
@@ -50,9 +56,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     contactSelected(event: any) {
         this.createOrder.selectContact({ contactName: 'demo', contactPhone: '777888999' });
-    }
-
-    ngOnInit() {
     }
 
 }

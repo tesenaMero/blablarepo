@@ -9,7 +9,7 @@ export class JobsiteApiService {
 
     constructor(private ApiService: ApiService) {}
     
-    all(jobsiteId): Observable<Response> {
+    byId(jobsiteId): Observable<Response> {
         return this.ApiService.get(`v5/dm/jobsites/${jobsiteId}?include=businessline,address,contact`);
     }
 }
