@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { CoreApi } from '../../../../shared/api/core.api'
+import { ProductLineApi } from '../../../../shared/api'
+import { CreateOrderService } from '../../../../shared/services/create-order.service';
 
 @Component({
     selector: 'product-selection-step',
@@ -10,22 +11,22 @@ import { CoreApi } from '../../../../shared/api/core.api'
 export class ProductSelectionStepComponent {
     @Output() onCompleted = new EventEmitter<any>();
 
-    products = [];
-    product: any;
+    productLines = [];
+    productLine: any;
 
-    constructor(private api: CoreApi) {
-        this.api.productsLines().subscribe((response) => {
-            this.products = response.json().productLines;
-            console.log(this.products);
+    constructor(private api: ProductLineApi, private orderManager: CreateOrderService) {
+        this.api.all().subscribe((response) => {
+            this.productLines = response.json().productLines;
         });
     }
 
     select(product: any) {
-        this.product = product;
-        this.onCompleted.emit(product);
+        this.productLine = product;
+        this.orderManager.selectProductLine(product);
+        this.onCompleted.emit();
     }
 
     isSelected(product: any) {
-        return this.product == product;
+        return this.productLine == product;
     }
 }
