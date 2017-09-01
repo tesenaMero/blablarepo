@@ -82,11 +82,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.shipmentApi.all().subscribe((response) => {
             this.locations = response.json().shipmentLocations;
         });
-
-        // this.myOptions = [
-        //     { id: 1, name: 'Option 1' },
-        //     { id: 2, name: 'Option 2' },
-        // ];
     }
 
     onShowed() {
