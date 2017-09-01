@@ -55,39 +55,6 @@
     }
 }
 
-.cards {
-    .card {
-        border: 0px;
-        padding-top: 21px;
-        padding-left: 23px;
-        padding-right: 23px;
-        padding-bottom: 27px;
-        margin-bottom: 10px;
-        &:first-child {
-            margin-top: 27px;
-        }
-        &:nth-child(even) {
-            border: 1px solid #DFDFDF !important;
-            background-color: transparent;
-        }
-        >.comment-text {
-            margin-top: 18px;
-            font-size: 13px;
-            color: #5C5C5C;
-        }
-        .from {
-            .name {
-                color: #020028;
-                font-size: 12px;
-            }
-            .date {
-                color: #5C5C5C;
-                font-size: 12px;
-            }
-        }
-    }
-}
-
 .location {
     border-radius: 2px;
     background-color: #FFFFFF;
