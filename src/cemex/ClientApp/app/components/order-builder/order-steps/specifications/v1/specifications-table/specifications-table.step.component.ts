@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ETypeProduct, CementPackageSpecification, ReadymixSpecification } from '../../../../models'
+import { ETypeProduct, CementPackageSpecification, ReadymixSpecification } from '../../../../../../models'
 
 @Component({
     selector: 'specifications-table',
