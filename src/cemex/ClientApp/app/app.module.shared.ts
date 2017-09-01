@@ -58,6 +58,9 @@ import { NguiDatetimePickerModule } from './shared/components/datetimepicker';
 import { OrderRequestHelper } from './utils/order-request.helper';
 import { OrdersModel } from './shared/schema';
 
+// Api
+import { Api, ProductLineApi, ShipmentLocationApi } from './shared/api'
+
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
     declarations: [
@@ -132,5 +135,8 @@ export const sharedConfig: NgModule = {
         JobsiteApiService,
         OrderRequestHelper,
         OrdersModel,
+        Api,
+        ProductLineApi,
+        ShipmentLocationApi,
     ]
 };

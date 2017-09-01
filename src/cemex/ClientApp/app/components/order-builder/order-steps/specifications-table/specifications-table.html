@@ -107,9 +107,14 @@
                     <span class="col-md-12 prod-field-value">{{specification.deliveryMode}}</span>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
+            <div class="col-md-6 plant">
+                <div class="form-group">
+                    <label for="payment">Plant</label>
+                    <select id="payment" class="form-control" [ngClass]="{ 'nice-selection': nice }" [(ngModel)]="specification.plant">
+                        <option value={{specification.plant}}>{{specification.plant}}</option>
+                    </select>
+                </div>
+            </div>
             <div class="col-sm-2 col-sm-offset-10">
                 <div class="action-remove">
                     <button cmx-button-link>REMOVE PRODUCT</button>
@@ -227,11 +232,51 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-2 slump">
+            <div class="col-md-2 slump" *ngIf="isMx">
                 <div class="form-group">
                     <label for="slump">Slump</label>
                     <select id="slump" class="form-control" [ngClass]="{ 'nice-selection': nice }" [(ngModel)]="specification.projectProfile.slump">
                         <option value={{specification.projectProfile.slump}} selected>{{specification.projectProfile.slump}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2 discarge-time" *ngIf="isMx">
+                <div class="form-group">
+                    <label for="dischargeTime">Discharge Time</label>
+                    <select id="dischargeTime" class="form-control" [ngClass]="{ 'nice-selection': nice }" [(ngModel)]="specification.projectProfile.dischargeTime">
+                        <option value={{specification.projectProfile.dischargeTime}} selected>{{specification.projectProfile.dischargeTime}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2 transport-method"  *ngIf="isMx">
+                <div class="form-group">
+                    <label for="transportMethod">Transport Method</label>
+                    <select id="transportMethod" class="form-control" [ngClass]="{ 'nice-selection': nice }" [(ngModel)]="specification.projectProfile.transportMethod">
+                        <option value={{specification.projectProfile.transportMethod}} selected>{{specification.transportMethod}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2 unload-type"  *ngIf="isMx">
+                <div class="form-group">
+                    <label for="unloadType">Unload Type</label>
+                    <select id="unloadType" class="form-control" [ngClass]="{ 'nice-selection': nice }" [(ngModel)]="specification.projectProfile.unloadType">
+                        <option value={{specification.projectProfile.unloadType}} selected>{{specification.projectProfile.unloadType}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2 pump-capacity-min"  *ngIf="isMx">
+                <div class="form-group">
+                    <label for="pumpCapacityMin">Pump Capacity Min</label>
+                    <select id="pumpCapacityMin" class="form-control" [ngClass]="{ 'nice-selection': nice }" [(ngModel)]="specification.projectProfile.pumpCapacityMin">
+                        <option value={{specification.projectProfile.pumpCapacityMin}} selected>{{specification.projectProfile.pumpCapacityMin}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2 pump-capacity-max"  *ngIf="isMx">
+                <div class="form-group">
+                    <label for="pumpCapacityMax">Pump Capacity Max</label>
+                    <select id="pumpCapacityMax" class="form-control" [ngClass]="{ 'nice-selection': nice }" [(ngModel)]="specification.projectProfile.pumpCapacityMax">
+                        <option value={{specification.projectProfile.pumpCapacityMax}} selected>{{specification.projectProfile.pumpCapacityMax}}</option>
                     </select>
                 </div>
             </div>

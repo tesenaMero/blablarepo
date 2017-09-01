@@ -35,8 +35,10 @@ export class OrdersTableComponent {
         });
     };
 
-    constructor(private OrdersService: OrdersService) {
-        localForage.getItem('ordersQty').then(ordersQty => {
+    private ORDERS_QTY_KEY = "ORDERS_QTY";
+
+    constructor(private ordersService: OrdersService) {
+        localForage.getItem(this.ORDERS_QTY_KEY).then(ordersQty => {
             this.ordersQty = ordersQty;
         });
     }
@@ -149,15 +151,14 @@ export class OrdersTableComponent {
 
     ngOnChanges() {
         if (this.orders && this.orders.length > 0) {
-            localForage.setItem('ordersQty', this.orders.length);
+            localForage.setItem(this.ORDERS_QTY_KEY, this.orders.length);
         }
     }
 
-    changePage(page) {
-    }
+    changePage(page) { }
 
     favorite(orderRequestId, isFavorite) {
-        this.OrdersService.favoriteOrder(orderRequestId, isFavorite);
+        this.ordersService.favoriteOrder(orderRequestId, isFavorite);
     }
 
     onRowClick(order: OrderRequest) {
@@ -170,7 +171,7 @@ export class OrdersTableComponent {
 
     sortBy(column, asc) {
         if(column.sortable) {
-            this.OrdersService.orderBy({ asc: Boolean(asc), key: column.key });
+            this.ordersService.orderBy({ asc: Boolean(asc), key: column.key });
             this.sortedBy = column.key;
             this.sortOrder[column.key] = !this.sortOrder[column.key];
         }

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { OrdersApiService } from '../../shared/services/orders-api.service';
 
 @Component({
     selector: 'order-detail-page',
@@ -8,9 +9,10 @@ import { Component, OnInit, Input } from '@angular/core';
         '../order-builder/order-steps/summary/summary.step.scss'
     ]
 })
-export class OrderDetailComponent {
-    order = 7543189;
-    requestDate = "31/12/2017, 15:00 - 16:00";
-    
-    constructor() { }
+export class OrderDetailComponent {    
+    constructor(private ordersApi: OrdersApiService) {
+        ordersApi.byId(41).subscribe((response) => {
+            console.log(response);
+        });
+    }
 }

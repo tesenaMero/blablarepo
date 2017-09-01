@@ -3,10 +3,10 @@
         <div class="select-product">Select a product</div>
     </div>
     <div class="row products">
-        <div *ngFor="let product of products" class="col-md-4">
+        <div *ngFor="let product of productLines" class="col-md-4">
             <div class="product-desc align-items-center" [ngClass]="{ 'selected': isSelected(product) }" (click)="select(product)">
                 <span class="icon cmx-icon-driver"></span>
-                <span>{{product}}</span>
+                <span>{{product.productLineDesc}}</span>
             </div>
         </div>
     </div>

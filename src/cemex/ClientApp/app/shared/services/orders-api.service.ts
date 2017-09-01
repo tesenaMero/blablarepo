@@ -9,8 +9,7 @@ export class OrdersApiService {
 
     constructor(private ApiService: ApiService) {}
     
-    all(customerId: string, take: number = 100): Observable<any> {
-        // return Observable.of(true);
+    all(customerId: string, take: number = 100): Observable<Response> {
         return this.ApiService.get(`v2/sm/orders?include=orderitem`);
     }
 
