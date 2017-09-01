@@ -31,6 +31,22 @@ export class OrderRequest {
         return this.orderRequest.statusCode === 'CONF';
     }
 
+    isBlocked() {
+        return this.orderRequest.statusCode === 'BLCK';
+    }
+
+    isHolded() {
+        return this.orderRequest.statusCode === 'HOLD';
+    }
+
+    isProcessed() {
+        return this.orderRequest.statusCode === 'INPC';
+    }
+
+    isCompleted() {
+        return this.orderRequest.statusCode === 'CMPO';
+    }
+
     isReadyMix() {
         return this.orderRequest.businessLine === buisnessLIneCodes.rmx;
     }

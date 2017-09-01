@@ -77,6 +77,8 @@ export class OrdersService {
                 key: 'purchaseOrder',
                 format: 'string',
                 value: 'purchaseOrder',
+                ignoreValue: 'purchaseOrder',
+                defaultValue: '-',
             },
             {
                 key: 'businessLine',

@@ -11,7 +11,7 @@ export class OrdersApiService {
     
     all(customerId: string, take: number = 100): Observable<any> {
         // return Observable.of(true);
-        return this.ApiService.get(`v2/sm/orders`);
+        return this.ApiService.get(`v2/sm/orders?include=orderitem`);
     }
 
     byId(orderRequestId: number): Observable<Response> {

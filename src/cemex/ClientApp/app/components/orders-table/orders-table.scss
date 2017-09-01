@@ -352,13 +352,20 @@ $table-border-color: #e0e0e0;
     }
 }
 
+.first {
+    &:hover {
+        text-decoration: underline;
+        color: #277eaf;
+        cursor: pointer;
+    }
+}
+
 .status-ico {
-    display: inline-block;
-    width: 16px;
+    width: 24px;
     height: 16px;
-    vertical-align: middle;
-    margin-right: 5px;
+    display: inline-block;
     border-radius: 2px;
+    margin-right: 8px;
     background: #e8ebef;
     &.statusConfirmed {
         background: #77cb38;
@@ -371,5 +378,11 @@ $table-border-color: #e0e0e0;
     }
     &.statusPending {
         background: #FBB03B;
+    }
+    &.statusBlocked {
+        background: #EE3D42;
+    }
+    &.statusCompleted, &.statusProcessed {
+        background: #3FA9F5;
     }
 }

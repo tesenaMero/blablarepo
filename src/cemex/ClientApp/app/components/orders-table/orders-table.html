@@ -30,10 +30,21 @@
                     <td 
                         [attr.data-title]="column.title"
                         class="{{ 'col-' + column.key }}"
-                        *ngFor="let column of filteredColumns; let i = index;">
+                        [ngClass]="{first: first}"
+                        [routerLink]="first ? '../order-detail' : null"
+                        *ngFor="let column of filteredColumns; let i = index; let first = first">
                         <span 
                             class="status-ico"
-                            [ngClass]="{statusCanceled: order.isCanceled(), statusConfirmed: order.isConfirmed(), statusDraft: order.isDraft(), statusPending: order.isPending()}"
+                            [ngClass]="{
+                                statusCanceled: order.isCanceled(),
+                                statusConfirmed: order.isConfirmed(),
+                                statusDraft: order.isDraft(),
+                                statusPending: order.isPending(),
+                                statusBlocked: order.isBlocked(),
+                                statusHolded: order.isHolded(),
+                                statusProcessed: order.isProcessed(),
+                                statusCompleted: order.isCompleted()
+                            }"
                             *ngIf="column.key === 'status'"></span>
                         {{ column.key !== 'businessLine' ? order.orderRequest[column.key] : '' }}
                         <span class="cmx-icon-driver" *ngIf="showIcon(order.orderRequest[column.key])"></span>
