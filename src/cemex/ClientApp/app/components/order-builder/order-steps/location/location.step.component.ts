@@ -3,6 +3,7 @@ import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { ShipmentLocationApi } from '../../../../shared/api/shipment-locations.api';
+import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
 
 @Component({
     selector: 'location-step',
@@ -24,6 +25,46 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     // Mapped data
     locations = [];
     contacts = [];
+
+    // Default selection
+    optionsModel: number[] = [ ];
+
+    // Settings configuration
+    mySettings: IMultiSelectSettings = {
+        enableSearch: true,
+        checkedStyle: 'fontawesome',
+        buttonClasses: 'btn btn-default btn-block',
+        dynamicTitleMaxItems: 1,
+        displayAllSelectedText: true,
+        closeOnClickOutside: true,
+        selectionLimit: 1,
+        autoUnselect: true,
+        closeOnSelect: true,
+    };
+
+    // Text configuration
+    myTexts: IMultiSelectTexts = {
+        checkAll: 'Select all',
+        uncheckAll: 'Unselect all',
+        checked: 'item selected',
+        checkedPlural: 'items selected',
+        searchPlaceholder: 'Find',
+        searchEmptyResult: 'Nothing found...',
+        searchNoRenderText: 'Type in search box to see results...',
+        defaultTitle: 'Select',
+        allSelected: 'All selected',
+    };
+
+    // Labels / Parents
+    myOptions: IMultiSelectOption[] = [
+        { id: 1, name: 'Dante Rodríguez' },
+        { id: 2, name: 'Cristóbal Ferrant' },
+        { id: 3, name: 'Raul Barrueco' },
+        { id: 4, name: 'Gonzalo Gisbert' },
+        { id: 5, name: 'Fernando Cadaval' },
+        { id: 6, name: 'Matthew Gálvez'}
+    ];
+
     
     // H4x0R
     nice: boolean;
@@ -41,6 +82,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.shipmentApi.all().subscribe((response) => {
             this.locations = response.json().shipmentLocations;
         });
+
+        // this.myOptions = [
+        //     { id: 1, name: 'Option 1' },
+        //     { id: 2, name: 'Option 2' },
+        // ];
     }
 
     onShowed() {
