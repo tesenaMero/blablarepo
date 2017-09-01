@@ -41,6 +41,8 @@ import {
 
 // Shared components
 import { StepperComponent, Step } from './shared/components/stepper';
+import { OrdersService } from './shared/services/orders.service';
+import { CreateOrderService } from './shared/services/create-order.service';
 import { ActionButtonComponent } from './shared/components/action-button/action-button.component';
 import { BreadcrumbsComponent, BreadcrumbsItemComponent } from './shared/components/breadcrumbs'
 import { PaginationComponent } from './shared/components/pagination/pagination.component';
@@ -48,20 +50,21 @@ import { DLSTableComponent } from './shared/components/table/table.component';
 
 // Services
 import { WindowRef } from './shared/services/window-ref.service';
-import { ApiService } from './shared/services/api.service';
-import { OrdersApiService } from './shared/services/orders-api.service';
-import { OrdersService } from './shared/services/orders.service';
-import { CreateOrderService } from './shared/services/create-order.service';
-import { LoginApiService } from './shared/services/login-api.service';
-import { ProjectProfileApiService } from './shared/services/project-profile-api.service';
-import { ContractsApiService } from './shared/services/contracts-api.service';
-import { JobsiteApiService } from './shared/services/jobsites-api.service';
 import { NguiDatetimePickerModule } from './shared/components/datetimepicker';
 import { OrderRequestHelper } from './utils/order-request.helper';
 import { OrdersModel } from './shared/schema';
 
 // Api
-import { Api, ProductLineApi, ShipmentLocationApi } from './shared/api'
+import { 
+    Api, 
+    ProductLineApi, 
+    ShipmentLocationApi,
+    OrdersApi,
+    LoginApi,
+    ProjectProfileApi,
+    ContractsApi,
+    JobsiteApi,
+} from './shared/services/api';
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
@@ -129,14 +132,13 @@ export const sharedConfig: NgModule = {
     ],
     providers: [
         WindowRef,
-        ApiService,
-        OrdersApiService,
+        OrdersApi,
         OrdersService,
         CreateOrderService,
-        LoginApiService,
-        ProjectProfileApiService,
-        ContractsApiService,
-        JobsiteApiService,
+        LoginApi,
+        ProjectProfileApi,
+        ContractsApi,
+        JobsiteApi,
         OrderRequestHelper,
         OrdersModel,
         Api,

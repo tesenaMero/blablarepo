@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { OrdersApiService } from '../../shared/services/orders-api.service';
+import { OrdersApi } from '../../shared/services/api';
 
 @Component({
     selector: 'order-detail-page',
@@ -10,8 +10,8 @@ import { OrdersApiService } from '../../shared/services/orders-api.service';
     ]
 })
 export class OrderDetailComponent {    
-    constructor(private ordersApi: OrdersApiService) {
-        ordersApi.byId(41).subscribe((response) => {
+    constructor(private OrdersApi: OrdersApi) {
+        OrdersApi.byId(41).subscribe((response) => {
             console.log(response);
         });
     }

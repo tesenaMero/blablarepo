@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs';
 
-import { Api } from '../api/api';
+import { Api } from './api.service';
 
 @Injectable()
 export class JobsiteApi {

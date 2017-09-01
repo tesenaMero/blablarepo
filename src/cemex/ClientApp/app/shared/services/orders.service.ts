@@ -3,7 +3,7 @@ import { Response } from '@angular/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { normalize, schema } from 'normalizr';
 
-import { OrdersApiService } from './orders-api.service';
+import { OrdersApi } from './api';
 import { OrderRequest } from '../types';
 import {
     OrderRequestHelper,
@@ -138,7 +138,7 @@ export class OrdersService {
     private theOrders;
     private ordersModel;
 
-    constructor(private OrdersApiService: OrdersApiService, private helper: OrderRequestHelper, private ordersModelService: OrdersModel) {
+    constructor(private OrdersApi: OrdersApi, private helper: OrderRequestHelper, private ordersModelService: OrdersModel) {
         this._orders = <BehaviorSubject<OrdersState>>new BehaviorSubject({ byId: {}, allIds: [] });
         this._isLoading = <BehaviorSubject<boolean>>new BehaviorSubject(false);
         this._error = <BehaviorSubject<string | null>>new BehaviorSubject(null);
@@ -150,7 +150,7 @@ export class OrdersService {
         this._error.next(null);
 
         // TODO depend on user service for customerId
-        this.OrdersApiService.all("4169", 100)
+        this.OrdersApi.all("4169", 100)
             .map(response => response.json())
             .map(json => {
                 const flatten = this.helper.flattenData(json);
@@ -174,7 +174,7 @@ export class OrdersService {
 
     public favoriteOrder(orderRequestId, isFavorite) {
         this._favorite(orderRequestId, isFavorite);
-        this.OrdersApiService.favoriteOrder(orderRequestId, isFavorite)
+        this.OrdersApi.favoriteOrder(orderRequestId, isFavorite)
             .map(response => response.json())
             .subscribe(response => {
                 // success do nothing
