@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { OrdersApiService } from '../../../shared/services/orders-api.service';
+import { OrdersApi } from '../../../shared/services/api';
 
 @Component({
     selector: 'order-detail-comments',
@@ -18,7 +18,7 @@ export class OrderDetailCommentsComponent {
         this.error = null;
         this.isLoading = true;
 
-        this.OrdersApiService.getComments(orderItemId, 10, 1)
+        this.OrdersApi.getComments(orderItemId, 10, 1)
         .map(response => response.json())
         .subscribe(response => {
             this.comments.next(response.comments);
@@ -29,14 +29,14 @@ export class OrderDetailCommentsComponent {
         });
     }
 
-    constructor(private OrdersApiService: OrdersApiService) {
+    constructor(private OrdersApi: OrdersApi) {
 
     }
 
     onSubmit() {
         if (this.newMessage) {
             this.isSending = true;
-            this.OrdersApiService.sendComment(this.orderItemId, this.newMessage)
+            this.OrdersApi.sendComment(this.orderItemId, this.newMessage)
             .map(response => response.json())
             .subscribe(response => {
                 // SUCCESS NOTIFY

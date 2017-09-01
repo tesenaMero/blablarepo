@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProjectProfileApiService } from '../../shared/services/project-profile-api.service'
+import { ProjectProfileApi } from '../../shared/services/api'
 
 let $ = require("jquery");
 
@@ -13,7 +13,7 @@ export class ProjectProfilesComponent {
     columns = [];
     rows = [];
 
-    constructor(private ppService: ProjectProfileApiService) {
+    constructor(private ppService: ProjectProfileApi) {
         this.ppService.all("4169").subscribe((response) => {
             if (response.json().profiles) {
                 this.profiles = response.json().profiles;
