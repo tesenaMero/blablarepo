@@ -1,8 +1,12 @@
 <div *ngIf="isLoading">
-    <p>Loading...</p>
+    <div class="card">
+        <p>Loading...</p>
+    </div>
 </div>
 <div *ngIf="!isLoading && comments.length == 0">
-    <p>No comments found</p>
+    <div class="card">
+        <p>No comments found</p>
+    </div>
 </div>
 <div class="cards" *ngIf="!isLoading && comments.length > 0">
     <div class="card" *ngFor="let comment of comments">
@@ -16,3 +20,7 @@
         </div>
     </div>
 </div>
+<form (ngSubmit)="onSubmit()" class="send-comment">
+    <input type="text" class="form-control transparent-input" placeholder="Start Typing Here" [value]="newMessage" (input)="newMessage = $event.target.value" />
+    <cemex-action-button title="send" color="ornage" isLink="true" class="submit-btn"></cemex-action-button>
+</form>

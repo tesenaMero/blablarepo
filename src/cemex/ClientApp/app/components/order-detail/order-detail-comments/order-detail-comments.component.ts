@@ -11,6 +11,8 @@ export class OrderDetailCommentsComponent {
     comments: any = [];
     isLoading: boolean = false;
     error: string | null = null;
+    newMessage: string = '';
+    isSending: boolean = false;
 
     @Input() set orderItemId(orderItemId) {
         this.error = null;
@@ -29,5 +31,20 @@ export class OrderDetailCommentsComponent {
 
     constructor(private OrdersApiService: OrdersApiService) {
 
+    }
+
+    onSubmit() {
+        if (this.newMessage) {
+            this.isSending = true;
+            this.OrdersApiService.sendComment(this.orderItemId, this.newMessage)
+            .map(response => response.json())
+            .subscribe(response => {
+                // SUCCESS NOTIFY
+                this.isSending = false;
+            }, err => {
+                // ERROR NOTIFY
+                this.isSending = false;
+            });
+        }
     }
 }

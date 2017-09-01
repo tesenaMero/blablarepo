@@ -1,8 +1,12 @@
 <div *ngIf="isLoading">
-    <p>Loading...</p>
+    <div class="card">
+        <p>Loading...</p>
+    </div>
 </div>
 <div *ngIf="!isLoading && logs.length == 0">
-    <p>No logs found</p>
+    <div class="card">
+        <p>No logs found</p>
+    </div>
 </div>
 <div class="cards" *ngIf="!isLoading && logs.length > 0">
     <div class="card" *ngFor="let log of logs">
