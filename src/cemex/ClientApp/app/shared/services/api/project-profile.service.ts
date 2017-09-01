@@ -2,23 +2,23 @@ import { Injectable } from '@angular/core';
 import { Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs';
 
-import { ApiService } from './api.service';
+import { Api } from './api.service';
 
 @Injectable()
-export class ProjectProfileApiService {
+export class ProjectProfileApi {
 
-    constructor(private ApiService: ApiService) {}
+    constructor(private Api: Api) {}
     
     all(customerId: string): Observable<Response> {
-        return this.ApiService.get(`v1/rc/myprofiles?customerId=${customerId}&include=projectproperties`);
+        return this.Api.get(`/v1/rc/myprofiles?customerId=${customerId}&include=projectproperties`);
     }
 
     delete(profileId): Observable<Response> {
-        return this.ApiService.delete(`v1/rc/profiles/${profileId}`);
+        return this.Api.delete(`/v1/rc/profiles/${profileId}`);
     }
 
     create(projectProfile, customerId): Observable<Response> {
-        return this.ApiService.post('v1/rc/profiles', JSON.stringify({
+        return this.Api.post('/v1/rc/profiles', JSON.stringify({
             ...projectProfile,
             customer: {
                 customerId,
@@ -27,7 +27,7 @@ export class ProjectProfileApiService {
     }
 
     edit(projectProfile, customerId): Observable<Response> {
-        return this.ApiService.get(`v1/rc/profiles/${projectProfile.profileId}`, JSON.stringify({
+        return this.Api.get(`/v1/rc/profiles/${projectProfile.profileId}`, JSON.stringify({
             ...projectProfile,
             customer: {
                 customerId,

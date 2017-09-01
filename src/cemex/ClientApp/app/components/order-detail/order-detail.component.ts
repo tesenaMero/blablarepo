@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { OrderDetailApi } from '../../shared/api/order-detail';
+import { OrderDetailApi } from '../../shared/services/api/order-detail.service';
 
 @Component({
     selector: 'order-detail-page',

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { OrdersApiService } from '../../../shared/services/orders-api.service';
+import { OrdersApi } from '../../../shared/services/api';
 
 @Component({
     selector: 'order-detail-logs',
@@ -16,7 +16,7 @@ export class OrderDetailLogsComponent {
         this.error = null;
         this.isLoading = true;
 
-        this.OrdersApiService.fetchLogs(orderItemId, 10, 1)
+        this.OrdersApi.fetchLogs(orderItemId, 10, 1)
         .map(response => response.json())
         .subscribe(response => {
             this.logs.next(response.logs);
@@ -27,7 +27,7 @@ export class OrderDetailLogsComponent {
         });
     }
 
-    constructor(private OrdersApiService: OrdersApiService) {
+    constructor(private OrdersApi: OrdersApi) {
         
     }
 }

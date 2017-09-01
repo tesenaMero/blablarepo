@@ -16,6 +16,7 @@ import localForage = require('localforage');
     styleUrls: ['./orders-table.scss', './orders-table.specific.scss']
 })
 export class OrdersTableComponent {
+    private ORDERS_QTY_KEY = "ORDERS_QTY";
     public compoundConfig = { columns: [] };
     ordersQty: any;
     sortOrder: Object = {};
@@ -35,8 +36,6 @@ export class OrdersTableComponent {
         });
     };
 
-    private ORDERS_QTY_KEY = "ORDERS_QTY";
-
     constructor(private ordersService: OrdersService) {
         localForage.getItem(this.ORDERS_QTY_KEY).then(ordersQty => {
             this.ordersQty = ordersQty;
@@ -52,31 +51,31 @@ export class OrdersTableComponent {
             {
                 key: 'orderRequestId',
                 title: 'Order No',
-                width: 8,
+                width: 10,
                 sortable: true
             },
             {
                 key: 'submitedOn',
                 title: 'Submitted',
-                width: 10,
+                width: 15,
                 sortable: true
             },
             {
                 key: 'pointOfDelivery',
                 title: 'Location',
-                width: 18,
+                width: 25,
                 sortable: true
             },
             {
                 key: 'purchaseOrder',
                 title: 'Purchase Order Number',
-                width: 10,
+                width: 20,
                 sortable: true
             },
             {
                 key: 'businessLine',
                 title: 'Products',
-                width: 8,
+                width: 10,
                 sortable: true
             },
             {
@@ -88,13 +87,13 @@ export class OrdersTableComponent {
             {
                 key: 'requestedOn',
                 title: 'Requested date',
-                width: 16,
+                width: 20,
                 sortable: true
             },
             {
                 key: 'status',
                 title: 'Status',
-                width: 10,
+                width: 18,
                 sortable: true
             },
             {
@@ -104,7 +103,7 @@ export class OrdersTableComponent {
             {
                 key: 'total',
                 title: 'Total amount',
-                width: 10,
+                width: 13,
                 sortable: true
             },
             {

@@ -123,13 +123,18 @@ export class StepperComponent implements AfterContentInit {
     }
 
     private selectStepByIndex(index: number) {
-        let step = this.steps.toArray()[index];
+        let step = this.getStepByIndex(index);
         if (step) { this.selectStep(step); }
 
         if (!this.currentStep.completed)
             this.nextAvailable = false;
         else
             this.nextAvailable = true;
+    }
+
+    private getStepByIndex(index: number) {
+        let step = this.steps.toArray()[index];
+        if (step) { return step; }
     }
 
 }

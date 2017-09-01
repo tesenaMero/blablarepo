@@ -1,7 +1,7 @@
- <button (click)="openModal()" data-toggle="modal" data-target="#search-product" class="button-ghost">Search product</button>
+<button (click)="openModal()" data-toggle="modal" data-target="#search-product" class="button-ghost">Search product</button>
 <div class="specs-content">
     <!-- CEMENT  -->
-     <div class="container prod-card cement" *ngFor="let specification of _cementPackageList">
+    <div class="container prod-card cement" *ngFor="let specification of _cementPackageList">
         <div class="row">
             <div class="col-md-4 description">
                 <div class="form-group">
@@ -15,8 +15,7 @@
                 <div class="form-group">
                     <div class="number-field-wrapper">
                         <label for="number-field">Quantity</label>
-                        <input id="number-field" class="form-control number-control" [(ngModel)]="specification.quantity" type="number" value=""
-                            placeholder="0" min="" max="" />
+                        <input id="number-field" class="form-control number-control" [(ngModel)]="specification.quantity" type="number" value="" placeholder="0" min="1" max="" />
                         <span class="number-field-btn minus-btn">
                             <button type="button">
                                 <svg class="icon-minus-basic">
@@ -86,7 +85,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-md-2 additional-services">
                 <div class="row">
@@ -121,9 +120,9 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 
- 
+
     <!-- READYMIX  -->
     <div class="container prod-card readymix" *ngFor="let specification of _readymix">
         <div class="row">
@@ -139,8 +138,7 @@
                 <div class="form-group">
                     <div class="number-field-wrapper">
                         <label for="number-field">Quantity</label>
-                        <input id="number-field" class="form-control number-control" [(ngModel)]="specification.quantity" type="number" value=""
-                            placeholder="0" min="" max="" />
+                        <input id="number-field" class="form-control number-control" [(ngModel)]="specification.quantity" type="number" value="" placeholder="0" min="" max="" />
                         <span class="number-field-btn minus-btn">
                             <button type="button">
                                 <svg class="icon-minus-basic">
@@ -181,7 +179,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-md-4 productId">
                 <div class="form-group">
@@ -248,7 +246,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-2 transport-method"  *ngIf="isMx">
+            <div class="col-md-2 transport-method" *ngIf="isMx">
                 <div class="form-group">
                     <label for="transportMethod">Transport Method</label>
                     <select id="transportMethod" class="form-control" [ngClass]="{ 'nice-selection': nice }" [(ngModel)]="specification.projectProfile.transportMethod">
@@ -256,7 +254,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-2 unload-type"  *ngIf="isMx">
+            <div class="col-md-2 unload-type" *ngIf="isMx">
                 <div class="form-group">
                     <label for="unloadType">Unload Type</label>
                     <select id="unloadType" class="form-control" [ngClass]="{ 'nice-selection': nice }" [(ngModel)]="specification.projectProfile.unloadType">
@@ -264,7 +262,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-2 pump-capacity-min"  *ngIf="isMx">
+            <div class="col-md-2 pump-capacity-min" *ngIf="isMx">
                 <div class="form-group">
                     <label for="pumpCapacityMin">Pump Capacity Min</label>
                     <select id="pumpCapacityMin" class="form-control" [ngClass]="{ 'nice-selection': nice }" [(ngModel)]="specification.projectProfile.pumpCapacityMin">
@@ -272,7 +270,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-2 pump-capacity-max"  *ngIf="isMx">
+            <div class="col-md-2 pump-capacity-max" *ngIf="isMx">
                 <div class="form-group">
                     <label for="pumpCapacityMax">Pump Capacity Max</label>
                     <select id="pumpCapacityMax" class="form-control" [ngClass]="{ 'nice-selection': nice }" [(ngModel)]="specification.projectProfile.pumpCapacityMax">
@@ -315,5 +313,5 @@
         <div class="action-remove">
             <button cmx-button-link>REMOVE PRODUCT</button>
         </div>
-    </div> 
+    </div>
 </div>

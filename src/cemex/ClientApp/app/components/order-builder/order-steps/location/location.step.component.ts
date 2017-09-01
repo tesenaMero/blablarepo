@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular
 import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
-import { ShipmentLocationApi } from '../../../../shared/api/shipment-locations.api';
+import { ShipmentLocationApi } from '../../../../shared/services/api/shipment-locations.service.api';
 
 @Component({
     selector: 'location-step',
@@ -60,7 +60,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
         // Fetch address
         // Right now not working so wait
-        //this.shipmentApi.address(this.shipmentLocation).subscribe((response) => {});
+        // this.shipmentApi.address(this.location).subscribe((response) => {});
 
         // Fetch pods
         // Right now not working so wait

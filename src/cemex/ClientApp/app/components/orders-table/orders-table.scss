@@ -80,6 +80,9 @@ $table-border-color: #e0e0e0;
                     font-size: 18px;
                     line-height: 24px;
                 }
+                &:focus {
+                    outline: 0;
+                }
             }
         }
     }
@@ -212,6 +215,7 @@ $table-border-color: #e0e0e0;
                     border-radius: 4px;
                     margin-bottom: $table-cell-padding;
                     padding: 20px 13px;
+                    background-color: #fff !important;
                     >td {
                         background-color: $table-bg;
                         display: block;
@@ -222,7 +226,7 @@ $table-border-color: #e0e0e0;
                         &.hide-in-mobile {
                             display: none;
                         }
-                        &.total-col {
+                        &.col-total {
                             display: grid;
                             font-size: 23px;
                             margin-top: 10px;
@@ -357,32 +361,5 @@ $table-border-color: #e0e0e0;
         text-decoration: underline;
         color: #277eaf;
         cursor: pointer;
-    }
-}
-
-.status-ico {
-    width: 24px;
-    height: 16px;
-    display: inline-block;
-    border-radius: 2px;
-    margin-right: 8px;
-    background: #e8ebef;
-    &.statusConfirmed {
-        background: #77cb38;
-    }
-    &.statusCanceled {
-        background: #D6D6D6;
-    }
-    &.statusDraft {
-        background: #D6D6D6;
-    }
-    &.statusPending {
-        background: #FBB03B;
-    }
-    &.statusBlocked {
-        background: #EE3D42;
-    }
-    &.statusCompleted, &.statusProcessed {
-        background: #3FA9F5;
     }
 }

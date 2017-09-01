@@ -5,28 +5,54 @@
     background-color: #333;
     padding: 0px 8px;
     margin-right: 7px;
+    // width: 24px;
+    // height: 16px;
+    // display: inline-block;
+    // border-radius: 2px;
+    // margin-right: 8px;
+    // background: #e8ebef;
+    &.confirmed {
+        background: #77cb38;
+    }
+    &.canceled {
+        background: #D6D6D6;
+    }
+    &.draft {
+        background: #D6D6D6;
+    }
+    &.pending {
+        background: #FBB03B;
+    }
+    &.blocked {
+        background: #EE3D42;
+    }
+    &.completed,
+    &.processed {
+        background: #3FA9F5;
+    }
 }
 
-.status.in-progress {
-    background-color: #A8B6CB;
-}
-
-.status.pending {
-    background-color: #A8B6CB;
-}
-
-.status.complete {
-    background-color: #77CB38;
-}
-
-.status.block {
-    background-color: #FF243F;
-}
-
-.status.draft {
-    background-color: #FF243F;
-}
-
+// .status {
+//     border-radius: 2px;
+//     background-color: #333;
+//     padding: 0px 8px;
+//     margin-right: 7px;
+// }
+// .status.in-progress {
+//     background-color: #A8B6CB;
+// }
+// .status.pending {
+//     background-color: #A8B6CB;
+// }
+// .status.complete {
+//     background-color: #77CB38;
+// }
+// .status.block {
+//     background-color: #FF243F;
+// }
+// .status.draft {
+//     background-color: #FF243F;
+// }
 // Shows status like this: [Completed]
 // .status {
 //     display: flex;
