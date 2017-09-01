@@ -1,3 +1,4 @@
+<!-- Cemex Mexico -->
 <div class="product-container">
     <div class="row">
         <div class="col-md-4 col-sm-12">
@@ -11,7 +12,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 col-sm-12">
+        <div class="col-md-3 col-sm-12 mt-3-md-down">
             <div class="flex-container">
                 <div class="group w70 mr-13">
                     <label for="product-desc">
@@ -39,18 +40,18 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-5 col-sm-12">
+        <div class="col-md-5 col-sm-12 mt-3-md-down">
             <div class="flex-container">
                 <div class="group w50 mr-13">
                     <label for="product-desc">Request date</label>
-                    <div class="input f-space-between">
+                    <div class="input flex-space-between">
                         <span class="value">13.01.2017</span>
                         <span class="icon"><span class="cmx-icon-calendar"></span></span>
                     </div>
                 </div>
                 <div class="group w50">
                     <label for="product-desc">Requested time</label>
-                    <div class="input f-space-between">
+                    <div class="input flex-space-between">
                         <span class="value">15.00 - 16.00</span>
                         <span class="icon"><span class="cmx-icon-clock"></span></span>
                     </div>
@@ -58,4 +59,71 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md 4 mt-3">
+            <div class="group">
+                <label>Product ID</label>
+                <div class="input">
+                    <span>20939302/10292/10102</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 mt-3">
+            <div class="group">
+                <label>Contact</label>
+                <div class="input flex-space-between">
+                    <span class=""><strong>10-20170218903432112212</strong></span>
+                    <span class="">Remaining volume: <strong>180</strong></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mt-3">
+            <div class="group">
+                <label>Payment</label>
+                <div>
+                    <select class="input">
+                        <option value="tons">Credit</option>
+                        <option value="tons">Cash</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 mt-3">
+            <div class="group">
+                <label>Additional services</label>
+                <div class="service">
+                    <input checked type="checkbox" id="maneuvering">
+                    <label for="maneuvering">
+                        <svg class="icon-checkbox-active">
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
+                        </svg>
+                        <svg class="icon-checkbox-static">
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                        </svg>
+                        <svg class="icon-checkbox-hover">
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                        </svg>
+                        <span>Maneuvering</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mt-3">
+            <div class="group">
+                <label>Delivery Mode</label>
+                <div class="service">
+                    <span>Delivery</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mt-3 flex-end">
+            <button class="noborder">Remove product</button>
+        </div>
+    </div>
+</div>
+
+<div class="flex-end mt-3">
+    <button class="button" href="#">+ Add Product</button>
 </div>
