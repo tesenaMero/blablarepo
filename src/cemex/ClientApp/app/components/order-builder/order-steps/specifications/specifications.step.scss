@@ -1,4 +1,40 @@
-.product-container {
+.products {
+    .product {
+        &:not(:first-child) {
+            margin-top: 20px;
+        }
+    }
+}
+
+.enter-animation {
+    animation: enter-animation .5s;
+    transition: transform ease;
+}
+
+@keyframes enter-animation {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.exit-animation {
+    animation: exit-animation .4s;
+    transition: transform ease;
+}
+
+@keyframes exit-animation {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.product {
     border-radius: 3px;
     background-color: #FFFFFF;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07);

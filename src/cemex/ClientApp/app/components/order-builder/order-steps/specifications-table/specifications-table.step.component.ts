@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ETypeProduct, CementPackageSpecification, ReadymixSpecification } from '../../../../models'
-import { ProductsApi } from '../../../../shared/api'
 
 @Component({
     selector: 'specifications-table',

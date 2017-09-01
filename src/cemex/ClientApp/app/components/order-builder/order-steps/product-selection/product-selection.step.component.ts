@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ProductLineApi } from '../../../../shared/api'
+import { ProductLineApi } from '../../../../shared/services/api'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 
 @Component({
