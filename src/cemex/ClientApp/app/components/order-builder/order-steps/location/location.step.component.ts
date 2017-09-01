@@ -51,8 +51,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         searchPlaceholder: 'Find',
         searchEmptyResult: 'Nothing found...',
         searchNoRenderText: 'Type in search box to see results...',
-        defaultTitle: 'Select',
-        allSelected: 'All selected',
+        defaultTitle: 'Select existing POD',
     };
 
     // Labels / Parents

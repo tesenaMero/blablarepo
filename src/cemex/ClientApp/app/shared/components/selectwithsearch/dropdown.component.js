@@ -412,4 +412,3 @@ MultiselectDropdown.propDecorators = {
     'onFilter': [{ type: Output },],
     'onClick': [{ type: HostListener, args: ['document: click', ['$event.target'],] },],
 };
-//# sourceMappingURL=dropdown.component.js.map
