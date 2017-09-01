@@ -1,0 +1,18 @@
+<div *ngIf="isLoading">
+    <p>Loading...</p>
+</div>
+<div *ngIf="!isLoading && comments.length == 0">
+    <p>No comments found</p>
+</div>
+<div class="cards" *ngIf="!isLoading && comments.length > 0">
+    <div class="card" *ngFor="let comment of comments">
+        <div class="row justify-content-start from">
+            <div class="name col-auto"><strong *ngIf="!comment.isCustomer">CEMEX</strong> {{comment.fullName}}</div>
+            <div class="divider"></div>
+            <div class="date col-auto">{{comment.createdDateTime}}</div>
+        </div>
+        <div class="comment-text">
+            <p>{{comment.commentDesc}}</p>
+        </div>
+    </div>
+</div>
