@@ -51,28 +51,5 @@ export class ProjectProfilesComponent {
                 { inner: "DELETE", class: "action-button" },
             ]);
         });
-
-        // this.rows = [
-        //     [ 
-        //         { inner: "My First Project Profile" }, 
-        //         { inner: "20 min" },
-        //         { inner: "Truck" },
-        //         { inner: "Pump" },
-        //         { inner: "Yes" },
-        //         { inner: "Extra hourts, Sundaly / Holiday" },
-        //         { inner: "EDIT", class: "action-button" },
-        //         { inner: "DELETE", class: "action-button" },
-        //     ],
-        //     [ 
-        //         { inner: "My Second Project Profile" }, 
-        //         { inner: "20 min" },
-        //         { inner: "Truck" },
-        //         { inner: "Pump" },
-        //         { inner: "No" },
-        //         { inner: "Extra hourts, Sundaly / Holiday" },
-        //         { inner: "EDIT", class: "action-button" },
-        //         { inner: "DELETE", class: "action-button" },
-        //     ]
-        // ]
     }
 }
