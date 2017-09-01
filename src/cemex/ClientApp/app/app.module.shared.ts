@@ -21,12 +21,12 @@ import { NewProjectProfile } from './components/new-project-profile/new-project-
 import { OrderDetailComponent } from './components/order-detail/order-detail.component'
 import { CartComponent } from './components/cart/cart.component';
 import { OrderBuilderComponent } from './components/order-builder/order-builder.component'
+import { SummaryStepComponent } from './components/order-builder/order-steps/summary/summary.step.component';
 import { 
     LocationStepComponent, 
     ProductSelectionStepComponent, 
     SpecificationsTableStepComponent, 
     ModeStepComponent,
-    SummaryStepComponent
 }  from './components/order-builder/order-steps'
 import { SearchProductComponent } from './components/search-product/search-product.component';
 
@@ -55,6 +55,8 @@ import { ProjectProfileApiService } from './shared/services/project-profile-api.
 import { ContractsApiService } from './shared/services/contracts-api.service';
 import { JobsiteApiService } from './shared/services/jobsites-api.service';
 import { NguiDatetimePickerModule } from './shared/components/datetimepicker';
+import { OrderRequestHelper } from './utils/order-request.helper';
+import { OrdersModel } from './shared/schema';
 
 // Api
 import { Api, ProductLineApi, ShipmentLocationApi } from './shared/api'
@@ -86,9 +88,9 @@ export const sharedConfig: NgModule = {
         ProductSelectionStepComponent,
         SpecificationsTableStepComponent,
         ModeStepComponent,
-        SummaryStepComponent,
         ProjectProfileCreatorComponent,
         SearchProductComponent,
+        SummaryStepComponent,
 
         // Shared
         PaginationComponent,
@@ -131,8 +133,10 @@ export const sharedConfig: NgModule = {
         ProjectProfileApiService,
         ContractsApiService,
         JobsiteApiService,
+        OrderRequestHelper,
+        OrdersModel,
         Api,
         ProductLineApi,
-        ShipmentLocationApi
+        ShipmentLocationApi,
     ]
 };
