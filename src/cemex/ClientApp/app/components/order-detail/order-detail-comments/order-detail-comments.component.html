@@ -1,0 +1,26 @@
+<div *ngIf="isLoading">
+    <div class="card">
+        <p>Loading...</p>
+    </div>
+</div>
+<div *ngIf="!isLoading && comments.length == 0">
+    <div class="card">
+        <p>No comments found</p>
+    </div>
+</div>
+<div class="cards" *ngIf="!isLoading && comments.length > 0">
+    <div class="card" *ngFor="let comment of comments">
+        <div class="row justify-content-start from">
+            <div class="name col-auto"><strong *ngIf="!comment.isCustomer">CEMEX</strong> {{comment.fullName}}</div>
+            <div class="divider"></div>
+            <div class="date col-auto">{{comment.createdDateTime}}</div>
+        </div>
+        <div class="comment-text">
+            <p>{{comment.commentDesc}}</p>
+        </div>
+    </div>
+</div>
+<form (ngSubmit)="onSubmit()" class="send-comment">
+    <input type="text" class="form-control transparent-input" placeholder="Start Typing Here" [value]="newMessage" (input)="newMessage = $event.target.value" />
+    <cemex-action-button title="send" color="ornage" isLink="true" class="submit-btn"></cemex-action-button>
+</form>
