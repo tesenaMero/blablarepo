@@ -27,6 +27,7 @@ export class CreateOrderService {
         public user: types.User;
         public items: types.Items;
         public loads: types.Loads;
+        public productLine: any;
 
     constructor() {
         this.initializeOrder();
@@ -50,7 +51,7 @@ export class CreateOrderService {
         jobsite?: types.Jobsite,
         pointOfDelivery?: types.PointOfDelivery,
         instructions?: string,
-        contact?: types.Contact,
+        contact?: any,
         user?: types.User,
         items?: types.Items,
         loads?: types.Loads,
@@ -98,6 +99,10 @@ export class CreateOrderService {
 
     selectContact(contact: types.Contact) {
         this.contact = contact;
+    }
+
+    selectProductLine(productLine: any) {
+        this.productLine = productLine;
     }
 
     resetOrder() {

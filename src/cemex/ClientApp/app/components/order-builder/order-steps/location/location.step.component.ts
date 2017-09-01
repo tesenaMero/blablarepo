@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
-
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
+import { ShipmentLocationApi } from '../../../../shared/api/shipment-locations.api';
 
 @Component({
     selector: 'location-step',
@@ -15,14 +15,32 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     @Output() onCompleted = new EventEmitter<any>();
 
     private isMapLoaded: boolean = false;
+    private map: any; // Map instance
 
-    map: any; // Map instance
+    // Selected data
+    private location: any = "";
+    private contact: any = "";
+
+    // Mapped data
+    locations = [];
+    contacts = [];
+    
+    // H4x0R
+    nice: boolean;
     jobsite: any;
-    nice: boolean = false;
-    model = this.createOrder
 
-    constructor( @Inject(Step) private step: Step, public createOrder: CreateOrderService) {
+    validationModel = {
+        purchaseOrder: true,
+    }
+
+    constructor(@Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi) {
         this.step.setEventsListener(this);
+    }
+
+    ngOnInit() {
+        this.shipmentApi.all().subscribe((response) => {
+            this.locations = response.json().shipmentLocations;
+        });
     }
 
     onShowed() {
@@ -36,23 +54,47 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         }
     }
 
-    jobsiteSelected(event: any) {
-        this.createOrder.selectJobsite({ jobsiteId: 1 });
+    jobsiteChanged() {
         this.nice = true;
-        this.onCompleted.emit(event);
+        this.orderManager.selectJobsite(this.location);
+
+        // Fetch address
+        // Right now not working so wait
+        //this.shipmentApi.address(this.shipmentLocation).subscribe((response) => {});
+
+        // Fetch pods
+        // Right now not working so wait
+        // this.shipmentApi.pods(this.location).subscribe((response) => {
+        //     console.log(response.json())
+        // });
+
+        // Fetch contacts
+        this.shipmentApi.contacts(this.location).subscribe((response => {
+            this.contacts = response.json().contacts;
+        }));
+        
+        if(this.validateFormElements(event)) {
+            this.onCompleted.emit(event);
+        }
     }
+
+
 
     pointOfDeliverySelected(event: any) {
-        this.createOrder.selectPointOfDelivery({ pointOfDeliveryId: 1 });
+        this.orderManager.selectPointOfDelivery({ pointOfDeliveryId: 1 });
         this.nice = true;
-        this.onCompleted.emit(event);
+        if(this.validateFormElements(event)) {
+            this.onCompleted.emit(event);
+        }
     }
 
-    contactSelected(event: any) {
-        this.createOrder.selectContact({ contactName: 'demo', contactPhone: '777888999' });
+    contactChanged() {
+        this.orderManager.selectContact(this.contact);
     }
 
-    ngOnInit() {
+    validateFormElements(e, key?: string) {
+        this.validationModel[key] = Boolean(e.target.value.length);
+        return e.target.value.length;
     }
 
 }

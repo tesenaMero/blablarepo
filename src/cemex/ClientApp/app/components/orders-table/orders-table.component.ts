@@ -13,39 +13,26 @@ export class OrdersTableComponent {
     @Input() orders: OrderRequest[];
     @Input() isLoading: boolean;
 
+    private ORDERS_QTY_KEY = "ORDERS_QTY"
+
     ordersQty;
 
-    columns = [
-        { inner: '<i class="star cmx-icon-favourite-active" aria-hidden="true"></i>', width: 5 },
-        { inner: "Order No", width: 10 },
-        { inner: "Submitted", width: 15 },
-        { inner: "Location", width: 20 },
-        { inner: "Purchase Order Number", width: 20 },
-        { inner: "Products", width: 10 },
-        { inner: "Amount", width: 10 },
-        { inner: "Requested date", width: 20 },
-        { inner: "Status", width: 13 },
-        { inner: "otal amount", width: 13 },
-        { inner: "", width: 5 },
-    ]
-
-    constructor(private OrdersService: OrdersService) {
-        localForage.getItem('ordersQty').then(ordersQty => {
+    constructor(private ordersService: OrdersService) {
+        localForage.getItem(this.ORDERS_QTY_KEY).then(ordersQty => {
             this.ordersQty = ordersQty;
         });
     }
 
     ngOnChanges() {
         if (this.orders && this.orders.length > 0) {
-            localForage.setItem('ordersQty', this.orders.length);
+            localForage.setItem(this.ORDERS_QTY_KEY, this.orders.length);
         }
     }
 
-    changePage(page) {
-    }
+    changePage(page) { }
 
     favorite(orderRequestId, isFavorite) {
-        this.OrdersService.favoriteOrder(orderRequestId, isFavorite);
+        this.ordersService.favoriteOrder(orderRequestId, isFavorite);
     }
 
     makeLocation(order): string {

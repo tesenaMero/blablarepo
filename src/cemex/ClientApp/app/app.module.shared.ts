@@ -56,6 +56,9 @@ import { ContractsApiService } from './shared/services/contracts-api.service';
 import { JobsiteApiService } from './shared/services/jobsites-api.service';
 import { NguiDatetimePickerModule } from './shared/components/datetimepicker';
 
+// Api
+import { Api, ProductLineApi, ShipmentLocationApi } from './shared/api'
+
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
     declarations: [
@@ -127,6 +130,9 @@ export const sharedConfig: NgModule = {
         LoginApiService,
         ProjectProfileApiService,
         ContractsApiService,
-        JobsiteApiService
+        JobsiteApiService,
+        Api,
+        ProductLineApi,
+        ShipmentLocationApi
     ]
 };

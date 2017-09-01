@@ -6,8 +6,8 @@ import { WindowRef } from './window-ref.service';
 
 @Injectable()
 export class ApiService {
-    public apiRoot = this.winRef['API_HOST'] || 'https://api.us.apiconnect.ibmcloud.com/cnx-gbl-apiconnect-org-development/dev';
-    public clientId = this.winRef['CLIENT_ID'] || 'e2824d38-9871-4d41-9d36-466993d97ee5';
+    public apiRoot = this.winRef['API_HOST'] || 'https://api.us2.apiconnect.ibmcloud.com/cnx-gbl-org-development/dev';
+    public clientId = this.winRef['CLIENT_ID'] || 'dd2ee55f-c93c-4c1b-b852-58c18cc7c277';
     private appId = 'DCMWebTool_App';
     private acceptLanguage = 'en-US';
     private jwt = null;
