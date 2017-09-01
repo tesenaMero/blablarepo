@@ -4,8 +4,8 @@ import { CreateOrderService } from '../../../../shared/services/create-order.ser
 
 @Component({
     selector: 'product-selection-step',
-    templateUrl: './product-selection.html',
-    styleUrls: ['./product-selection.scss'],
+    templateUrl: './product-selection.step.html',
+    styleUrls: ['./product-selection.step.scss'],
     host: {'class': 'w-100' }
 })
 export class ProductSelectionStepComponent {

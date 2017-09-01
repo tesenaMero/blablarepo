@@ -16,7 +16,6 @@
         "@angular/platform-browser-dynamic": "4.3.2",
         "@angular/platform-server": "4.3.2",
         "@angular/router": "4.3.2",
-        "@cemex/cmx-button-v1": "^1.0.0",
         "@types/googlemaps": "^3.26.17",
         "@types/node": "8.0.17",
         "angular2-template-loader": "0.6.2",

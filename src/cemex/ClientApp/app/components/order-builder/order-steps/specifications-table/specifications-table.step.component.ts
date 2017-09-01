@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ETypeProduct, CementPackageSpecification, ReadymixSpecification } from '../../../../models/index'
+import { ETypeProduct, CementPackageSpecification, ReadymixSpecification } from '../../../../models'
+import { ProductsApi } from '../../../../shared/api'
 
 @Component({
     selector: 'specifications-table',
@@ -8,9 +9,7 @@ import { ETypeProduct, CementPackageSpecification, ReadymixSpecification } from 
     host: { 'class': 'w-100' }
 })
 export class SpecificationsTableStepComponent implements OnInit {
-
-    @Input()
-    typeProduct:ETypeProduct;
+    @Input() typeProduct:ETypeProduct;
     
     _cementPackageList:CementPackageSpecification[] = [];
     _readymix:ReadymixSpecification[] = [];

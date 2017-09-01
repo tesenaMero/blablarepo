@@ -1,15 +1,15 @@
 <stepper finishText="Add to cart">
-    <step [automatic]="true" [showControls]="false" [showExit]="true" [inLine]="false" title="Delivery mode">
-        <mode-step (onCompleted)="modeStepCompleted(mode)"></mode-step>
-    </step>
-    <step [automatic]="true" title="Product line">
+    <!-- <step [automatic]="true" title="Product line" [showExit]="true" [showControls]="false">
         <product-selection-step (onCompleted)="productStepCompleted(product)"></product-selection-step>
+    </step>
+    <step [automatic]="true" [showControls]="true" [showExit]="false" [inLine]="false" title="Delivery mode">
+        <mode-step (onCompleted)="modeStepCompleted(mode)"></mode-step>
+    </step> -->
+    <step (onShowed)="specificationsStepShowed()" title="Specifications">
+        <specifications-step></specifications-step>
     </step>
     <step title="Delivery mode">
         <location-step (onCompleted)="locationStepCompleted()"></location-step>
-    </step>
-    <step (onShowed)="specificationsStepShowed()" title="Specifications">
-        <specifications-table></specifications-table>
     </step>
     <step title="Summary">
         <summary-step (onCompleted)="summaryStepCompleted()"></summary-step>

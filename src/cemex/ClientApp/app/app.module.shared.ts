@@ -4,9 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 
-// Cemex components
-import { CmxButtonModule } from '@cemex/cmx-button-v1/dist';
-
 // Components
 import { AppComponent } from './components/app/app.component'
 import { DashboardComponent } from './components/dashboard/dashboard.component'
@@ -24,7 +21,7 @@ import { OrderBuilderComponent } from './components/order-builder/order-builder.
 import { 
     LocationStepComponent, 
     ProductSelectionStepComponent, 
-    SpecificationsTableStepComponent, 
+    SpecificationsStepComponent, 
     ModeStepComponent,
     SummaryStepComponent
 }  from './components/order-builder/order-steps'
@@ -57,7 +54,12 @@ import { JobsiteApiService } from './shared/services/jobsites-api.service';
 import { NguiDatetimePickerModule } from './shared/components/datetimepicker';
 
 // Api
-import { Api, ProductLineApi, ShipmentLocationApi } from './shared/api'
+import { Api, 
+    ProductLineApi, 
+    ShipmentLocationApi, 
+    OrdersApi, 
+    ProductsApi 
+} from './shared/api'
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
@@ -84,7 +86,7 @@ export const sharedConfig: NgModule = {
         OrderBuilderComponent,
         LocationStepComponent,
         ProductSelectionStepComponent,
-        SpecificationsTableStepComponent,
+        SpecificationsStepComponent,
         ModeStepComponent,
         SummaryStepComponent,
         ProjectProfileCreatorComponent,
@@ -100,7 +102,6 @@ export const sharedConfig: NgModule = {
         DLSTableComponent
     ],
     imports: [
-        CmxButtonModule,
         NguiDatetimePickerModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full' },
@@ -133,6 +134,8 @@ export const sharedConfig: NgModule = {
         JobsiteApiService,
         Api,
         ProductLineApi,
-        ShipmentLocationApi
+        ShipmentLocationApi,
+        OrdersApi,
+        ProductsApi
     ]
 };
