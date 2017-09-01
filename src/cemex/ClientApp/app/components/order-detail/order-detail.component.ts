@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { OrdersApiService } from '../../shared/services/orders-api.service';
+import { OrderDetailApi } from '../../shared/api/order-detail';
 
 @Component({
     selector: 'order-detail-page',
@@ -9,10 +9,13 @@ import { OrdersApiService } from '../../shared/services/orders-api.service';
         '../order-builder/order-steps/summary/summary.step.scss'
     ]
 })
-export class OrderDetailComponent {    
-    constructor(private ordersApi: OrdersApiService) {
-        ordersApi.byId(41).subscribe((response) => {
+export class OrderDetailComponent {   
+    orderDetailData: any;
+
+    constructor(private orderDetailApi: OrderDetailApi) {
+        orderDetailApi.byId(1).subscribe((response) => {
             console.log(response);
+            this.orderDetailData = response;
         });
     }
 }
