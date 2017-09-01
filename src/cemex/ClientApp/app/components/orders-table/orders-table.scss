@@ -363,31 +363,3 @@ $table-border-color: #e0e0e0;
         cursor: pointer;
     }
 }
-
-.status-ico {
-    width: 24px;
-    height: 16px;
-    display: inline-block;
-    border-radius: 2px;
-    margin-right: 8px;
-    background: #e8ebef;
-    &.statusConfirmed {
-        background: #77cb38;
-    }
-    &.statusCanceled {
-        background: #D6D6D6;
-    }
-    &.statusDraft {
-        background: #D6D6D6;
-    }
-    &.statusPending {
-        background: #FBB03B;
-    }
-    &.statusBlocked {
-        background: #EE3D42;
-    }
-    &.statusCompleted,
-    &.statusProcessed {
-        background: #3FA9F5;
-    }
-}
