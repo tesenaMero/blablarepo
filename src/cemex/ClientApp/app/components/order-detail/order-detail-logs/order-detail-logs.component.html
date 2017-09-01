@@ -1,0 +1,19 @@
+<div *ngIf="isLoading">
+    <p>Loading...</p>
+</div>
+<div *ngIf="!isLoading && logs.length == 0">
+    <p>No logs found</p>
+</div>
+<div class="cards" *ngIf="!isLoading && logs.length > 0">
+    <div class="card" *ngFor="let log of logs">
+        <div class="row justify-content-start from">
+            <div class="name col-auto">{{log.username}}</div>
+            <div class="divider"></div>
+            <div class="date col-auto">{{log.datetime}}</div>
+        </div>
+        <div class="comment-text">
+            <p>TODO</p>
+        </div>
+    </div>
+</div>
+
