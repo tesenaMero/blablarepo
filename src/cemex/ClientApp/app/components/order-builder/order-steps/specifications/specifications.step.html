@@ -9,36 +9,44 @@
                     <label for="product-desc">
                         Product description
                     </label>
-                    <div class="input product-selection">
-                        <span class="selection">Cement - SCAH - CHM89</span>
+                    <div class="input product-selection dropdown">
+                        <span class="selection">
+                            {{ product.product.name }}
+                            <select style="width: calc(100% - 80px);" [(ngModel)]="product.product" class="input behind">
+                                <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p.name  }}</option>
+                            </select>
+                        </span>
                         <span class="action" data-toggle="modal" data-target="#search-product">Change</span>
                     </div>
                 </div>
             </div>
             <div class="col-md-3 col-sm-12 mt-3-md-down">
                 <div class="flex-container">
-                    <div class="group w70 mr-13">
+                    <div class="group w60 mr-13">
                         <label for="product-desc">
                             Quantity
                         </label>
                         <div class="noselect input number-stepper">
-                            <span (click)="qty(product, -1)" class="minus control">-</span>
+                            <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
                             <span class="value">{{ product.quantity }}</span>
-                            <span (click)="qty(product, 1)" class="plus control">+</span>
+                            <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                         </div>
                         <div class="info">
                             Maximum Capacity 100 tons
                         </div>
                     </div>
-                    <div class="group w30">
+                    <div class="group w40">
                         <label for="product-desc">
                             Unit
                         </label>
-                        <div>
-                            <select class="input">
-                                <option value="tons">tons</option>
-                                <option value="tons">m³</option>
-                            </select>
+                        <div class="input flex-space-between dropdown">
+                            <span>
+                                {{ product.unit?.name }}
+                                <select [(ngModel)]="product.unit" class="input behind">
+                                    <option *ngFor="let unit of availableUnits" [ngValue]="unit">{{ unit.name  }}</option>
+                                </select>
+                            </span>
+                            <span class="arrow cmx-icon-straight-arrow-down"></span>
                         </div>
                     </div>
                 </div>
@@ -46,28 +54,28 @@
             <div class="col-md-5 col-sm-12 mt-3-md-down">
                 <div class="flex-container">
                     <div class="group w50 mr-13">
-                        <label for="product-desc">Request date</label>
-                        <div class="input flex-space-between nopadding">
-                            <span class="hidden-md-down value">
-                                <input id="date{{ index }}" class="clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" />
+                        <label>Request date</label>
+                        <label for="date{{ index }}" class="input flex-space-between nopadding">
+                            <span class="mb-0 value">
+                                {{ product.date | date:'dd.MM.y' }}
+                                <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" />
                             </span>
-                            <span class="hidden-md-up value">{{ product.date }}</span>
-                            <label class="mb-0" for="date{{ index }}">
+                            <span class="mb-0">
                                 <span class="icon"><span class="cmx-icon-calendar"></span></span>
-                            </label>
-                        </div>
+                            </span>
+                        </label>
                     </div>
                     <div class="group w50">
-                        <label for="product-desc">Requested time</label>
-                        <div class="input flex-space-between nopadding">
-                            <span class="hidden-md-down value">
-                                <input id="time{{ index }}" class="clean-input" type="text" readonly [(ngModel)]="product.time" ngui-datetime-picker time-only="true" right-side="true" [close-on-select]="false" hour="0" minute="0" />
+                        <label>Requested time</label>
+                        <label for="time{{ index }}" class="input flex-space-between nopadding">
+                            <span class="mb-0 value">
+                                {{ product.time }}
+                                <input id="time{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.time" ngui-datetime-picker time-only="true" right-side="true" [close-on-select]="false" hour="0" minute="0" />
                             </span>
-                            <span class="hidden-md-up value">{{ product.time }}</span>
-                            <label class="mb-0" for="time{{ index }}">
+                            <span class="mb-0">
                                 <span class="icon"><span class="cmx-icon-clock"></span></span>
-                            </label>
-                        </div>
+                            </span>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -84,21 +92,34 @@
             <div class="col-md-5 mt-3">
                 <div class="group">
                     <label>Contract</label>
-                    <div class="input flex-space-between">
-                        <span class=""><strong>10-20170218903432112212</strong></span>
-                        <span class="">Remaining volume: <strong>180</strong></span>
+                    <div class="input contract dropdown flex-space-between">
+                        <span class=""><strong>{{ product.contract?.name }}</strong></span>
+                        <span class="volume">Remaining volume: <strong>{{ product.contract?.volume }}</strong></span>
+                        <span class="arrow cmx-icon-straight-arrow-down"></span>
+                        <select [(ngModel)]="product.contract" class="input behind">
+                            <option *ngFor="let contract of availableContracts; let first = first;" [ngValue]="contract">{{ contract.name }} &nbsp;&nbsp;&nbsp;&nbsp;  Volume: {{ contract.volume }} </option>
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="col-md-3 mt-3">
                 <div class="group">
                     <label>Payment</label>
-                    <div>
+                    <div class="input flex-space-between dropdown">
+                        <span>
+                            {{ product.payment?.name }}
+                            <select [(ngModel)]="product.payment" class="input behind">
+                                <option selected *ngFor="let payment of availablePayments" [ngValue]="payment">{{ payment.name }}</option>
+                            </select>
+                        </span>
+                        <span class="arrow cmx-icon-straight-arrow-down"></span>
+                    </div>
+                    <!-- <div>
                         <select class="input">
                             <option value="tons">Credit</option>
                             <option value="tons">Cash</option>
                         </select>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
