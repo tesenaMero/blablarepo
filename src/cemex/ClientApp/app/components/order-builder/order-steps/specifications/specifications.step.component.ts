@@ -48,6 +48,15 @@ export class SpecificationsStepComponent {
         return SpecificationsStepComponent.availableProducts;
     }
 
+    static availablePlants = [
+        { name: "Cemex, Mladá Boleslav, Palackeho 50, Mladá Boleslav II, Czechia" },
+        { name: "Cemex, Monterrey Mex, La arrolladora, El komander, Fierro" },
+    ];
+
+    get availablePlants() {
+        return SpecificationsStepComponent.availablePlants;
+    }
+
     constructor(private api: ProductsApi) { 
         this.products.push(new PreProduct());
         this.api.top({shipmentLocationId: 1058}).subscribe((result) => {
@@ -84,11 +93,13 @@ class PreProduct {
     payment: any;
     contract: any;
     product: any;
+    plant: any;
     constructor() {
         let _ = SpecificationsStepComponent;
         this.contract = _.availableContracts[0];
         this.unit = _.availableUnits[0];
         this.payment = _.availablePayments[0];
         this.product = _.availableProducts[0];
+        this.plant = _.availablePlants[0];
     }
 }
