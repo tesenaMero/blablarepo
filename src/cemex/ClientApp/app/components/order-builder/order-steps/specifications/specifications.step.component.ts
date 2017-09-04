@@ -94,6 +94,7 @@ class PreProduct {
     contract: any;
     product: any;
     plant: any;
+    projectProfile: any;
     constructor() {
         let _ = SpecificationsStepComponent;
         this.contract = _.availableContracts[0];

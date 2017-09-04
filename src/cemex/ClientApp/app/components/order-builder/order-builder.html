@@ -1,5 +1,5 @@
 <stepper finishText="Add to cart">
-    <!-- <step [automatic]="true" title="Product line" [showExit]="true" [showControls]="false">
+    <step [automatic]="true" title="Product line" [showExit]="true" [showControls]="false">
         <product-selection-step (onCompleted)="productStepCompleted($event)"></product-selection-step>
     </step>
     <step *ngIf="!isReadyMix" [automatic]="true" [showControls]="true" [showExit]="false" [inLine]="false" title="Delivery mode">
@@ -7,7 +7,7 @@
     </step>
     <step title="Delivery mode">
         <location-step (onCompleted)="locationStepCompleted()"></location-step>
-    </step> -->
+    </step>
     <step (onShowed)="specificationsStepShowed()" title="Specifications">
         <specifications-step></specifications-step>
     </step>

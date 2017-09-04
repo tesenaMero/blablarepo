@@ -61,8 +61,12 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         // Fetch address
         // Right now not working so wait
         // this.shipmentApi.address(this.location).subscribe((response) => {
-        //     console.log(response.json());
+        //     let address = response.json();
         // });
+
+        this.shipmentApi.jobsiteGeo(this.location).subscribe((response) => {
+            console.log("geo", response.json());
+        });
 
         // Fetch pods
         // Right now not working so wait
