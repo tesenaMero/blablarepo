@@ -10,20 +10,12 @@
         "@angular/common": "4.3.2",
         "@angular/compiler": "4.3.2",
         "@angular/core": "4.3.2",
-<<<<<<< HEAD
-        "@angular/flex-layout": "angular/flex-layout-builds",
-=======
->>>>>>> development
         "@angular/forms": "4.3.2",
         "@angular/http": "4.3.2",
         "@angular/platform-browser": "4.3.2",
         "@angular/platform-browser-dynamic": "4.3.2",
         "@angular/platform-server": "4.3.2",
         "@angular/router": "4.3.2",
-<<<<<<< HEAD
-        "@cemex/cmx-button-v1": "^1.0.0",
-=======
->>>>>>> development
         "@types/googlemaps": "^3.26.17",
         "@types/node": "8.0.17",
         "angular2-template-loader": "0.6.2",
