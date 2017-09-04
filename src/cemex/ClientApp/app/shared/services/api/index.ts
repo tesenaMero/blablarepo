@@ -7,6 +7,9 @@ import { ProjectProfileApi } from './project-profile.service';
 import { ContractsApi } from './contracts.service';
 import { JobsiteApi } from './jobsite.service';
 import { ProductsApi } from './products.service'
+import { ShippingConditionApi } from './shipping-condition.service';
+import { LegalEntitiesApi } from './legal-entities.service';
+
 export {
     ShipmentLocationApi,
     ProductLineApi,
@@ -16,5 +19,7 @@ export {
     ProjectProfileApi,
     ContractsApi,
     JobsiteApi,
-    ProductsApi
+    ProductsApi,
+    LegalEntitiesApi,
+    ShippingConditionApi
 }
