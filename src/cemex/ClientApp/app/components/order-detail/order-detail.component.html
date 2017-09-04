@@ -3,8 +3,10 @@
         <breadcrumbs-item link="../orders">Orders</breadcrumbs-item>
         <breadcrumbs-item>Detail</breadcrumbs-item>
     </breadcrumbs>
-
-    <div class="row">
+    <div *ngIf="!orderDetailData">
+        <p>No orders found</p>
+    </div>
+    <div class="row" *ngIf="orderDetailData">
         <div class="col-md-7">
             <div class="d-flex align-content-start flex-wrap mb-3">
                 <div class="title-container">
@@ -12,7 +14,8 @@
                 </div>
                 <div class="request-date align-self-center">
                     <span class="title">Request date:</span>
-                    <span class="value">{{orderDetailData.requestedDateTime}}</span>
+                    <span class="value">{{orderDetailData.requestedDateTime | date :  "dd/MM/yyyy, hh:mm"}}</span>
+                    <!-- <span class="value">31/12/2017, 15:00 - 16:00</span> -->
                 </div>
             </div>
         </div>
@@ -23,7 +26,7 @@
         </div>
     </div>
 
-    <div class="location">
+    <div class="location" *ngIf="orderDetailData">
         <div class="row">
             <div class="col-md-5">
                 <div class="group">
@@ -72,7 +75,7 @@
         </div>
     </div>
 
-    <div class="nav-tab-container">
+    <div class="nav-tab-container"  *ngIf="orderDetailData">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#products" role="tab">Products</a>
@@ -87,7 +90,7 @@
     </div>
 
     <!-- Tab panes -->
-    <div class="tab-content">
+    <div class="tab-content"  *ngIf="orderDetailData">
         <div class="tab-pane fade show active" id="products" role="tabpanel">
             <div class="products-container">
                 <div class="card-container product" id="products-id">

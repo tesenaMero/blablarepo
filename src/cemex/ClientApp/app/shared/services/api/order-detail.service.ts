@@ -10,8 +10,7 @@ export class OrderDetailApi {
     }
 
     byId(orderId: number): Observable<Response> {
-        // return this.api.get("/v2/sm/orders/" + orderId + "?orderType=SLS");
-        return this.api.get("/v2/sm/orders/1979?orderType=SLS");//test
+        return this.api.get("/v2/sm/orders/" + orderId + "?orderType=SLS");
     }
 
 }
