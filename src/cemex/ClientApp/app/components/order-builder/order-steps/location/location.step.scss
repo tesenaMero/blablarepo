@@ -102,3 +102,15 @@ input {
         border: 1px solid #EE3D41;
     }
 }
+
+.form-field {
+    svg {
+        vertical-align: top;
+    }
+    label {
+        margin-bottom: 0;
+    }
+    & + .form-field {
+        margin-top: 0.5rem;
+    }
+}
