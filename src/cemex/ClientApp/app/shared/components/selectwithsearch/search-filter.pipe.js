@@ -82,4 +82,3 @@ MultiSelectSearchFilter.decorators = [
 ];
 /** @nocollapse */
 MultiSelectSearchFilter.ctorParameters = function () { return []; };
-//# sourceMappingURL=search-filter.pipe.js.map

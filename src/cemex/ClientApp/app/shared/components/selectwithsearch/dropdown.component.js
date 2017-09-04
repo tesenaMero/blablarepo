@@ -137,11 +137,11 @@ var MultiselectDropdown = (function () {
         this.filterControl.valueChanges
             .takeUntil(this.destroyed$)
             .subscribe(function () {
-            this.updateRenderItems();
-            if (this.settings.isLazyLoad) {
-                this.load();
-            }
-        }.bind(this));
+                this.updateRenderItems();
+                if (this.settings.isLazyLoad) {
+                    this.load();
+                }
+            }.bind(this));
     };
     MultiselectDropdown.prototype.ngOnChanges = function (changes) {
         if (changes['options']) {
@@ -294,8 +294,8 @@ var MultiselectDropdown = (function () {
         else if (this.settings.dynamicTitleMaxItems && this.settings.dynamicTitleMaxItems >= this.numSelected) {
             this.title = this.options
                 .filter(function (option) {
-                return _this.model.indexOf(option.id) > -1;
-            })
+                    return _this.model.indexOf(option.id) > -1;
+                })
                 .map(function (option) { return option.name; })
                 .join(', ');
         }
@@ -313,12 +313,12 @@ var MultiselectDropdown = (function () {
         if (!this.disabledSelection) {
             var checkedOptions = (!this.searchFilterApplied() ? this.options : this.filteredOptions)
                 .filter(function (option) {
-                if (_this.model.indexOf(option.id) === -1) {
-                    _this.onAdded.emit(option.id);
-                    return true;
-                }
-                return false;
-            }).map(function (option) { return option.id; });
+                    if (_this.model.indexOf(option.id) === -1) {
+                        _this.onAdded.emit(option.id);
+                        return true;
+                    }
+                    return false;
+                }).map(function (option) { return option.id; });
             this.model = this.model.concat(checkedOptions);
             this.onModelChange(this.model);
             this.onModelTouched();
@@ -383,20 +383,24 @@ var MultiselectDropdown = (function () {
 }());
 export { MultiselectDropdown };
 MultiselectDropdown.decorators = [
-    { type: Component, args: [{
-                selector: 'ss-multiselect-dropdown',
-                template: '<div class="dropdown" [ngClass]="settings.containerClasses" [class.open]="isVisible"><button type="button" class="dropdown-toggle" [ngClass]="settings.buttonClasses" (click)="toggleDropdown()" [disabled]="disabled">{{ title }}<span class="caret"></span></button><ul #scroller *ngIf="isVisible" class="dropdown-menu" (scroll)="settings.isLazyLoad ? checkScrollPosition($event) : null" (wheel)="settings.stopScrollPropagation ? checkScrollPropagation($event, scroller) : null" [class.pull-right]="settings.pullRight" [class.dropdown-menu-right]="settings.pullRight" [style.max-height]="settings.maxHeight" style="display: block; height: auto; overflow-y: auto"><li class="dropdown-item search" *ngIf="settings.enableSearch"><div class="input-group input-group-sm"><span class="input-group-addon" id="sizing-addon3"><i class="fa fa-search"></i></span> <input type="text" class="form-control" placeholder="{{ texts.searchPlaceholder }}" aria-describedby="sizing-addon3" [formControl]="filterControl" autofocus> <span class="input-group-btn" *ngIf="filterControl.value.length > 0"><button class="btn btn-default btn-secondary" type="button" (click)="clearSearch($event)"><i class="fa fa-times"></i></button></span></div></li><li class="dropdown-divider divider" *ngIf="settings.enableSearch"></li><li class="dropdown-item check-control check-control-check" *ngIf="settings.showCheckAll && !disabledSelection"><a href="javascript:;" role="menuitem" tabindex="-1" (click)="checkAll()"><span style="width: 16px" [ngClass]="{\'glyphicon glyphicon-ok\': settings.checkedStyle !== \'fontawesome\',\'fa fa-check\': settings.checkedStyle === \'fontawesome\'}"></span> {{ texts.checkAll }}</a></li><li class="dropdown-item check-control check-control-uncheck" *ngIf="settings.showUncheckAll && !disabledSelection"><a href="javascript:;" role="menuitem" tabindex="-1" (click)="uncheckAll()"><span style="width: 16px" [ngClass]="{\'glyphicon glyphicon-remove\': settings.checkedStyle !== \'fontawesome\',\'fa fa-times\': settings.checkedStyle === \'fontawesome\'}"></span> {{ texts.uncheckAll }}</a></li><li *ngIf="settings.showCheckAll || settings.showUncheckAll" class="dropdown-divider divider"></li><li *ngIf="!renderItems" class="dropdown-item empty">{{ texts.searchNoRenderText }}</li><li *ngIf="renderItems && !renderFilteredOptions.length" class="dropdown-item empty">{{ texts.searchEmptyResult }}</li><li class="dropdown-item" *ngFor="let option of renderFilteredOptions" (click)="setSelected($event, option)" [ngStyle]="getItemStyle(option)" [ngClass]="option.classes" [class.dropdown-header]="option.isLabel"><a *ngIf="!option.isLabel; else label" href="javascript:;" role="menuitem" tabindex="-1" [style.padding-left]="this.parents.length>0&&this.parents.indexOf(option.id)<0&&\'30px\'" [ngStyle]="getItemStyleSelectionDisabled()"><ng-container [ngSwitch]="settings.checkedStyle"><input *ngSwitchCase="\'checkboxes\'" type="checkbox" [checked]="isSelected(option)" (click)="preventCheckboxCheck($event, option)" [disabled]="isCheckboxDisabled()" [ngStyle]="getItemStyleSelectionDisabled()" > <span *ngSwitchCase="\'glyphicon\'" style="width: 16px" class="glyphicon" [class.glyphicon-ok]="isSelected(option)"></span> <span *ngSwitchCase="\'fontawesome\'" style="width: 16px;display: inline-block"><i *ngIf="isSelected(option)" class="fa fa-check" aria-hidden="true"></i></span></ng-container><span [ngClass]="settings.itemClasses" [style.font-weight]="this.parents.indexOf(option.id)>=0?\'bold\':\'normal\'">{{ option.name }}</span></a><ng-template #label>{{ option.name }}</ng-template></li></ul></div>',
-                styles: ['a {  outline: none !important;}.dropdown-inline {  display: inline-block;}.dropdown-toggle .caret {  margin-left: 4px;  white-space: nowrap;  display: inline-block;}'],
-                providers: [MULTISELECT_VALUE_ACCESSOR, MultiSelectSearchFilter]
-            },] },
+    {
+        type: Component, args: [{
+            selector: 'ss-multiselect-dropdown',
+            template: '<div class="dropdown" [ngClass]="settings.containerClasses" [class.open]="isVisible"><button type="button" class="dropdown-toggle" [ngClass]="settings.buttonClasses" (click)="toggleDropdown()" [disabled]="disabled">{{ title }}<span class="caret"></span></button><ul #scroller *ngIf="isVisible" class="dropdown-menu" (scroll)="settings.isLazyLoad ? checkScrollPosition($event) : null" (wheel)="settings.stopScrollPropagation ? checkScrollPropagation($event, scroller) : null" [class.pull-right]="settings.pullRight" [class.dropdown-menu-right]="settings.pullRight" [style.max-height]="settings.maxHeight" style="display: block; height: auto; overflow-y: auto"><li class="dropdown-item search" *ngIf="settings.enableSearch"><div class="input-group input-group-sm"><span class="input-group-addon" id="sizing-addon3"><i class="fa fa-search"></i></span> <input type="text" class="form-control" placeholder="{{ texts.searchPlaceholder }}" aria-describedby="sizing-addon3" [formControl]="filterControl" autofocus> <span class="input-group-btn" *ngIf="filterControl.value.length > 0"><button class="btn btn-default btn-secondary" type="button" (click)="clearSearch($event)"><i class="fa fa-times"></i></button></span></div></li><li class="dropdown-item check-control check-control-check" *ngIf="settings.showCheckAll && !disabledSelection"><a href="javascript:;" role="menuitem" tabindex="-1" (click)="checkAll()"><span style="width: 16px" [ngClass]="{\'glyphicon glyphicon-ok\': settings.checkedStyle !== \'fontawesome\',\'fa fa-check\': settings.checkedStyle === \'fontawesome\'}"></span> {{ texts.checkAll }}</a></li><li class="dropdown-item check-control check-control-uncheck" *ngIf="settings.showUncheckAll && !disabledSelection"><a href="javascript:;" role="menuitem" tabindex="-1" (click)="uncheckAll()"><span style="width: 16px" [ngClass]="{\'glyphicon glyphicon-remove\': settings.checkedStyle !== \'fontawesome\',\'fa fa-times\': settings.checkedStyle === \'fontawesome\'}"></span> {{ texts.uncheckAll }}</a></li><li *ngIf="!renderItems" class="dropdown-item empty">{{ texts.searchNoRenderText }}</li><li *ngIf="renderItems && !renderFilteredOptions.length" class="dropdown-item empty">{{ texts.searchEmptyResult }}</li><li class="dropdown-item" *ngFor="let option of renderFilteredOptions" (click)="setSelected($event, option)" [ngStyle]="getItemStyle(option)" [ngClass]="option.classes" [class.dropdown-header]="option.isLabel"><a *ngIf="!option.isLabel; else label" href="javascript:;" role="menuitem" tabindex="-1" [style.padding-left]="this.parents.length>0&&this.parents.indexOf(option.id)<0&&\'30px\'" [ngStyle]="getItemStyleSelectionDisabled()"><ng-container [ngSwitch]="settings.checkedStyle"><input *ngSwitchCase="\'checkboxes\'" type="checkbox" [checked]="isSelected(option)" (click)="preventCheckboxCheck($event, option)" [disabled]="isCheckboxDisabled()" [ngStyle]="getItemStyleSelectionDisabled()" > <span *ngSwitchCase="\'glyphicon\'" style="width: 16px" class="glyphicon" [class.glyphicon-ok]="isSelected(option)"></span> <span *ngSwitchCase="\'fontawesome\'" style="width: 16px;display: inline-block"><i *ngIf="isSelected(option)" class="fa fa-check" aria-hidden="true"></i></span></ng-container><span [ngClass]="settings.itemClasses" [style.font-weight]="this.parents.indexOf(option.id)>=0?\'bold\':\'normal\'">{{ option.name }}</span></a><ng-template #label>{{ option.name }}</ng-template></li></ul></div>',
+            styles: ['a {  outline: none !important;}.dropdown-inline {display: inline-block; width: 100%;}.dropdown-toggle:focus{box-shadow: none;}.dropdown-toggle::after{float: right;top: 7px;position: relative;}.dropdown-toggle .caret {  margin-left: 4px;  white-space: nowrap;  display: inline-block;}.dropdown-toggle{background-color: transparent; border: none;text-align: left; color: #495057;}.dropdown-menu{width: 100%;}.input-group-addon{background: none;border: none;border-bottom: 1px solid #e6e6e6;padding-bottom: 10px;border-radius: 0;}.dropdown-item.search:focus{background: none;outline: 0;}.dropdown-item.search:hover{background: none;}.dropdown-item.search input{border: none;border-bottom: 1px solid #e6e6e6;padding-bottom: 10px;}.dropdown-item.search{margin-bottom: 20px;}.dropdown{border: 1px solid #ACAEBA; padding: 5px 0;background: white;border-radius: 0;}.dropdown-item:active{background: none}.dropdown-item:hover{background: none}.dropdown-item{cursor: pointer; padding: 0 10px; font-size: 14px;margin-bottom: 10px;}.dropdown-menu .dropdown-item a{color: #2d2d2d}.search .fa-search{color: #37A8F8;font-size: 16px;}.input-group-btn .btn{background: none; border: 0;border-bottom: 1px solid #e6e6e6;padding-bottom: 9px;}.input-group-btn .btn .fa{color: #2d2d2d;}'],
+            providers: [MULTISELECT_VALUE_ACCESSOR, MultiSelectSearchFilter]
+        },]
+    },
 ];
 /** @nocollapse */
-MultiselectDropdown.ctorParameters = function () { return [
-    { type: ElementRef, },
-    { type: FormBuilder, },
-    { type: MultiSelectSearchFilter, },
-    { type: IterableDiffers, },
-]; };
+MultiselectDropdown.ctorParameters = function () {
+    return [
+        { type: ElementRef, },
+        { type: FormBuilder, },
+        { type: MultiSelectSearchFilter, },
+        { type: IterableDiffers, },
+    ];
+};
 MultiselectDropdown.propDecorators = {
     'options': [{ type: Input },],
     'settings': [{ type: Input },],
