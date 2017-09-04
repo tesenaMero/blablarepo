@@ -83,9 +83,16 @@ export class StepperComponent implements AfterContentInit {
         this.nextAvailable = true;
     }
 
+    uncomplete() {
+        this.currentStep.completed = false;
+        this.nextAvailable = false;
+    }
+
     finish(result: any) {
         this.onFinish.emit(result);
     }
+
+    private validateNext
 
     private isLastStep() {
         let currentIndex = this.getActiveStepIndex();

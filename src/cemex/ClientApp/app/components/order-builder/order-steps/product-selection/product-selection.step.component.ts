@@ -23,7 +23,7 @@ export class ProductSelectionStepComponent {
     select(product: any) {
         this.productLine = product;
         this.orderManager.selectProductLine(product);
-        this.onCompleted.emit();
+        this.onCompleted.emit(product);
     }
 
     isSelected(product: any) {

@@ -1,3 +1,5 @@
+@import '../../../../scss/responsive.scss';
+@import '../../../../scss/utils.scss';
 .products {
     .product {
         &:not(:first-child) {
@@ -90,7 +92,9 @@
             &.number-stepper {
                 justify-content: space-between;
                 display: flex;
+                padding: 0;
                 .value {
+                    margin: 10px 0;
                     width: 100%;
                     text-align: center;
                     border-left: 1px solid #D7D7D7;
@@ -100,16 +104,11 @@
                     color: #3FA9F5;
                     font-family: Roboto;
                     font-size: 14px;
+                    padding: 10px 12px;
                     font-weight: bold;
                     text-transform: uppercase;
                     cursor: pointer;
                     align-self: center;
-                }
-                .minus {
-                    padding-right: 12px;
-                }
-                .plus {
-                    padding-left: 12px;
                 }
             }
         }
@@ -165,20 +164,14 @@
     display: flex;
 }
 
-.w50 {
-    width: 50%;
+.clean-input {
+    border: 0;
+    padding: 0;
 }
 
-.w70 {
-    width: 70%;
-}
-
-.mr-13 {
-    margin-right: 13px;
-}
-
-.w30 {
-    width: 30%;
+.cmx-icon-calendar,
+.cmx-icon-clock {
+    line-height: 20px;
 }
 
 .noborder {
