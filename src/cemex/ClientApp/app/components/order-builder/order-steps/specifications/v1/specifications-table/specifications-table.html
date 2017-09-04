@@ -81,6 +81,7 @@
                     <label for="payment">Payment</label>
                     <select id="payment" class="form-control" [ngClass]="{ 'nice-selection': nice }" [(ngModel)]="specification.payment">
                         <option value={{specification.payment}}>{{specification.payment}}</option>
+                        <option value={{specification.payment}}>Cash</option>
                     </select>
                 </div>
             </div>

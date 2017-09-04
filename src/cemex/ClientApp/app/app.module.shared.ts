@@ -62,6 +62,8 @@ import {
     JobsiteApi,
     ProductsApi,
     OrderDetailApi
+    LegalEntitiesApi,
+    ShippingConditionApi
 } from './shared/services/api';
 
 export const sharedConfig: NgModule = {
@@ -144,5 +146,7 @@ export const sharedConfig: NgModule = {
         OrdersApi,
         ProductsApi,
         OrderDetailApi
+        ShippingConditionApi,
+        LegalEntitiesApi
     ]
 };

@@ -5,11 +5,11 @@ import { Observable } from 'rxjs';
 import { Api } from './api.service';
 
 @Injectable()
-export class LegalEntitiesApi {
+export class ShippingConditionApi {
 
     constructor(private Api: Api) {}
 
-    all(): Observable<Response> {
-        return this.Api.get(`/v4/sm/mylegalentities`);
+    all(customerId): Observable<Response> {
+        return this.Api.get(`/v1/im/shippingconditions?customerId=${customerId}`);
     }
 }
