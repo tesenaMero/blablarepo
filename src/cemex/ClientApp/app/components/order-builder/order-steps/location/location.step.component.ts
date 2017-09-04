@@ -20,6 +20,10 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     // Selected data
     private location: any = "";
     private contact: any = "";
+    catalogOptions: Object = {};
+    selectedServices: Array<{
+        additionalServiceId: number
+    }> = [];
 
     // Mapped data
     locations = [];
@@ -41,6 +45,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.shipmentApi.all().subscribe((response) => {
             this.locations = response.json().shipmentLocations;
         });
+        this.getCatalog();
     }
 
     onShowed() {
@@ -95,6 +100,28 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     validateFormElements(e, key?: string) {
         this.validationModel[key] = Boolean(e.target.value.length);
         return e.target.value.length;
+    }
+
+    getCatalog() {
+        this.orderManager.getCatalogOptions().then(data => {
+            data.catalogs.map((item) => {
+                this.catalogOptions[item.catalogCode] = item;
+                return item;
+            });
+        })        
+    }
+
+    addAdditionalServices(event, index) {
+        if (event.target.checked) {
+            this.selectedServices.push({
+                additionalServiceId: Number(event.target.value)
+            });
+        } else {
+            this.selectedServices = this.selectedServices.filter((service) => {
+                return Number(service.additionalServiceId) !== Number(event.target.value);
+            });
+        }
+        this.orderManager.selectAdditionalServices(this.selectedServices);
     }
 
 }
