@@ -10,10 +10,6 @@ export class LegalEntitiesApi {
     constructor(private Api: Api) {}
 
     all(): Observable<Response> {
-        return this.Api.get(`/v4/sm/myshipmentlocations`);
-    }
-    
-    byId(jobsiteId): Observable<Response> {
-        return this.Api.get(`/v5/dm/jobsites/${jobsiteId}?include=businessline,address,contact`);
+        return this.Api.get(`/v4/sm/mylegalentities`);
     }
 }
