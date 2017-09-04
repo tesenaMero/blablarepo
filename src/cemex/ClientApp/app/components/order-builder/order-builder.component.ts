@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { StepperComponent } from '../../shared/components/stepper/';
 import { DeliveryMode } from '../../models/delivery.model';
 
@@ -9,7 +9,10 @@ import { DeliveryMode } from '../../models/delivery.model';
 })
 export class OrderBuilderComponent {
     @ViewChild(StepperComponent) stepper;
-    constructor() { }
+    private READYMIX_ID = 6;
+    private isReadyMix: boolean = false;
+
+    constructor(private _changeDetector: ChangeDetectorRef) { }
 
     modeStepCompleted(mode: DeliveryMode) {
         this.stepper.complete();
@@ -20,6 +23,8 @@ export class OrderBuilderComponent {
     }
 
     productStepCompleted(product: any) {
+        this.isReadyMix = product.productLineId == this.READYMIX_ID;
+        this._changeDetector.detectChanges();
         this.stepper.complete();
     }
 

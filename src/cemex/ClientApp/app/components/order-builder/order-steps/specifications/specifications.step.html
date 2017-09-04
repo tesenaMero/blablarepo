@@ -21,10 +21,10 @@
                         <label for="product-desc">
                             Quantity
                         </label>
-                        <div class="input number-stepper">
-                            <span class="minus control">-</span>
-                            <span class="value">10</span>
-                            <span class="plus control">+</span>
+                        <div class="noselect input number-stepper">
+                            <span (click)="qty(product, -1)" class="minus control">-</span>
+                            <span class="value">{{ product.quantity }}</span>
+                            <span (click)="qty(product, 1)" class="plus control">+</span>
                         </div>
                         <div class="info">
                             Maximum Capacity 100 tons
@@ -47,16 +47,26 @@
                 <div class="flex-container">
                     <div class="group w50 mr-13">
                         <label for="product-desc">Request date</label>
-                        <div class="input flex-space-between">
-                            <span class="value">13.01.2017</span>
-                            <span class="icon"><span class="cmx-icon-calendar"></span></span>
+                        <div class="input flex-space-between nopadding">
+                            <span class="hidden-md-down value">
+                                <input id="date{{ index }}" class="clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" />
+                            </span>
+                            <span class="hidden-md-up value">{{ product.date }}</span>
+                            <label class="mb-0" for="date{{ index }}">
+                                <span class="icon"><span class="cmx-icon-calendar"></span></span>
+                            </label>
                         </div>
                     </div>
                     <div class="group w50">
                         <label for="product-desc">Requested time</label>
-                        <div class="input flex-space-between">
-                            <span class="value">15.00 - 16.00</span>
-                            <span class="icon"><span class="cmx-icon-clock"></span></span>
+                        <div class="input flex-space-between nopadding">
+                            <span class="hidden-md-down value">
+                                <input id="time{{ index }}" class="clean-input" type="text" readonly [(ngModel)]="product.time" ngui-datetime-picker time-only="true" right-side="true" [close-on-select]="false" hour="0" minute="0" />
+                            </span>
+                            <span class="hidden-md-up value">{{ product.time }}</span>
+                            <label class="mb-0" for="time{{ index }}">
+                                <span class="icon"><span class="cmx-icon-clock"></span></span>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -73,7 +83,7 @@
             </div>
             <div class="col-md-5 mt-3">
                 <div class="group">
-                    <label>Contact</label>
+                    <label>Contract</label>
                     <div class="input flex-space-between">
                         <span class=""><strong>10-20170218903432112212</strong></span>
                         <span class="">Remaining volume: <strong>180</strong></span>
@@ -97,8 +107,8 @@
                 <div class="group">
                     <label>Additional services</label>
                     <div class="service">
-                        <input checked type="checkbox" id="maneuvering">
-                        <label for="maneuvering">
+                        <input [(ngModel)]="product.maneuvering" checked type="checkbox" id="maneuvering{{ index }}">
+                        <label for="maneuvering{{ index }}">
                             <svg class="icon-checkbox-active">
                                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
                             </svg>
@@ -128,6 +138,6 @@
     </div>
 </div>
 
-<div class="flex-end mt-3">
+<div class="flex-end mt-3 mb-100">
     <button (click)="add()" class="button" href="#">+ Add Product</button>
 </div>

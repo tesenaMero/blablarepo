@@ -12,10 +12,11 @@ export class Step {
     @Input() showExit? = false; // Show exit action button
     @Input() showControls? = true; // Show back/next control buttons
     @Input() automatic? = false; // Moves to next step automatically once its completed
+    @Input() skip? = false; // Skips step
     @Output() onShowed = new EventEmitter<any>();
 
-    completed: boolean = false;
     private stepEventsListener: StepEventsListener = null;
+    completed: boolean = false;
 
     constructor() { }
 
