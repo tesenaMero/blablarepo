@@ -21,7 +21,7 @@ export {
     ContractsApi,
     JobsiteApi,
     ProductsApi,
-    OrderDetailApi
+    OrderDetailApi,
     LegalEntitiesApi,
     ShippingConditionApi
 }
