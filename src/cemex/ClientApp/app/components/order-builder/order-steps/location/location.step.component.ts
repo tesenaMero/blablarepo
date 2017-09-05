@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular
 import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
+import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
 import { ShipmentLocationApi } from '../../../../shared/services/api/shipment-locations.service.api';
 
 @Component({
@@ -28,6 +29,38 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     // Mapped data
     locations = [];
     contacts = [];
+
+    // Default selection
+    optionsModel: number[] = [ ];
+
+    // Settings configuration
+    jobsiteSettings: IMultiSelectSettings = {
+        enableSearch: true,
+        checkedStyle: 'fontawesome',
+        buttonClasses: 'btn btn-default btn-block',
+        dynamicTitleMaxItems: 1,
+        displayAllSelectedText: true,
+        closeOnClickOutside: true,
+        selectionLimit: 1,
+        autoUnselect: true,
+        closeOnSelect: true,
+    };
+
+    // Text configuration
+    jobsiteTexts: IMultiSelectTexts = {
+        checkAll: 'Select all',
+        uncheckAll: 'Unselect all',
+        checked: 'item selected',
+        checkedPlural: 'items selected',
+        searchPlaceholder: 'Find jobsite',
+        searchEmptyResult: 'No jobsite found...',
+        searchNoRenderText: 'Type in search box to see results...',
+        defaultTitle: 'Select existing jobsite',
+    };
+
+    // Labels / Parents
+    jobsiteOptions: IMultiSelectOption[] = [];
+
     
     // H4x0R
     nice: boolean;
@@ -42,8 +75,14 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     ngOnInit() {
+        let locations;
+
         this.shipmentApi.all().subscribe((response) => {
-            this.locations = response.json().shipmentLocations;
+            locations = response.json().shipmentLocations;
+            locations.map((item, index) =>{
+                this.jobsiteOptions.push({id: index, name: item.shipmentLocationDesc})
+                return item;
+            })
         });
         this.getCatalog();
     }
