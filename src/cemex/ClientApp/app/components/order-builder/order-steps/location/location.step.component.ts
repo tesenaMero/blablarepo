@@ -111,7 +111,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     // Step flow
     // =====================
     jobsiteChanged(location: any) {
-        // This is garbage. location should me mapped as a model to the component
         this.location = location;
         this.orderManager.selectJobsite(this.location);
 
