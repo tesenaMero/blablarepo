@@ -18,7 +18,7 @@ export class ShipmentLocationApi {
             "/v4/sm/myshipmentlocations?shipmentlocationId=" + 
             shipmentLocation.shipmentLocationId + "." + 
             shipmentLocation.shipmentLocationType.shipmentLocationTypeId + "&" +
-            "shipmentLocationTypeId=5"
+            "shipmentLocationTypeId=6"
         );
     }
 
@@ -34,8 +34,8 @@ export class ShipmentLocationApi {
     }
     
     geo(address: any): Observable<Response> {
-        return this.api.get(address.geoPlace.links.self);
-        //return this.api.get(address.geoPlace.links.self.replace("v4", "v7"));
+        //return this.api.get(address.geoPlace.links.self);
+        return this.api.get(address.geoPlace.links.self.replace("v4", "v5"));
     }
 
     contacts(shipmentLocation: any): Observable<Response> {

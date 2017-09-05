@@ -15,36 +15,37 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     @Output() onCompleted = new EventEmitter<any>();
 
     private isMapLoaded: boolean = false;
-    private map: any; // Map instance
 
     // Selected data
     private location: any = "";
     private contact: any = "";
-    catalogOptions: Object = {};
-    selectedServices: Array<{
-        additionalServiceId: number
-    }> = [];
+    private catalogOptions: Object = {};
+    private selectedServices: Array<{ additionalServiceId: number }> = [];
 
     // Mapped data
     locations = [];
     contacts = [];
-    
-    // H4x0R
-    nice: boolean;
-    jobsite: any;
 
-    validationModel = {
+    // H4x0R
+    private nice: boolean; // Styling for dropdown item
+    private jobsite: any;
+    private validationModel = {
         purchaseOrder: true,
     }
 
-    constructor(@Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi) {
+    // Google map
+    private map: any; // Map instance
+    private infoWindow = new google.maps.InfoWindow();
+    private jobsiteMarker: any;
+
+    constructor( @Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi) {
         this.step.setEventsListener(this);
     }
 
+    // Interfaces
+    // ======================
     ngOnInit() {
-        this.shipmentApi.all().subscribe((response) => {
-            this.locations = response.json().shipmentLocations;
-        });
+        this.fetchJobsites();
         this.getCatalog();
     }
 
@@ -59,42 +60,45 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         }
     }
 
+    fetchJobsites() {
+        this.shipmentApi.all().subscribe((response) => {
+            this.locations = response.json().shipmentLocations;
+        });
+    }
+
+    getCatalog() {
+        this.orderManager.getCatalogOptions().then(data => {
+            data.catalogs.map((item) => {
+                this.catalogOptions[item.catalogCode] = item;
+                return item;
+            });
+        })
+    }
+
+    // Step flow
+    // =====================
     jobsiteChanged() {
         this.nice = true;
         this.orderManager.selectJobsite(this.location);
 
-        // Fetch address
-        // Right now not working so wait
-        // this.shipmentApi.address(this.location).subscribe((response) => {
-        //     let address = response.json();
-        // });
-
-        this.shipmentApi.jobsiteGeo(this.location).subscribe((response) => {
-            console.log("geo", response.json());
+        this.shipmentApi.jobsiteGeo(this.location).subscribe((geo) => {
+            this.cleanJobsiteMarker();
+            this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
+            this.addMarkerToMap(this.jobsiteMarker);
         });
 
         // Fetch pods
         // Right now not working so wait
-        // this.shipmentApi.pods(this.location).subscribe((response) => {
-        //     console.log(response.json())
-        // });
+        this.shipmentApi.pods(this.location).subscribe((response) => {
+            console.log("pods", response.json())
+        });
 
         // Fetch contacts
         this.shipmentApi.contacts(this.location).subscribe((response => {
             this.contacts = response.json().contacts;
         }));
-        
-        if(this.validateFormElements(event)) {
-            this.onCompleted.emit(event);
-        }
-    }
 
-
-
-    pointOfDeliverySelected(event: any) {
-        this.orderManager.selectPointOfDelivery({ pointOfDeliveryId: 1 });
-        this.nice = true;
-        if(this.validateFormElements(event)) {
+        if (this.validateFormElements(event)) {
             this.onCompleted.emit(event);
         }
     }
@@ -106,15 +110,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     validateFormElements(e, key?: string) {
         this.validationModel[key] = Boolean(e.target.value.length);
         return e.target.value.length;
-    }
-
-    getCatalog() {
-        this.orderManager.getCatalogOptions().then(data => {
-            data.catalogs.map((item) => {
-                this.catalogOptions[item.catalogCode] = item;
-                return item;
-            });
-        })        
     }
 
     addAdditionalServices(event, index) {
@@ -129,5 +124,40 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         }
         this.orderManager.selectAdditionalServices(this.selectedServices);
     }
+
+    // Map stuff
+    // ====================
+    makeJobsiteMarker(geo: any): google.maps.Marker {
+        let marker = new google.maps.Marker({
+            position: { lat: parseFloat(geo.latitude), lng: parseFloat(geo.longitude) },
+            title: 'jobsite'
+            //icon: InfoBuilder.plantIcon(plant)
+        });
+
+        // marker.addListener('click', () => {
+        //     this.showPlantInfo(plant, marker);
+        // });
+
+        return marker;
+    }
+
+    addMarkerToMap(marker: google.maps.Marker) {
+        marker.setMap(this.map);
+        this.map.setCenter(marker.getPosition());
+    }
+
+    cleanJobsiteMarker() {
+        if (this.jobsiteMarker)
+            this.jobsiteMarker.setMap(null);
+    }
+
+    // showJobsiteInfo(plant: any, marker: any) {
+    //     this.infoWindow.setContent(InfoBuilder.buildPlantInfoHTML(plant));
+    //     this.infoWindow.open(this.map, marker);
+    //     this.onMarkerSelected.emit(new MarkerItem(plant, MarkerType.PLANT));
+    //     this._zone.run(() => {
+    //         this.selectedPlant = plant;
+    //     });
+    // }
 
 }
