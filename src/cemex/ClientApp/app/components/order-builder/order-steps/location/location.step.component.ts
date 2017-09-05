@@ -75,9 +75,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     ngOnInit() {
+        let locations;
+
         this.shipmentApi.all().subscribe((response) => {
-            this.locations = response.json().shipmentLocations;
-            this.locations.map((item, index) =>{
+            locations = response.json().shipmentLocations;
+            locations.map((item, index) =>{
                 this.jobsiteOptions.push({id: index, name: item.shipmentLocationDesc})
                 return item;
             })
