@@ -30,7 +30,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     optionsModel: number[] = [ ];
 
     // Settings configuration
-    mySettings: IMultiSelectSettings = {
+    jobsiteSettings: IMultiSelectSettings = {
         enableSearch: true,
         checkedStyle: 'fontawesome',
         buttonClasses: 'btn btn-default btn-block',
@@ -43,26 +43,19 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     };
 
     // Text configuration
-    myTexts: IMultiSelectTexts = {
+    jobsiteTexts: IMultiSelectTexts = {
         checkAll: 'Select all',
         uncheckAll: 'Unselect all',
         checked: 'item selected',
         checkedPlural: 'items selected',
-        searchPlaceholder: 'Find',
-        searchEmptyResult: 'Nothing found...',
+        searchPlaceholder: 'Find jobsite',
+        searchEmptyResult: 'No jobsite found...',
         searchNoRenderText: 'Type in search box to see results...',
-        defaultTitle: 'Select existing POD',
+        defaultTitle: 'Select existing jobsite',
     };
 
     // Labels / Parents
-    myOptions: IMultiSelectOption[] = [
-        { id: 1, name: 'Dante Rodríguez' },
-        { id: 2, name: 'Cristóbal Ferrant' },
-        { id: 3, name: 'Raul Barrueco' },
-        { id: 4, name: 'Gonzalo Gisbert' },
-        { id: 5, name: 'Fernando Cadaval' },
-        { id: 6, name: 'Matthew Gálvez'}
-    ];
+    jobsiteOptions: IMultiSelectOption[] = [];
 
     
     // H4x0R
@@ -80,7 +73,13 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     ngOnInit() {
         this.shipmentApi.all().subscribe((response) => {
             this.locations = response.json().shipmentLocations;
+            this.locations.map((item, index) =>{
+                this.jobsiteOptions.push({id: index, name: item.shipmentLocationDesc})
+                return item;
+            })
         });
+
+        
     }
 
     onShowed() {
