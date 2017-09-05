@@ -10,6 +10,6 @@ export class ProductsApi {
     }
 
     top(shipmentLocation: any): Observable<Response> {
-        return this.api.get(`/v4/sm/myproducts?shipmentLocationId=` + shipmentLocation.shipmentLocationId + ".5&productLineId=1&salesDocumentTypeId=3");
+        return this.api.get(`/v2/mm/myproducts?shipmentLocationId=` + shipmentLocation.shipmentLocationId + ".5&productLineId=6&salesDocumentTypeId=3");
     }
 }

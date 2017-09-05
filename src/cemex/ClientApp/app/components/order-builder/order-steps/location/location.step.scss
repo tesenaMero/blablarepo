@@ -15,6 +15,7 @@
         padding-bottom: 42px;
     }
 }
+
 div.select-label {
     align-self: flex-start;
     align-items: center;
@@ -24,12 +25,13 @@ div.select-label {
         height: auto;
     }
 }
+
 .select-label {
     color: #001C3B;
     font-size: 12px;
     font-weight: 700;
     text-align: left;
-    margin-bottom: 0;    
+    margin-bottom: 0;
     @include media-breakpoint-down(sm) {
         margin-bottom: .25rem;
         &:not(:first-child) {
@@ -90,6 +92,7 @@ input {
 .error-message {
     display: none;
 }
+
 .error {
     .error-message {
         font-size: 0.75rem;
@@ -110,7 +113,7 @@ input {
     label {
         margin-bottom: 0;
     }
-    & + .form-field {
+    &+.form-field {
         margin-top: 0.5rem;
     }
 }

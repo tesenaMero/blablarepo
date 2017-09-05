@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular
 import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
+import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
 import { ShipmentLocationApi } from '../../../../shared/services/api/shipment-locations.service.api';
 
 @Component({
@@ -17,8 +18,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     private isMapLoaded: boolean = false;
 
     // Selected data
-    private location: any = "";
-    private contact: any = "";
+    private location: any;
+    private contact: any;
     private catalogOptions: Object = {};
     private selectedServices: Array<{ additionalServiceId: number }> = [];
 
@@ -26,8 +27,36 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     locations = [];
     contacts = [];
 
+    // Settings configuration
+    jobsiteSettings: IMultiSelectSettings = {
+        enableSearch: true,
+        checkedStyle: 'fontawesome',
+        buttonClasses: 'btn btn-default btn-block',
+        dynamicTitleMaxItems: 1,
+        displayAllSelectedText: true,
+        closeOnClickOutside: true,
+        selectionLimit: 1,
+        autoUnselect: true,
+        closeOnSelect: true,
+    };
+
+    // Text configuration
+    jobsiteTexts: IMultiSelectTexts = {
+        checkAll: 'Select all',
+        uncheckAll: 'Unselect all',
+        checked: 'item selected',
+        checkedPlural: 'items selected',
+        searchPlaceholder: 'Find jobsite',
+        searchEmptyResult: 'No jobsite found...',
+        searchNoRenderText: 'Type in search box to see results...',
+        defaultTitle: 'Select existing jobsite',
+    };
+
+    // Labels / Parents
+    jobsiteOptions: IMultiSelectOption[] = [];
+    locationIndex: any;
+
     // H4x0R
-    private nice: boolean; // Styling for dropdown item
     private jobsite: any;
     private validationModel = {
         purchaseOrder: true,
@@ -35,7 +64,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     // Google map
     private map: any; // Map instance
-    private infoWindow = new google.maps.InfoWindow();
+    private infoWindow: any;
     private jobsiteMarker: any;
 
     constructor( @Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi) {
@@ -63,6 +92,10 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     fetchJobsites() {
         this.shipmentApi.all().subscribe((response) => {
             this.locations = response.json().shipmentLocations;
+            this.locations.forEach((location, index) => {
+                location.id = index;
+                location.name = location.shipmentLocationDesc;
+            })
         });
     }
 
@@ -77,8 +110,9 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     // Step flow
     // =====================
-    jobsiteChanged() {
-        this.nice = true;
+    jobsiteChanged(location: any) {
+        // This is garbage. location should me mapped as a model to the component
+        this.location = location;
         this.orderManager.selectJobsite(this.location);
 
         this.shipmentApi.jobsiteGeo(this.location).subscribe((geo) => {
@@ -98,9 +132,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.contacts = response.json().contacts;
         }));
 
-        if (this.validateFormElements(event)) {
-            this.onCompleted.emit(event);
-        }
+        this.onCompleted.emit(event);
     }
 
     contactChanged() {
