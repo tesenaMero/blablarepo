@@ -13,7 +13,7 @@
         <tbody>
             <ng-container *ngFor="let row of rows; let odd = odd">
                 <tr [ngClass]="{ 'zebra': odd }">
-                    <td (click)="tdClicked(item.click)" [attr.data-title]="columns[index].name" *ngFor="let item of row; let index = index" class="{{ item.class }}" [ngClass]="{ 'title': item.title, 'subtitle': item.subtitle, 'hide-mobile': item.hideMobile, 'hide-desktop': item.hideDesktop }"
+                    <td (click)="tdClicked(item.click, item)" [attr.data-title]="columns[index].name" *ngFor="let item of row; let index = index" class="{{ item.class }}" [ngClass]="{ 'title': item.title, 'subtitle': item.subtitle, 'hide-mobile': item.hideMobile, 'hide-desktop': item.hideDesktop }"
                         innerHTML="{{ item.inner }}"></td>
                 </tr>
                 <tr class="hidden-md-down sub separator"></tr>
