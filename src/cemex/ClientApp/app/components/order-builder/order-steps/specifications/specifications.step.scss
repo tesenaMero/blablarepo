@@ -1,0 +1,262 @@
+@import "~bootstrap/scss/bootstrap-grid.scss";
+@import '../../../../scss/responsive.scss';
+@import '../../../../scss/utils.scss';
+.products {
+    .product {
+        &:not(:first-child) {
+            margin-top: 20px;
+        }
+    }
+}
+
+.enter-animation {
+    animation: enter-animation .5s;
+    transition: transform ease;
+}
+
+@keyframes enter-animation {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.exit-animation {
+    animation: exit-animation .4s;
+    transition: transform ease;
+}
+
+@keyframes exit-animation {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.product {
+    border-radius: 3px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07);
+    min-height: 276px;
+    padding: 25px 31px;
+    .group {
+        label {
+            color: #9CA4AE;
+            font-size: 12px;
+            line-height: 14px;
+        }
+        .input {
+            border: 1px solid #D7D7D7;
+            border-radius: 2px;
+            padding: 10px 12px 11px 12px;
+            color: #2A2A2A;
+            font-size: 14px;
+            background-color: inherit;
+            &.product-selection {
+                justify-content: space-between;
+                display: flex;
+                span.selection {
+                    width: 100%;
+                    border-right: 1px solid #D7D7D7;
+                    padding-right: 10px;
+                    padding-left: 4px;
+                }
+                span.action {
+                    color: #3FA9F5;
+                    font-family: Roboto;
+                    font-size: 14px;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    padding-left: 10px;
+                    cursor: pointer;
+                    align-self: center;
+                }
+            }
+            &.dropdown {
+                padding: 9px 12px;
+            }
+            &.unit {
+                >span {
+                    &.arrow {}
+                }
+            }
+            &.number-stepper {
+                justify-content: space-between;
+                display: flex;
+                //padding: 0;
+                .value {
+                    //margin: 10px 0;
+                    width: 100%;
+                    text-align: center;
+                    border-left: 1px solid #D7D7D7;
+                    border-right: 1px solid #D7D7D7;
+                }
+                .control {
+                    color: #3FA9F5;
+                    font-family: Roboto;
+                    font-weight: bold;
+                    font-size: 12px;
+                    //padding: 10px 14px;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    cursor: pointer;
+                    align-self: center;
+                    &.plus {
+                        padding-left: 10px;
+                    }
+                    &.minus {
+                        padding-right: 10px;
+                    }
+                }
+            }
+            &.contract {
+                word-break: break-word;
+                align-items: center;
+                .volume {
+                    padding: 0 10px;
+                }
+            }
+            span.icon {
+                color: #3FA9F5;
+                font-family: Roboto;
+                font-size: 14px;
+                font-weight: bold;
+                padding-left: 10px;
+                cursor: pointer;
+                align-self: center;
+            }
+            .value {
+                width: 100%;
+                padding-right: 6px;
+                padding-left: 4px;
+                color: #2A2A2A;
+                font-size: 14px;
+                line-height: 1.5;
+            }
+            .arrow {
+                font-weight: bold;
+                line-height: 25px;
+                color: #3FA9F5;
+                text-align: right;
+            }
+        }
+        select {
+            border: 1px solid #D7D7D7;
+            border-radius: 2px;
+            width: 100%;
+            min-width: 93px;
+            height: 43px;
+        }
+        input+label {
+            color: #2A2A2A !important;
+            span {
+                color: #2A2A2A;
+                font-size: 14px;
+                line-height: 16px;
+            }
+            [class*=icon-] {
+                width: 15px;
+                height: 15px;
+            }
+        }
+        .service {
+            &.spaced-top {
+                margin-top: 10px;
+            }
+            span {
+                color: #2A2A2A;
+                font-family: Roboto;
+                font-size: 14px;
+            }
+        }
+    }
+    .info {
+        color: #9CA4AE;
+        font-family: Helvetica;
+        font-size: 10px;
+        line-height: 12px;
+        margin-top: 3px;
+    }
+    .rdymx-specs {
+        .group {
+            margin-top: 22px;
+            flex-grow: 1;
+            &:not(:last-child) {
+                margin-right: 10px;
+            }
+        }
+    }
+}
+
+.behind {
+    margin: 0px;
+    padding: 0px;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    z-index: 101;
+}
+
+.flex-space-between {
+    justify-content: space-between;
+    display: flex;
+}
+
+.flex-end {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.left-separator {
+    border-left: 1px solid #D7D7D7;
+}
+
+.flex-container {
+    display: flex;
+    // &.units-fix {
+    //     @include media-breakpoint-up(md) {
+    //         margin-right: 26px;
+    //     }
+    // }
+}
+
+.clean-input {
+    border: 0;
+    padding: 0;
+}
+
+.cmx-icon-calendar,
+.cmx-icon-clock {
+    line-height: 20px;
+}
+
+.noborder {
+    border: 0;
+    background-color: #fff;
+    color: #3FA9F5;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    align-self: flex-end;
+    cursor: pointer;
+    &:focus {
+        outline: 0;
+    }
+}
+
+// Mods on time picker
+/deep/div.close-button {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .mt-3-md-down {
+        margin-top: 1rem !important;
+    }
+}

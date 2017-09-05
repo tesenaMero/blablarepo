@@ -2,8 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular
 import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
-import { ShipmentLocationApi } from '../../../../shared/api/shipment-locations.api';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
+import { ShipmentLocationApi } from '../../../../shared/services/api/shipment-locations.service.api';
 
 @Component({
     selector: 'location-step',
@@ -21,6 +21,10 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     // Selected data
     private location: any = "";
     private contact: any = "";
+    catalogOptions: Object = {};
+    selectedServices: Array<{
+        additionalServiceId: number
+    }> = [];
 
     // Mapped data
     locations = [];
@@ -78,8 +82,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 return item;
             })
         });
-
-        
+        this.getCatalog();
     }
 
     onShowed() {
@@ -99,7 +102,13 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
         // Fetch address
         // Right now not working so wait
-        //this.shipmentApi.address(this.shipmentLocation).subscribe((response) => {});
+        // this.shipmentApi.address(this.location).subscribe((response) => {
+        //     let address = response.json();
+        // });
+
+        this.shipmentApi.jobsiteGeo(this.location).subscribe((response) => {
+            console.log("geo", response.json());
+        });
 
         // Fetch pods
         // Right now not working so wait
@@ -134,6 +143,28 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     validateFormElements(e, key?: string) {
         this.validationModel[key] = Boolean(e.target.value.length);
         return e.target.value.length;
+    }
+
+    getCatalog() {
+        this.orderManager.getCatalogOptions().then(data => {
+            data.catalogs.map((item) => {
+                this.catalogOptions[item.catalogCode] = item;
+                return item;
+            });
+        })        
+    }
+
+    addAdditionalServices(event, index) {
+        if (event.target.checked) {
+            this.selectedServices.push({
+                additionalServiceId: Number(event.target.value)
+            });
+        } else {
+            this.selectedServices = this.selectedServices.filter((service) => {
+                return Number(service.additionalServiceId) !== Number(event.target.value);
+            });
+        }
+        this.orderManager.selectAdditionalServices(this.selectedServices);
     }
 
 }

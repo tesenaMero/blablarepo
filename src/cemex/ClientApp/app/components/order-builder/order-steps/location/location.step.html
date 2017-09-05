@@ -54,6 +54,29 @@
                     </div>
                 </div>
             </div>
+            <div class="second-container">
+                <div class="row align-items-center">
+                    <div class="col-md-4 col-sm-12 select-label">Additional Services</div>
+                    <div class="col-md-8 col-sm-12">
+                        <div class="form-field"
+                            *ngFor="let item of catalogOptions?.ASC?.entries">
+                            <input type="checkbox" id="additionService-{{item.entryId}}" [value]="item.entryId" (change)="addAdditionalServices($event)"  />
+                            <label for="additionService-{{item.entryId}}">
+                                <svg class="icon-checkbox-active">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
+                                </svg>
+                                <svg class="icon-checkbox-static">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                                </svg>
+                                <svg class="icon-checkbox-hover">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                                </svg>
+                                <span>{{item.entryDesc}}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-6">
             <div id="jobsite-selection-map"></div>

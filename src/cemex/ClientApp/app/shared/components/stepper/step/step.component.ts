@@ -14,8 +14,8 @@ export class Step {
     @Input() automatic? = false; // Moves to next step automatically once its completed
     @Output() onShowed = new EventEmitter<any>();
 
-    completed: boolean = false;
     private stepEventsListener: StepEventsListener = null;
+    completed: boolean = false;
 
     constructor() { }
 

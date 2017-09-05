@@ -1,11 +1,11 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ProductLineApi } from '../../../../shared/api'
+import { ProductLineApi } from '../../../../shared/services/api'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 
 @Component({
     selector: 'product-selection-step',
-    templateUrl: './product-selection.html',
-    styleUrls: ['./product-selection.scss'],
+    templateUrl: './product-selection.step.html',
+    styleUrls: ['./product-selection.step.scss'],
     host: {'class': 'w-100' }
 })
 export class ProductSelectionStepComponent {
@@ -23,7 +23,7 @@ export class ProductSelectionStepComponent {
     select(product: any) {
         this.productLine = product;
         this.orderManager.selectProductLine(product);
-        this.onCompleted.emit();
+        this.onCompleted.emit(product);
     }
 
     isSelected(product: any) {

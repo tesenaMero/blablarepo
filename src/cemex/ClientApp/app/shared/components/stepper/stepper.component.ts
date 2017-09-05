@@ -83,9 +83,16 @@ export class StepperComponent implements AfterContentInit {
         this.nextAvailable = true;
     }
 
+    uncomplete() {
+        this.currentStep.completed = false;
+        this.nextAvailable = false;
+    }
+
     finish(result: any) {
         this.onFinish.emit(result);
     }
+
+    private validateNext
 
     private isLastStep() {
         let currentIndex = this.getActiveStepIndex();
@@ -123,13 +130,18 @@ export class StepperComponent implements AfterContentInit {
     }
 
     private selectStepByIndex(index: number) {
-        let step = this.steps.toArray()[index];
+        let step = this.getStepByIndex(index);
         if (step) { this.selectStep(step); }
 
         if (!this.currentStep.completed)
             this.nextAvailable = false;
         else
             this.nextAvailable = true;
+    }
+
+    private getStepByIndex(index: number) {
+        let step = this.steps.toArray()[index];
+        if (step) { return step; }
     }
 
 }
