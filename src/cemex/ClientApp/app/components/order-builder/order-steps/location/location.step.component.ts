@@ -15,32 +15,37 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     @Input() mapOptions?: google.maps.MapOptions;
     @Output() onCompleted = new EventEmitter<any>();
 
-    private isMapLoaded: boolean = false;
-
     // Selected data
     private location: any;
     private contact: any;
+    private pod: any;
     private catalogOptions: Object = {};
     private selectedServices: Array<{ additionalServiceId: number }> = [];
+
+    // Loading state
+    private isMapLoaded: boolean = false;
+    private __locations__ = false;
+    private __contacts__ = false;
+    private __pods__ = false;
+
+    private loadings = {
+        locations: false,
+        contacts: true,
+        pods: true
+    }
 
     // Mapped data
     locations = [];
     contacts = [];
+    pods = []
+
+    // Mapping index values (For dropdown)
+    locationIndex: any;
+    contactsIndex: any;
+    podsIndex: any;
 
     // Settings configuration
-    jobsiteSettings: IMultiSelectSettings = {
-        enableSearch: true,
-        checkedStyle: 'fontawesome',
-        buttonClasses: 'btn btn-default btn-block',
-        dynamicTitleMaxItems: 1,
-        displayAllSelectedText: true,
-        closeOnClickOutside: true,
-        selectionLimit: 1,
-        autoUnselect: true,
-        closeOnSelect: true,
-    };
-
-    contactsSettings: IMultiSelectSettings = {
+    dropDownSettings: IMultiSelectSettings = {
         enableSearch: true,
         checkedStyle: 'fontawesome',
         buttonClasses: 'btn btn-default btn-block',
@@ -65,13 +70,13 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         defaultTitle: 'Select contact',
     };
 
-    // Labels / Parents
-    jobsiteOptions: IMultiSelectOption[] = [];
-    locationIndex: any;
-    contactsIndex: any;
+    podsTexts: IMultiSelectTexts = {
+        searchPlaceholder: 'Find point of delivery',
+        searchEmptyResult: 'No points of deliveries found...',
+        defaultTitle: 'Select existing POD',
+    };
 
     // H4x0R
-    private jobsite: any;
     private validationModel = {
         purchaseOrder: true,
     }
@@ -125,9 +130,13 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     // Step flow
     // =====================
     jobsiteChanged(location: any) {
+        // Set loading state
+        this.loadings.pods = true;
+        this.loadings.contacts = true;
+        
+        // Set current location and start fetching
         this.location = location;
         this.orderManager.selectJobsite(this.location);
-
         this.shipmentApi.jobsiteGeo(this.location).subscribe((geo) => {
             this.cleanJobsiteMarker();
             this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
@@ -135,24 +144,33 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         });
 
         // Fetch pods
-        // Right now not working so wait
         this.shipmentApi.pods(this.location).subscribe((response) => {
-            console.log("pods", response.json())
+            this.pods = response.json().shipmentLocations;
+            this.pods.forEach((pod, index) => {
+                pod.id = index;
+                pod.name = pod.shipmentLocationDesc;
+            })
+            this.loadings.pods = false;
         });
 
         // Fetch contacts
         this.shipmentApi.contacts(this.location).subscribe((response => {
             this.contacts = response.json().contacts;
-            this.contacts.forEach((contacts, index) => {
-                contacts.id = index;
-                contacts.name = contacts.name;
+            this.contacts.forEach((contact, index) => {
+                contact.id = index;
+                contact.name = contact.name;
             })
+            this.loadings.contacts = false;
         }));
 
         this.onCompleted.emit(event);
     }
 
-    contactChanged() {
+    podChanged(pod: any) {
+        this.orderManager.selectPointOfDelivery(this.pod);
+    }
+
+    contactChanged(contact: any) {
         this.orderManager.selectContact(this.contact);
     }
 

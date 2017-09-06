@@ -6,37 +6,36 @@
                     <div class="col-md-4 col-sm-12 select-label">
                         <label for="jobsite-select" class="select-label">Select from existing jobsite</label>
                     </div>
-                    <div class="col-md-8 col-sm-12">
-                        <ss-multiselect-dropdown [options]="locations" [texts]="jobsiteTexts" [settings]="jobsiteSettings" [(ngModel)]="locationIndex" (ngModelChange)="jobsiteChanged(locations[$event[0]])"></ss-multiselect-dropdown>
+                    <div class="col-md-8 col-sm-12" [ngClass]="{ disabled: loadings.locations }">
+                        <ss-multiselect-dropdown [options]="locations" [texts]="jobsiteTexts" [settings]="dropDownSettings" [(ngModel)]="locationIndex" (ngModelChange)="jobsiteChanged(locations[$event[0]])"></ss-multiselect-dropdown>
                     </div>
                 </div>
                 <div class="row align-items-center">
                     <div class="col-md-4 col-sm-12 select-label">
                         <label for="pod-select" class="select-label">Select from existing point of delivery</label>
                     </div>
-                    <div class="col-md-8 col-sm-12">
-                        <select id="pod-select" class="form-control" (change)="validateFormElements($event, 'pointOfDelivery')">
-                            <option value="" selected disabled hidden>Select existing POD</option>
-                        </select>
+                    <div class="col-md-8 col-sm-12" [ngClass]="{ disabled: loadings.pods }">
+                        <ss-multiselect-dropdown [options]=" pods " [texts]="podsTexts " [settings]="dropDownSettings " [(ngModel)]="podIndex " (ngModelChange)="podChanged(pods[$event[0]]) "></ss-multiselect-dropdown>
                     </div>
                 </div>
             </div>
-            <div class="second-container">
-                <div class="row align-items-center mb-21px">
-                    <div class="col-md-4 col-sm-12 select-label">
-                        <label for="purchase-order" class="select-label required" (change)="contactSelected($event)">Purchase order</label>
+            <div class="second-container ">
+                <div class="row align-items-center mb-21px ">
+                    <div class="col-md-4 col-sm-12 select-label ">
+                        <label for="purchase-order " class="select-label required " (change)="contactSelected($event) ">Purchase order</label>
                     </div>
-                    <div class="col-md-8 col-sm-12" [ngClass]="{error: !validationModel.purchaseOrder}">
-                        <input type="text" class="form-control dls required" (keyup)="validateFormElements($event, 'purchaseOrder')" (blur)="validateFormElements($event, 'purchaseOrder')" id="purchase-order" placeholder="Put your purchase order" name="purchase-order" />
-                        <span class="error-message">Address cannot be that short.</span>
+                    <div class="col-md-8 col-sm-12 " [ngClass]="{error: !validationModel.purchaseOrder} ">
+                        <input type="text " class="form-control dls required " (keyup)="validateFormElements($event, 'purchaseOrder') " (blur)="validateFormElements($event, 'purchaseOrder') " id="purchase-order " placeholder="Put your purchase order
+                        " name="purchase-order " />
+                        <span class="error-message ">Address cannot be that short.</span>
                     </div>
                 </div>
-                <div class="row align-items-center mb-21px">
-                    <div class="col-md-4 col-sm-12 select-label">
-                        <label for="conctact-select" class="select-label" (change)="contactSelected($event)">Contact person</label>
+                <div class="row align-items-center mb-21px ">
+                    <div class="col-md-4 col-sm-12 select-label ">
+                        <label for="conctact-select " class="select-label " (change)="contactSelected($event) ">Contact person</label>
                     </div>
-                    <div class="col-md-8 col-sm-12">
-                        <ss-multiselect-dropdown [options]="contacts" [texts]="contactsTexts" [settings]="contactsSettings" [(ngModel)]="contactsIndex"></ss-multiselect-dropdown>
+                    <div class="col-md-8 col-sm-12 " [ngClass]="{ disabled: loadings.contacts }">
+                        <ss-multiselect-dropdown [options]="contacts" [texts]="contactsTexts" [settings]="dropDownSettings" [(ngModel)]="contactsIndex" (ngModelChange)="contactChanged(contacts[$event[0]])"></ss-multiselect-dropdown>
                     </div>
                 </div>
                 <div class="row align-items-center mb-21px">

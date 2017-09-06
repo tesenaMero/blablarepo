@@ -60,7 +60,7 @@ export class SpecificationsStepComponent {
     constructor(private api: ProductsApi) { 
         this.products.push(new PreProduct());
         this.api.top({shipmentLocationId: 1058}).subscribe((result) => {
-            console.log(result.json());
+            //console.log(result.json());
         });
     }
 

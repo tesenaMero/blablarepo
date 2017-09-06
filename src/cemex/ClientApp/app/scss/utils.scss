@@ -16,3 +16,8 @@
     display: none;
     visibility: hidden;
 }
+
+.disabled {
+    opacity: .53;
+    pointer-events: none;
+}
