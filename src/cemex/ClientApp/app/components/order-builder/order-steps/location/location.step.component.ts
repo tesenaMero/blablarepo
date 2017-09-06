@@ -134,9 +134,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.loadings.pods = true;
         this.loadings.contacts = true;
         
-        // Set current location and start fetching
+        // Set current shipment location
         this.location = location;
         this.orderManager.selectJobsite(this.location);
+
+        // Fetch geolocation
         this.shipmentApi.jobsiteGeo(this.location).subscribe((geo) => {
             this.cleanJobsiteMarker();
             this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
@@ -167,7 +169,14 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     podChanged(pod: any) {
+        // Select it
         this.orderManager.selectPointOfDelivery(this.pod);
+
+        this.shipmentApi.jobsiteGeo(pod).subscribe((geo) => {
+            this.cleanJobsiteMarker();
+            this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
+            this.addMarkerToMap(this.jobsiteMarker);
+        });
     }
 
     contactChanged(contact: any) {
