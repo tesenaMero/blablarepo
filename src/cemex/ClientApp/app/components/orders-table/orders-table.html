@@ -51,7 +51,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="pagination">
-            <pagination [totalPages]="10" [currentPage]="1" (changePage)="changePage($event)"></pagination>
+            <pagination [totalPages]="totalPages || 1" [currentPage]="currentPage" (changePage)="changePage($event)"></pagination>
         </div>
     </div>
 </div>

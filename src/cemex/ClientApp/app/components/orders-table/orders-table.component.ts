@@ -21,9 +21,11 @@ export class OrdersTableComponent {
     ordersQty: any;
     sortOrder: Object = {};
     sortedBy: any;
+    currentPage: number = 1;
 
     @Input() orders: OrderRequest[];
     @Input() isLoading: boolean;
+    @Input() totalPages: number;
     @Input() set configuration(value: OrderRequestTableComponentConfiguration) {
         this.compoundConfig.columns.length = 0;
         value.columns.forEach((col) => {
@@ -154,7 +156,10 @@ export class OrdersTableComponent {
         }
     }
 
-    changePage(page) { }
+    changePage(page) {
+        this.ordersService.paginateOrders(page);
+        this.currentPage = page;
+    }
 
     favorite(orderRequestId, isFavorite) {
         this.ordersService.favoriteOrder(orderRequestId, isFavorite);
@@ -170,6 +175,7 @@ export class OrdersTableComponent {
 
     sortBy(column, asc) {
         if(column.sortable) {
+            this.currentPage = 1;
             this.ordersService.orderBy({ asc: Boolean(asc), key: column.key });
             this.sortedBy = column.key;
             this.sortOrder[column.key] = !this.sortOrder[column.key];

@@ -135,14 +135,15 @@ export class OrdersService {
     private _orders: BehaviorSubject<OrdersState>;
     private _isLoading: BehaviorSubject<boolean>;
     private _error: BehaviorSubject<string | null>;
+    private _totalItems: BehaviorSubject<number | 1>;
     private theOrders;
     private ordersModel;
 
     constructor(private OrdersApi: OrdersApi, private helper: OrderRequestHelper, private ordersModelService: OrdersModel) {
         this._orders = <BehaviorSubject<OrdersState>>new BehaviorSubject({ byId: {}, allIds: [] });
         this._isLoading = <BehaviorSubject<boolean>>new BehaviorSubject(false);
+        this._totalItems = <BehaviorSubject<number>>new BehaviorSubject(1);
         this._error = <BehaviorSubject<string | null>>new BehaviorSubject(null);
-
     }
 
     public fetchAllOrders() {
@@ -156,11 +157,13 @@ export class OrdersService {
                 const flatten = this.helper.flattenData(json);
                 const mappedData = this.helper.mapDataToResponseFormat(flatten, OrdersService.ORDER_REQUEST_MAPPING);
                 this.theOrders = mappedData;
-                return this.ordersModelService.getModelOrders(mappedData);
+                const pagedOrders = this.getPagedOrders(1)
+                return pagedOrders;
             })
             .subscribe(response => {
                 this.ordersModel = response.entities.orderRequests;
                 this._orders.next({ allIds: response.result, byId: response.entities.orderRequests });
+                this._totalItems.next(Math.ceil(50 / 10));
                 this._isLoading.next(false);
             }, err => {
                 this._error.next("Failed fetching orders");
@@ -186,6 +189,18 @@ export class OrdersService {
 
     public getOrders() {
         return this._orders.map((state) => state.allIds.map((id) => state.byId[id]));
+    }
+
+    paginateOrders(page: number, itemsPerPage: number = 10) {
+        const normalizedOrders = this.getPagedOrders(page, itemsPerPage);
+        this._orders.next({ allIds: normalizedOrders.result, byId: normalizedOrders.entities.orderRequests })
+    }
+
+    private getPagedOrders(page: number, itemsPerPage: number = 10) {
+        let index = page - 1;
+        const pagedOrders = this.theOrders.slice( index*10, index*10 + itemsPerPage);
+        const normalizedOrders = this.ordersModelService.getModelOrders(pagedOrders);
+        return normalizedOrders;
     }
 
     orderBy(event: OrderByEvent) {
@@ -221,16 +236,16 @@ export class OrdersService {
             }
             return 0;
         });
-
-        const ids = [];
-        let l = this.theOrders.length;
-        while(l--) {
-            ids.unshift(this.theOrders[l].orderId);
-        }
-        this._orders.next({ allIds: ids, byId: this.ordersModel })
+        
+        const orders = this.getPagedOrders(1, 10);
+        this._orders.next({ allIds: orders.result, byId: orders.entities.orderRequests })
     }
 
     public isLoading() {
         return this._isLoading.asObservable();
+    }
+
+    public getTotalPages() {
+        return this._totalItems.asObservable();
     }
 }
