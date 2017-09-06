@@ -36,12 +36,7 @@
                         <label for="conctact-select" class="select-label" (change)="contactSelected($event)">Contact person</label>
                     </div>
                     <div class="col-md-8 col-sm-12">
-                        <select id="conctact-select" class="form-control" [(ngModel)]="contact">
-                            <option value="" selected disabled hidden>Select contact</option>
-                            <ng-container *ngFor="let c of contacts">
-                                <option [ngValue]='c'>{{ c.name }}</option>
-                            </ng-container>
-                        </select>
+                        <ss-multiselect-dropdown [options]="contacts" [texts]="contactsTexts" [settings]="contactsSettings" [(ngModel)]="contactsIndex"></ss-multiselect-dropdown>
                     </div>
                 </div>
                 <div class="row align-items-center mb-21px">
