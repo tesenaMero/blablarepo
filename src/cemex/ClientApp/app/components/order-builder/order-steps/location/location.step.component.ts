@@ -40,21 +40,35 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         closeOnSelect: true,
     };
 
+    contactsSettings: IMultiSelectSettings = {
+        enableSearch: true,
+        checkedStyle: 'fontawesome',
+        buttonClasses: 'btn btn-default btn-block',
+        dynamicTitleMaxItems: 1,
+        displayAllSelectedText: true,
+        closeOnClickOutside: true,
+        selectionLimit: 1,
+        autoUnselect: true,
+        closeOnSelect: true,
+    };
+
     // Text configuration
     jobsiteTexts: IMultiSelectTexts = {
-        checkAll: 'Select all',
-        uncheckAll: 'Unselect all',
-        checked: 'item selected',
-        checkedPlural: 'items selected',
         searchPlaceholder: 'Find jobsite',
         searchEmptyResult: 'No jobsite found...',
-        searchNoRenderText: 'Type in search box to see results...',
         defaultTitle: 'Select existing jobsite',
+    };
+
+    contactsTexts: IMultiSelectTexts = {
+        searchPlaceholder: 'Find contact',
+        searchEmptyResult: 'No contacts found...',
+        defaultTitle: 'Select contact',
     };
 
     // Labels / Parents
     jobsiteOptions: IMultiSelectOption[] = [];
     locationIndex: any;
+    contactsIndex: any;
 
     // H4x0R
     private jobsite: any;
@@ -129,6 +143,10 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         // Fetch contacts
         this.shipmentApi.contacts(this.location).subscribe((response => {
             this.contacts = response.json().contacts;
+            this.contacts.forEach((contacts, index) => {
+                contacts.id = index;
+                contacts.name = contacts.name;
+            })
         }));
 
         this.onCompleted.emit(event);
