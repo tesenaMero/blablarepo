@@ -38,7 +38,7 @@ export class PaginationComponent implements OnInit {
   }
 
   setPage(page: number) {
-    this.changePage.emit(page);
+    this.totalPages >= page ? this.changePage.emit(page) : null;
   }
 
 }

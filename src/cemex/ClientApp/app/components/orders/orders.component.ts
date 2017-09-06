@@ -12,6 +12,7 @@ import { OrderRequestTableComponentConfiguration } from '../../utils/order-reque
 export class OrdersComponent implements OnInit {
   orders: any;
   isLoading: any;
+  totalPages: any;
 
   public orderRequestConfiguration: OrderRequestTableComponentConfiguration;
 
@@ -19,6 +20,7 @@ export class OrdersComponent implements OnInit {
     this.orders = ordersService.getOrders();
     this.isLoading = ordersService.isLoading();
     this.orderRequestConfiguration = OrdersService.ORDER_REQUEST_MAPPING;
+    this.totalPages = ordersService.getTotalPages();
   }
 
   ngOnInit() {
