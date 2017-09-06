@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular
 import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
+import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
 import { ShipmentLocationApi } from '../../../../shared/services/api/shipment-locations.service.api';
 
 @Component({
@@ -14,37 +15,82 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     @Input() mapOptions?: google.maps.MapOptions;
     @Output() onCompleted = new EventEmitter<any>();
 
-    private isMapLoaded: boolean = false;
-    private map: any; // Map instance
-
     // Selected data
-    private location: any = "";
-    private contact: any = "";
-    catalogOptions: Object = {};
-    selectedServices: Array<{
-        additionalServiceId: number
-    }> = [];
+    private location: any;
+    private contact: any;
+    private pod: any;
+    private catalogOptions: Object = {};
+    private selectedServices: Array<{ additionalServiceId: number }> = [];
+
+    // Loading state
+    private isMapLoaded: boolean = false;
+    private loadings = {
+        locations: false,
+        contacts: true,
+        pods: true,
+        map: false
+    }
 
     // Mapped data
     locations = [];
     contacts = [];
-    
-    // H4x0R
-    nice: boolean;
-    jobsite: any;
+    pods = []
 
-    validationModel = {
+    // Mapping index values (For dropdown)
+    locationIndex: any;
+    contactsIndex: any;
+    podsIndex: any;
+
+    // Settings configuration
+    dropDownSettings: IMultiSelectSettings = {
+        enableSearch: true,
+        checkedStyle: 'fontawesome',
+        buttonClasses: 'btn btn-default btn-block',
+        dynamicTitleMaxItems: 1,
+        displayAllSelectedText: true,
+        closeOnClickOutside: true,
+        selectionLimit: 1,
+        autoUnselect: true,
+        closeOnSelect: true,
+    };
+
+    // Text configuration
+    jobsiteTexts: IMultiSelectTexts = {
+        searchPlaceholder: 'Find jobsite',
+        searchEmptyResult: 'No jobsite found...',
+        defaultTitle: 'Select existing jobsite',
+    };
+
+    contactsTexts: IMultiSelectTexts = {
+        searchPlaceholder: 'Find contact',
+        searchEmptyResult: 'No contacts found...',
+        defaultTitle: 'Select contact',
+    };
+
+    podsTexts: IMultiSelectTexts = {
+        searchPlaceholder: 'Find point of delivery',
+        searchEmptyResult: 'No points of deliveries found...',
+        defaultTitle: 'Select existing POD',
+    };
+
+    // H4x0R
+    private validationModel = {
         purchaseOrder: true,
     }
 
-    constructor(@Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi) {
+    // Google map
+    private map: any; // Map instance
+    private infoWindow: any;
+    private jobsiteMarker: any;
+
+    constructor( @Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi) {
         this.step.setEventsListener(this);
     }
 
+    // Interfaces
+    // ======================
     ngOnInit() {
-        this.shipmentApi.all().subscribe((response) => {
-            this.locations = response.json().shipmentLocations;
-        });
+        this.fetchJobsites();
         this.getCatalog();
     }
 
@@ -59,47 +105,14 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         }
     }
 
-    jobsiteChanged() {
-        this.nice = true;
-        this.orderManager.selectJobsite(this.location);
-
-        // Fetch address
-        // Right now not working so wait
-        // this.shipmentApi.address(this.location).subscribe((response) => {});
-
-        // Fetch pods
-        // Right now not working so wait
-        // this.shipmentApi.pods(this.location).subscribe((response) => {
-        //     console.log(response.json())
-        // });
-
-        // Fetch contacts
-        this.shipmentApi.contacts(this.location).subscribe((response => {
-            this.contacts = response.json().contacts;
-        }));
-        
-        if(this.validateFormElements(event)) {
-            this.onCompleted.emit(event);
-        }
-    }
-
-
-
-    pointOfDeliverySelected(event: any) {
-        this.orderManager.selectPointOfDelivery({ pointOfDeliveryId: 1 });
-        this.nice = true;
-        if(this.validateFormElements(event)) {
-            this.onCompleted.emit(event);
-        }
-    }
-
-    contactChanged() {
-        this.orderManager.selectContact(this.contact);
-    }
-
-    validateFormElements(e, key?: string) {
-        this.validationModel[key] = Boolean(e.target.value.length);
-        return e.target.value.length;
+    fetchJobsites() {
+        this.shipmentApi.all().subscribe((response) => {
+            this.locations = response.json().shipmentLocations;
+            this.locations.forEach((location, index) => {
+                location.id = index;
+                location.name = location.shipmentLocationDesc;
+            })
+        });
     }
 
     getCatalog() {
@@ -108,7 +121,72 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 this.catalogOptions[item.catalogCode] = item;
                 return item;
             });
-        })        
+        })
+    }
+
+    // Step flow
+    // =====================
+    jobsiteChanged(location: any) {
+        // Set loading state
+        this.loadings.pods = true;
+        this.loadings.contacts = true;
+        this.loadings.map = true;
+        
+        // Set current shipment location
+        this.location = location;
+        this.orderManager.selectJobsite(this.location);
+
+        // Fetch geolocation
+        this.shipmentApi.jobsiteGeo(this.location).subscribe((geo) => {
+            this.cleanJobsiteMarker();
+            this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
+            this.addMarkerToMap(this.jobsiteMarker);
+            this.loadings.map = false;
+        });
+
+        // Fetch pods
+        this.shipmentApi.pods(this.location).subscribe((response) => {
+            this.pods = response.json().shipmentLocations;
+            this.pods.forEach((pod, index) => {
+                pod.id = index;
+                pod.name = pod.shipmentLocationDesc;
+            })
+            this.loadings.pods = false;
+        });
+
+        // Fetch contacts
+        this.shipmentApi.contacts(this.location).subscribe((response => {
+            this.contacts = response.json().contacts;
+            this.contacts.forEach((contact, index) => {
+                contact.id = index;
+                contact.name = contact.name;
+            })
+            this.loadings.contacts = false;
+        }));
+
+        this.onCompleted.emit(event);
+    }
+
+    podChanged(pod: any) {
+        // Select it
+        this.orderManager.selectPointOfDelivery(this.pod);
+
+        this.loadings.map = true;
+        this.shipmentApi.jobsiteGeo(pod).subscribe((geo) => {
+            this.cleanJobsiteMarker();
+            this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
+            this.addMarkerToMap(this.jobsiteMarker);
+            this.loadings.map = false;
+        });
+    }
+
+    contactChanged(contact: any) {
+        this.orderManager.selectContact(this.contact);
+    }
+
+    validateFormElements(e, key?: string) {
+        this.validationModel[key] = Boolean(e.target.value.length);
+        return e.target.value.length;
     }
 
     addAdditionalServices(event, index) {
@@ -123,5 +201,40 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         }
         this.orderManager.selectAdditionalServices(this.selectedServices);
     }
+
+    // Map stuff
+    // ====================
+    makeJobsiteMarker(geo: any): google.maps.Marker {
+        let marker = new google.maps.Marker({
+            position: { lat: parseFloat(geo.latitude), lng: parseFloat(geo.longitude) },
+            title: 'jobsite'
+            //icon: InfoBuilder.plantIcon(plant)
+        });
+
+        // marker.addListener('click', () => {
+        //     this.showPlantInfo(plant, marker);
+        // });
+
+        return marker;
+    }
+
+    addMarkerToMap(marker: google.maps.Marker) {
+        marker.setMap(this.map);
+        this.map.setCenter(marker.getPosition());
+    }
+
+    cleanJobsiteMarker() {
+        if (this.jobsiteMarker)
+            this.jobsiteMarker.setMap(null);
+    }
+
+    // showJobsiteInfo(plant: any, marker: any) {
+    //     this.infoWindow.setContent(InfoBuilder.buildPlantInfoHTML(plant));
+    //     this.infoWindow.open(this.map, marker);
+    //     this.onMarkerSelected.emit(new MarkerItem(plant, MarkerType.PLANT));
+    //     this._zone.run(() => {
+    //         this.selectedPlant = plant;
+    //     });
+    // }
 
 }

@@ -28,6 +28,7 @@ import {
 import { SearchProductComponent } from './components/search-product/search-product.component';
 import { OrderDetailCommentsComponent } from './components/order-detail/order-detail-comments/order-detail-comments.component';
 import { OrderDetailLogsComponent } from './components/order-detail/order-detail-logs/order-detail-logs.component';
+import { SelectDropdownModule } from './shared/components/selectwithsearch/dropdown.module';
 
 // Pipes
 import { 
@@ -110,6 +111,7 @@ export const sharedConfig: NgModule = {
     ],
     imports: [
         NguiDatetimePickerModule,
+        SelectDropdownModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full' },
             { path: 'orders', redirectTo: 'app', pathMatch: 'full' },

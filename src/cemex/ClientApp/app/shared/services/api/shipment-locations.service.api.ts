@@ -22,8 +22,20 @@ export class ShipmentLocationApi {
         );
     }
 
+    // Chain combines address() + geo()
+    jobsiteGeo(shipmentLocation: any): Observable<Response> {
+        return this.address(shipmentLocation)
+        .flatMap((address) => { return this.geo(address.json()); })
+        .map(geo => geo);
+    }
+
     address(shipmentLocation: any): Observable<Response> {
         return this.api.get(shipmentLocation.address.links.self);
+    }
+    
+    geo(address: any): Observable<Response> {
+        //return this.api.get(address.geoPlace.links.self);
+        return this.api.get(address.geoPlace.links.self.replace("v4", "v5"));
     }
 
     contacts(shipmentLocation: any): Observable<Response> {
