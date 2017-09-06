@@ -24,14 +24,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     // Loading state
     private isMapLoaded: boolean = false;
-    private __locations__ = false;
-    private __contacts__ = false;
-    private __pods__ = false;
-
     private loadings = {
         locations: false,
         contacts: true,
-        pods: true
+        pods: true,
+        map: false
     }
 
     // Mapped data
@@ -133,6 +130,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         // Set loading state
         this.loadings.pods = true;
         this.loadings.contacts = true;
+        this.loadings.map = true;
         
         // Set current shipment location
         this.location = location;
@@ -143,6 +141,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.cleanJobsiteMarker();
             this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
             this.addMarkerToMap(this.jobsiteMarker);
+            this.loadings.map = false;
         });
 
         // Fetch pods
@@ -172,10 +171,12 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         // Select it
         this.orderManager.selectPointOfDelivery(this.pod);
 
+        this.loadings.map = true;
         this.shipmentApi.jobsiteGeo(pod).subscribe((geo) => {
             this.cleanJobsiteMarker();
             this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
             this.addMarkerToMap(this.jobsiteMarker);
+            this.loadings.map = false;
         });
     }
 
