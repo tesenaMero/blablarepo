@@ -13,7 +13,7 @@ export class OrderDetailComponent {
     orderDetailData: any;
 
     constructor(private orderDetailApi: OrderDetailApi) {
-        orderDetailApi.byId(1979).subscribe((response) => {
+        orderDetailApi.byId(1).subscribe((response) => {
             console.log(response);
             this.orderDetailData = response.json();
         });
