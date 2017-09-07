@@ -11,6 +11,7 @@ import { OrderDetailApi } from '../../shared/services/api/order-detail.service';
 })
 export class OrderDetailComponent {   
     orderDetailData: any;
+    @Input() orderId: number;
 
     constructor(private orderDetailApi: OrderDetailApi) {
         orderDetailApi.byId(1).subscribe((response) => {

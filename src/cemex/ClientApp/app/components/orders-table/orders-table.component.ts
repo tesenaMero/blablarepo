@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { OrderRequest } from '../../shared/models/order-request';
 import { OrdersService } from '../../shared/services/orders.service';
 import {
@@ -167,6 +167,7 @@ export class OrdersTableComponent {
 
     onRowClick(order: OrderRequest) {
         //console.log(this.orders);
+        console.log(order);
     }
 
     showIcon(businessLineCode: string) {

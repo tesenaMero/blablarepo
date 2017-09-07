@@ -69,14 +69,14 @@
                 <div class="info">
                     <span class="title">Status:</span>
                     <span class="status" [ngClass]="{
-                        canceled: orderDetailData.status.isCanceled(),
-                        confirmed: orderDetailData.status.isConfirmed(),
-                        draft: orderDetailData.status.isDraft(),
-                        pending: orderDetailData.status.isPending(),
-                        blocked: orderDetailData.status.isBlocked(),
-                        holded: orderDetailData.status.isHolded(),
-                        processed: orderDetailData.status.isProcessed(),
-                        completed: orderDetailData.status.isCompleted()
+                         canceled: orderDetailData.status.statusDesc == 'Canceled - Hdr',
+                        confirmed: orderDetailData.status.statusCode == 'CONF',
+                            draft: orderDetailData.status.statusDesc == 'Draft - Hdr',
+                          pending: orderDetailData.status.statusCode == 'INPC',
+                          blocked: orderDetailData.status.statusCode == 'BLCK',
+                           holded: orderDetailData.status.statusDesc == 'Holded - Hdr',
+                        processed: orderDetailData.status.statusDesc == 'In process - Hdr',
+                        completed: orderDetailData.status.statusCode == 'CMPO'
                     }"></span>
                     <span class="value">{{orderDetailData.status.statusDesc}}</span>
                 </div>
