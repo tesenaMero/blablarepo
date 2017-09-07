@@ -11,7 +11,7 @@
             {{page}}
         </a>
     </li>
-    <li *ngIf="pages.length != currentPage" class="control">
+    <li *ngIf="totalPages != currentPage" class="control">
         <a (click)="setPage(currentPage + 1)">
             <svg class="icon-straight-arrow-right">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-straight-arrow-right"></use>

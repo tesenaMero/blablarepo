@@ -47,7 +47,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         checkedStyle: 'fontawesome',
         buttonClasses: 'btn btn-default btn-block',
         dynamicTitleMaxItems: 1,
-        displayAllSelectedText: true,
+        displayAllSelectedText: false,
         closeOnClickOutside: true,
         selectionLimit: 1,
         autoUnselect: true,

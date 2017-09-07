@@ -33,45 +33,29 @@ export class SessionService {
     }
 
     private generateUrlString(user: string, password: string): any {
-        // return {
-        //     "grant_type": "password",
-        //     "scope": "security",
-        //     "username": user,
-        //     "client_id": this.http.clientId,
-        //     "password": password
-        // };
-
         return "grant_type=password&scope=security&username=" + user +
         "&password=" + encodeURIComponent(password) +
         "&client_id=" + this.http.clientId;
     }
 
     private processDataFromLogin(data: any): void {
-        this.http.setToken(data.oauth2.access_token, data.jwt);
         sessionStorage.setItem('access_token', data.oauth2.access_token);
         sessionStorage.setItem('jwt', data.jwt);
         sessionStorage.setItem('user_profile', JSON.stringify(data.profile));
         sessionStorage.setItem('user_customer', JSON.stringify(data.customer));
     }
 
-    makeRequestOptions() {
+    loginHeaders() {
         let options = new RequestOptions({
             headers: new Headers({
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'accept': 'text/plain, */*',
+                'X-IBM-Client-Id': this.http.clientId,
+                'App-Code': this.http.appId,
+                'Accept-Language': this.http.acceptLanguage
             })
         });
-
-        options.headers.append('X-IBM-Client-Id', this.http.clientId);
-        options.headers.append('App-Code', this.http.appId);
-        options.headers.append('Accept-Language', 'en-US');
-
-        if (sessionStorage.getItem('access_token') !== null && sessionStorage.getItem('access_token') !== undefined)
-            options.headers.append('Authorization', 'Bearer ' + sessionStorage.getItem('access_token'));
-
-        if (sessionStorage.getItem('jwt') !== null && sessionStorage.getItem('jwt') !== undefined)
-            options.headers.append('jwt', sessionStorage.getItem('jwt'));
-
+        
         return options;
     }
 
@@ -81,9 +65,7 @@ export class SessionService {
 
     public login(user: string, password: string): Promise<any> {
         this.clean();
-        let options = this.makeRequestOptions()
-
-        return this.http.post("/v2/secm/oam/oauth2/token", this.generateUrlString(user, password), options)
+        return this.http.post("/v2/secm/oam/oauth2/token", this.generateUrlString(user, password), this.loginHeaders())
             .toPromise()
             .then(response => {
                 this.processDataFromLogin(response.json());

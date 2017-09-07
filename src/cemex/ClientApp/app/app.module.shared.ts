@@ -46,6 +46,7 @@ import { ActionButtonComponent } from './shared/components/action-button/action-
 import { BreadcrumbsComponent, BreadcrumbsItemComponent } from './shared/components/breadcrumbs'
 import { PaginationComponent } from './shared/components/pagination/pagination.component';
 import { DLSTableComponent } from './shared/components/table/table.component';
+import { NavigationComponent } from './shared/components/navigation/navigation.component'
 
 // Services
 import { WindowRef } from './shared/services/window-ref.service';
@@ -109,7 +110,8 @@ export const sharedConfig: NgModule = {
         StepperComponent,
         Step,
         ActionButtonComponent,
-        DLSTableComponent
+        DLSTableComponent,
+        NavigationComponent
     ],
     imports: [
         NguiDatetimePickerModule,

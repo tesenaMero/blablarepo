@@ -29,7 +29,7 @@
             <ng-container *ngFor="let order of orders; let odd = odd">
                 <tr [ngClass]="{ 'zebra': odd }" (click)="onRowClick(order)">
                     <td [attr.data-title]="column.title" class="{{ 'col-' + column.key }}" [ngClass]="{first: first}" [routerLink]="first ? '../order-detail' : null" *ngFor="let column of filteredColumns; let i = index; let first = first">
-                        <span class="status" [ngClass]="{
+                        <span [style.content]="canceled" class="status" [ngClass]="{
                                 canceled: order.isCanceled(),
                                 confirmed: order.isConfirmed(),
                                 draft: order.isDraft(),
@@ -51,7 +51,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="pagination">
-            <pagination [totalPages]="10" [currentPage]="1" (changePage)="changePage($event)"></pagination>
+            <pagination [totalPages]="totalPages || 1" [currentPage]="currentPage" (changePage)="changePage($event)"></pagination>
         </div>
     </div>
 </div>
