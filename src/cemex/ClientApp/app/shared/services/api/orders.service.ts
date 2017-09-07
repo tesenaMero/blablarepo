@@ -10,7 +10,7 @@ export class OrdersApi {
     constructor(private Api: Api) {}
     
     all(customerId: string, take: number = 100): Observable<Response> {
-        return this.Api.get(`/v2/sm/orders?include=orderitem`);
+        return this.Api.get(`/v4/sm/orders?include=orderitem`);
     }
 
     byId(orderRequestId: number): Observable<Response> {
