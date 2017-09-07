@@ -10,7 +10,7 @@ export class ProductLineApi {
     }
 
     all(): Observable<Response> {
-        return this.api.get("/v4/sm/productlines");
+        return this.api.get("/v4/sm/productlines?customerId=122");
     }
 
 }

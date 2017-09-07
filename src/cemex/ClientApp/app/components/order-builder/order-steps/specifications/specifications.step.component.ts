@@ -20,8 +20,8 @@ export class SpecificationsStepComponent {
     }
 
     static availablePayments = [
-        { name: "Credit" },
-        { name: "Cash" }
+        { name: "Cash" },
+        { name: "Credit" }
     ];
 
     get availablePayments() {

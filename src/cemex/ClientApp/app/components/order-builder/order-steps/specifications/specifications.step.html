@@ -1,6 +1,6 @@
 <div class="products">
     <!-- Cement Mexico Delivery -->
-    <ng-container *ngIf="false">
+    <ng-container *ngIf="true">
         <div class="product" [ngClass]="{ 
                 'exit-animation': product.deleting, 
                 'enter-animation': index > 0 }" *ngFor="let product of products; let index = index;">
@@ -324,7 +324,7 @@
     </ng-container>
 
     <!-- Readymix Mexico Delivery -->
-    <ng-container *ngIf="true">
+    <ng-container *ngIf="false">
         <div class="product" [ngClass]="{ 
                 'exit-animation': product.deleting, 
                 'enter-animation': index > 0 }" *ngFor="let product of products; let index = index;">
