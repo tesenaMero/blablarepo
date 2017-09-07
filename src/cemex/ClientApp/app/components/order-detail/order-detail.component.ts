@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { OrderDetailApi } from '../../shared/services/api/order-detail.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'order-detail-page',
@@ -11,12 +12,21 @@ import { OrderDetailApi } from '../../shared/services/api/order-detail.service';
 })
 export class OrderDetailComponent {   
     orderDetailData: any;
-    @Input() orderId: number;
+    id: number;
+    private sub: any;
 
-    constructor(private orderDetailApi: OrderDetailApi) {
-        orderDetailApi.byId(1).subscribe((response) => {
+    constructor(private orderDetailApi: OrderDetailApi, private route: ActivatedRoute) {
+        this.sub = this.route.params.subscribe(params => {
+            this.id = +params['id'];
+            //console.log(this.id);
+        });
+        // orderDetailApi.byId(1).subscribe((response) => {
+        orderDetailApi.byId(this.id).subscribe((response) => {            
             console.log(response);
             this.orderDetailData = response.json();
         });
     }
+    ngOnDestroy() {
+        this.sub.unsubscribe();
+    }        
 }

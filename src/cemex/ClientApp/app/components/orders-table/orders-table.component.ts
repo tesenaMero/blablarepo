@@ -167,7 +167,6 @@ export class OrdersTableComponent {
 
     onRowClick(order: OrderRequest) {
         //console.log(this.orders);
-        console.log(order);
     }
 
     showIcon(businessLineCode: string) {
