@@ -83,7 +83,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     private infoWindow: any;
     private jobsiteMarker: any;
 
-    constructor( @Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi) {
+    constructor(@Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi) {
         this.step.setEventsListener(this);
     }
 
