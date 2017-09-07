@@ -60,6 +60,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     constructor( @Inject(Step) private step: Step, private api: ProductsApi, private orders: CreateOrderService) {
+        this.step.setEventsListener(this);
         this.products.push(new PreProduct());
         this.step.setEventsListener(this);
     }
