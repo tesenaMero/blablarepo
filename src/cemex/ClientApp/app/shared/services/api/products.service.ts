@@ -12,4 +12,8 @@ export class ProductsApi {
     top(shipmentLocation: any): Observable<Response> {
         return this.api.get(`/v2/mm/myproducts?shipmentLocationId=` + shipmentLocation.shipmentLocationId + ".2&productLineId=2&salesDocumentTypeId=3");
     }
+
+    advancedSearch(shipmentLocationId): Observable<Response> {
+        return this.api.get(`/v2/mm/myproducts?shipmentLocationId=${shipmentLocationId}&salesDocumentTypeId=4&productLineId=1`);
+    }
 }

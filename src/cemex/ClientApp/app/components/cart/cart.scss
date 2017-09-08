@@ -1,5 +1,20 @@
 @import "~bootstrap/scss/bootstrap-grid.scss";
 $link-blue: #3FA9F5;
+.map-overlay {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    opacity: .53;
+    z-index: 1;
+    >div {
+        background: url(cemex-loading.gif) no-repeat 0 0;
+        background-position: center;
+        height: 100%;
+        width: 100%;
+    }
+}
+
 .layout {
     padding: 34px 26px 34px 26px;
     @include media-breakpoint-down(sm) {
