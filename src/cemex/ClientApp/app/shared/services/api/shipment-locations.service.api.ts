@@ -10,15 +10,15 @@ export class ShipmentLocationApi {
     }
 
     all(): Observable<Response> {
-        return this.api.get("/v4/sm/myshipmentlocations");
+        return this.api.get("/v4/sm/myshipmentlocations?legalEntityId=122.1&shipmentLocationTypeId=2&productLineId=2");
     }
 
     pods(shipmentLocation: any): Observable<Response> {
         return this.api.get(
-            "/v4/sm/myshipmentlocations?shipmentlocationId=" + 
+            "/v4/sm/myshipmentlocations?legalEntityId=122.1&shipmentlocationId=" + 
             shipmentLocation.shipmentLocationId + "." + 
             shipmentLocation.shipmentLocationType.shipmentLocationTypeId + "&" +
-            "shipmentLocationTypeId=6"
+            "shipmentLocationTypeId=3&productLineId=2"
         );
     }
 

@@ -10,8 +10,7 @@ $link-blue: #3FA9F5;
 .title-container {
     padding-top: 7px;
     padding-bottom: 16px;
-    margin-bottom: 76px;
-    // white-space: nowrap;
+    margin-bottom: 42px;
     @include media-breakpoint-down(sm) {
         margin-bottom: 0;
     }
@@ -41,6 +40,17 @@ $link-blue: #3FA9F5;
     }
 }
 
+.order {
+    min-height: 233px;
+    border-radius: 3px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07);
+    padding: 25px 33px;
+    &:first-child {
+        margin-top: 42px;
+    }
+}
+
 .cart-items-container {
     border-radius: 3px;
     background-color: #FFFFFF;
@@ -67,7 +77,6 @@ $link-blue: #3FA9F5;
                 color: #2A2A2A;
                 font-size: 14px;
                 line-height: 19px;
-                word-break: break-all;
             }
             .label-field {
                 color: #9CA4AE;

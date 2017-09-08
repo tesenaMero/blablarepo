@@ -9,6 +9,7 @@ import { JobsiteApi } from './jobsite.service';
 import { ProductsApi } from './products.service'
 import { ShippingConditionApi } from './shipping-condition.service';
 import { LegalEntitiesApi } from './legal-entities.service';
+import { DraftsService } from './drafts.service'
 
 export {
     ShipmentLocationApi,
@@ -21,5 +22,6 @@ export {
     JobsiteApi,
     ProductsApi,
     LegalEntitiesApi,
-    ShippingConditionApi
+    ShippingConditionApi,
+    DraftsService,
 }

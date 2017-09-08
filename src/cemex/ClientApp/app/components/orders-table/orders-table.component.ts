@@ -53,7 +53,7 @@ export class OrdersTableComponent {
             {
                 key: 'orderRequestId',
                 title: 'Order No',
-                width: 10,
+                width: 15,
                 sortable: true
             },
             {
@@ -71,7 +71,7 @@ export class OrdersTableComponent {
             {
                 key: 'purchaseOrder',
                 title: 'Purchase Order Number',
-                width: 20,
+                width: 15,
                 sortable: true
             },
             {
