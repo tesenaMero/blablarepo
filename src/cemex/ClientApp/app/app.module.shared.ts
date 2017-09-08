@@ -69,6 +69,8 @@ import {
     ShippingConditionApi
 } from './shared/services/api';
 
+import { EncodeDecodeJsonObjService } from './shared/services/encodeDecodeJsonObj.service';
+
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
     declarations: [
@@ -153,5 +155,6 @@ export const sharedConfig: NgModule = {
         ProductsApi,
         ShippingConditionApi,
         LegalEntitiesApi,
+        EncodeDecodeJsonObjService,
     ]
 };

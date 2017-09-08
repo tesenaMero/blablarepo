@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { ETypeProduct, CementPackageSpecification, CartProductGroup, ReadymixSpecification } from '../../models/index';
 import { WindowRef } from '../../shared/services/window-ref.service';
 import { DOCUMENT } from '@angular/platform-browser';
+import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
 
 @Component({
     selector: 'cart-page',
@@ -15,7 +16,7 @@ export class CartComponent implements OnInit {
     _productsReadymix: ReadymixSpecification[] = [];
     _products: any[] = [];
     disableCartBtn: boolean;
-    constructor(private location: Location, private windowRef: WindowRef, @Inject(DOCUMENT) private document: any) { }
+    constructor(private jsonObjService: EncodeDecodeJsonObjService, private location: Location, private windowRef: WindowRef, @Inject(DOCUMENT) private document: any) { }
 
     ngOnInit() {
         this.disableCartBtn = false;
@@ -143,7 +144,8 @@ export class CartComponent implements OnInit {
             ]
         };
         this.disableCartBtn = true;
-        let encoded = this.windowRef.btoa(JSON.stringify(mock)).replace(/=/g,'-');
-        this.document.location.href = 'http://quotation-pricing-ac.mybluemix.net/product-name/open/'+ encoded;
+        let encoded = this.jsonObjService.encodeJson(mock);
+        // uncomment after DEMO
+        // this.document.location.href = 'https://invoices-payments-dev2.mybluemix.net/invoices-payments/open/'+ encoded;
     }
 }
