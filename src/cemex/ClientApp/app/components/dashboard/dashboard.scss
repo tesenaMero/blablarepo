@@ -56,6 +56,24 @@ nav.side-nav-bar {
     border-bottom: 0;
 }
 
+// Alert
+.alert-bar {
+    transform: translateY(-40px);
+    position: fixed;
+    transition: transform 0.2s ease;
+    &.open {
+        transform: translateY(0);
+        z-index: $dashboard-index - 1;
+    }
+    p {
+        padding: 13px 19px;
+        float: left;
+        line-height: .875rem;
+        width: calc(100% - 46px);
+        font-family: Roboto;
+    }
+}
+
 // Outside of classes to optimize a little
 @include media-breakpoint-down(md) {
     nav.side-nav-bar {

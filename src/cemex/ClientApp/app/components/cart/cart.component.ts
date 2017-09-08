@@ -1,6 +1,8 @@
 import { Component, OnInit, PipeTransform, Pipe, Inject } from '@angular/core';
 import { Location } from '@angular/common';
 import { ETypeProduct, CementPackageSpecification, CartProductGroup, ReadymixSpecification } from '../../models/index';
+import { DraftsService } from '../../shared/services/api/drafts.service';
+import { DashboardService } from '../../shared/services/dashboard.service'
 import { WindowRef } from '../../shared/services/window-ref.service';
 import { DOCUMENT } from '@angular/platform-browser';
 import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
@@ -11,14 +13,39 @@ import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJs
     styleUrls: ['./cart.scss']
 })
 export class CartComponent implements OnInit {
-
     _productGroups: CartProductGroup[] = [];
     _productsReadymix: ReadymixSpecification[] = [];
     _products: any[] = [];
     disableCartBtn: boolean;
-    constructor(private jsonObjService: EncodeDecodeJsonObjService, private location: Location, private windowRef: WindowRef, @Inject(DOCUMENT) private document: any) { }
+
+    private order: any;
+    private loadings = {
+        order: true
+    }
+        
+    constructor(private drafts: DraftsService, private dashboard: DashboardService, private jsonObjService: EncodeDecodeJsonObjService, private location: Location, private windowRef: WindowRef, @Inject(DOCUMENT) private document: any) { }
 
     ngOnInit() {
+        this.loadings.order = true;
+        this.drafts.prices(68).subscribe((response) => {
+            this.order = response.json();
+            this.mockStuff();
+            this.loadings.order = false;
+        });
+    }
+
+    makeOrder() {
+        this.dashboard.alertInfo("Placing order...");
+        this.drafts.createOrder(68).subscribe((response) => {
+            this.dashboard.alertSuccess("Order placed successfully!");
+        });
+    }
+
+    back() {
+        this.location.back();
+    }
+
+    mockStuff() {
         this.disableCartBtn = false;
         let dummyProductGpo: CartProductGroup[] = [
             {
@@ -80,15 +107,15 @@ export class CartComponent implements OnInit {
 
         let dummyProducts: ReadymixSpecification[] = [
             {
-                productDescription: "ReadyMix CHM89",
-                quantity: 2,
+                productDescription: this.order.items[0].product.productDesc,
+                quantity: 1,
                 unit: "tons",
                 requestDate: "13/07/2017",
                 requestTime: "15.00 - 16.00",
-                location: "Southwest 68th Street building",
-                productId: "20939302/10292/20102",
+                location: this.order.items[0].shippingSource.address.cityDesc + ", " + this.order.items[0].shippingSource.address.regionDesc + ", " + this.order.items[0].shippingSource.address.streetName,
+                productId: this.order.items[0].product.productCode,
                 contract: "10-201702189034    Remaining volume: 180",
-                pointDelivery: "Backstreet yard",
+                pointDelivery: this.order.pointOfDelivery.pointOfDeliveryDesc,
                 projectProfile: {
                     id: 1,
                     aplication: "Roof",
@@ -107,18 +134,12 @@ export class CartComponent implements OnInit {
                 spacing: "10 mins",
                 deliveryMode: "Delivery",
                 kicker: true,
-                unitaryPrice: 2500
+                unitaryPrice: this.order.items[0].totalPrice
             }
         ];
 
         this._productsReadymix = dummyProducts;
-        //this._productGroups = dummyProductGpo;
-
         this._products = this._productGroups.length ? this._productGroups : this._productsReadymix;
-    }
-
-    back() {
-        this.location.back();
     }
 
     placeOrder() {
