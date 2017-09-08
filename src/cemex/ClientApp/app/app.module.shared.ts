@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 // Components
 import { AppComponent } from './components/app/app.component'
 import { DashboardComponent } from './components/dashboard/dashboard.component'
+import { LoginComponent }  from './shared/components/login/login.component'
 import { OrdersComponent } from './components/orders/orders.component'
 import { DraftsComponent } from './components/drafts/drafts.component'
 import { ProjectProfilesComponent } from './components/project-profiles/project-profiles.component'
@@ -31,7 +32,7 @@ import { OrderDetailLogsComponent } from './components/order-detail/order-detail
 import { SelectDropdownModule } from './shared/components/selectwithsearch/dropdown.module';
 
 // Pipes
-import { 
+import {
     NoSpacePipe, 
     ZeroPadPipe, 
     SumGroupProductPipe 
@@ -45,12 +46,14 @@ import { ActionButtonComponent } from './shared/components/action-button/action-
 import { BreadcrumbsComponent, BreadcrumbsItemComponent } from './shared/components/breadcrumbs'
 import { PaginationComponent } from './shared/components/pagination/pagination.component';
 import { DLSTableComponent } from './shared/components/table/table.component';
+import { NavigationComponent } from './shared/components/navigation/navigation.component'
 
 // Services
 import { WindowRef } from './shared/services/window-ref.service';
 import { NguiDatetimePickerModule } from './shared/components/datetimepicker';
 import { OrderRequestHelper } from './utils/order-request.helper';
 import { OrdersModel } from './shared/schema';
+import { SessionService, AuthGuard } from './shared/services/session.service'
 
 import { 
     Api, 
@@ -80,6 +83,7 @@ export const sharedConfig: NgModule = {
         CartComponent,
         NewProjectProfile,
         OrderDetailComponent,
+        LoginComponent,
 
         // Pipes
         ZeroPadPipe,
@@ -107,17 +111,16 @@ export const sharedConfig: NgModule = {
         StepperComponent,
         Step,
         ActionButtonComponent,
-        DLSTableComponent
+        DLSTableComponent,
+        NavigationComponent
     ],
     imports: [
         NguiDatetimePickerModule,
         SelectDropdownModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full' },
-            { path: 'orders', redirectTo: 'app', pathMatch: 'full' },
-            {
-                path: 'app', component: DashboardComponent,
-                children: [
+            { path: 'login', component: LoginComponent },
+            { path: 'app', component: DashboardComponent, canActivate: [AuthGuard], children: [
                     { path: '', redirectTo: 'orders', pathMatch: 'full' },
                     { path: 'orders', component: OrdersComponent },		    
                     { path: 'new', component: NewOrderComponent },
@@ -132,6 +135,8 @@ export const sharedConfig: NgModule = {
         ])
     ],
     providers: [
+        SessionService,
+        AuthGuard,
         WindowRef,
         OrdersApi,
         OrdersService,
@@ -149,6 +154,6 @@ export const sharedConfig: NgModule = {
         ProductsApi,
         OrderDetailApi,
         ShippingConditionApi,
-        LegalEntitiesApi
+        LegalEntitiesApi,
     ]
 };

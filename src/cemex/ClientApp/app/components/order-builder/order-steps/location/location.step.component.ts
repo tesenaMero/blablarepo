@@ -47,7 +47,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         checkedStyle: 'fontawesome',
         buttonClasses: 'btn btn-default btn-block',
         dynamicTitleMaxItems: 1,
-        displayAllSelectedText: true,
+        displayAllSelectedText: false,
         closeOnClickOutside: true,
         selectionLimit: 1,
         autoUnselect: true,
@@ -83,7 +83,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     private infoWindow: any;
     private jobsiteMarker: any;
 
-    constructor( @Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi) {
+    constructor(@Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi) {
         this.step.setEventsListener(this);
     }
 

@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { ProductsApi } from '../../../../shared/services/api'
+import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
+import { CreateOrderService } from '../../../../shared/services/create-order.service';
 
 @Component({
     selector: 'specifications-step',
@@ -7,7 +9,7 @@ import { ProductsApi } from '../../../../shared/services/api'
     styleUrls: ['./specifications.step.scss', './specifications.utils.scss'],
     host: { 'class': 'w-100' }
 })
-export class SpecificationsStepComponent {
+export class SpecificationsStepComponent implements StepEventsListener {
     private products = [];
 
     static availableUnits = [
@@ -20,8 +22,8 @@ export class SpecificationsStepComponent {
     }
 
     static availablePayments = [
-        { name: "Credit" },
-        { name: "Cash" }
+        { name: "Cash" },
+        { name: "Credit" }
     ];
 
     get availablePayments() {
@@ -57,10 +59,14 @@ export class SpecificationsStepComponent {
         return SpecificationsStepComponent.availablePlants;
     }
 
-    constructor(private api: ProductsApi) { 
+    constructor( @Inject(Step) private step: Step, private api: ProductsApi, private orders: CreateOrderService) {
         this.products.push(new PreProduct());
-        this.api.top({shipmentLocationId: 1058}).subscribe((result) => {
-            //console.log(result.json());
+        this.step.setEventsListener(this);
+    }
+
+    onShowed() {
+        this.api.top(this.orders.jobsite).subscribe((result) => {
+            console.log(result.json());
         });
     }
 

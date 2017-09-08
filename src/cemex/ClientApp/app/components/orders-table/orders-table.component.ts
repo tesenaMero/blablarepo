@@ -182,4 +182,8 @@ export class OrdersTableComponent {
         }
     }
 
+    substringStatus(str: string) {
+        return str.substr(0,str.indexOf(' '));
+    }
+
 }

@@ -17,7 +17,7 @@ export class OrderDetailComponent {
 
     constructor(private orderDetailApi: OrderDetailApi, private route: ActivatedRoute) {
         this.sub = this.route.params.subscribe(params => {
-            this.id = +params['id'];
+            this.id = params['id'];
             //console.log(this.id);
         });
         // orderDetailApi.byId(1).subscribe((response) => {

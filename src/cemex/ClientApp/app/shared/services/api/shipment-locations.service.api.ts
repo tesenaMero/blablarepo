@@ -35,7 +35,7 @@ export class ShipmentLocationApi {
     
     geo(address: any): Observable<Response> {
         //return this.api.get(address.geoPlace.links.self);
-        return this.api.get(address.geoPlace.links.self.replace("v4", "v5"));
+        return this.api.get(address.geoPlace.links.self);
     }
 
     contacts(shipmentLocation: any): Observable<Response> {
