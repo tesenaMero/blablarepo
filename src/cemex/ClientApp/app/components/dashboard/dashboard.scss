@@ -3,6 +3,7 @@
 $sidebar-width: 160px;
 $header-height: 54px;
 $dashboard-index: 100;
+$footer-height: 24px;
 nav.fixed {
     position: fixed;
     z-index: $dashboard-index;
@@ -22,6 +23,7 @@ nav.side-nav-bar {
 .content {
     padding-left: $sidebar-width;
     padding-top: $header-height;
+    padding-bottom: $footer-height;
     transition: all 0.25s ease-in-out;
     &.moved {
         padding-left: 0px;
