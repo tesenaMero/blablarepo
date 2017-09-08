@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { ProductsApi } from '../../shared/services/api'
 
 @Component({
     selector: 'search-product',
@@ -10,7 +11,11 @@ export class SearchProductComponent {
     @Output() canceled = new EventEmitter<any>();
     @Output() confirmed = new EventEmitter<any>();
 
-    constructor() {
+    constructor(private api: ProductsApi) {
+
+        this.api.advancedSearch('').subscribe((result) => {
+            console.log(result.json());
+        });
     }
 
     confirm() {
