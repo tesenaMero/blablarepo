@@ -145,6 +145,7 @@ export class CartComponent implements OnInit {
         };
         this.disableCartBtn = true;
         let encoded = this.jsonObjService.encodeJson(mock);
-        this.document.location.href = 'https://invoices-payments-dev2.mybluemix.net/invoices-payments/open/'+ encoded;
+        // uncomment after DEMO
+        // this.document.location.href = 'https://invoices-payments-dev2.mybluemix.net/invoices-payments/open/'+ encoded;
     }
 }
