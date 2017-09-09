@@ -11,7 +11,7 @@ export class ProductLineApi {
 
     all(): Observable<Response> {
         const user = sessionStorage.getItem('user_customer');
-        const customerId = JSON.parse(user).customerId;
+        const customerId = 122;
         return this.api.get("/v4/sm/productlines?customerId=" + customerId);
     }
 
