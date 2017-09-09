@@ -302,7 +302,7 @@
                 </div>
                 <div class="spacer-24"></div>
                 <div class="size-48 roboto-bold">{{ _products | sumGpoProduct | currency : 'USD' : true}}</div>
-                <button (click)="makeOrder()" class="button bright-green" [ngClass]="{disabled: disableCartBtn}" [disabled]="disableCartBtn">
+                <button (click)="placeOrder()" class="button bright-green" [ngClass]="{disabled: disableCartBtn}" [disabled]="disableCartBtn">
                     Order
                 </button>
             </div>
