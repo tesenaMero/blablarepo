@@ -13,18 +13,23 @@ import { ActivatedRoute } from '@angular/router';
 export class OrderDetailComponent {   
     orderDetailData: any;
     id: number;
+    type: string = "SLS";
     private sub: any;
 
     constructor(private orderDetailApi: OrderDetailApi, private route: ActivatedRoute) {
         this.sub = this.route.params.subscribe(params => {
-            this.id = params['id'];
-            //console.log(this.id);
+            this.id = params['orderId'];
+            if(params['typeCode'] && params['typeCode'] == "ZTA"){
+                this.type = "SLS";
+            } else {
+                if(params['typeCode']){
+                    this.type = params['typeCode'];
+                }
+            }
         });
-        // orderDetailApi.byId(1549).subscribe((response) => {
-        orderDetailApi.byId(this.id).subscribe((response) => {            
-            // console.log(response);
+        orderDetailApi.byIdType(this.id, this.type).subscribe((response) => {
             this.orderDetailData = response.json();
-        });
+        });        
     }
     ngOnDestroy() {
         this.sub.unsubscribe();

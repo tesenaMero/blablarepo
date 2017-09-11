@@ -139,6 +139,10 @@ export class OrdersTableComponent {
             {
                 key: 'unitDesc',
                 hidden: true,
+            },
+            {
+                key: 'orderType',
+                hidden: true,
             }
         ]
     };

@@ -9,8 +9,8 @@ export class OrderDetailApi {
     constructor(private api: Api) {
     }
 
-    byId(orderId: number): Observable<Response> {
-        return this.api.get("/v4/sm/orders/${orderId}?orderType=SLS");
+    byIdType(orderId: number, orderType: string): Observable<Response> {
+        return this.api.get("/v4/sm/orders/" + orderId + "?orderType=" +orderType);
     }
 
 }
