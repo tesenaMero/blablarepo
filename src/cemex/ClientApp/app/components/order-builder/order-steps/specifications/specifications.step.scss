@@ -56,6 +56,7 @@
             color: #2A2A2A;
             font-size: 14px;
             background-color: inherit;
+            min-height: 44px;
             &.product-selection {
                 justify-content: space-between;
                 display: flex;
@@ -64,6 +65,9 @@
                     border-right: 1px solid #D7D7D7;
                     padding-right: 10px;
                     padding-left: 4px;
+                    overflow: hidden;
+                    word-wrap: break-word;
+                    text-overflow: ellipsis;
                 }
                 span.action {
                     color: #3FA9F5;

@@ -10,6 +10,7 @@ import { ProductsApi } from './products.service'
 import { OrderDetailApi } from './order-detail.service'
 import { ShippingConditionApi } from './shipping-condition.service';
 import { LegalEntitiesApi } from './legal-entities.service';
+import { DraftsService } from './drafts.service'
 
 export {
     ShipmentLocationApi,
@@ -23,5 +24,6 @@ export {
     ProductsApi,
     OrderDetailApi,
     LegalEntitiesApi,
-    ShippingConditionApi
+    ShippingConditionApi,
+    DraftsService,
 }
