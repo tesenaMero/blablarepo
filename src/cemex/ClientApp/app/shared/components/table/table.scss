@@ -99,6 +99,9 @@ $table-border-color: #e0e0e0;
                     font-size: 18px;
                     line-height: 24px;
                 }
+                &.hide-desktop {
+                    display: none;
+                }
             }
         }
     }
@@ -227,19 +230,56 @@ $table-border-color: #e0e0e0;
                     display: block;
                     border: 1px solid $table-border-color;
                     border-radius: 2px;
-                    margin-bottom: $table-cell-padding;
+                    // margin-bottom: $table-cell-padding;
+                    margin-bottom: 1px;
                     >td {
                         background-color: $table-bg;
                         display: block;
                         //vertical-align: middle;
                         text-align: right;
+                        color: black;
+                        font-weight: bold;
+                        font-size: 12px;
+                        padding: 4px 26px;
+                        &:last-child {
+                            padding-bottom: 13px;
+                        }
+                        &:first-child {
+                            padding-top: 13px;
+                        }
+                        &.title {
+                            text-align: left;
+                            color: black;
+                            font-weight: bold;
+                            font-size: 16px;
+                            padding-bottom: 0px;
+                            &:before {
+                                display: none !important;
+                            }
+                        }
+                        &.subtitle {
+                            color: #ADADAD;
+                            font-size: 13px;
+                            font-weight: bold;
+                            text-align: left;
+                            padding-top: 0;
+                            padding-bottom: 8px;
+                            &:before {
+                                display: none !important;
+                            }
+                        }
+                        &.hide-mobile {
+                            display: none;
+                        }
                     }
                     >td[data-title]:before {
                         content: attr(data-title);
                         float: left;
-                        font-size: inherit;
-                        font-weight: $table-header-font-weight;
-                        color: $table-header-font-color;
+                        font-size: 12px;
+                        font-weight: bold;
+                        // font-weight: $table-header-font-weight;
+                        // color: $table-header-font-color;
+                        color: #ADADAD;
                     }
                 }
             }
@@ -283,7 +323,8 @@ $table-border-color: #e0e0e0;
                     background-color: $table-bg;
                 }
                 >tr>td:hover {
-                    background-color: $table-bg-hover;
+                    //background-color: $table-bg-hover;
+                    background-color: inherit;
                 }
             }
         }
