@@ -41,16 +41,18 @@
 .nav-tab-container {
     margin-top: 33px;
 }
-
-.nav-tabs .nav-item {
-    .nav-link {
-        color: #333333;
-        font-size: 15px;
-        font-weight: bold;
-        line-height: 18px;
-        cursor: pointer;
-        &.active {
-            border-radius: 0;
+.nav.nav-tabs {
+    display: -webkit-inline-box;
+    .nav-tabs .nav-item {
+        .nav-link {
+            color: #333333;
+            font-size: 15px;
+            font-weight: bold;
+            line-height: 18px;
+            cursor: pointer;
+            &.active {
+                border-radius: 0;
+            }
         }
     }
 }

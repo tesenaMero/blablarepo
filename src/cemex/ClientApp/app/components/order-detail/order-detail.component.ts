@@ -20,9 +20,9 @@ export class OrderDetailComponent {
             this.id = params['id'];
             //console.log(this.id);
         });
-        // orderDetailApi.byId(1).subscribe((response) => {
+        // orderDetailApi.byId(1549).subscribe((response) => {
         orderDetailApi.byId(this.id).subscribe((response) => {            
-            console.log(response);
+            // console.log(response);
             this.orderDetailData = response.json();
         });
     }
