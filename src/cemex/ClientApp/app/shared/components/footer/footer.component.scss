@@ -1,4 +1,10 @@
+@import "~bootstrap/scss/bootstrap-grid.scss";
+
 footer{
+    @include media-breakpoint-down(sm) {
+        display: none;
+    }
+
     width: 100%;
     height: 24px;
     background: #002a59;
