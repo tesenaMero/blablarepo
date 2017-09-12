@@ -129,6 +129,11 @@ export class OrdersService {
                 value: 'totalAmount',
                 ignoreValue: 'totalAmount',
                 defaultValue: 0,
+            },
+            {
+                key: 'orderType',
+                format: 'string',
+                value: 'orderType.orderTypeCode'
             }
         ]
     };

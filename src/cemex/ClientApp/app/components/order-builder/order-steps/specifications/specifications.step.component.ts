@@ -10,7 +10,10 @@ import { CreateOrderService } from '../../../../shared/services/create-order.ser
     host: { 'class': 'w-100' }
 })
 export class SpecificationsStepComponent implements StepEventsListener {
-    private products = [];
+    private preProducts = [];
+    private loadings = {
+        products: true
+    }
 
     static availableUnits = [
         { name: "m³" },
@@ -32,19 +35,17 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     static availableContracts = [
         { name: "10-20170218903432112212", volume: 180 },
-        { name: "11-20170218903432112212", volume: 160 },
-        { name: "12-20170218903432112212", volume: 140 },
+        // { name: "‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ", volume: "‌‌ ‌‌ ‌‌ " },
+        // { name: "10-20170218903432112212", volume: 180 },
+        // { name: "11-20170218903432112212", volume: 160 },
+        // { name: "12-20170218903432112212", volume: 140 },
     ];
 
     get availableContracts() {
         return SpecificationsStepComponent.availableContracts;
     }
 
-    static availableProducts = [
-        { name: "Cement - SCAH - CHM89" },
-        { name: "Cement - SCAH - CHM90" },
-        { name: "Cement - SCAH - CHM91" }
-    ];
+    static availableProducts = [];
 
     get availableProducts() {
         return SpecificationsStepComponent.availableProducts;
@@ -59,28 +60,38 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return SpecificationsStepComponent.availablePlants;
     }
 
-    constructor( @Inject(Step) private step: Step, private api: ProductsApi, private orders: CreateOrderService) {
+    constructor( @Inject(Step) private step: Step, private api: ProductsApi, private manager: CreateOrderService) {
         this.step.setEventsListener(this);
-        this.products.push(new PreProduct());
-        this.step.setEventsListener(this);
+        this.add(); // Push a pre product
     }
 
     onShowed() {
-        this.api.top(this.orders.jobsite).subscribe((result) => {
-            console.log(result.json());
+        this.loadings.products = true;
+        this.api.top(this.manager.jobsite).subscribe((result) => {
+            let topProducts = result.json().products;
+            SpecificationsStepComponent.availableProducts = topProducts;
+            
+            // Set defaults value
+            this.preProducts.forEach(item => {
+                if (topProducts.length > 0)
+                    item.product = topProducts[0];
+            });
+
+            this.manager.setProducts(this.preProducts);
+            this.loadings.products = false;
         });
     }
 
     add() {
-        this.products.push(new PreProduct());
+        this.preProducts.push(new PreProduct());
     }
 
     remove(index: any) {
-        let product = this.products[index];
+        let product = this.preProducts[index];
         product.deleting = true;
         console.log(product);
         setTimeout(() => {
-            this.products.splice(index, 1);
+            this.preProducts.splice(index, 1);
         }, 400);
     }
 
@@ -102,12 +113,18 @@ class PreProduct {
     product: any;
     plant: any;
     projectProfile: any;
+
     constructor() {
         let _ = SpecificationsStepComponent;
+        if (_.availableProducts.length > 0) { this.product = _.availableProducts[0]; }
         this.contract = _.availableContracts[0];
         this.unit = _.availableUnits[0];
         this.payment = _.availablePayments[0];
         this.product = _.availableProducts[0];
         this.plant = _.availablePlants[0];
+    }
+
+    setProduct(product: any[]) {
+        this.product = product;
     }
 }

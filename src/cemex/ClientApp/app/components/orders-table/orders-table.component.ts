@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { OrderRequest } from '../../shared/models/order-request';
 import { OrdersService } from '../../shared/services/orders.service';
 import {
@@ -53,7 +53,7 @@ export class OrdersTableComponent {
             {
                 key: 'orderRequestId',
                 title: 'Order No',
-                width: 10,
+                width: 15,
                 sortable: true
             },
             {
@@ -71,7 +71,7 @@ export class OrdersTableComponent {
             {
                 key: 'purchaseOrder',
                 title: 'Purchase Order Number',
-                width: 20,
+                width: 15,
                 sortable: true
             },
             {
@@ -138,6 +138,10 @@ export class OrdersTableComponent {
             },
             {
                 key: 'unitDesc',
+                hidden: true,
+            },
+            {
+                key: 'orderType',
                 hidden: true,
             }
         ]
