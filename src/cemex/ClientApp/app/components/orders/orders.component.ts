@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { OrdersService } from '../../shared/services/orders.service';
 import { Api } from '../../shared/services/api';
 import { OrderRequestTableComponentConfiguration } from '../../utils/order-request.helper';

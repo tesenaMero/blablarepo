@@ -14,7 +14,7 @@ export class SearchProductComponent {
     constructor(private api: ProductsApi) {
 
         this.api.advancedSearch('').subscribe((result) => {
-            console.log(result.json());
+            //console.log(result.json());
         });
     }
 

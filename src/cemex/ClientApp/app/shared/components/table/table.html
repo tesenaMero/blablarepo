@@ -3,16 +3,18 @@
     <table id="table" class="table table-fixed main table-hover table-striped cmx-table">
         <thead>
             <tr>
-                <th width="{{ column.width }}%" *ngFor="let column of columns">
+                <th (click)="column.sortable || column.sortable === undefined && sort(column, index)" width="{{ column.width }}%" *ngFor="let column of columns; let index = index">
                     <span innerHTML="{{ column.inner != undefined ? column.inner : column.name }}"></span>
-                    <svg *ngIf="column.sortable == true || column.sortable === undefined" class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    <svg *ngIf="(column.sortable == true || column.sortable === undefined) && (column.sorted == 'asc' || column.sorted == undefined)" class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
+                    <svg *ngIf="(column.sortable == true || column.sortable === undefined) && (column.sorted == 'desc')" class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-up-single"></use></svg>
                 </th>
             </tr>
         </thead>
         <tbody>
             <ng-container *ngFor="let row of rows; let odd = odd">
                 <tr [ngClass]="{ 'zebra': odd }">
-                    <td (click)="tdClicked(item.click)" [attr.data-title]="columns[index].name" *ngFor="let item of row; let index = index" class="{{ item.class }}" innerHTML="{{ item.inner }}"></td>
+                    <td (click)="tdClicked(item.click)" [attr.data-title]="columns[index].name" *ngFor="let item of row; let index = index" class="{{ item.class }}" [ngClass]="{ 'title': item.title, 'subtitle': item.subtitle, 'hide-mobile': item.hideMobile, 'hide-desktop': item.hideDesktop }"
+                        innerHTML="{{ item.inner }}"></td>
                 </tr>
                 <tr class="hidden-md-down sub separator"></tr>
             </ng-container>

@@ -85,4 +85,36 @@ export class DLSTableComponent {
     tdClicked(fn) {
         if (fn) { fn(); }
     }
+
+    sort(column: any, index: any, sortFn?: any) {
+        if (!column.sorted) { column.sorted = "desc"; }
+        else {
+            if (column.sorted == "asc") { column.sorted = "desc"; }
+            else if (column.sorted == "desc") { column.sorted = "asc"; }
+        }
+
+        // If has custom sort
+        if (sortFn) { 
+            sortFn(column, index); 
+            return;
+        }
+
+        // Default sort
+        this.rows.sort((a: any, b: any): number => {
+            if (column.sorted == "asc") { return this.asc(a, b, index); }
+            else { return this.desc(a, b, index); }
+        });
+    }
+
+    asc(a, b, index) {
+        if (a[index].inner < b[index].inner) return -1;
+        if (a[index].inner > b[index].inner) return 1;
+        return 0;
+    }
+
+    desc(a, b, index) {
+        if (a[index].inner < b[index].inner) return 1;
+        if (a[index].inner > b[index].inner) return -1;
+        return 0;
+    }
 }

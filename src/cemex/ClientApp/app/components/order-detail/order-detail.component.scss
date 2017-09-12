@@ -161,3 +161,20 @@
 .card-container {
     margin-bottom: 27px !important;
 }
+@include media-breakpoint-down(md) {
+    .nav-tab-container{
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    ul.nav{
+        min-width: 520px;
+        width: 100%;
+    }
+    
+    .nav-tabs{
+        .nav-item{
+            display: inline-block;
+        }
+    }
+}
