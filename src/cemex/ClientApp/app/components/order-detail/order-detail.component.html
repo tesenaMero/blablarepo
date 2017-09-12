@@ -3,28 +3,29 @@
         <breadcrumbs-item link="../orders">Orders</breadcrumbs-item>
         <breadcrumbs-item>Detail</breadcrumbs-item>
     </breadcrumbs>
-
-    <div class="row">
+    <div *ngIf="!orderDetailData">
+        <p>No orders found</p>
+    </div>
+    <div class="row" *ngIf="orderDetailData">
         <div class="col-md-7">
             <div class="d-flex align-content-start flex-wrap mb-3">
                 <div class="title-container">
-                    <h1>Order #7543189</h1>
+                    <h1>Order #{{orderDetailData.orderId}}</h1>
                 </div>
                 <div class="request-date align-self-center">
                     <span class="title">Request date:</span>
-                    <span class="value">31/12/2017, 15:00 - 16:00</span>
+                    <span class="value">{{orderDetailData.requestedDateTime | date : "dd/MM/yyyy, hh:mm"}}</span>
                 </div>
             </div>
         </div>
         <div class="col-md-5">
             <div class="cto-container center-with-steps">
-                <button class="button-ghost" routerLink="app/orders">Back</button>
-                <button class="button red" routerLink="../order-detail">Cancel order</button>
+                <button class="button-ghost" routerLink="../order-detail">Back</button>
             </div>
         </div>
     </div>
 
-    <div class="location">
+    <div class="location" *ngIf="orderDetailData">
         <div class="row">
             <div class="col-md-5">
                 <div class="group">
@@ -32,10 +33,10 @@
                         Location:
                     </div>
                     <div class="desc">
-                        Southwest 68th Street Building
+                        {{orderDetailData.pointOfDelivery.pointOfDeliveryDesc}}
                     </div>
                     <div class="detail">
-                        15 SW 68th Street, Chicago, Illinois, 60602
+                        {{orderDetailData.pointOfDelivery.pointOfDeliveryCode}}
                     </div>
                 </div>
             </div>
@@ -45,35 +46,45 @@
                         Point of Delivery:
                     </div>
                     <div class="desc">
-                        Backstreet yard
+                        {{orderDetailData.pointOfDelivery.pointOfDeliveryDesc}}
                     </div>
                     <div class="detail">
-                        N: 50°46’ 23.92” E: 14°07’ 18.85”
+                        {{orderDetailData.pointOfDelivery.pointOfDeliveryCode}}
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="info">
                     <span class="title">Submitted:</span>
-                    <span class="value">08/12/2017</span>
+                    <span class="value">{{orderDetailData.createdDateTime | date : "dd/MM/yyyy"}}</span>
                 </div>
                 <div class="info">
                     <span class="title">Submitted by:</span>
-                    <span class="value">Andrew Zacek</span>
+                    <span class="value">{{orderDetailData.customer.customerDesc}}</span>
                 </div>
                 <div class="info">
                     <span class="title">Purchase order:</span>
-                    <span class="value">7755-KJ120/00011</span>
+                    <span class="value">{{orderDetailData.purchaseOrder}}</span>
                 </div>
                 <div class="info">
                     <span class="title">Status:</span>
-                    <span class="value status">Complete</span>
+                    <span class="status" [ngClass]="{
+                         canceled: orderDetailData.status.statusDesc == 'Canceled - Hdr',
+                        confirmed: orderDetailData.status.statusCode == 'CONF',
+                            draft: orderDetailData.status.statusDesc == 'Draft - Hdr',
+                          pending: orderDetailData.status.statusCode == 'INPC',
+                          blocked: orderDetailData.status.statusCode == 'BLCK',
+                           holded: orderDetailData.status.statusDesc == 'Holded - Hdr',
+                        processed: orderDetailData.status.statusDesc == 'In process - Hdr',
+                        completed: orderDetailData.status.statusCode == 'CMPO'
+                    }"></span>
+                    <span class="value">{{orderDetailData.status.statusDesc}}</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="nav-tab-container">
+    <div class="nav-tab-container"  *ngIf="orderDetailData">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#products" role="tab">Products</a>
@@ -88,14 +99,14 @@
     </div>
 
     <!-- Tab panes -->
-    <div class="tab-content">
+    <div class="tab-content"  *ngIf="orderDetailData">
         <div class="tab-pane fade show active" id="products" role="tabpanel">
-            <div class="products-container">
-                <div class="card-container product" id="products-id">
+            <div class="products-container"> 
+                <div class="card-container product" id="products-id" *ngFor="let itemData of orderDetailData.items">
                     <div class="row">
                         <div class="col-md-4 col-sm-12 left-container">
                             <div class="name">
-                                ReadyMix CHM89
+                                {{itemData.product.productDesc}}
                             </div>
                         </div>
                         <div class="col-md-8 right-container">
@@ -106,7 +117,7 @@
                                             Quantity
                                         </div>
                                         <div class="value">
-                                            10
+                                            {{itemData.quantity}}
                                         </div>
                                     </div>
                                 </div>
@@ -116,7 +127,7 @@
                                             Unit
                                         </div>
                                         <div class="value">
-                                            tons
+                                            {{itemData.uom.unitDesc}}
                                         </div>
                                     </div>
                                 </div>
@@ -126,7 +137,7 @@
                                             Requested date
                                         </div>
                                         <div class="value">
-                                            13.07.2017
+                                            {{orderDetailData.requestedDateTime | date : "dd.MM.yyyy"}}
                                         </div>
                                     </div>
                                 </div>
@@ -136,7 +147,7 @@
                                             Requested time
                                         </div>
                                         <div class="value">
-                                            15.00 - 16.00
+                                            {{orderDetailData.requestedDateTime | date : "hh:mm"}}
                                         </div>
                                     </div>
                                 </div>
@@ -148,7 +159,7 @@
                                             Product ID
                                         </div>
                                         <div class="value">
-                                            20939302/10292/20102
+                                            {{itemData.product.productCode}}
                                         </div>
                                     </div>
                                 </div>
@@ -248,7 +259,7 @@
                                 <div class="col-sm-6">
                                     <div class="group">
                                         <div class="title">
-                                            Product ID
+                                            Additional services
                                         </div>
                                         <div class="value">
                                             20939302/10292/20102
@@ -279,7 +290,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>          
         </div>
         <div class="tab-pane fade" id="action-log" role="tabpanel">
             <order-detail-logs orderItemId=2></order-detail-logs>

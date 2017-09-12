@@ -25,7 +25,6 @@
     text-align: right;
     button {
         &:first-child {
-            margin-right: 8px;
             @include media-breakpoint-down(sm) {
                 margin-bottom: 16px;
             }
@@ -39,24 +38,21 @@
     }
 }
 
-.button.red {
-    border: 1px solid #EE3D42;
-    background: #EE3D42 !important;
-}
-
 .nav-tab-container {
     margin-top: 33px;
 }
-
-.nav-tabs .nav-item {
-    .nav-link {
-        color: #333333;
-        font-size: 15px;
-        font-weight: bold;
-        line-height: 18px;
-        cursor: pointer;
-        &.active {
-            border-radius: 0;
+.nav.nav-tabs {
+    display: -webkit-inline-box;
+    .nav-tabs .nav-item {
+        .nav-link {
+            color: #333333;
+            font-size: 15px;
+            font-weight: bold;
+            line-height: 18px;
+            cursor: pointer;
+            &.active {
+                border-radius: 0;
+            }
         }
     }
 }
@@ -108,21 +104,33 @@
         font-weight: bold;
         min-width: 124px;
         display: inline-block;
-        &.status {
-            &:before {
-                content: '';
-                height: 16px;
-                width: 16px;
-                border-radius: 2px;
-                background-color: #77CB38;
-                display: inline-flex;
-                transform: translateY(2px);
-                margin-right: 6px;
-            }
-        }
     }
 }
-
+.status {
+    border-radius: 2px;
+    background-color: #333;
+    padding: 0px 8px;
+    margin-right: 7px;
+    &.confirmed {
+        background: #77cb38;
+    }
+    &.canceled {
+        background: #D6D6D6;
+    }
+    &.draft {
+        background: #D6D6D6;
+    }
+    &.pending {
+        background: #FBB03B;
+    }
+    &.blocked {
+        background: #EE3D42;
+    }
+    &.completed,
+    &.processed {
+        background: #3FA9F5;
+    }
+}
 .request-date {
     .title {
         color: #333333;
@@ -150,6 +158,9 @@
     flex-direction: column;
 }
 
+.card-container {
+    margin-bottom: 27px !important;
+}
 @include media-breakpoint-down(md) {
     .nav-tab-container{
         overflow-x: auto;
