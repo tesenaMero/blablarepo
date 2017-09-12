@@ -9,16 +9,25 @@ export class ShipmentLocationApi {
     constructor(private api: Api) {
     }
 
-    all(): Observable<Response> {
-        return this.api.get("/v4/sm/myshipmentlocations");
+    getShipmentLocationType() {
+        return this.api.get('/v1/im/shipmentlocationtypes');
     }
 
-    pods(shipmentLocation: any): Observable<Response> {
+    all(shipmentLocationTypes, productLine): Observable<Response> {
+        const customerId = 354;
+        const locationType = shipmentLocationTypes.find(item => item.shipmentLocationTypeCode === 'J');
+        return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`);
+    }
+
+    pods(shipmentLocation: any, shipmentLocationTypes, legalEntityId?, productLine?): Observable<Response> {
+        // 'myshipmentlocations?legalEntityId=122.1&shipmentLocationTypeId=3&productLineId=2'
+        // "/v4/sm/myshipmentlocations?shipmentlocationId=" + 
+        // shipmentLocation.shipmentLocationId + "." + 
+        // shipmentLocation.shipmentLocationType.shipmentLocationTypeId + "&" +
+        // "shipmentLocationTypeId=6"
+        const locationType = shipmentLocationTypes.find(item => item.shipmentLocationTypeCode === 'P');
         return this.api.get(
-            "/v4/sm/myshipmentlocations?shipmentlocationId=" + 
-            shipmentLocation.shipmentLocationId + "." + 
-            shipmentLocation.shipmentLocationType.shipmentLocationTypeId + "&" +
-            "shipmentLocationTypeId=6"
+            `/v4/sm/myshipmentlocations?shipmentlocationId=${shipmentLocation.shipmentLocationId}.2&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`
         );
     }
 

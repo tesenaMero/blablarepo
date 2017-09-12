@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import * as types from '../../shared/types/CreateOrder';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { ShipmentLocationApi } from './api/shipment-locations.service.api';
 
 /**
  * Create an order for API V2
  */
 @Injectable()
 export class CreateOrderService {
+    public _shipmentLocationType: BehaviorSubject<any>;
         public orderId: number;
         public orderCode: string;
         public orderName: string;
@@ -30,8 +33,17 @@ export class CreateOrderService {
         public productLine: any;
         public additionalServices: Array<any>;
 
-    constructor() {
+    constructor(private shipmentLocationApi: ShipmentLocationApi) {
         this.initializeOrder();
+        this._shipmentLocationType = <BehaviorSubject<any>>new BehaviorSubject({});
+    }
+
+    public fetchShipmentLocation() {
+        this.shipmentLocationApi.getShipmentLocationType()
+            .map(response => response.json())
+            .subscribe(response => {
+                this._shipmentLocationType.next(response);
+            })
     }
 
     initializeOrder(
