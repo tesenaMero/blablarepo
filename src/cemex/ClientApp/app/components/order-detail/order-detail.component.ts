@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { OrderDetailApi } from '../../shared/services/api/order-detail.service';
 import { ActivatedRoute } from '@angular/router';
+import { ShipmentLocationApi } from '../../shared/services/api/shipment-locations.service.api';
 
 @Component({
     selector: 'order-detail-page',
@@ -16,7 +17,7 @@ export class OrderDetailComponent {
     type: string = "SLS";
     private sub: any;
 
-    constructor(private orderDetailApi: OrderDetailApi, private route: ActivatedRoute) {
+    constructor(private orderDetailApi: OrderDetailApi, private shipmentApi: ShipmentLocationApi, private route: ActivatedRoute) {
         this.sub = this.route.queryParams.subscribe(params => {
             this.id = params['orderId'];
             if (params['typeCode'] && params['typeCode'] == "ZTA") {
@@ -31,8 +32,17 @@ export class OrderDetailComponent {
         orderDetailApi.byIdType(this.id, this.type).subscribe((response) => {
             this.orderDetailData = response.json();
         });        
+        // // Fetch pods
+        // this.shipmentApi.pods(this.location).subscribe((response) => {
+        //     this.pods = response.json().shipmentLocations;
+        //     this.pods.forEach((pod, index) => {
+        //         pod.id = index;
+        //         pod.name = pod.shipmentLocationDesc;
+        //     })
+        //     this.loadings.pods = false;
+        // });      
     }
     ngOnDestroy() {
         this.sub.unsubscribe();
-    }        
+    }  
 }
