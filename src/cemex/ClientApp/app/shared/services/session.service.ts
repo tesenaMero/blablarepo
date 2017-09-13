@@ -2,6 +2,7 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpModule, RequestOptions, Headers } from '@angular/http';
 import { CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Api } from './api/api.service';
+import { LegalEntitiesApi } from './api/legal-entities.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/observable/ErrorObservable';
@@ -14,7 +15,11 @@ export class SessionService {
     static LOGIN_LOGOUT_EVENT = "LOGIN_LOGOUT_EVENT";
     static AUTH_TOKEN_VERSION = "auth_token_version";
     private _endpoint: string;
-    constructor(private http: Api, @Inject(SessionService.AUTH_TOKEN_VERSION) @Optional() private authTokenVersion: string) {
+    constructor(
+        private http: Api,
+        @Inject(SessionService.AUTH_TOKEN_VERSION) @Optional() private authTokenVersion: string,
+        private legalEntitiesApi: LegalEntitiesApi,
+    ) {
         this._endpoint = authTokenVersion ? `${authTokenVersion}/secm/oam/oauth2/token` : "v2/secm/oam/oauth2/token";
     }
 
@@ -69,6 +74,11 @@ export class SessionService {
             .toPromise()
             .then(response => {
                 this.processDataFromLogin(response.json());
+                this.legalEntitiesApi.all().subscribe(response => {
+                    // alert('legalEntitiesApi ready')
+                    // console.log(response.json());
+                    // sessionStorage.setItem('legalEntities', JSON.stringify(response.json().response))
+                })
             })
             .catch(error => {
                 return Promise.reject(error);

@@ -10,7 +10,9 @@ export class ProductLineApi {
     }
 
     all(): Observable<Response> {
-        return this.api.get("/v4/sm/productlines?customerId=122");
+        const user = sessionStorage.getItem('user_customer');
+        const customerId = 354;
+        return this.api.get("/v4/sm/productlines?customerId=" + customerId);
     }
 
 }

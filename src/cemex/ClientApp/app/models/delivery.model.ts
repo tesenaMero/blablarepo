@@ -1,4 +1,4 @@
 export enum DeliveryMode {
-    Delivery = 0,
-    Pickup = 1
+    Delivery = 1,
+    Pickup = 2
 }
