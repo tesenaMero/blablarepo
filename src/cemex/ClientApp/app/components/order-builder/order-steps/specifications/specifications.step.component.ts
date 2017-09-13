@@ -67,7 +67,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     onShowed() {
         this.loadings.products = true;
-        this.api.top(this.manager.jobsite).subscribe((result) => {
+        const salesDocumentType = '3'
+        this.api.top(
+            this.manager.jobsite,
+            salesDocumentType,
+            this.manager.productLine,
+            this.manager.shippingCondition
+        ).subscribe((result) => {
             let topProducts = result.json().products;
             SpecificationsStepComponent.availableProducts = topProducts;
             
@@ -78,6 +84,21 @@ export class SpecificationsStepComponent implements StepEventsListener {
             });
 
             this.manager.setProducts(this.preProducts);
+            this.loadings.products = false;
+        });
+    }
+
+    productChanged(event) {
+        const salesDocumentType = '1'
+        this.api.fetchContracts(
+            this.manager.jobsite,
+            salesDocumentType,
+            this.manager.productLine,
+            this.manager.shippingCondition,
+            event.product.productId
+        ).subscribe((result) => {
+            let contracts = result.json().products;
+            SpecificationsStepComponent.availableContracts = contracts;
             this.loadings.products = false;
         });
     }
