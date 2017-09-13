@@ -17,7 +17,6 @@ export class ProductSelectionStepComponent {
     constructor(private api: ProductLineApi, private orderManager: CreateOrderService) {
         this.api.all().subscribe((response) => {
             let productLines = response.json().productLines;
-            console.log(productLines);
 
             let bagCement = this.getBagCement(productLines);
             let multiproduct = this.getMultiproduct(productLines)
