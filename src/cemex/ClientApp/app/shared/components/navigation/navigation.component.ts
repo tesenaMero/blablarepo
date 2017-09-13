@@ -19,7 +19,7 @@ export class NavigationComponent {
 
     public open: boolean = false;
     public customers = [];
-    constructor(){
+    constructor() {
 
     }
 

@@ -13,7 +13,8 @@
                         <div class="input product-selection dropdown" [ngClass]="{ disabled: loadings.products }">
                             <span class="selection">
                                 {{ product.product?.commercialDesc }}
-                                <select style="width: calc(100% - 80px);" [(ngModel)]="product.product" class="input behind">
+                                <select style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged($event)" class="input behind">
+                                    <option value="0">Select a product</option>
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc  }}</option>
                                 </select>
                             </span>

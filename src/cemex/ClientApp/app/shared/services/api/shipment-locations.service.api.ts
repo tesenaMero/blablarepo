@@ -1,24 +1,33 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs';
-
 import { Api } from './api.service';
+import { CustomerService } from '../customer.service'
 
 @Injectable()
 export class ShipmentLocationApi {
-    constructor(private api: Api) {
+    constructor(private api: Api, private customerService: CustomerService) {
     }
 
-    all(): Observable<Response> {
-        return this.api.get("/v4/sm/myshipmentlocations?legalEntityId=122.1&shipmentLocationTypeId=2&productLineId=2");
+    getShipmentLocationType() {
+        return this.api.get('/v1/im/shipmentlocationtypes');
     }
 
-    pods(shipmentLocation: any): Observable<Response> {
+    all(shipmentLocationTypes, productLine): Observable<Response> {
+        const customerId = this.customerService.currentCustomer().legalEntityId;
+        const locationType = shipmentLocationTypes.find(item => item.shipmentLocationTypeCode === 'J');
+        return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`);
+    }
+
+    pods(shipmentLocation: any, shipmentLocationTypes, legalEntityId?, productLine?): Observable<Response> {
+        // 'myshipmentlocations?legalEntityId=122.1&shipmentLocationTypeId=3&productLineId=2'
+        // "/v4/sm/myshipmentlocations?shipmentlocationId=" + 
+        // shipmentLocation.shipmentLocationId + "." + 
+        // shipmentLocation.shipmentLocationType.shipmentLocationTypeId + "&" +
+        // "shipmentLocationTypeId=6"
+        const locationType = shipmentLocationTypes.find(item => item.shipmentLocationTypeCode === 'P');
         return this.api.get(
-            "/v4/sm/myshipmentlocations?legalEntityId=122.1&shipmentlocationId=" + 
-            shipmentLocation.shipmentLocationId + "." + 
-            shipmentLocation.shipmentLocationType.shipmentLocationTypeId + "&" +
-            "shipmentLocationTypeId=3&productLineId=2"
+            `/v4/sm/myshipmentlocations?shipmentlocationId=${shipmentLocation.shipmentLocationId}.2&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`
         );
     }
 

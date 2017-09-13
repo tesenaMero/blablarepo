@@ -13,7 +13,6 @@
 }
 
 .title-container {
-    //padding-bottom: 16px;
     margin-right: 40px;
     h1 {
         margin-left: 12px;
@@ -119,7 +118,11 @@
                 background: #D6D6D6;
             }
             &.draft:before {
+<<<<<<< HEAD
                 background: #D6D6D6;
+=======
+                background: #EE3D42;
+>>>>>>> development
             }
             &.pending:before {
                 background: #FBB03B;
@@ -134,6 +137,10 @@
         }
     }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> development
 .request-date {
     .title {
         color: #333333;
@@ -164,19 +171,18 @@
 .card-container {
     margin-bottom: 27px !important;
 }
+
 @include media-breakpoint-down(md) {
-    .nav-tab-container{
+    .nav-tab-container {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-    
-    ul.nav{
+    ul.nav {
         min-width: 520px;
         width: 100%;
     }
-    
-    .nav-tabs{
-        .nav-item{
+    .nav-tabs {
+        .nav-item {
             display: inline-block;
         }
     }

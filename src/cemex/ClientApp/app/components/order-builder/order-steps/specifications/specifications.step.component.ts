@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { ProductsApi } from '../../../../shared/services/api'
+import { ProductsApi, Api } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 
@@ -67,9 +67,16 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     onShowed() {
         this.loadings.products = true;
-        this.api.top(this.manager.jobsite).subscribe((result) => {
+        const salesDocumentType = '3'
+        this.api.top(
+            this.manager.jobsite,
+            salesDocumentType,
+            this.manager.productLine,
+            this.manager.shippingCondition
+        ).subscribe((result) => {
             let topProducts = result.json().products;
             SpecificationsStepComponent.availableProducts = topProducts;
+            SpecificationsStepComponent.availableProducts.push(topProducts[0]);
             
             // Set defaults value
             this.preProducts.forEach(item => {
@@ -82,6 +89,21 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
     }
 
+    productChanged(event) {
+        const salesDocumentType = '1'
+        this.api.fetchContracts(
+            this.manager.jobsite,
+            salesDocumentType,
+            this.manager.productLine,
+            this.manager.shippingCondition,
+            event.product.productId
+        ).subscribe((result) => {
+            let contracts = result.json().products;
+            SpecificationsStepComponent.availableContracts = contracts;
+            this.loadings.products = false;
+        });
+    }
+
     add() {
         this.preProducts.push(new PreProduct());
     }
@@ -89,7 +111,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
     remove(index: any) {
         let product = this.preProducts[index];
         product.deleting = true;
-        console.log(product);
         setTimeout(() => {
             this.preProducts.splice(index, 1);
         }, 400);

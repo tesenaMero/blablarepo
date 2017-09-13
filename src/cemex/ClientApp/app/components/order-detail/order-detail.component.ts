@@ -29,6 +29,7 @@ export class OrderDetailComponent {
                 }
             }
         });
+        
         orderDetailApi.byIdType(this.id, this.type).subscribe((response) => {
             this.orderDetailData = response.json();
         });        
@@ -42,6 +43,7 @@ export class OrderDetailComponent {
         //     this.loadings.pods = false;
         // });      
     }
+
     ngOnDestroy() {
         this.sub.unsubscribe();
     }  

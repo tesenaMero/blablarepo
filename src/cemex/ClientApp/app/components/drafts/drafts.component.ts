@@ -14,11 +14,11 @@ export class DraftsComponent implements OnInit {
     constructor(private ordersApi: OrdersApi) {
         this.ordersApi.all('4169', 100).subscribe((response) => {
             this.orders = response.json().orders.slice(0, 10);
-            console.log(this.orders);
-            this.initOrders();
+            // console.log(this.orders);
+            //this.initOrders();
         });
         
-        //this.initData();
+        this.initData();
     }
 
     ngOnInit() {
