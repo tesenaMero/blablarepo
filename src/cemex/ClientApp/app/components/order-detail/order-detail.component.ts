@@ -19,18 +19,21 @@ export class OrderDetailComponent {
     constructor(private orderDetailApi: OrderDetailApi, private route: ActivatedRoute) {
         this.sub = this.route.params.subscribe(params => {
             this.id = params['orderId'];
-            if(params['typeCode'] && params['typeCode'] == "ZTA"){
+            if (params['typeCode'] && params['typeCode'] == "ZTA") {
                 this.type = "SLS";
-            } else {
-                if(params['typeCode']){
+            } 
+            else {
+                if (params['typeCode']) {
                     this.type = params['typeCode'];
                 }
             }
         });
+        
         orderDetailApi.byIdType(this.id, this.type).subscribe((response) => {
             this.orderDetailData = response.json();
         });        
     }
+
     ngOnDestroy() {
         this.sub.unsubscribe();
     }        

@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
         this.showAlert = true;
         setTimeout(() => {
             this.showAlert = false;
-        }, 4000);
+        }, 6000);
     }
 
     private closeAlert() {

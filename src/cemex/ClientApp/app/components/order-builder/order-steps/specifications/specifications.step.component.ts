@@ -70,6 +70,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.api.top(this.manager.jobsite).subscribe((result) => {
             let topProducts = result.json().products;
             SpecificationsStepComponent.availableProducts = topProducts;
+            SpecificationsStepComponent.availableProducts.push(topProducts[0]);
             
             // Set defaults value
             this.preProducts.forEach(item => {
@@ -82,6 +83,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
     }
 
+    productSelected(product: any) {
+        this.fetchUnits(product);
+    }
+
+    fetchUnits(product: any) {
+    }
+
     add() {
         this.preProducts.push(new PreProduct());
     }
@@ -89,7 +97,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
     remove(index: any) {
         let product = this.preProducts[index];
         product.deleting = true;
-        console.log(product);
         setTimeout(() => {
             this.preProducts.splice(index, 1);
         }, 400);
