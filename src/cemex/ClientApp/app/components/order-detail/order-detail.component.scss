@@ -13,7 +13,6 @@
 }
 
 .title-container {
-    //padding-bottom: 16px;
     margin-right: 40px;
     h1 {
         margin-left: -4px;
@@ -41,6 +40,7 @@
 .nav-tab-container {
     margin-top: 33px;
 }
+
 .nav.nav-tabs {
     display: -webkit-inline-box;
     .nav-tabs .nav-item {
@@ -104,33 +104,37 @@
         font-weight: bold;
         min-width: 124px;
         display: inline-block;
+        &.status {
+            &:before {
+                content: '';
+                padding: 0 8px;
+                display: inline;
+                margin-right: 4px;
+                border-radius: 2px;
+            }
+            &.confirmed:before {
+                background: #77cb38;
+            }
+            &.canceled:before {
+                background: #D6D6D6;
+            }
+            &.draft:before {
+                background: #EE3D42;
+            }
+            &.pending:before {
+                background: #FBB03B;
+            }
+            &.blocked:before {
+                background: #EE3D42;
+            }
+            &.completed:before,
+            &.processed:before {
+                background: #3FA9F5;
+            }
+        }
     }
 }
-.status {
-    border-radius: 2px;
-    background-color: #333;
-    padding: 0px 8px;
-    margin-right: 7px;
-    &.confirmed {
-        background: #77cb38;
-    }
-    &.canceled {
-        background: #D6D6D6;
-    }
-    &.draft {
-        background: #D6D6D6;
-    }
-    &.pending {
-        background: #FBB03B;
-    }
-    &.blocked {
-        background: #EE3D42;
-    }
-    &.completed,
-    &.processed {
-        background: #3FA9F5;
-    }
-}
+
 .request-date {
     .title {
         color: #333333;
@@ -161,19 +165,18 @@
 .card-container {
     margin-bottom: 27px !important;
 }
+
 @include media-breakpoint-down(md) {
-    .nav-tab-container{
+    .nav-tab-container {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-    
-    ul.nav{
+    ul.nav {
         min-width: 520px;
         width: 100%;
     }
-    
-    .nav-tabs{
-        .nav-item{
+    .nav-tabs {
+        .nav-item {
             display: inline-block;
         }
     }

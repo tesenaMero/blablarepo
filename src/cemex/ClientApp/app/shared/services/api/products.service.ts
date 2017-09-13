@@ -20,8 +20,8 @@ export class ProductsApi {
         return this.api.get(`/v2/mm/myproducts?productId=${productId}&salesDocumentTypeId=${salesDocumentTypeId}&shippingConditionId=${shippingCondition.shippingConditionId}&shipmentLocationId=${jobsite.shipmentLocationId}.2`);
     }
 
-    units(prodcut: any): Observable<Response> {
-        return this.api.get(prodcut.unitOfMeasure.links.self);
+    units(product: any): Observable<Response> {
+        return this.api.get(product.unitOfMeasure.links.self);
     }
 
     advancedSearch(shipmentLocationId): Observable<Response> {

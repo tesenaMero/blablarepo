@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs';
-
 import { Api } from './api.service';
+import { CustomerService } from '../customer.service'
 
 @Injectable()
 export class ShipmentLocationApi {
-    constructor(private api: Api) {
+    constructor(private api: Api, private customerService: CustomerService) {
     }
 
     getShipmentLocationType() {
@@ -14,7 +14,7 @@ export class ShipmentLocationApi {
     }
 
     all(shipmentLocationTypes, productLine): Observable<Response> {
-        const customerId = 354;
+        const customerId = this.customerService.currentCustomer().legalEntityId;
         const locationType = shipmentLocationTypes.find(item => item.shipmentLocationTypeCode === 'J');
         return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`);
     }
