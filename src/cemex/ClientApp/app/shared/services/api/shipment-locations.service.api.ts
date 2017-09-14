@@ -13,10 +13,31 @@ export class ShipmentLocationApi {
         return this.api.get('/v1/im/shipmentlocationtypes');
     }
 
+    locationTypes() {
+        return this.api.get('/v1/im/shipmentlocationtypes');
+    }
+
     all(shipmentLocationTypes, productLine): Observable<Response> {
         const customerId = this.customerService.currentCustomer().legalEntityId;
         const locationType = shipmentLocationTypes.find(item => item.shipmentLocationTypeCode === 'J');
         return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`);
+    }
+
+    jobsites(productLine) {
+        return this.locationTypes()
+        .map(types => types.json().shipmentLocationTypes)
+        .flatMap((types) => {
+            let customer = this.customerService.customerSubject.asObservable();
+            console.log("Customer", customer);
+            return customer;
+        })
+        .map(customer => customer)
+        .flatMap((types) => {
+            let type = types.find(item => item.shipmentLocationTypeCode === 'J');
+            const customerId = this.customerService.currentCustomer().legalEntityId;
+            return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${type.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`)
+        })
+        .map(jobsites => jobsites);
     }
 
     pods(shipmentLocation: any, shipmentLocationTypes, legalEntityId?, productLine?): Observable<Response> {

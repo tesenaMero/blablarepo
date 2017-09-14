@@ -12,7 +12,6 @@ import { ShipmentLocationApi } from '../../../../shared/services/api/shipment-lo
     host: { 'class': 'w-100' }
 })
 export class LocationStepComponent implements OnInit, StepEventsListener {
-    
     @Input() mapOptions?: google.maps.MapOptions;
     @Output() onCompleted = new EventEmitter<any>();
 
@@ -32,6 +31,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         contacts: true,
         pods: true,
         map: false
+    }
+
+    private mandatories = {
+        purchaseOrder: false,
+        contactPerson: false
     }
 
     // Mapped data
@@ -100,7 +104,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.orderManager._shipmentLocationType.subscribe(data => {
             this.shipmentLocationTypes = data.shipmentLocationTypes;
             this.fetchJobsites(this.shipmentLocationTypes);
-        })
+        });
         if (!this.isMapLoaded) {
             GoogleMapsHelper.lazyLoadMap("jobsite-selection-map", (map) => {
                 this.isMapLoaded = true;
@@ -137,14 +141,15 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.loadings.pods = true;
         this.loadings.contacts = true;
         this.loadings.map = true;
-        
+
         // Set current shipment location
         this.location = location;
         this.orderManager.selectJobsite(this.location);
 
-        if(!location){
+        if (!location) {
             this.errorLocation = true;
-        } else {
+        }
+        else {
             this.errorLocation = false;
         }
 
@@ -180,7 +185,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     podChanged(pod: any) {
-        // Select it
         this.orderManager.selectPointOfDelivery(this.pod);
 
         this.loadings.map = true;
@@ -194,11 +198,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     contactChanged(contact: any) {
         this.orderManager.selectContact(this.contact);
-    }
-
-    validateFormElements(e, key?: string) {
-        this.validationModel[key] = Boolean(e.target.value.length);
-        return e.target.value.length;
     }
 
     addAdditionalServices(event, index) {
@@ -219,8 +218,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     makeJobsiteMarker(geo: any): google.maps.Marker {
         let marker = new google.maps.Marker({
             position: { lat: parseFloat(geo.latitude), lng: parseFloat(geo.longitude) },
-            title: 'jobsite'
-            //icon: InfoBuilder.plantIcon(plant)
+            title: 'jobsite',
+            icon: '/images/map/jobsite.png'
         });
 
         // marker.addListener('click', () => {
