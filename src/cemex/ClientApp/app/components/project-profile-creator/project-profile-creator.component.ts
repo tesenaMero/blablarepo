@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
-import { CatalogApi } from '../../shared/services/api';
+import { CatalogApi, ProjectProfileApi } from '../../shared/services/api';
+import { CustomerService } from '../../shared/services/customer.service';
 
 @Component({
     selector: 'project-profile-creator',
@@ -13,9 +14,31 @@ export class ProjectProfileCreatorComponent {
 
     private finishedOrder: boolean;
     private catalogs = {};
+    private projectProfile = {
+        profileName: '',
+        project: {
+            projectProperties: {
+                dischargeTime: { 
+                    dischargeTimeId: null 
+                },
+                transportMethod: {
+                    transportMethodId: 1
+                },
+                unloadType: {
+                    unloadTypeId: null,
+                },
+                pumpCapacity: {
+                    pumpCapacityId: null,
+                },
+                kicker: true
+            }
+        }
+    };
 
-    constructor(private CatalogApi: CatalogApi) {
-        this.CatalogApi.byProductLine('4169', '0006').map((response) => response.json()).subscribe((response) => {
+
+    constructor(private CatalogApi: CatalogApi, private ProjectProfileApi: ProjectProfileApi, private CustomerService: CustomerService) {
+        const customerId = CustomerService.currentCustomer().legalEntityId || 354;
+        this.CatalogApi.byProductLine(customerId, '0006').map((response) => response.json()).subscribe((response) => {
             response.catalogs.forEach((catalog) => {
                 this.catalogs[catalog.catalogCode] = catalog.entries;
             });
@@ -23,6 +46,12 @@ export class ProjectProfileCreatorComponent {
     }
 
     confirm() {
+        const customerId = this.CustomerService.currentCustomer().legalEntityId || 354;
+        this.ProjectProfileApi.create({ ...this.projectProfile, customer: { customerId: customerId }}, customerId)
+            .map((response) => response.json())
+            .subscribe((response) => {
+                console.log(response);
+        });
         this.finishedOrder = true;
     }
 
