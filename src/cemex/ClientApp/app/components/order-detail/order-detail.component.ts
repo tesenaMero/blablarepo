@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { OrderDetailApi } from '../../shared/services/api/order-detail.service';
 import { ActivatedRoute } from '@angular/router';
-import { ShipmentLocationApi } from '../../shared/services/api/shipment-locations.service.api';
 
 @Component({
     selector: 'order-detail-page',
@@ -16,8 +15,12 @@ export class OrderDetailComponent {
     id: number;
     type: string = "SLS";
     private sub: any;
+    pod: any;
+    jobsite: any;
+    streetJob: any;
+    streetPOD: any;
 
-    constructor(private orderDetailApi: OrderDetailApi, private shipmentApi: ShipmentLocationApi, private route: ActivatedRoute) {
+    constructor(private orderDetailApi: OrderDetailApi, private route: ActivatedRoute) {
         this.sub = this.route.queryParams.subscribe(params => {
             this.id = params['orderId'];
             if (params['typeCode'] && params['typeCode'] == "ZTA") {
@@ -28,23 +31,57 @@ export class OrderDetailComponent {
                     this.type = params['typeCode'];
                 }
             }
-        });
-        
+        });        
         orderDetailApi.byIdType(this.id, this.type).subscribe((response) => {
             this.orderDetailData = response.json();
-        });        
-        // // Fetch pods
-        // this.shipmentApi.pods(this.location).subscribe((response) => {
-        //     this.pods = response.json().shipmentLocations;
-        //     this.pods.forEach((pod, index) => {
-        //         pod.id = index;
-        //         pod.name = pod.shipmentLocationDesc;
-        //     })
-        //     this.loadings.pods = false;
-        // });      
+            console.log(response);
+            if (this.orderDetailData.salesArea.countryCode.trim() == "MX") { //Point Of Delivery
+                this.getJobsite(orderDetailApi);
+                this.getPod(orderDetailApi);
+            }
+            else {
+                if (this.orderDetailData.salesArea.countryCode.trim() == "US") { //Jobsite
+                    console.log("In US Job");
+                    this.getJobsite(orderDetailApi); 
+                }
+            }            
+        });         
     }
-
     ngOnDestroy() {
         this.sub.unsubscribe();
     }  
+    getJobsite(orderDetailApi) {
+        orderDetailApi.shipmentLocationsJob(this.orderDetailData.jobsite.jobsiteId).subscribe((response) => {
+            this.jobsite = response.json();
+            if (this.jobsite.shipmentLocations.length > 0) {
+                console.log(this.jobsite);
+                // console.log(this.jobsite.shipmentLocations[this.jobsite.shipmentLocations.length-1].address.addressId);
+                this.getStreetJobsite(orderDetailApi ,this.jobsite.shipmentLocations[this.jobsite.shipmentLocations.length-1].address.addressId);
+            }
+            
+            
+        });          
+    }
+    getPod(orderDetailApi) {
+        orderDetailApi.shipmentLocationsPOD(this.orderDetailData.pointOfDelivery.pointOfDeliveryId).subscribe((response) => {
+            this.pod = response.json();
+            if (this.pod.shipmentLocations.length > 0) {
+                console.log(this.pod);
+                // console.log(this.pod.shipmentLocations[this.pod.shipmentLocations.length-1].address.addressId);
+                this.getStreetPOD(orderDetailApi ,this.pod.shipmentLocations[this.pod.shipmentLocations.length-1].address.addressId);
+            }
+        });          
+    }    
+    getStreetJobsite(orderDetailApi, street) {
+        orderDetailApi.shipmentLocationsStreet(street).subscribe((response) => {
+            this.streetJob = response.json();
+            console.log(this.streetJob);
+        });
+    }    
+    getStreetPOD(orderDetailApi, street) {
+        orderDetailApi.shipmentLocationsStreet(street).subscribe((response) => {
+            this.streetPOD = response.json();
+            console.log(this.streetPOD);
+        });
+    }
 }
