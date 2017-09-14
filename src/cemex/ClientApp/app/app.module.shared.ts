@@ -56,6 +56,7 @@ import { OrderRequestHelper } from './utils/order-request.helper';
 import { OrdersModel } from './shared/schema';
 import { SessionService, AuthGuard } from './shared/services/session.service';
 import { DashboardService } from './shared/services/dashboard.service'
+import { CustomerService } from './shared/services/customer.service'
 import { 
     Api, 
     ProductLineApi, 
@@ -163,5 +164,6 @@ export const sharedConfig: NgModule = {
         DashboardService,
         DraftsService,
         EncodeDecodeJsonObjService,
+        CustomerService
     ]
 };
