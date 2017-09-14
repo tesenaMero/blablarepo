@@ -127,7 +127,7 @@ class PreProduct {
     maneuvering: boolean = false;
     quantity: number = 1;
     date: any = new Date();
-    time: any;
+    time: any = new Date();
     unit: any;
     payment: any;
     contract: any;
