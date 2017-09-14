@@ -71,7 +71,8 @@ import {
     OrderDetailApi,
     LegalEntitiesApi,
     ShippingConditionApi,
-    DraftsService
+    DraftsService,
+    CatalogApi
 } from './shared/services/api';
 
 import { EncodeDecodeJsonObjService } from './shared/services/encodeDecodeJsonObj.service';
@@ -166,6 +167,7 @@ export const sharedConfig: NgModule = {
         DashboardService,
         DraftsService,
         EncodeDecodeJsonObjService,
-        CustomerService
+        CustomerService,
+        CatalogApi
     ]
 };

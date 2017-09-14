@@ -12,59 +12,51 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12">
                     <label for="pp-name" class="">Define a Name for your Project Profile</label>
-                    <input type="text" class="form-control " id="pp-name" name="pp-name" value="">
+                    <input [(ngModel)]="projectProfile.profileName" type="text" class="form-control " id="pp-name" name="pp-name" value="">
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
                     <label for="pp-discharge" class="">Discharge Time</label>
-                    <select name="pp-discharge" id="pp-discharge" class="form-control">
+                    <select [(ngModel)]="projectProfile.project.projectProperties.dischargeTime.dischargeTimeId" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option value="1">Riderback Eastern River Valley</option>
-                        <option value="2">Monterrey, Nuevo Leon</option>
-                        <option value="3">Tokyo Shibuya</option>
+                        <option *ngFor="let entry of catalogs.DCT" [ngValue]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
                 <div class="col-sm-6">
                     <label for="pp-transport" class="">Transport Method</label>
                     <select name="pp-transport" id="pp-transport" class="form-control">
-                        <option value="" selected>Truck</option>
+                        <option value="42" selected>Truck</option>
                     </select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
                     <label for="pp-discharge" class="">Unload Type</label>
-                    <select name="pp-discharge" id="pp-discharge" class="form-control">
+                    <select [(ngModel)]="projectProfile.project.projectProperties.unloadType.unloadTypeId" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option value="1">Riderback Eastern River Valley</option>
-                        <option value="2">Monterrey, Nuevo Leon</option>
-                        <option value="3">Tokyo Shibuya</option>
+                        <option *ngFor="let entry of catalogs.ULT" [ngValue]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
                 <div class="col-sm-6">
                     <label for="pp-transport" class="">Pump Capacity</label>
-                    <select name="pp-transport" id="pp-transport" class="form-control">
+                    <select [(ngModel)]="projectProfile.project.projectProperties.pumpCapacity.pumpCapacityId" name="pp-transport" id="pp-transport" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option value="1">Riderback Eastern River Valley</option>
-                        <option value="2">Monterrey, Nuevo Leon</option>
-                        <option value="3">Tokyo Shibuya</option>
+                        <option *ngFor="let entry of catalogs.PCC" [ngValue]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6">
+                <!-- <div class="col-sm-6">
                     <label for="pp-discharge" class="">Pump Frequency</label>
                     <select name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option value="1">Riderback Eastern River Valley</option>
-                        <option value="2">Monterrey, Nuevo Leon</option>
-                        <option value="3">Tokyo Shibuya</option>
+                        <option *ngFor="let entry of catalogs.RCC" value="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
-                </div>
+                </div> -->
                 <div class="col-sm-6">
                     <div class="center-kicker">
-                        <input checked type="checkbox" id="kicker">
+                        <input [(ngModel)]="projectProfile.project.projectProperties.kicker" checked type="checkbox" id="kicker">
                         <label for="kicker">
                             <svg class="icon-checkbox-active">
                                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
@@ -81,7 +73,7 @@
                 </div>
             </div>
         </div>
-        <div class="row additional">
+        <!-- <div class="row additional">
             <div class="col-sm-12 mb-5">
                 <label class="">Additional Services</label>
             </div>
@@ -130,7 +122,7 @@
                     <span>Pipeline</span>
                 </label>
             </div>
-        </div>
+        </div> -->
         <div class="row actions text-right">
             <div class="col">
                 <button (click)="cancel()" data-dismiss="modal" class="button-ghost mb-2">Cancel</button>
