@@ -1,4 +1,4 @@
-<stepper finishText="Add to cart">
+<stepper (onFinish)="finishSteps()" finishText="Add to cart">
     <step [automatic]="true" title="Product line" [showExit]="true" [showControls]="false">
         <product-selection-step (onCompleted)="productStepCompleted($event)"></product-selection-step>
     </step>

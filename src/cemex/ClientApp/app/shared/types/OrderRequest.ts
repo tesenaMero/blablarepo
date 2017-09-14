@@ -28,6 +28,7 @@ interface Optional {
     fullname: string;
   };
   orderRequestedBy: string;
+  orderType: string;
 };
 
 type OrderRequest = Required & Partial<Optional>;

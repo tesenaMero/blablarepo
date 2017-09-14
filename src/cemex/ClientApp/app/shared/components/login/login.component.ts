@@ -8,7 +8,7 @@ import { SessionService } from '../../../shared/services/session.service'
     styleUrls: ['./login.scss']
 })
 export class LoginComponent implements OnInit {
-    username = "ordertaking.customer03@hotmail.com";
+    username = "ordertaking.customer02@hotmail.com";
     password = "C3m3x2020";
     loading: boolean = false;
 

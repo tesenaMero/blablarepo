@@ -7,9 +7,9 @@ import { Api } from './api.service';
 @Injectable()
 export class LegalEntitiesApi {
 
-    constructor(private Api: Api) {}
+    constructor(private api: Api) {}
 
     all(): Observable<Response> {
-        return this.Api.get(`/v4/sm/mylegalentities`);
+        return this.api.get(`/v4/sm/mylegalentities`);
     }
 }

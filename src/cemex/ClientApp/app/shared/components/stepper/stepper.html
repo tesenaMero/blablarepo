@@ -51,7 +51,7 @@
             </svg>
         </a>
     </div>
-    <div class="current">
+    <div class="current" (click)="changeShowOverlay()">
         <a data-toggle="collapse" href="#collapse-steps">
             {{currentStep.title}}
             <svg class="icon-up-single">
@@ -83,3 +83,4 @@
         </div>
     </div>
 </div>
+<div *ngIf="overlay" class="stepper-overlay hidden-md-up"></div>

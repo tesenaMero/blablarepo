@@ -3,6 +3,7 @@
 $sidebar-width: 160px;
 $header-height: 54px;
 $dashboard-index: 100;
+$footer-height: 24px;
 nav.fixed {
     position: fixed;
     z-index: $dashboard-index;
@@ -22,6 +23,7 @@ nav.side-nav-bar {
 .content {
     padding-left: $sidebar-width;
     padding-top: $header-height;
+    padding-bottom: $footer-height;
     transition: all 0.25s ease-in-out;
     &.moved {
         padding-left: 0px;
@@ -52,6 +54,24 @@ nav.side-nav-bar {
 
 .side-nav-bar ul .side-subnav li {
     border-bottom: 0;
+}
+
+// Alert
+.alert-bar {
+    transform: translateY(-40px);
+    position: fixed;
+    transition: transform 0.2s ease;
+    &.open {
+        transform: translateY(0);
+        z-index: $dashboard-index - 1;
+    }
+    p {
+        padding: 13px 19px;
+        float: left;
+        line-height: .875rem;
+        width: calc(100% - 46px);
+        font-family: Roboto;
+    }
 }
 
 // Outside of classes to optimize a little

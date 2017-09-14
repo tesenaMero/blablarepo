@@ -8,13 +8,10 @@ import 'rxjs/observable/ErrorObservable';
 
 @Injectable()
 export class SessionService {
-
-    static LOGIN_SUCCESS_EVENT = "LOGIN_SUCCESS_EVENT";
-    static LOGIN_FAIL_EVENT = "LOGIN_FAIL_EVENT";
-    static LOGIN_LOGOUT_EVENT = "LOGIN_LOGOUT_EVENT";
     static AUTH_TOKEN_VERSION = "auth_token_version";
     private _endpoint: string;
-    constructor(private http: Api, @Inject(SessionService.AUTH_TOKEN_VERSION) @Optional() private authTokenVersion: string) {
+    constructor(
+        private http: Api, @Inject(SessionService.AUTH_TOKEN_VERSION) @Optional() private authTokenVersion: string) {
         this._endpoint = authTokenVersion ? `${authTokenVersion}/secm/oam/oauth2/token` : "v2/secm/oam/oauth2/token";
     }
 

@@ -12,6 +12,7 @@ import { ShipmentLocationApi } from '../../../../shared/services/api/shipment-lo
     host: { 'class': 'w-100' }
 })
 export class LocationStepComponent implements OnInit, StepEventsListener {
+    
     @Input() mapOptions?: google.maps.MapOptions;
     @Output() onCompleted = new EventEmitter<any>();
 
@@ -21,6 +22,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     private pod: any;
     private catalogOptions: Object = {};
     private selectedServices: Array<{ additionalServiceId: number }> = [];
+    private errorLocation: boolean;
+    shipmentLocationTypes;
 
     // Loading state
     private isMapLoaded: boolean = false;
@@ -90,11 +93,14 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     // Interfaces
     // ======================
     ngOnInit() {
-        this.fetchJobsites();
         this.getCatalog();
     }
 
     onShowed() {
+        this.orderManager._shipmentLocationType.subscribe(data => {
+            this.shipmentLocationTypes = data.shipmentLocationTypes;
+            this.fetchJobsites(this.shipmentLocationTypes);
+        })
         if (!this.isMapLoaded) {
             GoogleMapsHelper.lazyLoadMap("jobsite-selection-map", (map) => {
                 this.isMapLoaded = true;
@@ -105,8 +111,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         }
     }
 
-    fetchJobsites() {
-        this.shipmentApi.all().subscribe((response) => {
+    fetchJobsites(shipmentLocationTypes) {
+        this.shipmentApi.all(shipmentLocationTypes, this.orderManager.productLine).subscribe((response) => {
             this.locations = response.json().shipmentLocations;
             this.locations.forEach((location, index) => {
                 location.id = index;
@@ -136,6 +142,12 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.location = location;
         this.orderManager.selectJobsite(this.location);
 
+        if(!location){
+            this.errorLocation = true;
+        } else {
+            this.errorLocation = false;
+        }
+
         // Fetch geolocation
         this.shipmentApi.jobsiteGeo(this.location).subscribe((geo) => {
             this.cleanJobsiteMarker();
@@ -145,7 +157,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         });
 
         // Fetch pods
-        this.shipmentApi.pods(this.location).subscribe((response) => {
+        this.shipmentApi.pods(this.location, this.shipmentLocationTypes, null, this.orderManager.productLine).subscribe((response) => {
             this.pods = response.json().shipmentLocations;
             this.pods.forEach((pod, index) => {
                 pod.id = index;

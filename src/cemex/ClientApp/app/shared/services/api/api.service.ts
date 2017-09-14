@@ -20,8 +20,9 @@ export class Api {
     }
 
     public post(url: string, body: any, options: RequestOptionsArgs = {}): Observable<Response> {
-        if (options == {})
-            options.headers = (this.getHeaders());
+        if (Object.keys(options).length === 0)
+            options.headers = this.getHeaders();
+
         return this._http.post(`${this.apiRoot}${url}`, body, options);
     }
 
@@ -30,7 +31,7 @@ export class Api {
         return this._http.post(`${this.apiRoot}${url}`, body, options);
     }
 
-    public patch(url: string, body: any, options: RequestOptionsArgs = {}): Observable<Response> {
+    public patch(url: string, body: any = {}, options: RequestOptionsArgs = {}): Observable<Response> {
         options.headers = this.getHeaders();
         return this._http.patch(`${this.apiRoot}${url}`, body, options);
     }

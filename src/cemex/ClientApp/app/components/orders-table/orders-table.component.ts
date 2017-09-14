@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { OrderRequest } from '../../shared/models/order-request';
 import { OrdersService } from '../../shared/services/orders.service';
+import { WindowRef } from '../../shared/services/window-ref.service';
 import {
     OrderRequestHelper,
     OrderRequestTableComponentConfiguration,
@@ -38,7 +39,7 @@ export class OrdersTableComponent {
         });
     };
 
-    constructor(private ordersService: OrdersService) {
+    constructor(private ordersService: OrdersService, private WindowRef: WindowRef) {
         localForage.getItem(this.ORDERS_QTY_KEY).then(ordersQty => {
             this.ordersQty = ordersQty;
         });
@@ -53,7 +54,7 @@ export class OrdersTableComponent {
             {
                 key: 'orderRequestId',
                 title: 'Order No',
-                width: 10,
+                width: 15,
                 sortable: true
             },
             {
@@ -71,7 +72,7 @@ export class OrdersTableComponent {
             {
                 key: 'purchaseOrder',
                 title: 'Purchase Order Number',
-                width: 20,
+                width: 15,
                 sortable: true
             },
             {
@@ -139,6 +140,10 @@ export class OrdersTableComponent {
             {
                 key: 'unitDesc',
                 hidden: true,
+            },
+            {
+                key: 'orderType',
+                hidden: true,
             }
         ]
     };
@@ -157,6 +162,7 @@ export class OrdersTableComponent {
     }
 
     changePage(page) {
+        window.scroll(0, 0);
         this.ordersService.paginateOrders(page);
         this.currentPage = page;
     }

@@ -13,7 +13,6 @@
 }
 
 .title-container {
-    //padding-bottom: 16px;
     margin-right: 40px;
     h1 {
         margin-left: -4px;
@@ -25,7 +24,6 @@
     text-align: right;
     button {
         &:first-child {
-            margin-right: 8px;
             @include media-breakpoint-down(sm) {
                 margin-bottom: 16px;
             }
@@ -39,24 +37,22 @@
     }
 }
 
-.button.red {
-    border: 1px solid #EE3D42;
-    background: #EE3D42 !important;
-}
-
 .nav-tab-container {
     margin-top: 33px;
 }
 
-.nav-tabs .nav-item {
-    .nav-link {
-        color: #333333;
-        font-size: 15px;
-        font-weight: bold;
-        line-height: 18px;
-        cursor: pointer;
-        &.active {
-            border-radius: 0;
+.nav.nav-tabs {
+    display: -webkit-inline-box;
+    .nav-tabs .nav-item {
+        .nav-link {
+            color: #333333;
+            font-size: 15px;
+            font-weight: bold;
+            line-height: 18px;
+            cursor: pointer;
+            &.active {
+                border-radius: 0;
+            }
         }
     }
 }
@@ -111,13 +107,29 @@
         &.status {
             &:before {
                 content: '';
-                height: 16px;
-                width: 16px;
+                padding: 0 8px;
+                display: inline;
+                margin-right: 4px;
                 border-radius: 2px;
-                background-color: #77CB38;
-                display: inline-flex;
-                transform: translateY(2px);
-                margin-right: 6px;
+            }
+            &.confirmed:before {
+                background: #77cb38;
+            }
+            &.canceled:before {
+                background: #D6D6D6;
+            }
+            &.draft:before {
+                background: #EE3D42;
+            }
+            &.pending:before {
+                background: #FBB03B;
+            }
+            &.blocked:before {
+                background: #EE3D42;
+            }
+            &.completed:before,
+            &.processed:before {
+                background: #3FA9F5;
             }
         }
     }
@@ -148,4 +160,24 @@
     justify-content: center;
     align-content: center;
     flex-direction: column;
+}
+
+.card-container {
+    margin-bottom: 27px !important;
+}
+
+@include media-breakpoint-down(md) {
+    .nav-tab-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    ul.nav {
+        min-width: 520px;
+        width: 100%;
+    }
+    .nav-tabs {
+        .nav-item {
+            display: inline-block;
+        }
+    }
 }

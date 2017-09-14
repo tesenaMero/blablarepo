@@ -5,27 +5,27 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 
 // Components
-import { AppComponent } from './components/app/app.component'
-import { DashboardComponent } from './components/dashboard/dashboard.component'
-import { LoginComponent }  from './shared/components/login/login.component'
-import { OrdersComponent } from './components/orders/orders.component'
-import { DraftsComponent } from './components/drafts/drafts.component'
-import { ProjectProfilesComponent } from './components/project-profiles/project-profiles.component'
-import { ProjectProfileCreatorComponent } from './components/project-profile-creator/project-profile-creator.component'
-import { OrdersTableComponent } from './components/orders-table/orders-table.component'
-import { LoadingTableComponent } from './components/orders-table/loading-table/loading-table.component'
-import { NewOrderComponent } from './components/new-order/new-order.component'
-import { NewProjectProfile } from './components/new-project-profile/new-project-profile.component'
-import { OrderDetailComponent } from './components/order-detail/order-detail.component'
+import { AppComponent } from './components/app/app.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { LoginComponent }  from './shared/components/login/login.component';
+import { OrdersComponent } from './components/orders/orders.component';
+import { DraftsComponent } from './components/drafts/drafts.component';
+import { ProjectProfilesComponent } from './components/project-profiles/project-profiles.component';
+import { ProjectProfileCreatorComponent } from './components/project-profile-creator/project-profile-creator.component';
+import { OrdersTableComponent } from './components/orders-table/orders-table.component';
+import { LoadingTableComponent } from './components/orders-table/loading-table/loading-table.component';
+import { NewOrderComponent } from './components/new-order/new-order.component';
+import { NewProjectProfile } from './components/new-project-profile/new-project-profile.component';
+import { OrderDetailComponent } from './components/order-detail/order-detail.component';
 import { CartComponent } from './components/cart/cart.component';
-import { OrderBuilderComponent } from './components/order-builder/order-builder.component'
+import { OrderBuilderComponent } from './components/order-builder/order-builder.component';
 import { SummaryStepComponent } from './components/order-builder/order-steps/summary/summary.step.component';
 import { 
     LocationStepComponent, 
     ProductSelectionStepComponent, 
     SpecificationsStepComponent, 
     ModeStepComponent,
-}  from './components/order-builder/order-steps'
+}  from './components/order-builder/order-steps';
 import { SearchProductComponent } from './components/search-product/search-product.component';
 import { OrderDetailCommentsComponent } from './components/order-detail/order-detail-comments/order-detail-comments.component';
 import { OrderDetailLogsComponent } from './components/order-detail/order-detail-logs/order-detail-logs.component';
@@ -36,7 +36,8 @@ import { CrossProductComponent } from './components/cross-product/crossProduct.c
 import {
     NoSpacePipe, 
     ZeroPadPipe, 
-    SumGroupProductPipe 
+    SumGroupProductPipe,
+    DatePipe
 } from './pipes'
 
 // Shared components
@@ -47,15 +48,17 @@ import { ActionButtonComponent } from './shared/components/action-button/action-
 import { BreadcrumbsComponent, BreadcrumbsItemComponent } from './shared/components/breadcrumbs'
 import { PaginationComponent } from './shared/components/pagination/pagination.component';
 import { DLSTableComponent } from './shared/components/table/table.component';
-import { NavigationComponent } from './shared/components/navigation/navigation.component'
+import { FooterComponent } from './shared/components/footer/footer.component';
+import { NavigationComponent } from './shared/components/navigation/navigation.component';
 
 // Services
 import { WindowRef } from './shared/services/window-ref.service';
 import { NguiDatetimePickerModule } from './shared/components/datetimepicker';
 import { OrderRequestHelper } from './utils/order-request.helper';
 import { OrdersModel } from './shared/schema';
-import { SessionService, AuthGuard } from './shared/services/session.service'
-
+import { SessionService, AuthGuard } from './shared/services/session.service';
+import { DashboardService } from './shared/services/dashboard.service'
+import { CustomerService } from './shared/services/customer.service'
 import { 
     Api, 
     ProductLineApi, 
@@ -66,8 +69,11 @@ import {
     ContractsApi,
     JobsiteApi,
     ProductsApi,
+    OrderDetailApi,
     LegalEntitiesApi,
-    ShippingConditionApi
+    ShippingConditionApi,
+    DraftsService,
+    CatalogApi
 } from './shared/services/api';
 
 import { EncodeDecodeJsonObjService } from './shared/services/encodeDecodeJsonObj.service';
@@ -91,6 +97,7 @@ export const sharedConfig: NgModule = {
         ZeroPadPipe,
         NoSpacePipe,
         SumGroupProductPipe,
+        DatePipe,
 
         // Regular components
         OrdersTableComponent,
@@ -115,7 +122,8 @@ export const sharedConfig: NgModule = {
         Step,
         ActionButtonComponent,
         DLSTableComponent,
-        NavigationComponent
+        NavigationComponent,
+        FooterComponent
     ],
     imports: [
         NguiDatetimePickerModule,
@@ -156,8 +164,13 @@ export const sharedConfig: NgModule = {
         ShipmentLocationApi,
         OrdersApi,
         ProductsApi,
+        OrderDetailApi,
         ShippingConditionApi,
         LegalEntitiesApi,
+        DashboardService,
+        DraftsService,
         EncodeDecodeJsonObjService,
+        CustomerService,
+        CatalogApi
     ]
 };

@@ -1,6 +1,6 @@
 <header>
     <nav class="main-nav-bar fixed">
-        <div class="main-nav-items left hidden-md-up">
+        <div class="main-nav-items left hidden-lg-up">
             <div class="main-nav-item hamburger-button" (click)="toggleMenu()">
                 <div class="hamburger" [ngClass]="{open: open}">
                     <span></span>
@@ -71,24 +71,6 @@
                 <!-- end .notifications-container -->
             </div>
             <div class="vertical-bar hidden-sm-down"></div>
-            <div class="main-nav-item">
-                <div class="search-container">
-                    <svg class="icon-magnifier-glass">
-                        <use xlink:href="#icon-magnifier-glass" xmlns:xlink="http://www.w3.org/1999/xlink"></use></svg>
-                    <!-- end .icon-magnifier-glass -->
-                    <div class="search-holder">
-                        <input type="submit"> <svg class="icon-magnifier-glass fake-submit">
-                            <use xlink:href="#icon-magnifier-glass" xmlns:xlink="http://www.w3.org/1999/xlink"></use></svg> <input placeholder="Type to search and press enter" type="search">
-                        <div class="dismiss-search">
-                            <svg class="icon-close-silver">
-                                <use xlink:href="#icon-close" xmlns:xlink="http://www.w3.org/1999/xlink"></use></svg>
-                        </div>
-                    </div>
-                    <!-- end .search-holder -->
-                </div>
-                <!-- end .search-container -->
-            </div>
-            <div class="vertical-bar"></div>
             <div class="dropdown" style="float: left; display: inline-block;  position: relative">
                 <div class="user-logged" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="circle white-circle">
@@ -119,7 +101,7 @@
             <!-- end .user-logged-container -->
         </div>
         <!-- end .main-nav-items -->
-        <div class="sub-nav-loader hidden-md-down"></div>
+        <!-- <div class="sub-nav-loader hidden-md-down"></div> -->
         <!-- end .sub-nav-loader -->
     </nav>
     <!-- <cmx-nav-header></cmx-nav-header> -->
@@ -128,7 +110,7 @@
 <aside id="sidebar-wrapper">
     <nav class="side-nav-bar can-hide" [ngClass]="{open: open}">
 
-        <div class="collapse-trigger opened-nav hidden-sm-down">
+        <div class="collapse-trigger opened-nav hidden-md-down">
             <svg class="icon-left-double-silver">
                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-left-double"></use>
                     </svg>

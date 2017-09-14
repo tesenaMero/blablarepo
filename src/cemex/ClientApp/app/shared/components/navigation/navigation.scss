@@ -2,7 +2,7 @@
 @import '../../../scss/responsive.scss';
 $sidebar-width: 160px;
 $header-height: 54px;
-$dashboard-index: 9999;
+$dashboard-index: 100;
 .user-logger-container {
     top: 41px;
     right: -5px;
@@ -17,7 +17,7 @@ nav.side-nav-bar {
     position: fixed;
     top: $header-height;
     height: 100%;
-    z-index: $dashboard-index;
+    z-index: $dashboard-index + 1;
     transition: transform 0.25s ease;
     &.moved {
         transform: translateX(-$sidebar-width);
@@ -41,7 +41,13 @@ nav.side-nav-bar {
     font-size: 14px;
     line-height: 16px;
     padding-top: 4px;
-    padding-bottom: 30px;
+    padding-bottom: 20px;
+    padding-left: 13px;
+    padding-right: 5px;
+}
+
+.side-nav-bar ul li a+ul li:first-child a {
+    padding-top: 12px;
 }
 
 .side-nav-bar ul li .active+ul li a {

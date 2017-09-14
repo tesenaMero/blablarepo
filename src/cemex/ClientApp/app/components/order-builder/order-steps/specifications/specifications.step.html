@@ -3,18 +3,19 @@
     <ng-container *ngIf="true">
         <div class="product" [ngClass]="{ 
                 'exit-animation': product.deleting, 
-                'enter-animation': index > 0 }" *ngFor="let product of products; let index = index;">
+                'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
             <div class="row">
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
                         <label>
                             Product description
                         </label>
-                        <div class="input product-selection dropdown">
+                        <div class="input product-selection dropdown" [ngClass]="{ disabled: loadings.products }">
                             <span class="selection">
-                                {{ product.product.name }}
-                                <select style="width: calc(100% - 80px);" [(ngModel)]="product.product" class="input behind">
-                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p.name  }}</option>
+                                {{ product.product?.commercialDesc }}
+                                <select style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged($event)" class="input behind">
+                                    <option value="0">Select a product</option>
+                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc  }}</option>
                                 </select>
                             </span>
                             <span class="action" data-toggle="modal" data-target="#search-product">Change</span>
@@ -58,7 +59,7 @@
                             <label>Request date</label>
                             <label for="date{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    {{ product.date | date:'dd.MM.y' }}
+                                    {{ product.date | date: 'shortDate' }}
                                     <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" />
                                 </span>
                                 <span class="mb-0">
@@ -70,8 +71,8 @@
                             <label>Requested time</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    {{ product.time }}
-                                    <input id="time{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.time" ngui-datetime-picker time-only="true" right-side="true" [close-on-select]="false" hour="0" minute="0" />
+                                    <div class="time{{ index }}">{{ product.date | date: 'HH:mm' }}</div>
+                                    <input id="time{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker time-only="true" right-side="true" [close-on-select]="false" hour="0" minute="0" />
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-clock"></span></span>
@@ -86,7 +87,7 @@
                     <div class="group">
                         <label>Product ID</label>
                         <div class="input">
-                            <span>20939302/10292/10102</span>
+                            <span>{{ product?.product?.commercialCode }}</span>
                         </div>
                     </div>
                 </div>
@@ -158,7 +159,7 @@
     <ng-container *ngIf="false">
         <div class="product" [ngClass]="{ 
             'exit-animation': product.deleting, 
-            'enter-animation': index > 0 }" *ngFor="let product of products; let index = index;">
+            'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
             <div class="row">
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
@@ -327,7 +328,7 @@
     <ng-container *ngIf="false">
         <div class="product" [ngClass]="{ 
                 'exit-animation': product.deleting, 
-                'enter-animation': index > 0 }" *ngFor="let product of products; let index = index;">
+                'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
             <div class="row">
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
