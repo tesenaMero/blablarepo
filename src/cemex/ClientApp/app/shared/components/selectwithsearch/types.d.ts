@@ -48,6 +48,7 @@ export interface IMultiSelectSettings {
     isLazyLoad?: boolean;
     loadViewDistance?: number;
     stopScrollPropagation?: boolean;
+    addOption? : boolean;
 }
 export interface IMultiSelectTexts {
     checkAll?: string;
