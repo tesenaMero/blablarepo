@@ -83,6 +83,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
     }
 
+    timeChanged(index: any, value){
+        // this.preProducts[index].date = 'time'
+        // console.log(index, 'changed', this.preProducts[index]);
+    }
+
     productSelected(product: any) {
         this.fetchUnits(product);
     }
