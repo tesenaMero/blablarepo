@@ -12,6 +12,7 @@ export class ProjectProfileCreatorComponent {
     private finishedOrder: boolean;
 
     constructor() {
+        
     }
 
     confirm() {
