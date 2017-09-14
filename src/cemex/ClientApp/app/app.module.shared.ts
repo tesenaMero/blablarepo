@@ -30,6 +30,7 @@ import { SearchProductComponent } from './components/search-product/search-produ
 import { OrderDetailCommentsComponent } from './components/order-detail/order-detail-comments/order-detail-comments.component';
 import { OrderDetailLogsComponent } from './components/order-detail/order-detail-logs/order-detail-logs.component';
 import { SelectDropdownModule } from './shared/components/selectwithsearch/dropdown.module';
+import { CrossProductComponent } from './components/cross-product/crossProduct.component';
 
 // Pipes
 import {
@@ -104,6 +105,7 @@ export const sharedConfig: NgModule = {
         SummaryStepComponent,
         OrderDetailCommentsComponent,
         OrderDetailLogsComponent,
+        CrossProductComponent,
 
         // Shared
         PaginationComponent,
@@ -130,6 +132,7 @@ export const sharedConfig: NgModule = {
                     { path: 'order-detail', component: OrderDetailComponent },
                     { path: 'project-profiles', component: ProjectProfilesComponent },
                     { path: 'drafts', component: DraftsComponent },
+                    { path: 'open/:id', component: CrossProductComponent },
                 ]
             },
             { path: '**', redirectTo: 'app' }
