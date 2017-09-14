@@ -45,13 +45,19 @@
 .stepper-open {
     width: 100%;
     min-height: 0;
-    background: #003876;
+    background: #f4f6f9;
     border-bottom: 1px solid #fff;
     position: absolute;
     bottom: 48px;
     color: #fff;
     font-size: 1rem;
     padding: 0;
+
+    .step{
+        a{
+            color: #29a6f3;
+        }
+    }
 }
 
 .cto-container {

@@ -71,8 +71,8 @@
                             <label>Requested time</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    <div class="time{{ index }}">{{ product.date | date:'HH:mm' }}</div>
-                                    <input id="time{{ index }}" class="behind clean-input" type="text" readonly (ngModelChange)="timeChanged(index, $event)" [(ngModel)]="product.date" ngui-datetime-picker time-only="true" right-side="true" [close-on-select]="false" hour="0" minute="0" />
+                                    <div class="time{{ index }}">{{ product.time }}</div>
+                                    <input id="time{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker time-only="true" right-side="true" [close-on-select]="false" hour="0" minute="0" />
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-clock"></span></span>
