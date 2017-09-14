@@ -35,7 +35,8 @@ import { SelectDropdownModule } from './shared/components/selectwithsearch/dropd
 import {
     NoSpacePipe, 
     ZeroPadPipe, 
-    SumGroupProductPipe 
+    SumGroupProductPipe,
+    DatePipe
 } from './pipes'
 
 // Shared components
@@ -94,6 +95,7 @@ export const sharedConfig: NgModule = {
         ZeroPadPipe,
         NoSpacePipe,
         SumGroupProductPipe,
+        DatePipe,
 
         // Regular components
         OrdersTableComponent,

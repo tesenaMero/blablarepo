@@ -28,12 +28,15 @@ export class StepperComponent implements AfterContentInit {
 
     nextAvailable: boolean = false;
     backAvailable: boolean = true;
+    overlay: boolean = false;
 
     @ContentChildren(Step) steps: QueryList<Step>;
     @Output() onFinish = new EventEmitter<any>();
 
     currentStep: any;
-    constructor() { }
+    constructor() {
+        this.overlay = false;
+     }
 
     // Content children are set
     ngAfterContentInit() {
@@ -90,6 +93,10 @@ export class StepperComponent implements AfterContentInit {
 
     finish(result: any) {
         this.onFinish.emit(result);
+    }
+
+    changeShowOverlay(){
+        this.overlay = !this.overlay;
     }
 
     private validateNext

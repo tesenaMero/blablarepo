@@ -43,7 +43,7 @@
 
 <!-- Mobile stepper -->
 <!-- ============== -->
-<div class="mobile-stepper hidden-md-up">
+<div class="mobile-stepper hidden-md-up" (click)="changeShowOverlay()">
     <div class="prev" [ngClass]="{ 'hidden-arrow': !backAvailable, 'hidden-arrow': !currentStep.showControls }">
         <a (click)="prev()">
             <svg class="icon-left-single">
@@ -83,3 +83,4 @@
         </div>
     </div>
 </div>
+<div *ngIf="overlay" class="stepper-overlay hidden-md-up"></div>
