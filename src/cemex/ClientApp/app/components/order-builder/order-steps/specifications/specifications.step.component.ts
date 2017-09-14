@@ -12,13 +12,12 @@ import { CreateOrderService } from '../../../../shared/services/create-order.ser
 export class SpecificationsStepComponent implements StepEventsListener {
     private preProducts = [];
     private loadings = {
-        products: true
+        products: true,
+        contracts: true
     }
+    private selectedProduct: any;
 
-    static availableUnits = [
-        { name: "m³" },
-        { name: "tons" }
-    ];
+    static availableUnits = [];
 
     get availableUnits() {
         return SpecificationsStepComponent.availableUnits;
@@ -34,11 +33,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     static availableContracts = [
-        { name: "10-20170218903432112212", volume: 180 },
-        // { name: "‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ‌‌ ", volume: "‌‌ ‌‌ ‌‌ " },
-        // { name: "10-20170218903432112212", volume: 180 },
-        // { name: "11-20170218903432112212", volume: 160 },
-        // { name: "12-20170218903432112212", volume: 140 },
+        {
+            "salesDocument": {
+                "salesDocumentCode": "Select Contract"
+            }
+        }
     ];
 
     get availableContracts() {
@@ -67,7 +66,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     onShowed() {
         this.loadings.products = true;
-        const salesDocumentType = '3'
+        const salesDocumentType = '3';
         this.api.top(
             this.manager.jobsite,
             salesDocumentType,
@@ -84,24 +83,55 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     item.product = topProducts[0];
             });
 
+            this.selectedProduct = topProducts[0];
+
+            this.getUnits(topProducts[0].product.productId);
+            this.productChanged(topProducts[0]);
+
             this.manager.setProducts(this.preProducts);
             this.loadings.products = false;
         });
     }
 
-    productChanged(event) {
-        const salesDocumentType = '1'
+    getUnits(product) {
+        this.api.units(product).subscribe((result) => {
+            let units = result.json().productUnitConversions;
+            this.preProducts.forEach(item => {
+                if (units.length > 0)
+                    item.unit = units[0];
+            });
+            SpecificationsStepComponent.availableUnits = units
+        });
+    }
+
+    productChanged(el) {
+        this.loadings.contracts = true;
+        const salesDocumentType = '1';
         this.api.fetchContracts(
             this.manager.jobsite,
             salesDocumentType,
             this.manager.productLine,
             this.manager.shippingCondition,
-            event.product.productId
+            el.product.productId
         ).subscribe((result) => {
             let contracts = result.json().products;
             SpecificationsStepComponent.availableContracts = contracts;
-            this.loadings.products = false;
+            this.preProducts.forEach(item => {
+                if (contracts.length >= 0)
+                    item.contract = contracts[0];
+            });
+            this.preProducts[0].contract = {
+                "salesDocument": {
+                    "salesDocumentCode": "Select Contract"
+                }
+            }
+            this.loadings.contracts = false;
         });
+    }
+
+    contractChanged(contract) {
+        this.getUnits(contract.salesDocument.salesDocumentId);
+        this.selectedProduct = contract;
     }
 
     add() {
