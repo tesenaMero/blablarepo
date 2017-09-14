@@ -12,11 +12,13 @@ export class ProjectProfileCreatorComponent {
     @Output() confirmed = new EventEmitter<any>();
 
     private finishedOrder: boolean;
-    private catalog = {};
+    private catalogs = {};
 
     constructor(private CatalogApi: CatalogApi) {
         this.CatalogApi.byProductLine('4169', '0006').map((response) => response.json()).subscribe((response) => {
-            this.catalog = response;
+            response.catalogs.forEach((catalog) => {
+                this.catalogs[catalog.catalogCode] = catalog.entries;
+            });
         });
     }
 

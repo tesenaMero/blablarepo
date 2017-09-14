@@ -20,15 +20,13 @@
                     <label for="pp-discharge" class="">Discharge Time</label>
                     <select name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option value="1">Riderback Eastern River Valley</option>
-                        <option value="2">Monterrey, Nuevo Leon</option>
-                        <option value="3">Tokyo Shibuya</option>
+                        <option *ngFor="let entry of catalogs.DCT" value="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
                 <div class="col-sm-6">
                     <label for="pp-transport" class="">Transport Method</label>
                     <select name="pp-transport" id="pp-transport" class="form-control">
-                        <option value="" selected>Truck</option>
+                        <option value="42" selected>Truck</option>
                     </select>
                 </div>
             </div>
@@ -37,18 +35,14 @@
                     <label for="pp-discharge" class="">Unload Type</label>
                     <select name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option value="1">Riderback Eastern River Valley</option>
-                        <option value="2">Monterrey, Nuevo Leon</option>
-                        <option value="3">Tokyo Shibuya</option>
+                        <option *ngFor="let entry of catalogs.ULT" value="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
                 <div class="col-sm-6">
                     <label for="pp-transport" class="">Pump Capacity</label>
                     <select name="pp-transport" id="pp-transport" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option value="1">Riderback Eastern River Valley</option>
-                        <option value="2">Monterrey, Nuevo Leon</option>
-                        <option value="3">Tokyo Shibuya</option>
+                        <option *ngFor="let entry of catalogs.PCC" value="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
             </div>
@@ -57,9 +51,7 @@
                     <label for="pp-discharge" class="">Pump Frequency</label>
                     <select name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option value="1">Riderback Eastern River Valley</option>
-                        <option value="2">Monterrey, Nuevo Leon</option>
-                        <option value="3">Tokyo Shibuya</option>
+                        <option *ngFor="let entry of catalogs.RCC" value="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
                 <div class="col-sm-6">
