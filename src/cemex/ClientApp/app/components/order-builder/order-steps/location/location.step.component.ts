@@ -12,6 +12,7 @@ import { ShipmentLocationApi } from '../../../../shared/services/api/shipment-lo
     host: { 'class': 'w-100' }
 })
 export class LocationStepComponent implements OnInit, StepEventsListener {
+    
     @Input() mapOptions?: google.maps.MapOptions;
     @Output() onCompleted = new EventEmitter<any>();
 
@@ -21,6 +22,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     private pod: any;
     private catalogOptions: Object = {};
     private selectedServices: Array<{ additionalServiceId: number }> = [];
+    private errorLocation: boolean;
     shipmentLocationTypes;
 
     // Loading state
@@ -139,6 +141,12 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         // Set current shipment location
         this.location = location;
         this.orderManager.selectJobsite(this.location);
+
+        if(!location){
+            this.errorLocation = true;
+        } else {
+            this.errorLocation = false;
+        }
 
         // Fetch geolocation
         this.shipmentApi.jobsiteGeo(this.location).subscribe((geo) => {
