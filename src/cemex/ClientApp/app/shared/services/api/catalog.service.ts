@@ -10,11 +10,11 @@ export class CatalogApi {
     constructor(private Api: Api) {}
     
     byCode(code: string): Observable<Response> {
-        return this.Api.get(`v4/ce/catalogs?code=${code}`);
+        return this.Api.get(`/v4/ce/catalogs?code=${code}`);
     }
 
-    byProductLine(productCode, customerId): Observable<Response> {
-        return this.Api.delete(`v1/sm/catalogs?customerId=${customerId}&productLine=${productCode}`);
+    byProductLine(customerId, productCode): Observable<Response> {
+        return this.Api.get(`/v1/sm/catalogs?customerId=${customerId}&productLine=${productCode}`);
     }
 }
   
