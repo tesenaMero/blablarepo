@@ -6,6 +6,7 @@ import { DashboardService } from '../../shared/services/dashboard.service'
 import { WindowRef } from '../../shared/services/window-ref.service';
 import { DOCUMENT } from '@angular/platform-browser';
 import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
+import localForage = require('localforage');
 
 @Component({
     selector: 'cart-page',
@@ -143,10 +144,15 @@ export class CartComponent implements OnInit {
     }
 
     placeOrder() {
+        console.log(sessionStorage.getItem('access_token'))
         const mock = {
             sourceApp: "order-taking",
             date: new Date().toISOString(),
             screenToShow: "cash-sales",
+            credentials : {
+                token : sessionStorage.getItem('access_token'),
+                jwt : sessionStorage.getItem('jwt')
+            },
             data: [{
                 companyCode: "7180",
                 customerCode: "0050163248",
@@ -154,22 +160,8 @@ export class CartComponent implements OnInit {
                 payerCode: "0065014102",
                 orderAmount: 500.00,
                 documents: [
-                    // {
-                    //     documentCode: "9000000655",
-                    //     toCommit: 50.00
-                    // },
-                    // {
-                    //     documentCode: "9000000445",
-                    //     toCommit: 10.00
-                    // }
-                    // {
-                    //     documentCode: "3000002887",
-                    //     toCommit: 30.00
-                    // }
                 ]
             }]
-            // credentials: { "token": "token", "jwt": "jwt" },
-            // userInfo: { "name": "name", "userid": "userid" }
         }
         this.disableCartBtn = true;
         let encoded = this.jsonObjService.encodeJson(mock);
