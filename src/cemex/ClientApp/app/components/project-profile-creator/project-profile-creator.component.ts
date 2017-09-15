@@ -12,6 +12,7 @@ export class ProjectProfileCreatorComponent {
     @Output() canceled = new EventEmitter<any>();
     @Output() confirmed = new EventEmitter<any>();
 
+    private postingTheOrder: boolean;
     private finishedOrder: boolean;
     private loadingCatalog: boolean;
     private isUnloadTypePump: boolean;
@@ -21,17 +22,17 @@ export class ProjectProfileCreatorComponent {
         project: {
             projectProperties: {
                 transportMethod: {
-                    transportMethodId: 1
+                    transportMethodId: 2
                 },
                 kicker: true
             }
         }
     };
 
-
+    // CustomerService.currentCustomer().legalEntityId || 
     constructor(private CatalogApi: CatalogApi, private ProjectProfileApi: ProjectProfileApi, private CustomerService: CustomerService) {
         this.loadingCatalog = true;
-        const customerId = CustomerService.currentCustomer().legalEntityId || 354;
+        const customerId = 354;
         this.CatalogApi.byProductLine(customerId, '0006').map((response) => response.json()).subscribe((response) => {
             response.catalogs.forEach((catalog) => {
                 this.catalogs[catalog.catalogCode] = catalog.entries;
@@ -41,13 +42,18 @@ export class ProjectProfileCreatorComponent {
     }
 
     confirm() {
-        const customerId = this.CustomerService.currentCustomer().legalEntityId || 354;
-        this.ProjectProfileApi.create({ ...this.projectProfile, customer: { customerId: customerId }}, customerId)
+        // this.CustomerService.currentCustomer().legalEntityId 
+        this.postingTheOrder = true;
+        const customerId = 354;
+        this.ProjectProfileApi.create({ ...this.projectProfile, customer: { customerId }}, customerId)
             .map((response) => response.json())
             .subscribe((response) => {
-                console.log(response);
-        });
-        this.finishedOrder = true;
+                this.postingTheOrder = false;
+                this.finishedOrder = true;
+                // TODO refetch project prorfiles on table
+            }
+        );
+        
     }
 
     cancel() {

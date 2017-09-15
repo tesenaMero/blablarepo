@@ -126,7 +126,7 @@
         <div class="row actions text-right">
             <div class="col">
                 <button (click)="cancel()" data-dismiss="modal" class="button-ghost mb-2">Cancel</button>
-                <button (click)="confirm()" data-dismiss="modal" class="button bright-green">Confirm</button>
+                <button [disabled]="postingTheOrder" (click)="confirm()" data-dismiss="modal" class="button bright-green">{{postingTheOrder ? 'Saving...': 'Confirm'}}</button>
             </div>
         </div>
     </ng-container>
@@ -134,7 +134,7 @@
         <div class="success-group">
             <span class="cmx-icon-accepted-ok"></span>
             <div class="success-text">
-                Project profile created succesfully #784915
+                Project profile created succesfully <!-- PP Number? -->
             </div>
         </div>
     </div>
