@@ -216,7 +216,6 @@ var MultiselectDropdown = (function() {
         this.element.nativeElement.children["0"].children["0"].hidden = 'true';
         this.element.nativeElement.children["0"].children["2"].style.display = "block";
         this.element.nativeElement.childNodes[0].className = 'no-borders';
-        console.log(this.element.nativeElement.childNodes[0].className);
     };
     MultiselectDropdown.prototype.isSelected = function(option) {
         return this.model && this.model.indexOf(option.id) > -1;
