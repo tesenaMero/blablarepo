@@ -38,7 +38,7 @@ export class DashboardComponent implements OnInit {
             let legalEntities = response.json().legalEntities
             this.customers = legalEntities;
             this.customerService.setAvailableCustomers(legalEntities);
-            this.customerService.setCustomer(legalEntities[5]);
+            this.customerService.setCustomer(legalEntities[0]);
         });
     }
 
