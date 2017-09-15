@@ -9,7 +9,7 @@
         <location-step (onCompleted)="locationStepCompleted()"></location-step>
     </step>
     <step (onShowed)="specificationsStepShowed()" title="Specifications">
-        <specifications-step></specifications-step>
+        <specifications-step (onCompleted)="specificationsStepCompleted()"></specifications-step>
     </step>
     <step title="Summary">
         <summary-step (onCompleted)="summaryStepCompleted()"></summary-step>
