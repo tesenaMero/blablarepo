@@ -33,9 +33,9 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         map: false
     }
 
-    private mandatories = {
-        purchaseOrder: false,
-        contactPerson: false
+    private validations = {
+        purchaseOrder: { valid: false, mandatory: false },
+        contactPerson: { valid: false, mandatory: false }
     }
 
     // Mapped data
@@ -90,7 +90,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     private infoWindow: any;
     private jobsiteMarker: any;
 
-    constructor(@Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi) {
+    constructor( @Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi) {
         this.step.setEventsListener(this);
     }
 
@@ -123,6 +123,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 location.name = location.shipmentLocationDesc;
             })
         });
+
+        // this.shipmentApi.jobsites(this.orderManager.productLine).subscribe((response) => {
+        //     //this.locations = response.json().shipmentLocations;
+        //     console.log("shipment locations", response.json().shipmentLocations);
+        // });
     }
 
     getCatalog() {
@@ -153,6 +158,17 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.errorLocation = false;
         }
 
+        // Fetch salesarea
+        this.shipmentApi.salesAreas(this.location, this.orderManager.productLine).subscribe((salesAreas) => {
+            if (salesAreas.json().jobsiteSalesAreas.length > 0) {
+                let salesArea = salesAreas.json().jobsiteSalesAreas[0];
+                this.orderManager.salesArea = salesArea;
+                this.location.purchaseOrderValidation = salesArea.purchaseOrderValidation;
+                this.validations.purchaseOrder.mandatory = salesArea.purchaseOrderValidation;
+                this.validateForm();
+            }
+        });
+
         // Fetch geolocation
         this.shipmentApi.jobsiteGeo(this.location).subscribe((geo) => {
             this.cleanJobsiteMarker();
@@ -181,7 +197,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.loadings.contacts = false;
         }));
 
-        this.onCompleted.emit(event);
+        this.onCompleted.emit(false);
     }
 
     podChanged(pod: any) {
@@ -200,17 +216,47 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.orderManager.selectContact(this.contact);
     }
 
-    addAdditionalServices(event, index) {
-        if (event.target.checked) {
-            this.selectedServices.push({
-                additionalServiceId: Number(event.target.value)
-            });
-        } else {
-            this.selectedServices = this.selectedServices.filter((service) => {
-                return Number(service.additionalServiceId) !== Number(event.target.value);
-            });
+    validateForm() {
+        let valid = false;
+        // Validate a jobsite is selected
+        this.onCompleted.emit(false);
+        if (this.location) {
+            if (this.hasMandatories) {
+                for (let key in this.validations) {
+                    if (this.validations[key].mandatory) {
+                        if (this.validate(key)) {
+                            valid = false;
+                        }
+                    }
+                }
+            }
+            else {
+                valid = true;
+            }
         }
-        this.orderManager.selectAdditionalServices(this.selectedServices);
+
+        if (valid) { this.onCompleted.emit(true); }
+        else { this.onCompleted.emit(false) }
+    }
+
+    validate(key: any): boolean {
+        return false;
+    }
+
+    hasMandatories(): boolean {
+        for (let key in this.validations) {
+            if (this.validations[key].mandatory) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    resetValidations() {
+        for (let key in this.validations) {
+            this.validations[key].valid = false;
+        }
     }
 
     // Map stuff

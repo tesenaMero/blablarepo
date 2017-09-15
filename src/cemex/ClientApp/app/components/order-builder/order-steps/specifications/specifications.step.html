@@ -13,7 +13,7 @@
                         <div class="input product-selection dropdown" [ngClass]="{ disabled: loadings.products }">
                             <span class="selection">
                                 {{ product.product?.commercialDesc }}
-                                <select style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged($event)" class="input behind">
+                                <select *ngIf="availableProducts.lenght" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged($event)" class="input behind">
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc  }}</option>
                                 </select>
                             </span>
@@ -100,10 +100,7 @@
                                 <strong *ngIf="product.contract.salesDocument.hasOwnProperty('volume')">{{ product.contract?.salesDocument.volume?.total.quantity.amount }}</strong>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
-                            <select 
-                                [(ngModel)]="product.contract"
-                                (ngModelChange)="contractChanged($event)"
-                                class="input behind">
+                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event)" class="input behind">
                                 <option *ngFor="let contract of availableContracts; let first = first;" [ngValue]="contract">{{ contract.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract.salesDocument?.volume?.total.quantity.amount }} </option>
                             </select>
                         </div>

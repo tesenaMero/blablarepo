@@ -27,14 +27,8 @@ export class ShipmentLocationApi {
         return this.locationTypes()
         .map(types => types.json().shipmentLocationTypes)
         .flatMap((types) => {
-            let customer = this.customerService.customerSubject.asObservable();
-            console.log("Customer", customer);
-            return customer;
-        })
-        .map(customer => customer)
-        .flatMap((types) => {
             let type = types.find(item => item.shipmentLocationTypeCode === 'J');
-            const customerId = this.customerService.currentCustomer().legalEntityId;
+            let customerId = this.customerService.currentCustomer().legalEntityId;
             return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${type.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`)
         })
         .map(jobsites => jobsites);
@@ -42,7 +36,7 @@ export class ShipmentLocationApi {
 
     pods(shipmentLocation: any, shipmentLocationTypes, legalEntityId?, productLine?): Observable<Response> {
         // 'myshipmentlocations?legalEntityId=122.1&shipmentLocationTypeId=3&productLineId=2'
-        // "/v4/sm/myshipmentlocations?shipmentlocationId=" + 
+        // "/v4/sm/myshipmentlocations?shipmentlocationId=" +   
         // shipmentLocation.shipmentLocationId + "." + 
         // shipmentLocation.shipmentLocationType.shipmentLocationTypeId + "&" +
         // "shipmentLocationTypeId=6"
@@ -50,6 +44,11 @@ export class ShipmentLocationApi {
         return this.api.get(
             `/v4/sm/myshipmentlocations?shipmentlocationId=${shipmentLocation.shipmentLocationId}.2&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`
         );
+    }
+
+    // Chain combines address() + geo()
+    salesAreas(shipmentLocation: any, productLine): Observable<Response> {
+        return this.api.get("/v4/sm/jobsitesalesareas?shipmentLocationId=" + shipmentLocation.shipmentLocationId + ".2&productLineId=" + productLine.productLineId)
     }
 
     // Chain combines address() + geo()
