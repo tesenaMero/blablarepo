@@ -1,5 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
+export interface StepEventsListener {
+    onShowed(): void;
+}
+
+export abstract class _Step {
+    abstract canAdvance(): boolean;
+}
+
 @Component({
     selector: 'step',
     template: `<ng-content></ng-content>`,
@@ -17,7 +25,7 @@ export class Step {
     private stepEventsListener: StepEventsListener = null;
     completed: boolean = false;
 
-    constructor() { }
+    constructor() {}
 
     setEventsListener(stepEventsListener: StepEventsListener) {
         this.stepEventsListener = stepEventsListener;
@@ -29,12 +37,4 @@ export class Step {
         if (this.stepEventsListener)
             this.stepEventsListener.onShowed();
     }
-}
-
-export interface StepEventsListener {
-    onShowed(): void;
-}
-
-export abstract class _Step {
-    abstract isCompleted(): boolean;
 }

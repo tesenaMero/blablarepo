@@ -19,6 +19,8 @@ export class DashboardComponent implements OnInit {
         type: "info" 
     };
 
+    private customers: any[];
+
     constructor(
         private session: SessionService,
         private createOrderService: CreateOrderService,
@@ -34,6 +36,7 @@ export class DashboardComponent implements OnInit {
         this.dashboard.alertSubject.subscribe((alert) => this.handleAlert(alert));
         this.legalEnitityApi.all().subscribe((response) => {
             let legalEntities = response.json().legalEntities
+            this.customers = legalEntities;
             this.customerService.setAvailableCustomers(legalEntities);
             this.customerService.setCustomer(legalEntities[5]);
         });
@@ -64,5 +67,9 @@ export class DashboardComponent implements OnInit {
     private logout() {
         this.session.logout();
         this.router.navigate(['/login']);
+    }
+
+    private setCustomer(customer: any) {
+        this.customerService.setCustomer(customer);
     }
 }
