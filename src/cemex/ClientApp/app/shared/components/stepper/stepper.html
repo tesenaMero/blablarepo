@@ -43,7 +43,7 @@
 
 <!-- Mobile stepper -->
 <!-- ============== -->
-<div class="mobile-stepper hidden-md-up" (click)="changeShowOverlay()">
+<div class="mobile-stepper hidden-md-up">
     <div class="prev" [ngClass]="{ 'hidden-arrow': !backAvailable, 'hidden-arrow': !currentStep.showControls }">
         <a (click)="prev()">
             <svg class="icon-left-single">
@@ -51,7 +51,7 @@
             </svg>
         </a>
     </div>
-    <div class="current">
+    <div class="current" (click)="changeShowOverlay()">
         <a data-toggle="collapse" href="#collapse-steps">
             {{currentStep.title}}
             <svg class="icon-up-single">
