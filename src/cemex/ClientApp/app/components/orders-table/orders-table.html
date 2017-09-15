@@ -28,7 +28,14 @@
         <tbody>
             <ng-container *ngFor="let order of orders; let odd = odd">
                 <tr [ngClass]="{ 'zebra': odd }" (click)="onRowClick(order)">
-                    <td [attr.data-title]="column.title" class="{{ 'col-' + column.key }}" [ngClass]="{first: first}" [routerLink]="['../order-detail/']" [queryParams]="{orderId:order.orderRequest.orderId, typeCode:order.orderRequest.orderType}" *ngFor="let column of filteredColumns; let i = index; let first = first">
+                    <td [attr.data-title]="column.title" class="{{ 'col-' + column.key }}" [ngClass]="{first: first}" [routerLink]="['../order-detail/']" 
+                                                        [queryParams]="{
+                                                                            orderId:order.orderRequest.orderId ? order.orderRequest.orderId : null, 
+                                                                            typeCode:order.orderRequest.orderType ? order.orderRequest.orderType : null, 
+                                                                            orderCode:order.orderCode ? order.orderCode : null, 
+                                                                            businessLine: order.orderCode ?  order.salesArea.businessLine.businessLineCode : null 
+                                                                        }" 
+                                                        *ngFor="let column of filteredColumns; let i = index; let first = first">
                         <span class="status" [ngClass]="{
                                 canceled: order.isCanceled(),
                                 confirmed: order.isConfirmed(),

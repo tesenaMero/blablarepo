@@ -73,58 +73,60 @@ export class OrderRequestHelper {
   }
 
   public getModelFieldByColumn(row, column: OrderRequestColumnConfiguration): string {
-    const getPropertyByKey = (key: Array<string>, pointer: any, index = 0) => {
-      pointer = pointer[key[index]];
-      if (!pointer) {
-        throw new Error('NullException');
-      }
-      if (index < key.length - 1) {
-        return getPropertyByKey(key, pointer, ++index);
-      }
-      return pointer;
-    };
-    let value = '';
-    try {
-      if (Array.isArray(column.value)) {
-        value = column.value.map(item => {
-          const key = item.split('.');
-          try {
-            return getPropertyByKey(key, row);
-          } catch (e) {
-            value = item.toString();
-            if (column.ignoreValue === value || item === value) {
-              if (column.defaultValue) {
-                if (column.translateable) {
+    if (row.orderType.orderTypeCode != "DFT") {
+      const getPropertyByKey = (key: Array<string>, pointer: any, index = 0) => {
+        pointer = pointer[key[index]];
+        if (!pointer) {
+          throw new Error('NullException');
+        }
+        if (index < key.length - 1) {
+          return getPropertyByKey(key, pointer, ++index);
+        }
+        return pointer;
+      };
+      let value = '';
+      try {
+        if (Array.isArray(column.value)) {
+          value = column.value.map(item => {
+            const key = item.split('.');
+            try {
+              return getPropertyByKey(key, row);
+            } catch (e) {
+              value = item.toString();
+              if (column.ignoreValue === value || item === value) {
+                if (column.defaultValue) {
+                  if (column.translateable) {
+                    return column.defaultValue;
+                  }
                   return column.defaultValue;
                 }
-                return column.defaultValue;
+                return '';
               }
-              return '';
+              return value;
             }
-            return value;
-          }
-        }).join(' ');
-      } else {
-        const key = column.value.split('.');
-        if (row[key[0]]) {
-          value = getPropertyByKey(key, row);
+          }).join(' ');
         } else {
-          throw new Error('unknown field');
+          const key = column.value.split('.');
+          if (row[key[0]]) {
+            value = getPropertyByKey(key, row);
+          } else {
+            throw new Error('unknown field');
+          }
         }
+      } catch (e) {
+        value = column.value.toString();
       }
-    } catch (e) {
-      value = column.value.toString();
-    }
-    if (column.ignoreValue && column.ignoreValue === value) {
-      if (column.defaultValue) {
-        if (column.translateable) {
+      if (column.ignoreValue && column.ignoreValue === value) {
+        if (column.defaultValue) {
+          if (column.translateable) {
+            return column.defaultValue;
+          }
           return column.defaultValue;
         }
-        return column.defaultValue;
+        return '';
       }
-      return '';
+      return value;
     }
-    return value;
   }
 
   public getFormatForColumn(format: string, value: any): any {
@@ -286,7 +288,8 @@ export class OrderRequestHelper {
   public flattenData(response: any): Array<any> {
     const orderRequests = [];
     // todo
-    response.orders.forEach((request) => {
+    const requests = response.orders.filter(item => item.orderType.orderTypeCode != "DFT");
+    requests.forEach((request) => {
       if (!request || !request.items) {
         return;
       }

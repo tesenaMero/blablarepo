@@ -21,10 +21,10 @@
                         Location:
                     </div>
                     <div class="desc">
-                        {{orderDetailData.pointOfDelivery.pointOfDeliveryDesc}}**
+                        {{orderDetailData.jobsite.jobsiteDesc}}
                     </div>
-                    <div class="detail">
-                        {{orderDetailData.pointOfDelivery.pointOfDeliveryCode}}**
+                    <div class="detail" *ngIf="streetJob">
+                        {{streetJob.domicileNum}} {{streetJob.streetName}}, {{streetJob.cityDesc}}, {{streetJob.regionDesc}}, {{streetJob.postalCode}}
                     </div>
                 </div>
             </div>
@@ -34,10 +34,10 @@
                         Point of Delivery:
                     </div>
                     <div class="desc">
-                        {{orderDetailData.pointOfDelivery.pointOfDeliveryDesc}}**
+                        {{orderDetailData.pointOfDelivery.pointOfDeliveryDesc}}
                     </div>
-                    <div class="detail">
-                        {{orderDetailData.pointOfDelivery.pointOfDeliveryCode}}**
+                    <div class="detail" *ngIf="streetPOD">
+                        {{streetPOD.domicileNum}} {{streetPOD.streetName}}, {{streetPOD.cityDesc}}, {{streetPOD.regionDesc}}, {{streetPOD.postalCode}}   
                     </div>
                 </div>
             </div>
@@ -54,21 +54,21 @@
                     <span class="title">Purchase order:</span>
                     <span class="value">{{orderDetailData.purchaseOrder}}</span>
                 </div>
-                <div class="info">
-                    <span class="title">Status:</span>
-                    <!-- <span class="status"></span> -->
-                    <span class="value status" [ngClass]="{
-                        canceled: orderDetailData.status.statusDesc == 'Canceled - Hdr',
-                        confirmed: orderDetailData.status.statusCode == 'CONF',
-                        draft: orderDetailData.status.statusDesc == 'Draft - Hdr',
-                        draft: orderDetailData.status.statusCode == 'DRFT',
-                        pending: orderDetailData.status.statusCode == 'INPC',
-                        blocked: orderDetailData.status.statusCode == 'BLCK',
-                        holded: orderDetailData.status.statusDesc == 'Holded - Hdr',
-                        processed: orderDetailData.status.statusDesc == 'In process - Hdr',
-                        completed: orderDetailData.status.statusCode == 'CMPO'
-                    }">{{orderDetailData.status.statusDesc}}</span>
-                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 info">
+                <span class="value status" [ngClass]="{
+                    canceled: orderDetailData.status.statusDesc == 'Canceled - Hdr',
+                    confirmed: orderDetailData.status.statusCode == 'CONF',
+                    draft: orderDetailData.status.statusDesc == 'Draft - Hdr',
+                    draft: orderDetailData.status.statusCode == 'DRFT',
+                    pending: orderDetailData.status.statusCode == 'INPC',
+                    blocked: orderDetailData.status.statusCode == 'BLCK',
+                    holded: orderDetailData.status.statusDesc == 'Holded - Hdr',
+                    processed: orderDetailData.status.statusDesc == 'In process - Hdr',
+                    completed: orderDetailData.status.statusCode == 'CMPO'
+                }">{{orderDetailData.status.statusDesc}}</span>
             </div>
         </div>
     </div>
@@ -142,7 +142,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-md-6 col-xs-6">
                                     <div class="group">
                                         <div class="title">
                                             Product ID
@@ -152,100 +152,125 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-md-6 col-xs-6">
                                     <div class="group">
                                         <div class="title">
                                             Contract
                                         </div>
                                         <div class="value">
-                                            10-201702189034 Remaining volume: 180 **
+                                            10-201702189034**
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-md-3 col-xs-6">
                                     <div class="group">
                                         <div class="title">
-                                            Projet profile
+                                            Discharge Time
                                         </div>
                                         <div class="value">
-                                            My Project Profile with quite long technical title, that it must be for more rows **
+                                            60min**
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <!-- Flex way -->
-                                    <div class="d-flex flex-wrap">
-                                        <div class="group">
-                                            <div class="title">
-                                                Discharge Time
-                                            </div>
-                                            <div class="value">
-                                                60min**
-                                            </div>
+                                <div class="col-md-3 col-xs-6">
+                                    <div class="group">
+                                        <div class="title">
+                                            Transport Method
                                         </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Transport Method
-                                            </div>
-                                            <div class="value">
-                                                Truck**
-                                            </div>
+                                        <div class="value">
+                                            Truck**
                                         </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Unload Type
-                                            </div>
-                                            <div class="value">
-                                                Pump**
-                                            </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-xs-6">
+                                    <div class="group">
+                                        <div class="title">
+                                            Unload Type
                                         </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Pump Capacity Min
-                                            </div>
-                                            <div class="value">
-                                                30 m3/s**
-                                            </div>
+                                        <div class="value">
+                                            Pump**
                                         </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Pump Capacity Max
-                                            </div>
-                                            <div class="value">
-                                                40 m<sup>3</sup>/s**
-                                            </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-xs-6">
+                                    <div class="group">
+                                        <div class="title">
+                                            Delivery mode
                                         </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Application
-                                            </div>
-                                            <div class="value">
-                                                Roof**
-                                            </div>
-                                        </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Load Size
-                                            </div>
-                                            <div class="value">
-                                                10 tons**
-                                            </div>
-                                        </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Spacing
-                                            </div>
-                                            <div class="value">
-                                                10 min**
-                                            </div>
+                                        <div class="value">                                            
+                                            Delivery**
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">                                        
+                                <div class="col-md-3 col-xs-6">
+                                    <div class="group">
+                                        <div class="title">
+                                            Pump Capacity Min
+                                        </div>
+                                        <div class="value">
+                                            30 m3/s**
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-xs-6">
+                                    <div class="group">
+                                        <div class="title">
+                                            Pump Frequency Max
+                                        </div>
+                                        <div class="value">
+                                            Weekly**
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-xs-6">
+                                    <div class="group">
+                                        <div class="title">
+                                            Application
+                                        </div>
+                                        <div class="value">
+                                            Roof**
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-xs-6">
+                                    <div class="group">
+                                        <div class="title">
+                                            Kicker
+                                        </div>
+                                        <div class="value">                                            
+                                            Yes**
+                                        </div>
+                                    </div>
+                                </div>   
+                            </div>         
+                            <div class="row">  
+                                <div class="col-md-3 col-xs-6">
+                                    <div class="group">
+                                        <div class="title">
+                                            Load Size
+                                        </div>
+                                        <div class="value">                                            
+                                            10 tons**
+                                        </div>
+                                    </div>
+                                </div>  
+                                <div class="col-md-3 col-xs-6">
+                                    <div class="group">
+                                        <div class="title">
+                                            Spacing
+                                        </div>
+                                        <div class="value">                                            
+                                            10 min**
+                                        </div>
+                                    </div>
+                                </div>        
+                            </div>   
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-8">
                                     <div class="group">
                                         <div class="title">
                                             Additional services
@@ -254,28 +279,8 @@
                                             20939302/10292/20102**
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="group flex-6">
-                                            <div class="title">
-                                                Delivery mode
-                                            </div>
-                                            <div class="value">
-                                                Delivery**
-                                            </div>
-                                        </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Kicker
-                                            </div>
-                                            <div class="value">
-                                                Yes**
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                </div>                                            
+                            </div>         
                         </div>
                     </div>
                 </div>

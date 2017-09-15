@@ -11,27 +11,52 @@ import { ActivatedRoute } from '@angular/router';
     ]
 })
 export class OrderDetailComponent {   
-    orderDetailData: any;
-    id: number;
-    type: string = "SLS";
+    orderDetailData: any = null;
+    id: number = null;
+    type: string = null;
+    orderCode: string = null;
+    businessLine: string = null;
     private sub: any;
-    pod: any;
-    jobsite: any;
-    streetJob: any;
-    streetPOD: any;
+    pod: any = null;
+    jobsite: any = null;
+    streetJob: any = null;
+    streetPOD: any = null;
 
     constructor(private orderDetailApi: OrderDetailApi, private route: ActivatedRoute) {
         this.sub = this.route.queryParams.subscribe(params => {
-            this.id = params['orderId'];
-            if (params['typeCode'] && params['typeCode'] == "ZTA") {
-                this.type = "SLS";
-            } 
-            else {
-                if (params['typeCode']) {
-                    this.type = params['typeCode'];
+            if (params['orderId']) {
+                this.id = params['orderId'];
+            }
+            if (params['orderCode']) {
+                this.orderCode = params['orderCode'];                
+            }
+            if (params['businessLine']) {
+                this.businessLine = params['businessLine'];                
+            }
+            if (params['typeCode']) {
+                this.type = params['typeCode'];                
+            }
+            if (this.orderCode) {
+                if (this.businessLine == 'RMX') {
+                    this.type = 'ZTRM';
+                }
+                else {
+                    this.type = 'ZTA';
                 }
             }
+            else {
+                this.type = 'REQ';
+            }
+            // if(params['typeCode']) {
+            //     if(params['typeCode'] == "ZTA") {
+            //         this.type = "SLS";
+            //     }
+            //     else {
+            //         this.type = params['typeCode'];
+            //     }
+            // } 
         });        
+
         orderDetailApi.byIdType(this.id, this.type).subscribe((response) => {
             this.orderDetailData = response.json();
             console.log(response);
