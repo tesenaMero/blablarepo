@@ -11,7 +11,7 @@
                         <span class="error-message-select" *ngIf="errorLocation">Please select location</span>
                     </div>
                 </div>
-                <div class="row align-items-center">
+                <div class="row align-items-center" [ngClass]="{ disabled: orderManager?.shippingCondition?.shippingConditionId == 2 }">
                     <div class="col-md-4 col-sm-12 select-label">
                         <label for="pod-select" class="select-label">Select from existing point of delivery</label>
                     </div>
@@ -25,10 +25,10 @@
                     <div class="col-md-4 col-sm-12 select-label ">
                         <label for="purchase-order " class="select-label required " (change)="contactSelected($event) ">Purchase order</label>
                     </div>
-                    <div class="col-md-8 col-sm-12 " [ngClass]="{error: !validationModel.purchaseOrder} ">
-                        <input type="text " class="form-control dls required " (keyup)="validateFormElements($event, 'purchaseOrder') " (blur)="validateFormElements($event, 'purchaseOrder') " id="purchase-order " placeholder="Put your purchase order
+                    <div class="col-md-8 col-sm-12 " [ngClass]="{error: true} ">
+                        <input type="text " class="form-control dls required" id="purchase-order " placeholder="Put your purchase order
                         " name="purchase-order " />
-                        <span class="error-message ">Address cannot be that short.</span>
+                        <span class="error-message ">Please enter valid purchase order.</span>
                     </div>
                 </div>
                 <div class="row align-items-center mb-21px ">
@@ -36,15 +36,15 @@
                         <label for="conctact-select " class="select-label " (change)="contactSelected($event) ">Contact person</label>
                     </div>
                     <div class="col-md-8 col-sm-12 " [ngClass]="{ disabled: loadings.contacts }">
-                        <ss-multiselect-dropdown [options]="contacts" [texts]="contactsTexts" [settings]="dropDownSettings" [(ngModel)]="contactsIndex" (ngModelChange)="contactChanged(contacts[$event[0]])"></ss-multiselect-dropdown>
+                        <ss-multiselect-dropdown [options]="contacts" [texts]="contactsTexts" [settings]="contactsSettings" [(ngModel)]="contactsIndex" (ngModelChange)="contactChanged(contacts[$event[0]])"></ss-multiselect-dropdown>
                     </div>
                 </div>
-                <div class="row align-items-center mb-21px">
+                <div class="row align-items-center">
                     <div class="col-md-4 col-sm-12 select-label">
                         <label for="special-instructions-field" class="select-label">Special instructions</label>
                     </div>
                     <div class="col-md-8 col-sm-12">
-                        <textarea id="special-instructions-field" (change)="validateFormElements($event, 'instructions')" (blur)="validateFormElements($event, 'instructions')" [(ngModel)]="orderManager.instructions" class="instructions-area form-control" placeholder="Comments belong here"></textarea>
+                        <textarea id="special-instructions-field" [(ngModel)]="orderManager.instructions" class="instructions-area form-control" placeholder="Comments belong here"></textarea>
                         <span class="error-message">Address cannot be that short.</span>
                     </div>
                 </div>

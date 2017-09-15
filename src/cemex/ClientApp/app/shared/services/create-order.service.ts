@@ -19,7 +19,7 @@ export class CreateOrderService {
     public draftDateTime: string;
     public purchaseOrder: string;
     public status: types.Status;
-    public salesArea: types.SalesArea;
+    public salesArea: any;
     public orderType: types.OrderType;
     public customer: types.Customer;
     public shippingCondition: types.ShippingCondition;

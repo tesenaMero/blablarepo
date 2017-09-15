@@ -61,6 +61,7 @@ export declare class MultiselectDropdown implements OnInit, OnChanges, DoCheck, 
     registerOnValidatorChange(_fn: () => void): void;
     clearSearch(event: Event): void;
     toggleDropdown(): void;
+    addOption(): void;
     isSelected(option: IMultiSelectOption): boolean;
     setSelected(_event: Event, option: IMultiSelectOption): void;
     updateNumSelected(): void;
