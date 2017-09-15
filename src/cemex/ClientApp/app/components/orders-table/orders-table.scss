@@ -14,9 +14,9 @@ $table-bg-active: $table-bg-hover;
 $table-border-color: #e0e0e0;
 // Material Design shadows
 @mixin shadow-z-1() {
-    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
+    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
 }
 
 // Icon column, always show
@@ -208,44 +208,59 @@ $table-border-color: #e0e0e0;
             >tbody {
                 display: block;
                 >tr {
-                    display: flex;
-                    flex-direction: column;
-                    // display: block;
+                    display: block;
                     border: 1px solid $table-border-color;
-                    border-radius: 4px;
-                    margin-bottom: $table-cell-padding;
-                    padding: 20px 13px;
-                    background-color: #fff !important;
+                    border-radius: 2px;
+                    // margin-bottom: $table-cell-padding;
+                    margin-bottom: 1px;
                     >td {
                         background-color: $table-bg;
                         display: block;
                         //vertical-align: middle;
                         text-align: right;
+                        color: black;
                         font-weight: bold;
-                        padding: 14px 17px;
-                        &.hide-in-mobile {
-                            display: none;
+                        font-size: 12px;
+                        padding: 4px 26px;
+                        &:last-child {
+                            padding-bottom: 13px;
                         }
-                        &.col-total {
-                            display: grid;
-                            font-size: 23px;
-                            margin-top: 10px;
+                        &:first-child {
+                            padding-top: 13px;
+                        }
+                        &.title {
+                            text-align: left;
+                            color: black;
+                            font-weight: bold;
+                            font-size: 16px;
+                            padding-bottom: 0px;
                             &:before {
-                                font-size: 14px !important;
-                                margin-bottom: 5px;
+                                display: none !important;
                             }
                         }
-                        &.orderRequestId-col {
-                            color: #333333;
+                        &.subtitle {
+                            color: #ADADAD;
+                            font-size: 13px;
+                            font-weight: bold;
+                            text-align: left;
+                            padding-top: 0;
+                            padding-bottom: 8px;
+                            &:before {
+                                display: none !important;
+                            }
+                        }
+                        &.hide-mobile {
+                            display: none;
                         }
                     }
                     >td[data-title]:before {
                         content: attr(data-title);
                         float: left;
-                        font-size: inherit;
-                        font-weight: $table-header-font-weight;
-                        color: #ABB2BE;
-                        padding-right: 8px;
+                        font-size: 12px;
+                        font-weight: bold;
+                        // font-weight: $table-header-font-weight;
+                        // color: $table-header-font-color;
+                        color: #ADADAD;
                     }
                 }
             }
@@ -289,7 +304,8 @@ $table-border-color: #e0e0e0;
                     background-color: $table-bg;
                 }
                 >tr>td:hover {
-                    background-color: $table-bg-hover;
+                    //background-color: $table-bg-hover;
+                    background-color: inherit;
                 }
             }
         }
