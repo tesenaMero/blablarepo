@@ -42,9 +42,9 @@ export class ProjectProfilesComponent {
         this.profiles.forEach((profile) => {
             this.rows.push([
                 { inner: profile.profileName }, 
-                { inner: "20 min" },
+                { inner: profile.project.projectProperties.dischargeTime && profile.project.projectProperties.dischargeTime.timePerDischargeDesc },
                 { inner: profile.project.projectProperties.transportMethod.transportMethodDesc },
-                { inner: "Pump" },
+                { inner: profile.project.projectProperties.unloadType && profile.project.projectProperties.unloadType.unloadTypeDesc },
                 { inner: profile.project.projectProperties.kicker, class: "capitalize" },
                 { inner: "Extra hourts, Sundaly / Holiday" },
                 { inner: "EDIT", class: "action-button" },
