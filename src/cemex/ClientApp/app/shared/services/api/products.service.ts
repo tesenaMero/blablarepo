@@ -20,11 +20,15 @@ export class ProductsApi {
         return this.api.get(`/v2/mm/myproducts?productId=${productId}&salesDocumentTypeId=${salesDocumentTypeId}&shippingConditionId=${shippingCondition.shippingConditionId}&shipmentLocationId=${jobsite.shipmentLocationId}.2`);
     }
 
-    units(product: any): Observable<Response> {
-        return this.api.get(product.unitOfMeasure.links.self);
-    }
+    // units(product: any): Observable<Response> {
+    //     return this.api.get(product.unitOfMeasure.links.self);
+    // }
 
     advancedSearch(shipmentLocationId): Observable<Response> {
         return this.api.get(`/v2/mm/myproducts?shipmentLocationId=${shipmentLocationId}.2&salesDocumentTypeId=5&productLineId=1`);
+    }
+
+    units(productId: any): Observable<Response> {
+        return this.api.get(`/v2/mm/productunitconversions?productId=${productId}`);
     }
 }

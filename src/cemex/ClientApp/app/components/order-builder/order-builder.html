@@ -6,7 +6,7 @@
         <mode-step (onCompleted)="modeStepCompleted($event)"></mode-step>
     </step>
     <step title="Delivery mode">
-        <location-step (onCompleted)="locationStepCompleted()"></location-step>
+        <location-step (onCompleted)="locationStepCompleted($event)"></location-step>
     </step>
     <step (onShowed)="specificationsStepShowed()" title="Specifications">
         <specifications-step></specifications-step>

@@ -1,10 +1,16 @@
 @import "~bootstrap/scss/bootstrap-grid.scss";
 @import "../../scss/responsive.scss";
 $link-blue: #3FA9F5;
+
 .layout {
     padding: 34px 26px 34px 26px;
     @include media-breakpoint-down(sm) {
-        padding: 17px 17px 34px 17px;
+        padding: 18px 0 34px 0;
+        overflow: hidden;
+        /deep/.title-nav {
+            padding-left: 11px;
+            padding-right: 11px;
+        }
     }
 }
 
@@ -20,12 +26,14 @@ $link-blue: #3FA9F5;
     }
     h1 {
         display: inline;
-        @include media-breakpoint-down(sm) {
-            font-size: 30px;
-        }
     }
     @include media-breakpoint-down(sm) {
-        margin-bottom: 0;
+        padding-left: 11px;
+        padding-right: 11px;
+        padding-top: 0;
+        h1 {
+            font-size: 30px;
+        }
     }
 }
 

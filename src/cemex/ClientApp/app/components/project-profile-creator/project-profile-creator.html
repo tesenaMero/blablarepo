@@ -4,7 +4,7 @@
     </svg>
 </div>
 <div class="container-layout">
-    <ng-container *ngIf="!finishedOrder">
+    <ng-container *ngIf="!finishedOrder && !loadingCatalog">
         <div class="title">
             New Project Profile
         </div>
@@ -12,59 +12,51 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12">
                     <label for="pp-name" class="">Define a Name for your Project Profile</label>
-                    <input type="text" class="form-control " id="pp-name" name="pp-name" value="">
+                    <input [(ngModel)]="projectProfile.profileName" type="text" class="form-control " id="pp-name" name="pp-name" value="">
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
                     <label for="pp-discharge" class="">Discharge Time</label>
-                    <select name="pp-discharge" id="pp-discharge" class="form-control">
+                    <select (change)="onChangeDischargeTime($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option value="1">Riderback Eastern River Valley</option>
-                        <option value="2">Monterrey, Nuevo Leon</option>
-                        <option value="3">Tokyo Shibuya</option>
+                        <option *ngFor="let entry of catalogs.DCT" [value]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
                 <div class="col-sm-6">
                     <label for="pp-transport" class="">Transport Method</label>
                     <select name="pp-transport" id="pp-transport" class="form-control">
-                        <option value="" selected>Truck</option>
+                        <option value="42" selected>Truck</option>
                     </select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
                     <label for="pp-discharge" class="">Unload Type</label>
-                    <select name="pp-discharge" id="pp-discharge" class="form-control">
+                    <select (change)="onChangeUnloadType($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option value="1">Riderback Eastern River Valley</option>
-                        <option value="2">Monterrey, Nuevo Leon</option>
-                        <option value="3">Tokyo Shibuya</option>
+                        <option *ngFor="let entry of catalogs.ULT; let i = index" [attr.data-index]="i" [value]="i">{{entry.entryDesc}}</option>
                     </select>
                 </div>
-                <div class="col-sm-6">
+                <div *ngIf="isUnloadTypePump" class="col-sm-6">
                     <label for="pp-transport" class="">Pump Capacity</label>
-                    <select name="pp-transport" id="pp-transport" class="form-control">
+                    <select (change)="onChangePumpCapacity($event.target.value)" name="pp-transport" id="pp-transport" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option value="1">Riderback Eastern River Valley</option>
-                        <option value="2">Monterrey, Nuevo Leon</option>
-                        <option value="3">Tokyo Shibuya</option>
+                        <option *ngFor="let entry of catalogs.PCC" [value]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6">
+                <!-- <div class="col-sm-6">
                     <label for="pp-discharge" class="">Pump Frequency</label>
                     <select name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option value="1">Riderback Eastern River Valley</option>
-                        <option value="2">Monterrey, Nuevo Leon</option>
-                        <option value="3">Tokyo Shibuya</option>
+                        <option *ngFor="let entry of catalogs.RCC" value="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
-                </div>
+                </div> -->
                 <div class="col-sm-6">
                     <div class="center-kicker">
-                        <input checked type="checkbox" id="kicker">
+                        <input [(ngModel)]="projectProfile.project.projectProperties.kicker" checked type="checkbox" id="kicker">
                         <label for="kicker">
                             <svg class="icon-checkbox-active">
                                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
@@ -81,7 +73,7 @@
                 </div>
             </div>
         </div>
-        <div class="row additional">
+        <!-- <div class="row additional">
             <div class="col-sm-12 mb-5">
                 <label class="">Additional Services</label>
             </div>
@@ -130,11 +122,11 @@
                     <span>Pipeline</span>
                 </label>
             </div>
-        </div>
+        </div> -->
         <div class="row actions text-right">
             <div class="col">
                 <button (click)="cancel()" data-dismiss="modal" class="button-ghost mb-2">Cancel</button>
-                <button (click)="confirm()" data-dismiss="modal" class="button bright-green">Confirm</button>
+                <button [disabled]="postingTheOrder" (click)="confirm()" data-dismiss="modal" class="button bright-green">{{postingTheOrder ? 'Saving...': 'Confirm'}}</button>
             </div>
         </div>
     </ng-container>
@@ -142,7 +134,38 @@
         <div class="success-group">
             <span class="cmx-icon-accepted-ok"></span>
             <div class="success-text">
-                Project profile created succesfully #784915
+                Project profile created succesfully <!-- PP Number? -->
+            </div>
+        </div>
+    </div>
+    <div *ngIf="loadingCatalog" class="loading-wrapper">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
             </div>
         </div>
     </div>

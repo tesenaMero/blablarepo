@@ -35,6 +35,7 @@
     position: fixed;
     bottom: 0;
     left: 0;
+    z-index: 2;
 }
 
 .stepper-container {
@@ -45,13 +46,31 @@
 .stepper-open {
     width: 100%;
     min-height: 0;
-    background: #003876;
+    background: #f4f6f9;
     border-bottom: 1px solid #fff;
     position: absolute;
     bottom: 48px;
     color: #fff;
     font-size: 1rem;
     padding: 0;
+    
+    .step{
+        a{
+            color: #29a6f3;
+        }
+    }
+}
+
+.stepper-overlay{
+    background: black;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: inherit;
+    height: calc(100% - 48px);
+    width: 100%;
+    opacity: 0.3;
+    z-index: 1;
 }
 
 .cto-container {

@@ -30,12 +30,14 @@ import { SearchProductComponent } from './components/search-product/search-produ
 import { OrderDetailCommentsComponent } from './components/order-detail/order-detail-comments/order-detail-comments.component';
 import { OrderDetailLogsComponent } from './components/order-detail/order-detail-logs/order-detail-logs.component';
 import { SelectDropdownModule } from './shared/components/selectwithsearch/dropdown.module';
+import { CrossProductComponent } from './components/cross-product/crossProduct.component';
 
 // Pipes
 import {
     NoSpacePipe, 
     ZeroPadPipe, 
-    SumGroupProductPipe 
+    SumGroupProductPipe,
+    DatePipe
 } from './pipes'
 
 // Shared components
@@ -70,7 +72,8 @@ import {
     OrderDetailApi,
     LegalEntitiesApi,
     ShippingConditionApi,
-    DraftsService
+    DraftsService,
+    CatalogApi
 } from './shared/services/api';
 
 import { EncodeDecodeJsonObjService } from './shared/services/encodeDecodeJsonObj.service';
@@ -94,6 +97,7 @@ export const sharedConfig: NgModule = {
         ZeroPadPipe,
         NoSpacePipe,
         SumGroupProductPipe,
+        DatePipe,
 
         // Regular components
         OrdersTableComponent,
@@ -108,6 +112,7 @@ export const sharedConfig: NgModule = {
         SummaryStepComponent,
         OrderDetailCommentsComponent,
         OrderDetailLogsComponent,
+        CrossProductComponent,
 
         // Shared
         PaginationComponent,
@@ -135,6 +140,7 @@ export const sharedConfig: NgModule = {
                     { path: 'order-detail', component: OrderDetailComponent },
                     { path: 'project-profiles', component: ProjectProfilesComponent },
                     { path: 'drafts', component: DraftsComponent },
+                    { path: 'open/:id', component: CrossProductComponent },
                 ]
             },
             { path: '**', redirectTo: 'app' }
@@ -164,6 +170,7 @@ export const sharedConfig: NgModule = {
         DashboardService,
         DraftsService,
         EncodeDecodeJsonObjService,
-        CustomerService
+        CustomerService,
+        CatalogApi
     ]
 };

@@ -13,15 +13,30 @@ export class ShipmentLocationApi {
         return this.api.get('/v1/im/shipmentlocationtypes');
     }
 
+    locationTypes() {
+        return this.api.get('/v1/im/shipmentlocationtypes');
+    }
+
     all(shipmentLocationTypes, productLine): Observable<Response> {
         const customerId = this.customerService.currentCustomer().legalEntityId;
         const locationType = shipmentLocationTypes.find(item => item.shipmentLocationTypeCode === 'J');
         return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`);
     }
 
+    jobsites(productLine) {
+        return this.locationTypes()
+        .map(types => types.json().shipmentLocationTypes)
+        .flatMap((types) => {
+            let type = types.find(item => item.shipmentLocationTypeCode === 'J');
+            let customerId = this.customerService.currentCustomer().legalEntityId;
+            return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${type.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`)
+        })
+        .map(jobsites => jobsites);
+    }
+
     pods(shipmentLocation: any, shipmentLocationTypes, legalEntityId?, productLine?): Observable<Response> {
         // 'myshipmentlocations?legalEntityId=122.1&shipmentLocationTypeId=3&productLineId=2'
-        // "/v4/sm/myshipmentlocations?shipmentlocationId=" + 
+        // "/v4/sm/myshipmentlocations?shipmentlocationId=" +   
         // shipmentLocation.shipmentLocationId + "." + 
         // shipmentLocation.shipmentLocationType.shipmentLocationTypeId + "&" +
         // "shipmentLocationTypeId=6"
@@ -29,6 +44,11 @@ export class ShipmentLocationApi {
         return this.api.get(
             `/v4/sm/myshipmentlocations?shipmentlocationId=${shipmentLocation.shipmentLocationId}.2&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`
         );
+    }
+
+    // Chain combines address() + geo()
+    salesAreas(shipmentLocation: any, productLine): Observable<Response> {
+        return this.api.get("/v4/sm/jobsitesalesareas?shipmentLocationId=" + shipmentLocation.shipmentLocationId + ".2&productLineId=" + productLine.productLineId)
     }
 
     // Chain combines address() + geo()
