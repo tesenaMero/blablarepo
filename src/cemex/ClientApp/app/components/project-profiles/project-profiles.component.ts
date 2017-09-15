@@ -14,7 +14,7 @@ export class ProjectProfilesComponent {
     rows = [];
 
     constructor(private ppService: ProjectProfileApi) {
-        this.ppService.all("4169").subscribe((response) => {
+        this.ppService.all('354').subscribe((response) => {
             if (response.json().profiles) {
                 this.profiles = response.json().profiles;
                 this.initData(this.profiles);

@@ -1,4 +1,6 @@
 @import "~bootstrap/scss/bootstrap-grid.scss";
+@import "../../scss/mixins/animations.scss";
+
 .close {
     position: absolute;
     top: 30px;
@@ -129,4 +131,16 @@ label {
 .success-text {
     margin-top: 26px;
     font-size: 26px;
+}
+
+.loading-wrapper {
+    margin-top: 50px;
+}
+
+.input-pulse {
+    background-color: rgba(128, 128, 128, .1);
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0) !important;
+    @include animation('pulse 1s alternate infinite');
+    height: 40px;
+    margin-bottom: 40px;
 }

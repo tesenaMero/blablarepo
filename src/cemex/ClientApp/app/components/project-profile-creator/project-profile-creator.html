@@ -4,7 +4,7 @@
     </svg>
 </div>
 <div class="container-layout">
-    <ng-container *ngIf="!finishedOrder">
+    <ng-container *ngIf="!finishedOrder && !loadingCatalog">
         <div class="title">
             New Project Profile
         </div>
@@ -18,9 +18,9 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label for="pp-discharge" class="">Discharge Time</label>
-                    <select [(ngModel)]="projectProfile.project.projectProperties.dischargeTime.dischargeTimeId" name="pp-discharge" id="pp-discharge" class="form-control">
+                    <select (change)="onChangeDischargeTime($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option *ngFor="let entry of catalogs.DCT" [ngValue]="entry.entryId">{{entry.entryDesc}}</option>
+                        <option *ngFor="let entry of catalogs.DCT" [value]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
                 <div class="col-sm-6">
@@ -33,16 +33,16 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label for="pp-discharge" class="">Unload Type</label>
-                    <select [(ngModel)]="projectProfile.project.projectProperties.unloadType.unloadTypeId" name="pp-discharge" id="pp-discharge" class="form-control">
+                    <select (change)="onChangeUnloadType($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option *ngFor="let entry of catalogs.ULT" [ngValue]="entry.entryId">{{entry.entryDesc}}</option>
+                        <option *ngFor="let entry of catalogs.ULT; let i = index" [attr.data-index]="i" [value]="i">{{entry.entryDesc}}</option>
                     </select>
                 </div>
-                <div class="col-sm-6">
+                <div *ngIf="isUnloadTypePump" class="col-sm-6">
                     <label for="pp-transport" class="">Pump Capacity</label>
-                    <select [(ngModel)]="projectProfile.project.projectProperties.pumpCapacity.pumpCapacityId" name="pp-transport" id="pp-transport" class="form-control">
+                    <select (change)="onChangePumpCapacity($event.target.value)" name="pp-transport" id="pp-transport" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option *ngFor="let entry of catalogs.PCC" [ngValue]="entry.entryId">{{entry.entryDesc}}</option>
+                        <option *ngFor="let entry of catalogs.PCC" [value]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
             </div>
@@ -135,6 +135,37 @@
             <span class="cmx-icon-accepted-ok"></span>
             <div class="success-text">
                 Project profile created succesfully #784915
+            </div>
+        </div>
+    </div>
+    <div *ngIf="loadingCatalog" class="loading-wrapper">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="input-pulse"></div>
             </div>
         </div>
     </div>
