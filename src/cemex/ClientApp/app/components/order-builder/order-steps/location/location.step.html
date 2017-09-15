@@ -28,7 +28,7 @@
                     <div class="col-md-8 col-sm-12 " [ngClass]="{error: true} ">
                         <input type="text " class="form-control dls required" id="purchase-order " placeholder="Put your purchase order
                         " name="purchase-order " />
-                        <span class="error-message ">Address cannot be that short.</span>
+                        <span class="error-message ">Please enter valid purchase order.</span>
                     </div>
                 </div>
                 <div class="row align-items-center mb-21px ">
@@ -36,7 +36,7 @@
                         <label for="conctact-select " class="select-label " (change)="contactSelected($event) ">Contact person</label>
                     </div>
                     <div class="col-md-8 col-sm-12 " [ngClass]="{ disabled: loadings.contacts }">
-                        <ss-multiselect-dropdown [options]="contacts" [texts]="contactsTexts" [settings]="dropDownSettings" [(ngModel)]="contactsIndex" (ngModelChange)="contactChanged(contacts[$event[0]])"></ss-multiselect-dropdown>
+                        <ss-multiselect-dropdown [options]="contacts" [texts]="contactsTexts" [settings]="contactsSettings" [(ngModel)]="contactsIndex" (ngModelChange)="contactChanged(contacts[$event[0]])"></ss-multiselect-dropdown>
                     </div>
                 </div>
                 <div class="row align-items-center">

@@ -61,6 +61,19 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         closeOnSelect: true,
     };
 
+    contactsSettings: IMultiSelectSettings = {
+        enableSearch: true,
+        checkedStyle: 'fontawesome',
+        buttonClasses: 'btn btn-default btn-block',
+        dynamicTitleMaxItems: 1,
+        displayAllSelectedText: false,
+        closeOnClickOutside: true,
+        selectionLimit: 1,
+        autoUnselect: true,
+        addOption: true,
+        maxHeight: '250px'
+    };
+
     // Text configuration
     jobsiteTexts: IMultiSelectTexts = {
         searchPlaceholder: 'Find jobsite',

@@ -58,7 +58,7 @@
                             <label>Request date</label>
                             <label for="date{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    {{ product.date | date: 'shortDate' }}
+                                    {{ product.date }}
                                     <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" />
                                 </span>
                                 <span class="mb-0">
@@ -70,7 +70,7 @@
                             <label>Requested time</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    <div class="time{{ index }}">{{ product.date | date: 'HH:mm' }}</div>
+                                    <div class="time{{ index }}">{{ product.date }}</div>
                                     <input id="time{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker time-only="true" right-side="true" [close-on-select]="false" hour="0" minute="0" />
                                 </span>
                                 <span class="mb-0">
