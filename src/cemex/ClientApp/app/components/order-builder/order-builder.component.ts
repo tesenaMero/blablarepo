@@ -59,6 +59,81 @@ export class OrderBuilderComponent {
     }
 
     private uglyOrder() {
-        return { "orderId": 0, "orderCode": "", "orderName": "Cement Online Order", "createdDateTime": "2017-09-07T15:00:00.000Z", "updatedDateTime": "2017-09-07T15:00:00.000Z", "programmedDateTime": "2017-09-07T15:00:00.000Z", "requestedDateTime": "2017-09-10T15:00:00.000Z", "draftDateTime": "2017-09-07T14:28:18.814Z", "purchaseOrder": "PO_JVC", "status": {  "statusId": 1 }, "salesArea": {  "salesAreaId": 2 }, "orderType": {  "orderTypeId": 450 }, "customer": {  "customerId": 122 }, "shippingCondition": {  "shippingConditionId": 1 }, "jobsite": {  "jobsiteId": 59 }, "pointOfDelivery": {  "pointOfDeliveryId": 393 }, "instructions": "Instrucciones de entrega", "contact": {  "contactId": "2298",  "contactName": "Contact",  "contactPhone": "Contact" }, "user": {  "userId": 50 }, "items": [{   "orderItemId": 0,   "itemSeqNum": 10,   "purchaseOrder": "PO_JVC",   "requestedDateTime": "2017-09-05T14:28:18.814Z",   "programmedDateTime": "2017-09-05T14:28:18.814Z",   "currency": {    "currencyId": 1   },   "quantity": 50,   "product": {    "productId": 1629   },   "uom": {    "unitId": 262   },   "paymentTerm": {    "paymentTermId": 43   },   "shippingSource": {    "shippingSourceId": 387   },   "orderItemProfile": {    "transportMethod": {     "transportMethodId": 26    },    "additionalServices": [{      "additionalServiceId": 4     }    ]   }  } ]}
+        return {
+            "orderId": 51,
+            "orderCode": "",
+            "orderName": "Cement Online Order Mock",
+            "createdDateTime": "2017-09-07T15:00:00.000Z",
+            "updatedDateTime": "2017-09-07T15:00:00.000Z",
+            "programmedDateTime": "2017-09-07T15:00:00.000Z",
+            "requestedDateTime": "2017-09-10T15:00:00.000Z",
+            "draftDateTime": "2017-09-07T14:28:18.814Z",
+            "purchaseOrder": "PO_JVC",
+            "status": {
+                "statusId": 1
+            },
+            "salesArea": {
+                "salesAreaId": 2
+            },
+            "orderType": {
+                "orderTypeId": 450
+            },
+            "customer": {
+                "customerId": 122
+            },
+            "shippingCondition": {
+                "shippingConditionId": 1
+            },
+            "jobsite": {
+                "jobsiteId": 59
+            },
+            "pointOfDelivery": {
+                "pointOfDeliveryId": 393
+            },
+            "instructions": "Instrucciones de entrega",
+            "contact": {
+                "contactId": "2298",
+                "contactName": "Ivan el Terrible",
+                "contactPhone": "821920192102"
+            },
+            "user": {
+                "userId": 50
+            },
+            "items": [
+                {
+                    "orderItemId": 56,
+                    "itemSeqNum": 10,
+                    "purchaseOrder": "PO_JVC",
+                    "requestedDateTime": "2017-09-05T14:28:18.814Z",
+                    "programmedDateTime": "2017-09-05T14:28:18.814Z",
+                    "currency": {
+                        "currencyId": 1
+                    },
+                    "quantity": 50,
+                    "product": {
+                        "productId": 1629
+                    },
+                    "uom": {
+                        "unitId": 262
+                    },
+                    "paymentTerm": {
+                        "paymentTermId": 43
+                    },
+                    "shippingSource": {
+                        "shippingSourceId": 387
+                    },
+                    "orderItemProfile": {
+                        "transportMethod": {
+                            "transportMethodId": 26
+                        },
+                        "additionalServices": [
+                            {
+                                "additionalServiceId": 4
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
     }
 }
