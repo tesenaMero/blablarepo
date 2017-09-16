@@ -64,10 +64,12 @@
                     draft: orderDetailData.status.statusDesc == 'Draft - Hdr',
                     draft: orderDetailData.status.statusCode == 'DRFT',
                     pending: orderDetailData.status.statusCode == 'INPC',
+                    pending: orderDetailData.status.statusDesc == 'Pending',
                     blocked: orderDetailData.status.statusCode == 'BLCK',
                     holded: orderDetailData.status.statusDesc == 'Holded - Hdr',
                     processed: orderDetailData.status.statusDesc == 'In process - Hdr',
-                    completed: orderDetailData.status.statusCode == 'CMPO'
+                    completed: orderDetailData.status.statusCode == 'CMPO',
+                    completed: orderDetailData.status.statusDesc == 'Completed'
                 }">{{orderDetailData.status.statusDesc}}</span>
             </div>
         </div>
@@ -78,12 +80,12 @@
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#products" role="tab">Products</a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#action-log" role="tab">Action log</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#comments" role="tab">Comments</a>
-            </li>
+            </li> -->
         </ul>
     </div>
     
@@ -157,8 +159,8 @@
                                         <div class="title">
                                             Contract
                                         </div>
-                                        <div class="value">
-                                            10-201702189034**
+                                        <div class="value" *ngIf="itemData.agreementItem">
+                                            {{itemData.agreementItem.agreementItemCode}}
                                         </div>
                                     </div>
                                 </div>
@@ -169,8 +171,8 @@
                                         <div class="title">
                                             Discharge Time
                                         </div>
-                                        <div class="value">
-                                            60min**
+                                        <div class="value" *ngIf="itemData.orderItemProfile.dischargeTime">
+                                            {{itemData.orderItemProfile.dischargeTime.timePerDischargeDesc}}
                                         </div>
                                     </div>
                                 </div>
@@ -179,8 +181,8 @@
                                         <div class="title">
                                             Transport Method
                                         </div>
-                                        <div class="value">
-                                            Truck**
+                                        <div class="value" *ngIf="itemData.transportMethod">
+                                            {{itemData.transportMethod.transportMethodDesc}}
                                         </div>
                                     </div>
                                 </div>
@@ -189,8 +191,8 @@
                                         <div class="title">
                                             Unload Type
                                         </div>
-                                        <div class="value">
-                                            Pump**
+                                        <div class="value" *ngIf="itemData.unloadType">
+                                            {{itemData.unloadType.unloadTypeDesc}}
                                         </div>
                                     </div>
                                 </div>
@@ -199,8 +201,8 @@
                                         <div class="title">
                                             Delivery mode
                                         </div>
-                                        <div class="value">                                            
-                                            Delivery**
+                                        <div class="value" *ngIf="orderDetailData.shippingCondition">                                            
+                                            {{orderDetailData.shippingCondition.shippingConditionDesc}}
                                         </div>
                                     </div>
                                 </div>
@@ -211,8 +213,8 @@
                                         <div class="title">
                                             Pump Capacity Min
                                         </div>
-                                        <div class="value">
-                                            30 m3/s**
+                                        <div class="value" *ngIf="itemData.orderItemProfile.pumpCapacity">
+                                            {{itemData.orderItemProfile.pumpCapacity.pumpCapacityDesc}}
                                         </div>
                                     </div>
                                 </div>
@@ -221,8 +223,8 @@
                                         <div class="title">
                                             Pump Frequency Max
                                         </div>
-                                        <div class="value">
-                                            Weekly**
+                                        <div class="value" *ngIf="itemData.orderItemProfile.timePerLoad">
+                                            {{itemData.orderItemProfile.timePerLoad.timePerLoadDesc.timePerLoadDesc}}**
                                         </div>
                                     </div>
                                 </div>
@@ -231,8 +233,8 @@
                                         <div class="title">
                                             Application
                                         </div>
-                                        <div class="value">
-                                            Roof**
+                                        <div class="value" *ngIf="itemData.orderItemProfile.element">
+                                            {{itemData.orderItemProfile.element.elementDesc}}
                                         </div>
                                     </div>
                                 </div>
@@ -241,8 +243,8 @@
                                         <div class="title">
                                             Kicker
                                         </div>
-                                        <div class="value">                                            
-                                            Yes**
+                                        <div class="value" *ngIf="itemData.orderItemProfile.kicker">                                            
+                                            {{itemData.orderItemProfile.kicker}}
                                         </div>
                                     </div>
                                 </div>   
@@ -253,8 +255,8 @@
                                         <div class="title">
                                             Load Size
                                         </div>
-                                        <div class="value">                                            
-                                            10 tons**
+                                        <div class="value" *ngIf="itemData.orderItemProfile.loadSize">  
+                                            {{itemData.orderItemProfile.loadSize.loadSizeDesc}}
                                         </div>
                                     </div>
                                 </div>  
@@ -263,8 +265,8 @@
                                         <div class="title">
                                             Spacing
                                         </div>
-                                        <div class="value">                                            
-                                            10 min**
+                                        <div class="value" *ngIf="itemData.orderItemProfile.timePerLoad">
+                                            {{itemData.orderItemProfile.timePerLoad.timePerLoadDesc.timePerLoadDesc}}
                                         </div>
                                     </div>
                                 </div>        
@@ -275,8 +277,8 @@
                                         <div class="title">
                                             Additional services
                                         </div>
-                                        <div class="value">
-                                            20939302/10292/20102**
+                                        <div class="value" *ngIf="itemData.orderItemProfile.additionalServices">
+                                            {{itemData.orderItemProfile.additionalServices.additionalServiceDesc}}
                                         </div>
                                     </div>
                                 </div>                                            

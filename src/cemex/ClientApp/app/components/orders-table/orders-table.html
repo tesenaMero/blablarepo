@@ -30,6 +30,7 @@
                 <tr [ngClass]="{ 'zebra': odd }" (click)="onRowClick(order)">
                     <td [attr.data-title]="column.title" class="{{ 'col-' + column.key }}" [ngClass]="{first: first}" [routerLink]="['../order-detail/']" 
                                                         [queryParams]="{
+                                                                            orderRequestId: order.orderRequest.orderRequestId ? order.orderRequest.orderRequestId : null,
                                                                             orderId:order.orderRequest.orderId ? order.orderRequest.orderId : null, 
                                                                             typeCode:order.orderRequest.orderType ? order.orderRequest.orderType : null, 
                                                                             orderCode:order.orderCode ? order.orderCode : null, 

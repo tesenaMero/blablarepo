@@ -57,6 +57,7 @@ export class OrdersService {
                 key: 'orderRequestId',
                 format: 'string',
                 value: 'orderCode',
+                ignoreValue: 'orderCode',
             },
             {
                 key: 'submitedOn',

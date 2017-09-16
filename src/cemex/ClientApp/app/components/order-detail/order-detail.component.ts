@@ -11,16 +11,17 @@ import { ActivatedRoute } from '@angular/router';
     ]
 })
 export class OrderDetailComponent {   
-    orderDetailData: any = null;
-    id: number = null;
-    type: string = null;
-    orderCode: string = null;
-    businessLine: string = null;
+    orderDetailData: any;
+    id: any;
+    orderRequestId: string;
+    type: string;
+    orderCode: string;
+    businessLine: string;
     private sub: any;
-    pod: any = null;
-    jobsite: any = null;
-    streetJob: any = null;
-    streetPOD: any = null;
+    pod: any;
+    jobsite: any;
+    streetJob: any;
+    streetPOD: any;
 
     constructor(private orderDetailApi: OrderDetailApi, private route: ActivatedRoute) {
         this.sub = this.route.queryParams.subscribe(params => {
@@ -36,30 +37,36 @@ export class OrderDetailComponent {
             if (params['typeCode']) {
                 this.type = params['typeCode'];                
             }
+            if (params['orderRequestId'] === null) {
+                this.orderRequestId = params['orderRequestId'];                
+            }
+            if (this.orderRequestId && this.orderRequestId.length > 0) {
+                this.id = this.orderRequestId;             
+            }
             if (this.orderCode) {
                 if (this.businessLine == 'RMX') {
                     this.type = 'ZTRM';
                 }
                 else {
-                    this.type = 'ZTA';
+                    if (this.businessLine == 'CEM') {
+                        this.type = 'ZTA';
+                    }
                 }
             }
-            else {
-                this.type = 'REQ';
-            }
-            // if(params['typeCode']) {
-            //     if(params['typeCode'] == "ZTA") {
-            //         this.type = "SLS";
-            //     }
-            //     else {
-            //         this.type = params['typeCode'];
-            //     }
-            // } 
         });        
 
         orderDetailApi.byIdType(this.id, this.type).subscribe((response) => {
             this.orderDetailData = response.json();
-            // console.log(response);
+            const parent = this.orderDetailData;
+            // console.log(parent.items);
+            // Change kicker to text
+            // Array.prototype.forEach.call(parent.items, child => {
+            //     console.log(child.orderItemProfile.kicker);
+            //     if (child.orderItemProfile.kicker === 'kicker') {
+            //         console.log(child);
+            //         // key.orderItemProfile.kicker = "yes";
+            //     }
+            // });
             if (this.orderDetailData.salesArea.countryCode.trim() == "MX") { //Point Of Delivery
                 this.getJobsite(orderDetailApi);
                 this.getPod(orderDetailApi);
