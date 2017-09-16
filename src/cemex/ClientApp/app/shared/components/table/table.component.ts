@@ -82,8 +82,8 @@ export class DLSTableComponent {
         // }
     }
 
-    tdClicked(fn) {
-        if (fn) { fn(); }
+    tdClicked(fn, item) {
+        if (fn) { fn(item); }
     }
 
     sort(column: any, index: any, sortFn?: any) {

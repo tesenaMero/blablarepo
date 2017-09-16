@@ -168,7 +168,7 @@ export class OrdersService {
             .subscribe(response => {
                 this.ordersModel = response.entities.orderRequests;
                 this._orders.next({ allIds: response.result, byId: response.entities.orderRequests });
-                this._totalItems.next(Math.ceil(50 / 10));
+                this._totalItems.next(Math.ceil(this.theOrders.length / 10));
                 this._isLoading.next(false);
             }, err => {
                 this._error.next("Failed fetching orders");
