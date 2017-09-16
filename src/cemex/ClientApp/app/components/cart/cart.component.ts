@@ -144,6 +144,7 @@ export class CartComponent implements OnInit {
     }
 
     placeOrder() {
+        console.log(sessionStorage.getItem('access_token'))
         const mock = {
             sourceApp: "order-taking",
             date: new Date().toISOString(),

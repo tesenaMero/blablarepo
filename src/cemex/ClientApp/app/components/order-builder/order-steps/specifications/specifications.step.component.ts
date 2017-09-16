@@ -74,8 +74,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.manager.shippingCondition
         ).subscribe((result) => {
             let topProducts = result.json().products;
+            this.loadings.products = false;
+            if (!topProducts.length) { return; }
+
             SpecificationsStepComponent.availableProducts = topProducts;
-            
             // Set defaults value
             this.preProducts.forEach(item => {
                 if (topProducts.length > 0)
@@ -88,7 +90,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.productChanged(topProducts[0]);
 
             this.manager.setProducts(this.preProducts);
-            this.loadings.products = false;
         });
     }
 
@@ -171,7 +172,7 @@ class PreProduct {
         this.contract = _.availableContracts[0];
         this.unit = _.availableUnits[0];
         this.payment = _.availablePayments[0];
-        this.product = _.availableProducts[0];
+        if (_.availableProducts.length) { this.product = _.availableProducts[0]; }
         this.plant = _.availablePlants[0];
     }
 

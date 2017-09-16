@@ -22,7 +22,10 @@ export class OrderBuilderComponent {
     }
 
     locationStepCompleted(event: any) {
-        this.stepper.complete();
+        if (event)
+            this.stepper.complete();
+        else
+            this.stepper.uncomplete();
     }
 
     productStepCompleted(product: any) {

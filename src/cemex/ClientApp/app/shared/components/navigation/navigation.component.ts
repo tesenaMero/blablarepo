@@ -14,17 +14,27 @@ export class NavigationComponent {
     @Input() entityItemsSubtitle:string;
     @Input() notifications: any[];
 
+    @Input() customers: any[] = [];
+
     @Output() public logout: EventEmitter<any> = new EventEmitter<any>();
     @Output() public selectDropdown: EventEmitter<any> = new EventEmitter<any>();
+    @Output() public customerChange: EventEmitter<any> = new EventEmitter<any>();
 
     public open: boolean = false;
-    public customers = [];
+    private customer: any;
+
+    ngOnChanges() {
+        if (this.customers && this.customers.length > 0) {
+            this.customer = this.customers[0];
+        }
+    }
+
     constructor() {
 
     }
 
     public fireSelectDropdown(customer) {
-        this.selectDropdown.emit(customer)
+        this.selectDropdown.emit(customer);
     }
 
     public firelogout() { 
@@ -33,5 +43,10 @@ export class NavigationComponent {
 
     public toggleMenu() {
         this.open = !this.open;
+    }
+
+    customerChanged(customer: any) {
+        console.log("this.customer", this.customer)
+        this.customerChange.emit(this.customer);
     }
 }
