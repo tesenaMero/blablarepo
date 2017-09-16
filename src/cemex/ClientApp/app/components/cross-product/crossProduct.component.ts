@@ -42,7 +42,7 @@ export class CrossProductComponent implements OnInit {
                 return;
             }
             this.dashboard.alertInfo("Placing order...");
-            this.drafts.createOrder(jObj.data[0].orderId).subscribe((response) => {
+            this.drafts.createOrder(jObj.data[0].orderID).subscribe((response) => {
                 this.dashboard.alertSuccess("Order placed successfully!");
                 setTimeout(() => {
                     this.router.navigate(['/orders']);
