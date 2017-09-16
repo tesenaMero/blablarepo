@@ -9,12 +9,10 @@ import { LegalEntitiesApi } from '../../shared/services/api/legal-entities.servi
 
 import { TranslationService } from '../../shared/services/translation.service';
 
-import { Broadcaster } from '../../shared/types/broadcaster';
 
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.html',
-    providers: [TranslationService, Broadcaster],
     styleUrls: ['./dashboard.scss']
 })
 export class DashboardComponent implements OnInit {

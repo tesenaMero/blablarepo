@@ -1,5 +1,5 @@
 import { SessionService } from '../services/session.service';
-import { Api } from './api';
+import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { Broadcaster } from '../types/Broadcaster';
 import 'rxjs/add/operator/toPromise';
@@ -9,10 +9,10 @@ export class TranslationService {
     public static translation: Map<string, string> = new Map<string, string>();
     public static language: string = '';
 
-    constructor(private http: Api, private eventDispatcher: Broadcaster) {
+    constructor(private _http: Http, private eventDispatcher: Broadcaster) {
         if (TranslationService.st('lang').indexOf('NOT:') !== -1) {
             this.eventDispatcher.broadcast('LANGUAGE_LOADED', false);
-            this.http.get('/locale-en.json')
+            this._http.get('/locale-en.json')
                 .toPromise()
                 .then(response => {
                     this.eventDispatcher.broadcast('LANGUAGE_LOADED', true);
@@ -33,7 +33,7 @@ export class TranslationService {
     public lang(lang: string): void {
         TranslationService.language = lang;
         this.eventDispatcher.broadcast('LANGUAGE_LOADED', false);
-        this.http.get('/locale-' + lang + '.json')
+        this._http.get('/locale-' + lang + '.json')
             .toPromise()
             .then(response => {
                 this.eventDispatcher.broadcast('LANGUAGE_LOADED', true);
@@ -43,7 +43,7 @@ export class TranslationService {
     }
     public file(url: string): void {
         this.eventDispatcher.broadcast('LANGUAGE_LOADED', false);
-        this.http.get(url)
+        this._http.get(url)
             .toPromise()
             .then(response => {
                 this.eventDispatcher.broadcast('LANGUAGE_LOADED', true);
