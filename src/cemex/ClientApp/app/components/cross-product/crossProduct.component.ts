@@ -36,10 +36,30 @@ export class CrossProductComponent implements OnInit {
             // sessionStorage.setItem("jsonObjDecoded", JSON.stringify(jObj));
             //TODO: remove this
             // this.router.navigate(['/cart']);
+
+            if (!this.checkPayment(jObj)){
+                return;
+            }
+            this.dashboard.alertInfo("Placing order...");
             this.drafts.createOrder(jObj.data[0].orderId).subscribe((response) => {
                 this.dashboard.alertSuccess("Order placed successfully!");
+                setTimeout(() => {
+                    this.router.navigate(['/orders']);
+                },3000)
             });
         });
+    }
+
+    checkPayment(obj) {
+        let res: number;
+        obj.data.forEach(el => {
+            let toCommit = 0;
+            el.documents.forEach(doc => {
+                toCommit += doc.toCommit;
+            });
+            res = el.orderAmount - toCommit;
+        });
+        return !Boolean(res);
     }
 
     ngOnDestroy() {
