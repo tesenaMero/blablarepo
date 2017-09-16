@@ -165,6 +165,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         // Set current shipment location
         this.location = location;
         this.orderManager.selectJobsite(this.location);
+        this.onCompleted.emit(true);
 
         if (!location) {
             this.errorLocation = true;
@@ -211,8 +212,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             })
             this.loadings.contacts = false;
         }));
-
-        this.onCompleted.emit(false);
     }
 
     podChanged(pod: any) {
@@ -251,7 +250,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         }
 
         if (valid) { this.onCompleted.emit(true); }
-        else { this.onCompleted.emit(false) }
+        else { this.onCompleted.emit(true) }
     }
 
     validate(key: any): boolean {

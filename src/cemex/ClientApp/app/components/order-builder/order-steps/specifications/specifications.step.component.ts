@@ -3,6 +3,10 @@ import { ProductsApi, Api } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 
+export interface SpecificationsStepListener {
+    advancedSearchOpened();
+}
+
 @Component({
     selector: 'specifications-step',
     templateUrl: './specifications.step.html',
@@ -102,6 +106,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
             });
             SpecificationsStepComponent.availableUnits = units
         });
+    }
+
+    openAdvancedSeach() {
+        console.log("Opened");
     }
 
     productChanged(el) {

@@ -17,7 +17,7 @@
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc  }}</option>
                                 </select>
                             </span>
-                            <span class="action" data-toggle="modal" data-target="#search-product">Change</span>
+                            <span (click)="openAdvancedSeach()" class="action" data-toggle="modal" data-target="#search-product">Change</span>
                         </div>
                     </div>
                 </div>
