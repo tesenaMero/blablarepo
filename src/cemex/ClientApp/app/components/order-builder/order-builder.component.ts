@@ -51,7 +51,7 @@ export class OrderBuilderComponent {
     }
 
     specificationsStepCompleted() {
-        
+        this.stepper.complete();
     }
 
     finishSteps() {
