@@ -73,7 +73,6 @@ export class OrderRequestHelper {
   }
 
   public getModelFieldByColumn(row, column: OrderRequestColumnConfiguration): string {
-    if (row.orderType.orderTypeCode != "DFT") {
       const getPropertyByKey = (key: Array<string>, pointer: any, index = 0) => {
         pointer = pointer[key[index]];
         if (!pointer) {
@@ -126,7 +125,6 @@ export class OrderRequestHelper {
         return '';
       }
       return value;
-    }
   }
 
   public getFormatForColumn(format: string, value: any): any {
@@ -288,8 +286,7 @@ export class OrderRequestHelper {
   public flattenData(response: any): Array<any> {
     const orderRequests = [];
     // todo
-    const requests = response.orders.filter(item => item.orderType.orderTypeCode != "DFT");
-    requests.forEach((request) => {
+    response.forEach((request) => {
       if (!request || !request.items) {
         return;
       }

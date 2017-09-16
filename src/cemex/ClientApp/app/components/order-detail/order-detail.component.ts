@@ -59,14 +59,14 @@ export class OrderDetailComponent {
 
         orderDetailApi.byIdType(this.id, this.type).subscribe((response) => {
             this.orderDetailData = response.json();
-            console.log(response);
+            // console.log(response);
             if (this.orderDetailData.salesArea.countryCode.trim() == "MX") { //Point Of Delivery
                 this.getJobsite(orderDetailApi);
                 this.getPod(orderDetailApi);
             }
             else {
                 if (this.orderDetailData.salesArea.countryCode.trim() == "US") { //Jobsite
-                    console.log("In US Job");
+                    // console.log("In US Job");
                     this.getJobsite(orderDetailApi); 
                 }
             }            
@@ -79,7 +79,7 @@ export class OrderDetailComponent {
         orderDetailApi.shipmentLocationsJob(this.orderDetailData.jobsite.jobsiteId).subscribe((response) => {
             this.jobsite = response.json();
             if (this.jobsite.shipmentLocations.length > 0) {
-                console.log(this.jobsite);
+                // console.log(this.jobsite);
                 // console.log(this.jobsite.shipmentLocations[this.jobsite.shipmentLocations.length-1].address.addressId);
                 this.getStreetJobsite(orderDetailApi ,this.jobsite.shipmentLocations[this.jobsite.shipmentLocations.length-1].address.addressId);
             }
@@ -91,7 +91,7 @@ export class OrderDetailComponent {
         orderDetailApi.shipmentLocationsPOD(this.orderDetailData.pointOfDelivery.pointOfDeliveryId).subscribe((response) => {
             this.pod = response.json();
             if (this.pod.shipmentLocations.length > 0) {
-                console.log(this.pod);
+                // console.log(this.pod);
                 // console.log(this.pod.shipmentLocations[this.pod.shipmentLocations.length-1].address.addressId);
                 this.getStreetPOD(orderDetailApi ,this.pod.shipmentLocations[this.pod.shipmentLocations.length-1].address.addressId);
             }
@@ -100,13 +100,13 @@ export class OrderDetailComponent {
     getStreetJobsite(orderDetailApi, street) {
         orderDetailApi.shipmentLocationsStreet(street).subscribe((response) => {
             this.streetJob = response.json();
-            console.log(this.streetJob);
+            // console.log(this.streetJob);
         });
     }    
     getStreetPOD(orderDetailApi, street) {
         orderDetailApi.shipmentLocationsStreet(street).subscribe((response) => {
             this.streetPOD = response.json();
-            console.log(this.streetPOD);
+            // console.log(this.streetPOD);
         });
     }
 }
