@@ -28,7 +28,7 @@ export class CartComponent implements OnInit {
 
     ngOnInit() {
         this.loadings.order = true;
-        this.drafts.prices(68).subscribe((response) => {
+        this.drafts.prices(this.drafts._draftId).subscribe((response) => {
             this.order = response.json();
             this.mockStuff();
             this.loadings.order = false;
@@ -37,7 +37,7 @@ export class CartComponent implements OnInit {
 
     makeOrder() {
         this.dashboard.alertInfo("Placing order...");
-        this.drafts.createOrder(68).subscribe((response) => {
+        this.drafts.createOrder(this.drafts._draftId).subscribe((response) => {
             this.dashboard.alertSuccess("Order placed successfully!");
         });
     }
