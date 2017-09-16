@@ -22,11 +22,10 @@ export class ProjectProfilesComponent {
     }
 
     fetchProjectProfiles() {
-        this.profiles = [];
-        this.ppService.all("4169").subscribe((response) => {
-            if (response.json().profiles) {
-                this.profiles = response.json().profiles;
-                this.initData(this.profiles);
+        this.ppService.all('354').subscribe((response) => {
+            const profiles = response.json().profiles;
+            if (profiles) {
+                this.initData(response.json().profiles);
             }
         });
     }
@@ -43,20 +42,22 @@ export class ProjectProfilesComponent {
             { name: "", width: 5, sortable: false },
             { name: "", width: 10, sortable: false },
         ]
-        
-        this.profiles.forEach((profile) => {
-            this.rows.push([
+
+        this.rows = profiles.map((profile) => {
+            return [
                 { inner: profile.profileName }, 
                 { inner: profile.project.projectProperties.dischargeTime && profile.project.projectProperties.dischargeTime.timePerDischargeDesc },
                 { inner: profile.project.projectProperties.transportMethod.transportMethodDesc },
                 { inner: profile.project.projectProperties.unloadType && profile.project.projectProperties.unloadType.unloadTypeDesc },
                 { inner: profile.project.projectProperties.kicker, class: "capitalize" },
                 { inner: "Extra hourts, Sundaly / Holiday" },
-                { inner: "EDIT", class: "action-button" },
+                { inner: "EDIT", class: "action-button", click: (item) => {
+                    console.log('edit project profile');
+                }, profile},
                 { inner: "DELETE", class: "action-button", click: (item) => {
                     this.ppService.delete(item.profile.profileId).subscribe(res => res.ok && this.fetchProjectProfiles())
                 }, profile },
-            ]);
+            ]
         });
     }
 }
