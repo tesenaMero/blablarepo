@@ -141,6 +141,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     remove(index: any) {
         let product = this.preProducts[index];
         product.deleting = true;
+        console.log(product);
         setTimeout(() => {
             this.preProducts.splice(index, 1);
         }, 400);
@@ -157,7 +158,7 @@ class PreProduct {
     maneuvering: boolean = false;
     quantity: number = 1;
     date: any = new Date();
-    time: any = new Date();
+    time: any;
     unit: any;
     payment: any;
     contract: any;
