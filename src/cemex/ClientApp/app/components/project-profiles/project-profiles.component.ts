@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+
 import { ProjectProfileApi } from '../../shared/services/api'
 
 let $ = require("jquery");
@@ -13,7 +15,7 @@ export class ProjectProfilesComponent {
     columns = [];
     rows = [];
 
-    constructor(private ppService: ProjectProfileApi) {
+    constructor(private ppService: ProjectProfileApi, private sanitizer: DomSanitizer) {
         this.fetchProjectProfiles();
     }
 
@@ -22,11 +24,10 @@ export class ProjectProfilesComponent {
     }
 
     fetchProjectProfiles() {
-        this.profiles = [];
-        this.ppService.all("4169").subscribe((response) => {
-            if (response.json().profiles) {
-                this.profiles = response.json().profiles;
-                this.initData(this.profiles);
+        this.ppService.all('354').subscribe((response) => {
+            const profiles = response.json().profiles;
+            if (profiles) {
+                this.initData(response.json().profiles);
             }
         });
     }
@@ -43,20 +44,22 @@ export class ProjectProfilesComponent {
             { name: "", width: 5, sortable: false },
             { name: "", width: 10, sortable: false },
         ]
-        
-        this.profiles.forEach((profile) => {
-            this.rows.push([
+
+        this.rows = profiles.map((profile) => {
+            return [
                 { inner: profile.profileName }, 
                 { inner: profile.project.projectProperties.dischargeTime && profile.project.projectProperties.dischargeTime.timePerDischargeDesc },
                 { inner: profile.project.projectProperties.transportMethod.transportMethodDesc },
                 { inner: profile.project.projectProperties.unloadType && profile.project.projectProperties.unloadType.unloadTypeDesc },
                 { inner: profile.project.projectProperties.kicker, class: "capitalize" },
                 { inner: "Extra hourts, Sundaly / Holiday" },
-                { inner: "EDIT", class: "action-button" },
+                { inner: this.sanitizer.bypassSecurityTrustHtml("<span data-toggle='modal' data-target='#pp-creator'>EDIT</span>"), class: "action-button", click: (item) => {
+                    
+                }, profile},
                 { inner: "DELETE", class: "action-button", click: (item) => {
                     this.ppService.delete(item.profile.profileId).subscribe(res => res.ok && this.fetchProjectProfiles())
                 }, profile },
-            ]);
+            ]
         });
     }
 }
