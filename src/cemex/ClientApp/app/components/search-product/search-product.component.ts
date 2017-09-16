@@ -12,7 +12,6 @@ export class SearchProductComponent {
     @Output() confirmed = new EventEmitter<any>();
 
     constructor(private api: ProductsApi) {
-
         this.api.advancedSearch('').subscribe((result) => {
             //console.log(result.json());
         });

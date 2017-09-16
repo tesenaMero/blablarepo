@@ -1,7 +1,11 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input, Inject, EventEmitter, Output } from '@angular/core';
 import { ProductsApi, Api } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
+
+export interface SpecificationsStepListener {
+    advancedSearchOpened();
+}
 
 @Component({
     selector: 'specifications-step',
@@ -10,6 +14,7 @@ import { CreateOrderService } from '../../../../shared/services/create-order.ser
     host: { 'class': 'w-100' }
 })
 export class SpecificationsStepComponent implements StepEventsListener {
+    @Output() onCompleted = new EventEmitter<any>();
     private preProducts = [];
     private loadings = {
         products: true,
@@ -65,6 +70,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     onShowed() {
+        this.onCompleted.emit();
         this.loadings.products = true;
         const salesDocumentType = '3';
         this.api.top(
@@ -102,6 +108,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
             });
             SpecificationsStepComponent.availableUnits = units
         });
+    }
+
+    openAdvancedSeach() {
+        console.log("Opened");
     }
 
     productChanged(el) {
