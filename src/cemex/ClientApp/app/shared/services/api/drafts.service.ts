@@ -6,6 +6,7 @@ import { Api } from './api.service';
 
 @Injectable()
 export class DraftsService {
+    _draftId: any = '';
     constructor(private api: Api) {
     }
 
@@ -19,5 +20,9 @@ export class DraftsService {
 
     createOrder(draftId: any): Observable<Response> {
         return this.api.patch("/v4/sm/orders/" + draftId + "/requested");
+    }
+
+    draftId(id) {
+        this._draftId = id;
     }
 }

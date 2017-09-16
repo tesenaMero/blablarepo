@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
-import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
+import { Step, StepEventsListener, _Step } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
 import { ShipmentLocationApi } from '../../../../shared/services/api/shipment-locations.service.api';
@@ -103,7 +103,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     private infoWindow: any;
     private jobsiteMarker: any;
 
-    constructor( @Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi) {
+    constructor(@Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi) {
         this.step.setEventsListener(this);
     }
 
@@ -155,6 +155,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     // Step flow
     // =====================
     jobsiteChanged(location: any) {
+        this.onCompleted.emit(true);
+        
         // Set loading state
         this.loadings.pods = true;
         this.loadings.contacts = true;
@@ -178,7 +180,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 this.orderManager.salesArea = salesArea;
                 this.location.purchaseOrderValidation = salesArea.purchaseOrderValidation;
                 this.validations.purchaseOrder.mandatory = salesArea.purchaseOrderValidation;
-                this.validateForm();
+                //this.validateForm();
             }
         });
 

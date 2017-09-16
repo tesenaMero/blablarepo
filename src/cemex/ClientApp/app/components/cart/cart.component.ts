@@ -2,7 +2,7 @@ import { Component, OnInit, PipeTransform, Pipe, Inject } from '@angular/core';
 import { Location } from '@angular/common';
 import { ETypeProduct, CementPackageSpecification, CartProductGroup, ReadymixSpecification } from '../../models/index';
 import { DraftsService } from '../../shared/services/api/drafts.service';
-import { DashboardService } from '../../shared/services/dashboard.service'
+import { DashboardService } from '../../shared/services/dashboard.service';
 import { WindowRef } from '../../shared/services/window-ref.service';
 import { DOCUMENT } from '@angular/platform-browser';
 import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
@@ -154,6 +154,7 @@ export class CartComponent implements OnInit {
                 jwt : sessionStorage.getItem('jwt')
             },
             data: [{
+                orderId: this.drafts._draftId,
                 companyCode: "7180",
                 customerCode: "0050163248",
                 jobSiteCode: "0065014102",

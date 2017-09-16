@@ -1,4 +1,4 @@
-<navigation [notifications]="[]" (logout)="logout($event)"></navigation>
+<navigation [customers]="customers" [notifications]="[]" (logout)="logout($event)" (customerChange)="setCustomer($event)"></navigation>
 
 <div id="layout" class="content">
     <div class="alert-bar {{ alertClass(alert) }}" [ngClass]="{ open: showAlert }">
