@@ -20,8 +20,9 @@ export class Step {
     @Input() showExit? = false; // Show exit action button
     @Input() showControls? = true; // Show back/next control buttons
     @Input() automatic? = false; // Moves to next step automatically once its completed
-    @Output() onShowed = new EventEmitter<any>();
+    @Output() showed = new EventEmitter<any>();
 
+    canAdvance = () => { return true; }
     private stepEventsListener: StepEventsListener = null;
     completed: boolean = false;
 
@@ -32,7 +33,7 @@ export class Step {
     }
 
     show() {
-        this.onShowed.emit();
+        this.showed.emit();
         //window.scrollTo(0, 0);
         if (this.stepEventsListener)
             this.stepEventsListener.onShowed();
