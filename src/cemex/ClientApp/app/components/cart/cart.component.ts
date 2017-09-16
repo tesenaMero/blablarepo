@@ -159,7 +159,7 @@ export class CartComponent implements OnInit {
                 customerCode: "0050163248",
                 jobSiteCode: "0065014102",
                 payerCode: "0065014102",
-                orderAmount: 500.00,
+                orderAmount: 12.00,
                 documents: [
                 ]
             }]
