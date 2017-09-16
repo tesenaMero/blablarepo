@@ -11,32 +11,32 @@
                         <span class="error-message-select" *ngIf="errorLocation">Please select location</span>
                     </div>
                 </div>
-                <div class="row align-items-center" [ngClass]="{ disabled: orderManager?.shippingCondition?.shippingConditionId == 2 }">
+                <div class="row align-items-center" *ngIf="!hiddens.pods" [ngClass]="{ disabled: loadings.pods }">
                     <div class="col-md-4 col-sm-12 select-label">
                         <label for="pod-select" class="select-label">Select from existing point of delivery</label>
                     </div>
                     <div class="col-md-8 col-sm-12" [ngClass]="{ disabled: loadings.pods }">
-                        <ss-multiselect-dropdown [options]=" pods " [texts]="podsTexts " [settings]="dropDownSettings " [(ngModel)]="podIndex " (ngModelChange)="podChanged(pods[$event[0]]) "></ss-multiselect-dropdown>
+                        <ss-multiselect-dropdown [options]="pods" [texts]="podsTexts" [settings]="dropDownSettings " [(ngModel)]="podsIndex" (ngModelChange)="podChanged(pods[$event[0]])"></ss-multiselect-dropdown>
                     </div>
                 </div>
             </div>
             <div class="second-container ">
-                <div class="row align-items-center mb-21px ">
-                    <div class="col-md-4 col-sm-12 select-label ">
-                        <label for="purchase-order " class="select-label required " (change)="contactSelected($event) ">Purchase order</label>
+                <div class="row align-items-center mb-21px" [ngClass]="{ error: validations.purchaseOrder.showError, disabled: loadings.purchaseOrder }">
+                    <div class="col-md-4 col-sm-12 select-label">
+                        <label for="purchase-order" class="select-label" [ngClass]="{ required: validations.purchaseOrder.mandatory }">Purchase order</label>
                     </div>
-                    <div class="col-md-8 col-sm-12 " [ngClass]="{error: true} ">
-                        <input type="text " class="form-control dls required" id="purchase-order " placeholder="Put your purchase order
-                        " name="purchase-order " />
+                    <div class="col-md-8 col-sm-12">
+                        <input type="text " class="form-control dls" id="purchase-order" placeholder="Put your purchase order" name="purchase-order" [(ngModel)]="purchaseOrder" (keyup)="purchaseOrderChanged($event)" />
                         <span class="error-message ">Please enter valid purchase order.</span>
                     </div>
                 </div>
-                <div class="row align-items-center mb-21px ">
-                    <div class="col-md-4 col-sm-12 select-label ">
-                        <label for="conctact-select " class="select-label " (change)="contactSelected($event) ">Contact person</label>
+                <div class="row align-items-center mb-21px" [ngClass]="{ error: validations.contactPerson.showError }">
+                    <div class="col-md-4 col-sm-12 select-label">
+                        <label for="conctact-select" [ngClass]="{ required: validations.contactPerson.mandatory }" class="select-label">Contact person</label>
                     </div>
                     <div class="col-md-8 col-sm-12 " [ngClass]="{ disabled: loadings.contacts }">
                         <ss-multiselect-dropdown [options]="contacts" [texts]="contactsTexts" [settings]="contactsSettings" [(ngModel)]="contactsIndex" (ngModelChange)="contactChanged(contacts[$event[0]])"></ss-multiselect-dropdown>
+                        <span class="error-message ">Please select a contact</span>
                     </div>
                 </div>
                 <div class="row align-items-center">
