@@ -10,6 +10,7 @@ import { CreateOrderService } from '../../../../shared/services/create-order.ser
     host: { 'class': 'w-100' }
 })
 export class SpecificationsStepComponent implements StepEventsListener {
+    @Output() initializeProductColorsEmitter = new EventEmitter<any>();
     @Output() onCompleted = new EventEmitter<any>();
     private preProducts = [];
     private loadings = {
@@ -17,6 +18,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
         contracts: true
     }
     private selectedProduct: any;
+    initializeProductSearch() {
+        this.manager.fetchProductColors(this.manager.productLine.productLineId);
+    }
 
     static availableUnits = [];
 
@@ -137,7 +141,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     add() {
-        this.preProducts.push(new PreProduct());
+        this.preProducts.push(new PreProduct(this.manager));
     }
 
     remove(index: any) {
@@ -168,7 +172,7 @@ class PreProduct {
     plant: any;
     projectProfile: any;
 
-    constructor() {
+    constructor(private manager: CreateOrderService) {
         let _ = SpecificationsStepComponent;
         if (_.availableProducts.length > 0) { this.product = _.availableProducts[0]; }
         this.contract = _.availableContracts[0];
@@ -176,6 +180,15 @@ class PreProduct {
         this.payment = _.availablePayments[0];
         if (_.availableProducts.length) { this.product = _.availableProducts[0]; }
         this.plant = _.availablePlants[0];
+        this.manager._productSelectedProduct.subscribe(product => {
+            let filteredProducts = _.availableProducts.filter((availableProduct: any) => availableProduct.commercialCode === product.commercialCode);
+            if(filteredProducts.length) {
+                this.product = filteredProducts[0];
+            } else {
+                _.availableProducts.push(product);
+                this.product = product;
+            }
+        })
     }
 
     setProduct(product: any[]) {

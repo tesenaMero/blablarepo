@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as types from '../../shared/types/CreateOrder';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ShipmentLocationApi } from './api/shipment-locations.service.api';
+import { ProductColorApi } from './api/product-colors.service';
 
 /**
  * Create an order for API V2
@@ -9,6 +10,8 @@ import { ShipmentLocationApi } from './api/shipment-locations.service.api';
 @Injectable()
 export class CreateOrderService {
     public _shipmentLocationType: BehaviorSubject<any>;
+    public _productColors: BehaviorSubject<any>;
+    public _productSelectedProduct: BehaviorSubject<any>;
     public orderId: number;
     public orderCode: string;
     public orderName: string;
@@ -34,9 +37,15 @@ export class CreateOrderService {
     public additionalServices: Array<any>;
     public products: Array<any>;
 
-    constructor(private shipmentLocationApi: ShipmentLocationApi) {
+    constructor(private shipmentLocationApi: ShipmentLocationApi, private productColorApi: ProductColorApi) {
         this.initializeOrder();
         this._shipmentLocationType = <BehaviorSubject<any>>new BehaviorSubject({});
+        this._productColors = <BehaviorSubject<any>>new BehaviorSubject({});
+        this._productSelectedProduct = <BehaviorSubject<any>>new BehaviorSubject({});
+    }
+
+    public fetchProductColors(productLineId: number) {
+        this.productColorApi.productColors(productLineId).subscribe((response) => this._productColors.next(response.json().productColors));
     }
 
     public fetchShipmentLocation() {
