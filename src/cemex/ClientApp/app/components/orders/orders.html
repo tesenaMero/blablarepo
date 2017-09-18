@@ -25,19 +25,19 @@
 
 <div class="layout">
     <breadcrumbs>
-        <breadcrumbs-item link="../orders">Orders</breadcrumbs-item>
-        <breadcrumbs-item>History</breadcrumbs-item>
+        <breadcrumbs-item link="../orders">{{ t.pt('views.common.orders') }}</breadcrumbs-item>
+        <breadcrumbs-item>{{ t.pt('views.common.history') }}</breadcrumbs-item>
     </breadcrumbs>
     <div class="title-container row align-items-center">
         <div class="col-sm-8">
-            <h1>All locations</h1>
+            <h1>{{ t.pt('views.common.all_locations') }}</h1>
             <svg class="icon-down-single-black">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use>
             </svg>
         </div>
         <div class="cto-container col-sm-4">
             <div class="float-sm-right">
-                <a class="button-ghost" routerLink="../new">Request order</a>
+                <a class="button-ghost" routerLink="../new">{{ t.pt('views.common.request_order') }}</a>
             </div>
         </div>
     </div>

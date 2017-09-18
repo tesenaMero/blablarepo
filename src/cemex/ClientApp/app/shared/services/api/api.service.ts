@@ -56,7 +56,11 @@ export class Api {
 
         if (this.jwt)
             headers.append('jwt', this.jwt);
+            const time = new Date();
+            const sessionId = time.toISOString().replace(/-/g, '').replace(/:/g, '').replace('Z', '').replace('T', '');
 
+            headers.append('sessionId', sessionId);
+            headers.append('RequestDateTime', time.getTime().toString());
         return headers;
     }
 
@@ -73,4 +77,5 @@ export class Api {
         this.authorization = null;
         this.jwt = null;
     }
+
 }

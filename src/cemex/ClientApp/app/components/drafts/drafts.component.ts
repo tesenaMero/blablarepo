@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { OrdersApi } from '../../shared/services/api';
 
+import { TranslationService } from '../../shared/services/translation.service';
+
 @Component({
     selector: 'page-drafts',
     templateUrl: './drafts.html',
@@ -11,7 +13,7 @@ export class DraftsComponent implements OnInit {
     rows: any[] = [];
     orders: any;
 
-    constructor(private ordersApi: OrdersApi) {
+    constructor(private ordersApi: OrdersApi, private t: TranslationService) {
         this.ordersApi.all('4169', 100).subscribe((response) => {
             this.orders = response.json().orders.slice(0, 10);
             // console.log(this.orders);

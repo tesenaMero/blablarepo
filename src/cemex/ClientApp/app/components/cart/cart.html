@@ -3,16 +3,16 @@
 </div>
 <div class="layout">
     <breadcrumbs>
-        <breadcrumbs-item link="../orders">Orders</breadcrumbs-item>
+        <breadcrumbs-item link="../orders">{{ t.pt('views.common.orders') }}</breadcrumbs-item>
     </breadcrumbs>
     <div class="title-container row">
         <div class="col-sm-8">
-            <h1>Shopping cart</h1>
+            <h1>{{ t.pt('views.cart.title') }}</h1>
         </div>
         <div class="cto-container col-sm-4">
             <div class="float-md-right text-right-md">
-                <a class="button-ghost mb-2" (click)="back()">Back</a>
-                <a class="button-ghost" routerLink="app/orders" role="button" aria-hidden="true">Orders history</a>
+                <a class="button-ghost mb-2" (click)="back()">{{ t.pt('views.common.back') }}</a>
+                <a class="button-ghost" routerLink="app/orders" role="button" aria-hidden="true">{{ t.pt('views.common.orders_history') }}</a>
             </div>
         </div>
     </div>
@@ -35,59 +35,59 @@
     </div>
 
     <div class="cart-group" *ngFor="let group  of _productGroups">
-        <h3 class="h3-group roboto-bold">Group {{group.id}}</h3>
+        <h3 class="h3-group roboto-bold">{{ t.pt('views.common.group') }} {{group.id}}</h3>
         <div class="row cart-items-container" *ngFor="let productDto of group.products">
             <div class="cart-item-container col-md-10 row">
                 <div class="product-field col-md-4">
-                    <div class="label-field roboto">Product Description</div>
+                    <div class="label-field roboto">{{ t.pt('views.cart.product_description') }}</div>
                     <p class="product-type roboto-bold">{{productDto.productDescription}}</p>
                 </div>
                 <div class="product-field col-md-2">
-                    <div class="label-field roboto">Quantity</div>
+                    <div class="label-field roboto">{{ t.pt('views.cart.quantity') }}</div>
                     <p class="product-type">{{productDto.quantity}}</p>
                 </div>
                 <div class="product-field col-md-1">
-                    <div class="label-field roboto">Unit</div>
+                    <div class="label-field roboto">{{ t.pt('views.cart.unit') }}</div>
                     <p class="product-type">{{productDto.unit}}</p>
                 </div>
                 <div class="product-field col-md-2">
-                    <div class="label-field roboto">Requested Date</div>
+                    <div class="label-field roboto">{{ t.pt('views.cart.request_date') }}</div>
                     <p class="product-type">{{productDto.requestDate}}</p>
                 </div>
                 <div class="product-field col-md-2">
-                    <div class="label-field roboto">Requested Time</div>
+                    <div class="label-field roboto">{{ t.pt('views.cart.request_time') }}</div>
                     <p class="product-type">{{productDto.requestTime}}</p>
                 </div>
                 <div class="product-field col-md-1">
-                    <div class="label-field roboto">Payment</div>
+                    <div class="label-field roboto">{{ t.pt('views.cart.payment') }}</div>
                     <p class="product-type">{{productDto.payment}}</p>
                 </div>
                 <div class="product-field col-md-4">
-                    <div class="label-field roboto">Location</div>
+                    <div class="label-field roboto">{{ t.pt('views.cart.location') }}</div>
                     <p class="product-type roboto-bold">{{productDto.location}}</p>
                 </div>
                 <div class="product-field col-md-2">
-                    <div class="label-field roboto">Product ID</div>
+                    <div class="label-field roboto">{{ t.pt('views.cart.product_id') }}</div>
                     <div class="product-type">{{productDto.productId}}</div>
                 </div>
                 <div class="product-field col-md-3">
-                    <div class="label-field roboto">Maximum Capacity</div>
+                    <div class="label-field roboto">{{ t.pt('views.cart.maximum_capacity') }}</div>
                     <p class="product-type">{{productDto.maximumCapacity}} {{productDto.unit}}</p>
                 </div>
                 <div class="product-field col-md-3">
-                    <div class="label-field roboto">Contract</div>
+                    <div class="label-field roboto">{{ t.pt('views.cart.contract') }}</div>
                     <p class="product-type">{{productDto.contract}}</p>
                 </div>
                 <div class="product-field col-md-4">
-                    <div class="label-field roboto">Point of Delivery</div>
+                    <div class="label-field roboto">{{ t.pt('views.cart.pod') }}</div>
                     <p class="product-type roboto-bold">{{productDto.pointDelivery}}</p>
                 </div>
                 <div class="product-field col-md-3">
-                    <div class="label-field roboto">Additional Services</div>
+                    <div class="label-field roboto">{{ t.pt('views.cart.aditional_services') }}</div>
                     <p class="product-type">Maneuvering</p>
                 </div>
                 <div class="product-field col-md-5">
-                    <div class="label-field roboto">Delivery Mode</div>
+                    <div class="label-field roboto">{{ t.pt('views.cart.delivery_mode') }}</div>
                     <p class="product-type">{{productDto.deliveryMode}}</p>
                 </div>
 
@@ -97,10 +97,10 @@
             </div>
             <div class="cart-item-container with-sepatator col-md-2">
                 <div class="amount-container">
-                    <div class="label-amount roboto">Unitary Price</div>
+                    <div class="label-amount roboto">{{ t.pt('views.cart.unitary_price') }}</div>
                     <p class="value-amount roboto-bold">{{productDto.unitaryPrice | currency : 'USD' : true}}</p>
                     <div class="spacer-16"></div>
-                    <div class="label-amount roboto">Material Value</div>
+                    <div class="label-amount roboto">{{ t.pt('views.cart.material_values') }}</div>
                     <div class="value-amount roboto-bold">{{productDto.unitaryPrice * productDto.quantity | currency : 'USD' : true}}</div>
                 </div>
             </div>
@@ -109,11 +109,11 @@
     </div>
 
     <div class="cart-group" *ngFor="let group  of _productGroups">
-        <h3 class="h3-group roboto-bold">Group {{group.id}}</h3>
+        <h3 class="h3-group roboto-bold">{{ t.pt('views.common.group') }} {{group.id}}</h3>
         <div class="row cart-items-container" *ngFor="let productDto of group.products">
             <div class="cart-item-container col-md-10 row">
                 <div class="product-field col-md-4">
-                    <div class="label-field roboto">Product Description</div>
+                    <div class="label-field roboto">{{ t.pt('views.cart.product_description') }}</div>
                     <p class="product-type roboto-bold">{{productDto.productDescription}}</p>
                 </div>
                 <div class="product-field col-md-2">
@@ -221,57 +221,57 @@
                 <p class="product-type roboto-bold">{{productDto.pointDelivery}}</p>
             </div>
             <div class="product-field col-md-4">
-                <div class="label-field roboto">Project profile</div>
+                <div class="label-field roboto">{{ t.pt('views.cart.project_profile') }}</div>
                 <p class="product-type">{{productDto.projectProfile.name}}</p>
             </div>
             <div class="product-field col-md-2">
-                <div class="label-field roboto">Discharge Time</div>
+                <div class="label-field roboto">{{ t.pt('views.cart.discharge_time') }}</div>
                 <p class="product-type">{{productDto.dischargeTime}}</p>
             </div>
             <div class="product-field col-md-2">
-                <div class="label-field roboto">Transport method</div>
+                <div class="label-field roboto">{{ t.pt('views.cart.transport_method') }}</div>
                 <p class="product-type">{{productDto.transportMethod}}</p>
             </div>
             <div class="product-field col-md-1">
-                <div class="label-field roboto">Unload type</div>
+                <div class="label-field roboto">{{ t.pt('views.cart.unload_type') }}</div>
                 <p class="product-type">{{productDto.unloadType}}</p>
             </div>
             <div class="col-md-7">
             </div>
             <div class="product-field col-md-2">
-                <div class="label-field roboto">Pump Capacity Min</div>
+                <div class="label-field roboto">{{ t.pt('views.cart.pump_capacity_min') }}</div>
                 <p class="product-type">{{productDto.pumpCapacityMin}}</p>
             </div>
             <div class="product-field col-md-2">
-                <div class="label-field roboto">Pump Capacity Max</div>
+                <div class="label-field roboto">{{ t.pt('views.cart.pump_capacity_max') }}</div>
                 <p class="product-type">{{productDto.pumpCapacityMax}}</p>
             </div>
             <div class="product-field col-md-1">
-                <div class="label-field roboto">Application</div>
+                <div class="label-field roboto">{{ t.pt('views.cart.application') }}</div>
                 <p class="product-type">{{productDto.projectProfile.aplication}}</p>
             </div>
             <div class="col-md-7">
             </div>
             <div class="product-field col-md-2">
-                <div class="label-field roboto">Load Size</div>
+                <div class="label-field roboto">{{ t.pt('views.cart.load_size') }}</div>
                 <p class="product-type">{{productDto.loadSize}}</p>
             </div>
             <div class="product-field col-md-3">
-                <div class="label-field roboto">Spacing</div>
+                <div class="label-field roboto">{{ t.pt('views.cart.spacing') }}</div>
                 <p class="product-type">{{productDto.spacing}}</p>
             </div>
             <div class="col-md-3">
             </div>
             <div class="product-field col-md-4">
-                <div class="label-field roboto">Additional Services</div>
+                <div class="label-field roboto">{{ t.pt('views.cart.aditional_services') }}</div>
                 <p class="product-type">Extra Hours, Sunday / Holiday Service, Pipeline</p>
             </div>
             <div class="product-field col-md-2">
-                <div class="label-field roboto">Delivery Mode</div>
+                <div class="label-field roboto">{{ t.pt('views.cart.delivery_mode') }}</div>
                 <p class="product-type">{{productDto.deliveryMode}}</p>
             </div>
             <div class="product-field col-md-3">
-                <div class="label-field roboto">Kicker</div>
+                <div class="label-field roboto">{{ t.pt('views.cart.kicker') }}</div>
                 <p class="product-type">{{productDto.kicker}}</p>
             </div>
 
@@ -293,17 +293,17 @@
         <div class="col-md-12">
             <div class="order-total float-right text-right">
                 <div class="row concepts-total">
-                    <h4 class="col-md-6">Subtotal:</h4>
+                    <h4 class="col-md-6">{{ t.pt('views.cart.subtotal') }}:</h4>
                     <p class="col-md-6 roboto-bold">${{ order?.items[0]?.totalPrice - order?.items[0]?.taxAmount }}</p>
                 </div>
                 <div class="row concepts-total">
-                    <h4 class="col-md-6">Taxes:</h4>
+                    <h4 class="col-md-6">{{ t.pt('views.cart.taxes') }}:</h4>
                     <p class="col-md-6 roboto-bold">${{ order?.items[0]?.taxAmount }}</p>
                 </div>
                 <div class="spacer-24"></div>
                 <div class="size-48 roboto-bold">{{ _products | sumGpoProduct | currency : 'USD' : true}}</div>
                 <button (click)="placeOrder()" class="button bright-green" [ngClass]="{disabled: disableCartBtn}" [disabled]="disableCartBtn">
-                    Order
+                    {{ t.pt('views.cart.order') }}
                 </button>
             </div>
         </div>

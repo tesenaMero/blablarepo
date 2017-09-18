@@ -7,6 +7,9 @@ import { DashboardService } from '../../shared/services/dashboard.service'
 import { CustomerService } from '../../shared/services/customer.service'
 import { LegalEntitiesApi } from '../../shared/services/api/legal-entities.service'
 
+import { TranslationService } from '../../shared/services/translation.service';
+
+
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.html',
@@ -20,15 +23,17 @@ export class DashboardComponent implements OnInit {
     };
 
     private customers: any[];
+    langSelected: string = 'en';
 
     constructor(
+        private t: TranslationService,
         private session: SessionService,
         private createOrderService: CreateOrderService,
         private router: Router,
         private shipmentLocationApi: ShipmentLocationApi,
         private dashboard: DashboardService,
         private legalEnitityApi: LegalEntitiesApi,
-        private customerService: CustomerService
+        private customerService: CustomerService,
     ) { }
 
     ngOnInit() {
@@ -40,7 +45,21 @@ export class DashboardComponent implements OnInit {
             this.customerService.setAvailableCustomers(legalEntities);
             this.customerService.setCustomer(legalEntities[0]);
         });
+        this.initLanguage();
     }
+
+    private initLanguage() {
+        this.langSelected = localStorage.getItem('Language') || 'en';
+        this.t.lang(this.langSelected);
+        localStorage.setItem('Language', this.langSelected);
+    }
+
+    private changeLanguage(lang: any) {
+        this.t.lang(lang);
+        this.langSelected = lang;
+        localStorage.setItem('Language', lang);
+        //this.eventDispatcher.broadcast(this.CHANGE_LANGUAGE, lang);
+      }
 
     private handleAlert(alert: any) {
         this.showAlert = false;

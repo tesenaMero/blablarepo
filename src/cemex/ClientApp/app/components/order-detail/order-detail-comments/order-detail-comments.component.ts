@@ -18,15 +18,15 @@ export class OrderDetailCommentsComponent {
         this.error = null;
         this.isLoading = true;
 
-        this.OrdersApi.getComments(orderItemId, 10, 1)
-        .map(response => response.json())
-        .subscribe(response => {
-            this.comments.next(response.comments);
-            this.isLoading = false;
-        }, err => {
-            this.isLoading = false;
-            this.error = "Failed fetching comments";
-        });
+        // this.OrdersApi.getComments(orderItemId, 10, 1)
+        // .map(response => response.json())
+        // .subscribe(response => {
+        //     this.comments.next(response.comments);
+        //     this.isLoading = false;
+        // }, err => {
+        //     this.isLoading = false;
+        //     this.error = "Failed fetching comments";
+        // });
     }
 
     constructor(private OrdersApi: OrdersApi) {

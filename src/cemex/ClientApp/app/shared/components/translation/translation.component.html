@@ -1,0 +1,9 @@
+<h2>Translation Tester</h2>
+
+<p>There are two ways for accessing translations</p>
+<p>{{ translations.get("views.signin.username") }}</p>
+<p>{{ t.pt("views.signin.username") }}</p>
+<p>{{ translate("views.signin.username") }}</p>
+
+<button (click)="changeLanguage('es')">Spanish</button>
+<button (click)="changeLanguage('en')">English</button>

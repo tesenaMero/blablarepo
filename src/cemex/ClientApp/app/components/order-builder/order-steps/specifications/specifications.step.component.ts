@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Inject, EventEmitter, Output } from '@angular
 import { ProductsApi, Api } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
+import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.service';
 
 @Component({
     selector: 'specifications-step',
@@ -28,10 +29,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return SpecificationsStepComponent.availableUnits;
     }
 
-    static availablePayments = [
-        { name: "Cash" },
-        { name: "Credit" }
-    ];
+    static availablePayments = [];
 
     get availablePayments() {
         return SpecificationsStepComponent.availablePayments;
@@ -64,7 +62,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return SpecificationsStepComponent.availablePlants;
     }
 
-    constructor( @Inject(Step) private step: Step, private api: ProductsApi, private manager: CreateOrderService) {
+    constructor( @Inject(Step) private step: Step, private api: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi) {
         this.step.setEventsListener(this);
         this.add(); // Push a pre product
     }
@@ -96,6 +94,39 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.productChanged(topProducts[0]);
 
             this.manager.setProducts(this.preProducts);
+        });
+        this.getPaymentTerms();
+    }
+
+    paymentTermChanged(term) {
+        this.selectedProduct.payment = term;
+    }
+    
+    getPaymentTerms() {
+        let paymentTermIds = '';
+        this.manager.salesArea.map((area: any) => {
+            paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
+        });
+        
+        this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
+            const terms = result.json().paymentTerms;
+            let uniqueTerms = [];
+
+            // find type Cache
+            const cachePayment = terms.find((term: any) => {
+                return term.paymentTermType.paymentTermTypeDesc === 'Cash';
+            });
+
+            // find type Credit
+            const creditPayment = terms.find((term: any) => {
+                return term.paymentTermType.paymentTermTypeDesc === 'Credit';
+            });
+
+
+            // push to terms array
+            cachePayment && uniqueTerms.push(cachePayment);
+            creditPayment && uniqueTerms.push(creditPayment);
+            SpecificationsStepComponent.availablePayments = terms;
         });
     }
 
@@ -147,7 +178,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
     remove(index: any) {
         let product = this.preProducts[index];
         product.deleting = true;
-        console.log(product);
         setTimeout(() => {
             this.preProducts.splice(index, 1);
         }, 400);
@@ -171,6 +201,7 @@ class PreProduct {
     product: any;
     plant: any;
     projectProfile: any;
+    paymentOption: any;
 
     constructor(private manager: CreateOrderService) {
         let _ = SpecificationsStepComponent;
@@ -180,6 +211,7 @@ class PreProduct {
         this.payment = _.availablePayments[0];
         if (_.availableProducts.length) { this.product = _.availableProducts[0]; }
         this.plant = _.availablePlants[0];
+        this.paymentOption = _.availablePayments[0];
         this.manager._productSelectedProduct.subscribe(product => {
             let filteredProducts = _.availableProducts.filter((availableProduct: any) => availableProduct.commercialCode === product.commercialCode);
             if(filteredProducts.length) {
