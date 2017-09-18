@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { ETypeProduct, CementPackageSpecification, CartProductGroup, ReadymixSpecification } from '../../models/index';
 import { DraftsService } from '../../shared/services/api/drafts.service';
 import { DashboardService } from '../../shared/services/dashboard.service';
+import { CreateOrderService } from '../../shared/services/create-order.service';
 import { WindowRef } from '../../shared/services/window-ref.service';
 import { TranslationService } from '../../shared/services/translation.service';
 import { DOCUMENT } from '@angular/platform-browser';
@@ -31,8 +32,9 @@ export class CartComponent implements OnInit {
         private dashboard: DashboardService, 
         private jsonObjService: EncodeDecodeJsonObjService, 
         private location: Location, 
-        private windowRef: WindowRef, @Inject(DOCUMENT) 
-        private document: any
+        private windowRef: WindowRef, 
+        @Inject(DOCUMENT) private document: any,
+        private orderManager: CreateOrderService
     ) { }
 
     ngOnInit() {
@@ -153,7 +155,11 @@ export class CartComponent implements OnInit {
     }
 
     placeOrder() {
-        console.log(sessionStorage.getItem('access_token'))
+        if(!Boolean(this.drafts._draftId)) {
+            alert('no draft order ID');
+            return;
+        }
+        const customer = JSON.parse(sessionStorage.getItem('currentCustomer'));
         const mock = {
             sourceApp: "order-taking",
             date: new Date().toISOString(),
@@ -165,9 +171,9 @@ export class CartComponent implements OnInit {
             data: [{
                 orderID: this.drafts._draftId,
                 companyCode: "7180",
-                customerCode: "0050163248",
-                jobSiteCode: "0065014102",
-                payerCode: "0065014102",
+                customerCode: customer.legalEntityTypeCode,
+                jobSiteCode: this.orderManager.jobsite.jobSiteCode || "",
+                payerCode: customer.legalEntityTypeCode,
                 orderAmount: 12.00,
                 documents: [
                 ]

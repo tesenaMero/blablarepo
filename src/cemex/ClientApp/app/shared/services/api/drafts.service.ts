@@ -23,6 +23,7 @@ export class DraftsService {
     }
 
     draftId(id) {
+        sessionStorage.setItem('draftId', id);
         this._draftId = id;
     }
 }
