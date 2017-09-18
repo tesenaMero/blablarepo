@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Inject, EventEmitter, Output } from '@angular
 import { ProductsApi, Api } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
+import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.service';
 
 @Component({
     selector: 'specifications-step',
@@ -64,7 +65,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return SpecificationsStepComponent.availablePlants;
     }
 
-    constructor( @Inject(Step) private step: Step, private api: ProductsApi, private manager: CreateOrderService) {
+    constructor( @Inject(Step) private step: Step, private api: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi) {
         this.step.setEventsListener(this);
         this.add(); // Push a pre product
     }
@@ -96,6 +97,17 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.productChanged(topProducts[0]);
 
             this.manager.setProducts(this.preProducts);
+        });
+        this.getPaymentTerms();
+    }
+    getPaymentTerms() {
+        let paymentTermIds = '';
+        this.manager.salesArea.map((area: any) => {
+            paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
+        });
+        
+        this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
+            console.log('result: ', result.json(), result);
         });
     }
 
