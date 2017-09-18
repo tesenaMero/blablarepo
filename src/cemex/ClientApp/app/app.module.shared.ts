@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 // Components
 import { AppComponent } from './components/app/app.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { LoginComponent }  from './shared/components/login/login.component';
+import { LoginComponent } from './shared/components/login/login.component';
 import { OrdersComponent } from './components/orders/orders.component';
 import { DraftsComponent } from './components/drafts/drafts.component';
 import { ProjectProfilesComponent } from './components/project-profiles/project-profiles.component';
@@ -20,12 +20,12 @@ import { OrderDetailComponent } from './components/order-detail/order-detail.com
 import { CartComponent } from './components/cart/cart.component';
 import { OrderBuilderComponent } from './components/order-builder/order-builder.component';
 import { SummaryStepComponent } from './components/order-builder/order-steps/summary/summary.step.component';
-import { 
-    LocationStepComponent, 
-    ProductSelectionStepComponent, 
-    SpecificationsStepComponent, 
+import {
+    LocationStepComponent,
+    ProductSelectionStepComponent,
+    SpecificationsStepComponent,
     ModeStepComponent,
-}  from './components/order-builder/order-steps';
+} from './components/order-builder/order-steps';
 import { SearchProductComponent } from './components/search-product/search-product.component';
 import { OrderDetailCommentsComponent } from './components/order-detail/order-detail-comments/order-detail-comments.component';
 import { OrderDetailLogsComponent } from './components/order-detail/order-detail-logs/order-detail-logs.component';
@@ -34,8 +34,8 @@ import { CrossProductComponent } from './components/cross-product/crossProduct.c
 
 // Pipes
 import {
-    NoSpacePipe, 
-    ZeroPadPipe, 
+    NoSpacePipe,
+    ZeroPadPipe,
     SumGroupProductPipe,
     DatePipe
 } from './pipes'
@@ -62,9 +62,9 @@ import { CustomerService } from './shared/services/customer.service';
 import { Broadcaster } from './shared/types/Broadcaster';
 import { TranslationService } from './shared/services/translation.service';
 
-import { 
-    Api, 
-    ProductLineApi, 
+import {
+    Api,
+    ProductLineApi,
     ShipmentLocationApi,
     OrdersApi,
     LoginApi,
@@ -86,6 +86,10 @@ import {
 } from './shared/services/api';
 
 import { EncodeDecodeJsonObjService } from './shared/services/encodeDecodeJsonObj.service';
+
+import { CmxSharedModule } from '@cemex/cmx-shared-v1/dist'
+import { CmxCoreCommonModule } from '@cemex-core/angular-services-v2/dist';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
@@ -137,12 +141,16 @@ export const sharedConfig: NgModule = {
     imports: [
         NguiDatetimePickerModule,
         SelectDropdownModule,
+        FlexLayoutModule,
+        CmxCoreCommonModule,
+        CmxSharedModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full' },
             { path: 'login', component: LoginComponent },
-            { path: 'app', component: DashboardComponent, canActivate: [AuthGuard], children: [
+            {
+                path: 'app', component: DashboardComponent, canActivate: [AuthGuard], children: [
                     { path: '', redirectTo: 'orders', pathMatch: 'full' },
-                    { path: 'orders', component: OrdersComponent },		    
+                    { path: 'orders', component: OrdersComponent },
                     { path: 'new', component: NewOrderComponent },
                     { path: 'cart', component: CartComponent },
                     { path: 'new-project', component: NewProjectProfile },

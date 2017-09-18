@@ -1,5 +1,10 @@
 @{
     ViewData["Title"] = "Home Page";
+    ViewData["API_HOST"] = Environment.GetEnvironmentVariable("API_HOST");
+    ViewData["API_ORG"] = Environment.GetEnvironmentVariable("API_ORG");
+    ViewData["API_ENV"] = Environment.GetEnvironmentVariable("API_ENV");
+    ViewData["APP_CODE"] = Environment.GetEnvironmentVariable("APP_CODE");
+    ViewData["CLIENT_ID"] = Environment.GetEnvironmentVariable("CLIENT_ID");
 }
 
 <!-- <app asp-prerender-module="ClientApp/dist/main-server">Loading...</app> -->
@@ -19,5 +24,12 @@
 <script src="~/dist/bootstrap.bundle.js" asp-append-version="true"></script>
 <script src="~/dist/dls/dls.bundle.js" asp-append-version="true"></script>
 @section scripts {
+    <script>
+        window.API_HOST = '@ViewData["API_HOST"]';
+        window.API_ORG = '@ViewData["API_ORG"]';
+        window.API_ENV = '@ViewData["API_ENV"]';
+        window.APP_CODE = '@ViewData["APP_CODE"]';
+        window.CLIENT_ID = '@ViewData["CLIENT_ID"]';
+    </script>
     <script src="~/dist/main-client.js" asp-append-version="true"></script>
 }
