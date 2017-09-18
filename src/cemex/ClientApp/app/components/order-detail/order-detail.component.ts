@@ -116,4 +116,10 @@ export class OrderDetailComponent {
             // console.log(this.streetPOD);
         });
     }
+    // isEmptyObject(myobject, field){
+    //     if (`myobject.${field}` === undefined) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
 }

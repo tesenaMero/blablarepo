@@ -59,17 +59,18 @@
         <div class="row">
             <div class="col-md-12 info">
                 <span class="value status" [ngClass]="{
-                    canceled: orderDetailData.status.statusDesc == 'Canceled - Hdr',
-                    confirmed: orderDetailData.status.statusCode == 'CONF',
-                    draft: orderDetailData.status.statusDesc == 'Draft - Hdr',
-                    draft: orderDetailData.status.statusCode == 'DRFT',
-                    pending: orderDetailData.status.statusCode == 'INPC',
-                    pending: orderDetailData.status.statusDesc == 'Pending',
-                    blocked: orderDetailData.status.statusCode == 'BLCK',
-                    holded: orderDetailData.status.statusDesc == 'Holded - Hdr',
-                    processed: orderDetailData.status.statusDesc == 'In process - Hdr',
-                    completed: orderDetailData.status.statusCode == 'CMPO',
-                    completed: orderDetailData.status.statusDesc == 'Completed'
+                    canceled:   orderDetailData.status.statusDesc == 'Canceled - Hdr',
+                    confirmed:  orderDetailData.status.statusCode == 'CONF',
+                    draft:      orderDetailData.status.statusDesc == 'Draft - Hdr',
+                    draft:      orderDetailData.status.statusCode == 'DRFT',
+                    pending:    orderDetailData.status.statusCode == 'INPC',
+                    pending:    orderDetailData.status.statusDesc == 'Pending',
+                    blocked:    orderDetailData.status.statusCode == 'BLCK',
+                    holded:     orderDetailData.status.statusDesc == 'Holded - Hdr',
+                    processed:  orderDetailData.status.statusDesc == 'In process - Hdr',
+                    completed:  orderDetailData.status.statusCode == 'CMPO',
+                    completed:  orderDetailData.status.statusDesc == 'Completed',
+                    complete:   orderDetailData.status.statusDesc == 'Complete'
                 }">{{orderDetailData.status.statusDesc}}</span>
             </div>
         </div>
@@ -154,130 +155,130 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-xs-6">
+                                <div class="col-md-6 col-xs-6" *ngIf="itemData.agreementItem">
                                     <div class="group">
                                         <div class="title">
                                             Contract
                                         </div>
-                                        <div class="value" *ngIf="itemData.agreementItem">
+                                        <div class="value">
                                             {{itemData.agreementItem.agreementItemCode}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-3 col-xs-6">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.dischargeTime">
                                     <div class="group">
                                         <div class="title">
                                             Discharge Time
                                         </div>
-                                        <div class="value" *ngIf="itemData.orderItemProfile.dischargeTime">
+                                        <div class="value">
                                             {{itemData.orderItemProfile.dischargeTime.timePerDischargeDesc}}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-xs-6">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.transportMethod">
                                     <div class="group">
                                         <div class="title">
                                             Transport Method
                                         </div>
-                                        <div class="value" *ngIf="itemData.transportMethod">
+                                        <div class="value">
                                             {{itemData.transportMethod.transportMethodDesc}}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-xs-6">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.unloadType">
                                     <div class="group">
                                         <div class="title">
                                             Unload Type
                                         </div>
-                                        <div class="value" *ngIf="itemData.unloadType">
+                                        <div class="value">
                                             {{itemData.unloadType.unloadTypeDesc}}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-xs-6">
+                                <div class="col-md-3 col-xs-6" *ngIf="orderDetailData.shippingCondition">
                                     <div class="group">
                                         <div class="title">
                                             Delivery mode
                                         </div>
-                                        <div class="value" *ngIf="orderDetailData.shippingCondition">                                            
+                                        <div class="value">                                            
                                             {{orderDetailData.shippingCondition.shippingConditionDesc}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">                                        
-                                <div class="col-md-3 col-xs-6">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.pumpCapacity">
                                     <div class="group">
                                         <div class="title">
                                             Pump Capacity Min
                                         </div>
-                                        <div class="value" *ngIf="itemData.orderItemProfile.pumpCapacity">
+                                        <div class="value">
                                             {{itemData.orderItemProfile.pumpCapacity.pumpCapacityDesc}}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-xs-6">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.timePerLoad">
                                     <div class="group">
                                         <div class="title">
                                             Pump Frequency Max
                                         </div>
-                                        <div class="value" *ngIf="itemData.orderItemProfile.timePerLoad">
+                                        <div class="value">
                                             {{itemData.orderItemProfile.timePerLoad.timePerLoadDesc.timePerLoadDesc}}**
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-xs-6">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.element">
                                     <div class="group">
                                         <div class="title">
                                             Application
                                         </div>
-                                        <div class="value" *ngIf="itemData.orderItemProfile.element">
+                                        <div class="value">
                                             {{itemData.orderItemProfile.element.elementDesc}}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-xs-6">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.kicker">
                                     <div class="group">
                                         <div class="title">
                                             Kicker
                                         </div>
-                                        <div class="value" *ngIf="itemData.orderItemProfile.kicker">                                            
+                                        <div class="value">                                            
                                             {{itemData.orderItemProfile.kicker}}
                                         </div>
                                     </div>
                                 </div>   
                             </div>         
                             <div class="row">  
-                                <div class="col-md-3 col-xs-6">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.loadSize">
                                     <div class="group">
                                         <div class="title">
                                             Load Size
                                         </div>
-                                        <div class="value" *ngIf="itemData.orderItemProfile.loadSize">  
+                                        <div class="value">  
                                             {{itemData.orderItemProfile.loadSize.loadSizeDesc}}
                                         </div>
                                     </div>
                                 </div>  
-                                <div class="col-md-3 col-xs-6">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.timePerLoad">
                                     <div class="group">
                                         <div class="title">
                                             Spacing
                                         </div>
-                                        <div class="value" *ngIf="itemData.orderItemProfile.timePerLoad">
+                                        <div class="value">
                                             {{itemData.orderItemProfile.timePerLoad.timePerLoadDesc.timePerLoadDesc}}
                                         </div>
                                     </div>
                                 </div>        
                             </div>   
                             <div class="row">
-                                <div class="col-sm-8">
+                                <div class="col-sm-8" *ngIf="itemData.orderItemProfile.additionalServices">
                                     <div class="group">
                                         <div class="title">
                                             Additional services
                                         </div>
-                                        <div class="value" *ngIf="itemData.orderItemProfile.additionalServices">
+                                        <div class="value">
                                             {{itemData.orderItemProfile.additionalServices.additionalServiceDesc}}
                                         </div>
                                     </div>

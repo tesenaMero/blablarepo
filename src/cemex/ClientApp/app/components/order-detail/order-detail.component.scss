@@ -61,6 +61,7 @@
     background-color: #FFFFFF;
     min-height: 145px;
     padding: 31px 29px;
+    border-bottom: 2px dotted #D6D6D6;
     .group {
         .title {
             color: #9DA4AD;
@@ -111,7 +112,8 @@
                 margin-right: 4px;
                 border-radius: 2px;
             }
-            &.confirmed:before {
+            &.confirmed:before,
+            &.complete:before {
                 background: #77cb38;
             }
             &.canceled:before {
