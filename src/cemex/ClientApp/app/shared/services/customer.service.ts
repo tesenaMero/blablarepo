@@ -9,6 +9,7 @@ export class CustomerService {
     constructor() {}
 
     setCustomer(entity: any) {
+        sessionStorage.setItem('currentCustomer', JSON.stringify(entity));
         this.customerSubject.next(entity);
     }
 

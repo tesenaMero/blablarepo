@@ -49,6 +49,11 @@ export class OrderBuilderComponent {
             this.stepper.uncomplete();
     }
 
+    locationStepRequestedNext(event: any) {
+        this.stepper.complete();
+        this.stepper.next(true);
+    }
+
     productStepCompleted(product: any) {
         this.isReadyMix = product.productLineId == this.READYMIX_ID;
         this._changeDetector.detectChanges();
@@ -63,7 +68,6 @@ export class OrderBuilderComponent {
             console.log('drafts.add -> ', res);
             this.drafts.draftId(res.id);
             this.dashboard.alertSuccess("Draft saved!");
-            this.router.navigate(['/app/cart']);
         });
     }
 

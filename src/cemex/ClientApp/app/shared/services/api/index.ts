@@ -14,6 +14,7 @@ import { DraftsService } from './drafts.service';
 import { CatalogApi } from './catalog.service';
 import { ProductColorApi } from './product-colors.service';
 import { PlantApi } from './plants.service';
+import { PurchaseOrderApi } from './pruchase-order.service'
 import { PaymentTermsApi } from './payment-terms.service';
 import { PingSalesOrderApi } from './ping-sales-order.service';
 
@@ -36,4 +37,5 @@ export {
     PlantApi,
     PaymentTermsApi,
     PingSalesOrderApi,
+    PurchaseOrderApi,
 }

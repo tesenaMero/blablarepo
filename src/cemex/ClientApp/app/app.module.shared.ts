@@ -79,6 +79,7 @@ import {
     CatalogApi,
     ProductColorApi,
     PlantApi,
+    PurchaseOrderApi,
     PaymentTermsApi,
     PingSalesOrderApi,
 } from './shared/services/api';
@@ -185,5 +186,6 @@ export const sharedConfig: NgModule = {
         ProductColorApi,
         PlantApi,
         PingSalesOrderApi,
+        PurchaseOrderApi,
     ]
 };
