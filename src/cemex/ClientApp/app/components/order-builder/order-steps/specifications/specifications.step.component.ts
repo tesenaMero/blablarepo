@@ -163,7 +163,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.loadings.catalog = true;
         this.CatalogApi.byProductLine('354', '0006').subscribe((res: any) => {
             this.loadings.catalog = false;
-            res.catalogs && res.catalogs.forEach((catalog) => {
+            res.json().catalogs && res.json().catalogs.forEach((catalog) => {
                 this.catalogs[catalog.catalogCode] = catalog.entries;
             });
         });
@@ -243,8 +243,8 @@ class PreProduct {
     contract: any;
     product: any;
     plant: any;
-    projectProfile: any;
     paymentOption: any;
+    projectProfile: any = {};
 
     constructor() {
         let _ = SpecificationsStepComponent;
