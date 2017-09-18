@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { SessionService } from '../../shared/services/session.service';
 import { Router } from '@angular/router';
-import { ShipmentLocationApi } from '../../shared/services/api/shipment-locations.service.api';
 import { CreateOrderService } from '../../shared/services/create-order.service';
 import { DashboardService } from '../../shared/services/dashboard.service'
 import { CustomerService } from '../../shared/services/customer.service'
-import { LegalEntitiesApi } from '../../shared/services/api/legal-entities.service'
+import { LegalEntitiesApi, SalesDocumentApi, ShipmentLocationApi } from '../../shared/services/api';
 
 import { TranslationService } from '../../shared/services/translation.service';
 
@@ -34,17 +33,24 @@ export class DashboardComponent implements OnInit {
         private dashboard: DashboardService,
         private legalEnitityApi: LegalEntitiesApi,
         private customerService: CustomerService,
+        private salesDocumentService: SalesDocumentApi
     ) { }
 
     ngOnInit() {
         this.createOrderService.fetchShipmentLocation();
         this.dashboard.alertSubject.subscribe((alert) => this.handleAlert(alert));
+        
         this.legalEnitityApi.all().subscribe((response) => {
             let legalEntities = response.json().legalEntities
             this.customers = legalEntities;
             this.customerService.setAvailableCustomers(legalEntities);
             this.customerService.setCustomer(legalEntities[0]);
         });
+
+        this.salesDocumentService.all().subscribe((response) => {
+            console.log(response.json());
+        });
+
         this.initLanguage();
     }
 
@@ -68,7 +74,7 @@ export class DashboardComponent implements OnInit {
         this.showAlert = true;
         setTimeout(() => {
             this.showAlert = false;
-        }, 6000);
+        }, 8000);
     }
 
     private closeAlert() {
