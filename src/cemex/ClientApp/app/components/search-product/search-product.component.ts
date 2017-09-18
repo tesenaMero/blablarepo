@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ProductsApi } from '../../shared/services/api'
+// import { SpecificationsStepListener } from '../order-builder/order-steps/specifications/specifications.step.component'
 
 @Component({
     selector: 'search-product',
@@ -7,7 +8,7 @@ import { ProductsApi } from '../../shared/services/api'
     styleUrls: ['./search-product.scss']
 })
 
-export class SearchProductComponent {
+export class SearchProductComponent /*implements somthing*/ {
     @Output() canceled = new EventEmitter<any>();
     @Output() confirmed = new EventEmitter<any>();
 
@@ -16,7 +17,7 @@ export class SearchProductComponent {
             //console.log(result.json());
         });
     }
-
+    
     confirm() {
         this.confirmed.emit();
     }
