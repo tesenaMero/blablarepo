@@ -68,7 +68,6 @@ export class OrderBuilderComponent {
             console.log('drafts.add -> ', res);
             this.drafts.draftId(res.id);
             this.dashboard.alertSuccess("Draft saved!");
-            this.router.navigate(['/app/cart']);
         });
     }
 
