@@ -16,6 +16,7 @@
     "views.common.request_order"            : "Request order",
     "views.common.project_profiles"         : "Project profiles",
     "views.common.select"                   : "Select",
+    "views.common.ping_unsuccessful"        : "Bd unavailable",
 
     "views.cart.title"                      : "Shopping cart",
     "views.cart.product_description"        : "Product Description",
