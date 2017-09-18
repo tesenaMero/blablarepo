@@ -46,7 +46,6 @@ export class NavigationComponent {
     }
 
     customerChanged(customer: any) {
-        console.log("this.customer", this.customer)
         this.customerChange.emit(this.customer);
     }
 }

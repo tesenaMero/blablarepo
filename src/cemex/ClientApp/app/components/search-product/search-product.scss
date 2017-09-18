@@ -127,6 +127,30 @@ label {
     line-height: 16px;
 }
 
+div.select-label {
+    align-self: flex-start;
+    align-items: center;
+    height: 48px;
+    display: flex;
+    @include media-breakpoint-down(sm) {
+        height: auto;
+    }
+}
+
+.select-label {
+    color: #001C3B;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: left;
+    margin-bottom: 0;
+    @include media-breakpoint-down(sm) {
+        margin-bottom: .25rem;
+        &:not(:first-child) {
+            margin-top: 26px;
+        }
+    }
+}
+
 .lh-19 {
     line-height: 19px !important;
 }
@@ -144,3 +168,18 @@ label {
         margin-top: 26px;
     }
 }
+
+.active {
+    background-color: #3fa9f5;
+    color: #FFFFFF;
+}
+
+select {
+    border: 1px solid transparent;
+     &.ng-pristine{
+       color: darken($white, 50%);
+    }
+    padding: 5px;
+}
+
+   

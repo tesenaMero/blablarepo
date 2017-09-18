@@ -11,41 +11,27 @@
         <div class="row">
             <div class="col-sm-6">
                 <label for="ps-product-type" class="">Product Type</label>
-                <select name="ps-product-type" id="ps-product-type" class="form-control">
-                    <option value="" selected disabled hidden></option>
-                    <option value="1">Riderback Eastern River Valley</option>
-                    <option value="2">Monterrey, Nuevo Leon</option>
-                    <option value="3">Tokyo Shibuya</option>
+                <select [(ngModel)]="productColorSelected" (change)="productColorChanged($event.target.value)" name="ps-product-type" id="ps-product-type" class="form-control">
+                    <option [value]="productColorSelected" disabled selected hidden>Select a Product Type</option>
+                    <option *ngFor="let productColor of productColors" [ngValue]="productColor.productColorId">{{productColor.productColorDesc}}</option>
                 </select>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6" *ngIf="orderManager?.shippingCondition?.shippingConditionId == 2">
                 <label for="ps-plant" class="">Plant</label>
-                <select name="ps-plant" id="ps-plant" class="form-control">
-                    <option value="" selected disabled hidden></option>
-                    <option value="1">Riderback Eastern River Valley</option>
-                    <option value="2">Monterrey, Nuevo Leon</option>
-                    <option value="3">Tokyo Shibuya</option>
+                <select [(ngModel)]="plantSelected" (change)="plantChanged($event.target.value)" name="ps-plant" id="ps-plant" class="form-control">
+                    <option [value]="plantSelected" disabled selected hidden>Select a Plant</option>
+                    <option *ngFor="let plant of plants" [ngValue]="plant.plantId">{{plant.plantDesc}}</option>
                 </select>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
-                <label for="ps-pcode" class="">Product Code</label>
-                <select name="ps-pcode" id="ps-pcode" class="form-control">
-                    <option value="" selected disabled hidden></option>
-                    <option value="1">Riderback Eastern River Valley</option>
-                    <option value="2">Monterrey, Nuevo Leon</option>
-                    <option value="3">Tokyo Shibuya</option>
-                </select>
+                <label for="product-code" class="">Product Code</label>
+                <input type="text" [(ngModel)]="productCodeInput" class="form-control dls required " (keyup)="filterProductByProductCode($event)" id="product-code" placeholder="Filter by Product Code" name="product-code" />
             </div>
             <div class="col-sm-6">
-                <label for="ps-description" class="">Product Description</label>
-                <select name="ps-description" id="ps-description" class="form-control">
-                    <option value="" selected disabled hidden></option>
-                    <option value="1">Riderback Eastern River Valley</option>
-                    <option value="2">Monterrey, Nuevo Leon</option>
-                    <option value="3">Tokyo Shibuya</option>
-                </select>
+                <label for="product-description" class="">Product Description</label>
+                <input type="text" [(ngModel)]="productDescriptionInput" class="form-control dls required " (keyup)="filterProductByProductDescription($event)" id="product-description" placeholder="Filter by Product Description" name="product-description" />
             </div>
         </div>
         <hr class="separator" />
@@ -56,36 +42,9 @@
             <div class="col-sm-12">
                 <div class="modal-scrolling-content">
                     <ul class="product-list">
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
-                        <li>100000045 - CPO40</li>
+                        <li class="product-list-item" [ngClass]="{'active': selectedProduct == product}" (click)="productSelected(product)" (dblclick)="productSelectedAndConfirm(product)" *ngFor="let product of filteredProducts">
+                            {{product.commercialCode}} - {{product.commercialDesc}}
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -94,7 +53,7 @@
     <div class="row actions text-right">
         <div class="col">
             <button (click)="cancel()" data-dismiss="modal" class="button-ghost mb-2">Cancel</button>
-            <button (click)="confirm()" data-dismiss="modal" class="button bright-green">Select</button>
+            <button (click)="confirm()" data-dismiss="modal" class="button bright-green" #confirmSelection>Select</button>
         </div>
     </div>
 </div>

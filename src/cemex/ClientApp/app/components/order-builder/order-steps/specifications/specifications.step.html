@@ -13,11 +13,11 @@
                         <div class="input product-selection dropdown" [ngClass]="{ disabled: loadings.products }">
                             <span class="selection">
                                 {{ product.product?.commercialDesc }}
-                                <select *ngIf="availableProducts.lenght" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged($event)" class="input behind">
+                                <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged($event)" class="input behind">
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc  }}</option>
                                 </select>
                             </span>
-                            <span class="action" data-toggle="modal" data-target="#search-product">Change</span>
+                            <span class="action" data-toggle="modal" data-target="#search-product" (click)="initializeProductSearch()">Change</span>
                         </div>
                     </div>
                 </div>

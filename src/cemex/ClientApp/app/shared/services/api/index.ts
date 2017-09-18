@@ -12,6 +12,8 @@ import { ShippingConditionApi } from './shipping-condition.service';
 import { LegalEntitiesApi } from './legal-entities.service';
 import { DraftsService } from './drafts.service';
 import { CatalogApi } from './catalog.service';
+import { ProductColorApi } from './product-colors.service';
+import { PlantApi } from './plants.service';
 
 export {
     ShipmentLocationApi,
@@ -27,5 +29,7 @@ export {
     LegalEntitiesApi,
     ShippingConditionApi,
     DraftsService,
-    CatalogApi
+    CatalogApi,
+    ProductColorApi,
+    PlantApi
 }
