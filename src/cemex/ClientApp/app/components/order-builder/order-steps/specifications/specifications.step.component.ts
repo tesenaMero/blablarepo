@@ -170,7 +170,12 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     projectProfileChange(projectProfile) {
-        console.log('project profile change', projectProfile);
+        // TODO use index &&  _.pick
+        this.preProducts[0].projectProfile = projectProfile.project.projectProperties;
+    }
+
+    onChangeDischargeTime(dischargeTimeId) {
+        console.log('on change discharge time', dischargeTimeId);
     }
 
     getUnits(product) {

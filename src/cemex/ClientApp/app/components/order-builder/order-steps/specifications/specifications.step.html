@@ -452,7 +452,8 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            <select [(ngModel)]="product.projectProfile.dischargeTime" class="input behind">
+                            {{product.projectProfile.dischargeTime?.timePerDischargeDesc}}
+                            <select (change)="onChangeDischargeTime($event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.DCT" [value]="entry.entryId">{{entry.entryDesc}}</option>
                             </select>
@@ -466,8 +467,10 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            <select [(ngModel)]="product.unit" class="input behind">
-                                <option value="42" selected>Truck</option>
+                            {{product.projectProfile.transportMethod?.transportMethodDesc}}
+                            <select class="input behind">
+                                <option value="" selected disabled hidden></option>
+                                <option *ngFor="let entry of catalogs.TPM" [value]="entry.entryId">{{entry.entryDesc}}</option>
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -479,7 +482,8 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            <select [(ngModel)]="product.unit" class="input behind">
+                            {{product.projectProfile.unloadType?.unloadTypeDesc}}
+                            <select class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.ULT;" [value]="entry.entryId">{{entry.entryDesc}}</option>
                             </select>
@@ -493,7 +497,8 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            <select [(ngModel)]="product.unit" class="input behind">
+                            {{product.projectProfile.pumpCapacity?.pumpCapacityDesc}}
+                            <select class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.PCC" [value]="entry.entryId">{{entry.entryDesc}}</option>
                             </select>
@@ -533,7 +538,8 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            <select [(ngModel)]="product.unit" class="input behind">
+                            {{product.projectProfile.element?.elementDesc}}
+                            <select class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.ELM" [value]="entry.entryId">{{entry.entryDesc}}</option>
                             </select>
@@ -547,8 +553,8 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            
-                            <select [(ngModel)]="product.unit" class="input behind">
+                            {{product.projectProfile.loadSize?.loadSizeDesc}}
+                            <select class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.LSC" [value]="entry.entryId">{{entry.entryDesc}}</option>
                             </select>
@@ -562,10 +568,10 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            
-                            <select [(ngModel)]="product.unit" class="input behind">
+                            {{product.projectProfile.timePerLoad?.timePerLoadDesc}}
+                            <select class="input behind">
                                 <option value="" selected disabled hidden></option>
-                                <option *ngFor="let entry of catalogs.DCT" [value]="entry.entryId">{{entry.entryDesc}}</option>
+                                <option *ngFor="let entry of catalogs.TPL" [value]="entry.entryId">{{entry.entryDesc}}</option>
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
