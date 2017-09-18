@@ -3,6 +3,7 @@ import { ProductsApi, Api } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.service';
+import { ProjectProfileApi } from '../../../../shared/services/api';
 
 @Component({
     selector: 'specifications-step',
@@ -16,7 +17,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
     private preProducts = [];
     private loadings = {
         products: true,
-        contracts: true
+        contracts: true,
+        projectProfiles: true,
     }
     private selectedProduct: any;
     initializeProductSearch() {
@@ -62,7 +64,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return SpecificationsStepComponent.availablePlants;
     }
 
-    constructor( @Inject(Step) private step: Step, private api: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi) {
+    static projectProfiles = [];
+
+    get projectProfiles() {
+        return SpecificationsStepComponent.projectProfiles;
+    }
+
+    constructor( @Inject(Step) private step: Step, private api: ProductsApi, private manager: CreateOrderService, private ProjectProfileApi: ProjectProfileApi, private paymentTermsApi: PaymentTermsApi) {
         this.step.setEventsListener(this);
         this.add(); // Push a pre product
     }
@@ -96,6 +104,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.manager.setProducts(this.preProducts);
         });
         this.getPaymentTerms();
+        this.getProjectProfiles();
+        
     }
 
     paymentTermChanged(term) {
@@ -128,6 +138,21 @@ export class SpecificationsStepComponent implements StepEventsListener {
             creditPayment && uniqueTerms.push(creditPayment);
             SpecificationsStepComponent.availablePayments = terms;
         });
+    }
+
+    getProjectProfiles() {
+        this.loadings.projectProfiles = true;
+        this.ProjectProfileApi.all('354').subscribe((response) => {
+            this.loadings.projectProfiles = false;
+            const profiles = response.json().profiles;
+            if (profiles) {
+                SpecificationsStepComponent.projectProfiles = profiles;
+            }
+        });
+    }
+
+    projectProfileChange(projectProfile) {
+        console.log('project profile change', projectProfile);
     }
 
     getUnits(product) {

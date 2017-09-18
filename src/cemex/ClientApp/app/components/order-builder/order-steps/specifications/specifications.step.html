@@ -436,9 +436,8 @@
                         <div class="input flex-space-between dropdown">
                             <span>
                                 Select project profile to prefill specifications
-                                <select [(ngModel)]="product.payment" class="input behind">
-                                    <option>Project profile 1</option>
-                                    <option>Project profile 2</option>
+                                <select [(ngModel)]="product.projectProfile" (ngModelChange)="projectProfileChange($event)" class="input behind">
+                                    <option *ngFor="let project of projectProfiles" [ngValue]="project">{{project.profileName}}</option>
                                 </select>
                                 </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -453,7 +452,7 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            <select [(ngModel)]="product.unit" class="input behind">
+                            <select [(ngModel)]="product.projectProfile.project.projectProperties.dischargeTime" class="input behind">
                                 <option *ngFor="let unit of availableUnits" [ngValue]="unit">{{ unit.name  }}</option>
                             </select>
                         </span>
