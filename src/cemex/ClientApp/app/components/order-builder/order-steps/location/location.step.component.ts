@@ -131,7 +131,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         for (let key in this.validations) {
             if (this.validations[key].mandatory) {
                 if (!this.validations[key].valid) {
-                    console.log(key, this.validations[key]);
                     this.validations[key].showError = true;
                     advance = false;
                 }
@@ -232,6 +231,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         }
         else {
             this.validations.jobsite.valid = true;
+            this.validations.jobsite.showError = true;
         }
 
         // Set loading state

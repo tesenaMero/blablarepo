@@ -3,7 +3,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class CustomerService {
-    customerSubject = new BehaviorSubject<any>({});
+    customerSubject = new BehaviorSubject<any>(undefined);
     availableCustomers = [];
 
     constructor() {}

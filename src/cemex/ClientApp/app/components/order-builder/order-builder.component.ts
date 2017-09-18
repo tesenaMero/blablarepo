@@ -1,9 +1,10 @@
-import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef, NgZone } from '@angular/core';
 import { Router } from '@angular/router'
 import { StepperComponent } from '../../shared/components/stepper/';
 import { DeliveryMode } from '../../models/delivery.model';
 import { DashboardService } from '../../shared/services/dashboard.service'
 import { DraftsService } from '../../shared/services/api/drafts.service'
+import { CustomerService } from '../../shared/services/customer.service'
 
 @Component({
     selector: 'order-builder',
@@ -14,8 +15,28 @@ export class OrderBuilderComponent {
     @ViewChild(StepperComponent) stepper;
     private READYMIX_ID = 6;
     private isReadyMix: boolean = false;
+    private rebuildOrder = false;
 
-    constructor(private _changeDetector: ChangeDetectorRef, private router: Router, private dashboard: DashboardService, private drafts: DraftsService) { }
+    constructor(
+        private _changeDetector: ChangeDetectorRef,
+        private router: Router,
+        private dashboard: DashboardService,
+        private drafts: DraftsService,
+        private customerService: CustomerService,
+        private zone: NgZone) {
+        this.rebuildOrder = false;
+        this.customerService.customerSubject.subscribe((customer) => {
+            if (customer) {
+                this.rebuild();
+            }
+        });
+    }
+
+    rebuild() {
+        // Add instruction to event queue
+        setTimeout(() => { this.rebuildOrder = false; }, 0);
+        setTimeout(() => { this.rebuildOrder = true; }, 0);
+    }
 
     modeStepCompleted(mode: DeliveryMode) {
         this.stepper.complete();

@@ -36,7 +36,7 @@ export class StepperComponent implements AfterContentInit {
     currentStep: any;
     constructor() {
         this.overlay = false;
-     }
+    }
 
     // Content children are set
     ngAfterContentInit() {
@@ -96,7 +96,7 @@ export class StepperComponent implements AfterContentInit {
         this.onFinish.emit(result);
     }
 
-    changeShowOverlay(){
+    changeShowOverlay() {
         this.overlay = !this.overlay;
     }
 
