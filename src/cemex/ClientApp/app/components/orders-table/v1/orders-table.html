@@ -1,10 +1,10 @@
 <!-- Responsive table starts here -->
 <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
 <div *ngIf="isLoading">
-    <p>Loading...</p>
+    <p>{{ t.pt('views.common.loading') }}...</p>
 </div>
 <div *ngIf="!isLoading && orders?.length == 0">
-    <p>No orders found</p>
+    <p>{{ t.pt('views.common.no_orders') }}</p>
 </div>
 <div class="orders" *ngIf="!isLoading && orders?.length > 0">
     <div class="table-responsive-vertical shadow-z-1">
@@ -14,27 +14,27 @@
                 <tr>
                     <th width="4%"></th>
                     <th width="15%">
-                        Submitted
+                        {{ t.pt('views.table.submitted') }}
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
                     <th width="20%">
-                        Submitted by
+                        {{ t.pt('views.table.submitted_by') }}
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
                     <th width="10%">
-                        Items
+                        {{ t.pt('views.table.items') }}
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
                     <th width="10%">
-                        Products
+                        {{ t.pt('views.table.products') }}
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
                     <th width="20%">
-                        Status
+                        {{ t.pt('views.table.status') }}
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
                     <th width="15%">
-                        Total amount
+                        {{ t.pt('views.table.total') }}
                         <svg class="control"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use></svg>
                     </th>
                     <th width="7%">
@@ -69,13 +69,13 @@
                                 <div class="content">
                                     <table class="table table-fixed details-table">
                                         <thead>
-                                            <th width="15%">Order Number</th>
-                                            <th width="15%">Location</th>
-                                            <th width="10%">Product</th>
-                                            <th width="10%">Amount</th>
-                                            <th width="25%">Delivery date</th>
-                                            <th width="10%">Payment</th>
-                                            <th width="10%">Payment</th>
+                                            <th width="15%">{{ t.pt('views.table.order_no') }}</th>
+                                            <th width="15%">{{ t.pt('views.table.location') }}</th>
+                                            <th width="10%">{{ t.pt('views.table.products') }}</th>
+                                            <th width="10%">{{ t.pt('views.table.amount') }}</th>
+                                            <th width="25%">{{ t.pt('views.table.delivery_date') }}</th>
+                                            <th width="10%">{{ t.pt('views.table.payment') }}</th>
+                                            <th width="10%">{{ t.pt('views.table.payment') }}</th>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let orderRequestItem of order.orderRequest.orderRequestItems" class="order">

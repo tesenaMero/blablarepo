@@ -57,8 +57,11 @@ import { NguiDatetimePickerModule } from './shared/components/datetimepicker';
 import { OrderRequestHelper } from './utils/order-request.helper';
 import { OrdersModel } from './shared/schema';
 import { SessionService, AuthGuard } from './shared/services/session.service';
-import { DashboardService } from './shared/services/dashboard.service'
-import { CustomerService } from './shared/services/customer.service'
+import { DashboardService } from './shared/services/dashboard.service';
+import { CustomerService } from './shared/services/customer.service';
+import { Broadcaster } from './shared/types/Broadcaster';
+import { TranslationService } from './shared/services/translation.service';
+
 import { 
     Api, 
     ProductLineApi, 
@@ -176,6 +179,8 @@ export const sharedConfig: NgModule = {
         EncodeDecodeJsonObjService,
         CustomerService,
         CatalogApi,
+        Broadcaster,
+        TranslationService,
         ProductColorApi,
         PlantApi
     ]

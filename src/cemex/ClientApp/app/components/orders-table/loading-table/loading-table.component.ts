@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { TranslationService } from '../../../shared/services/translation.service';
+
 
 @Component({
     selector: 'loading-table',
@@ -23,7 +25,9 @@ export class LoadingTableComponent {
         { inner: "", width: 5},
     ]
 
-    constructor() {}
+    constructor(
+        private t: TranslationService
+    ) {}
 
     ngOnChanges() {
         this.range = Array(this.rows);

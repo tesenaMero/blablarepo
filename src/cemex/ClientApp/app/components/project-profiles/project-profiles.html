@@ -4,19 +4,19 @@
 
 <div class="layout">
     <breadcrumbs>
-        <breadcrumbs-item link="../orders">Orders</breadcrumbs-item>
-        <breadcrumbs-item>Project profiles</breadcrumbs-item>
+        <breadcrumbs-item link="../orders">{{ t.pt('views.common.orders') }}</breadcrumbs-item>
+        <breadcrumbs-item>{{ t.pt('views.common.project_profiles') }}</breadcrumbs-item>
     </breadcrumbs>
     <div class="title-container row align-items-center">
         <div class="col-sm-8">
-            <h1>Project profiles</h1>
+            <h1>{{ t.pt('views.common.project_profiles') }}</h1>
             <svg class="icon-down-single-black">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use>
             </svg>
         </div>
         <div class="cto-container col-sm-4">
             <div class="float-sm-right">
-                <button (click)="openModal()" data-toggle="modal" data-target="#pp-creator" class="button-ghost">Create a new one</button>
+                <button (click)="openModal()" data-toggle="modal" data-target="#pp-creator" class="button-ghost">{{ t.pt('views.project.profile.create') }}</button>
             </div>
         </div>
     </div>

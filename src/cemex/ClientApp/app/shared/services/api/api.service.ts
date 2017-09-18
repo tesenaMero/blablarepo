@@ -77,4 +77,5 @@ export class Api {
         this.authorization = null;
         this.jwt = null;
     }
+
 }

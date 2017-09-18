@@ -1,4 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { TranslationService } from '../../shared/services/translation.service';
 
 @Component({
     selector: 'page-profile',
@@ -7,7 +8,7 @@ import {Component, OnInit} from '@angular/core';
 })
 export class NewProjectProfile implements OnInit {
 
-  constructor(){}
+  constructor(private t: TranslationService){}
 
   ngOnInit(){}
 

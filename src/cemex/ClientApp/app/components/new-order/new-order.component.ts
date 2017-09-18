@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-
+import { TranslationService } from '../../shared/services/translation.service';
 import { CreateOrderService } from '../../shared/services/create-order.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { CreateOrderService } from '../../shared/services/create-order.service';
     styleUrls: ['./new-order.scss']
 })
 export class NewOrderComponent implements OnInit, OnDestroy {
-    constructor(public createOrder: CreateOrderService) { }
+    constructor(public createOrder: CreateOrderService, private t: TranslationService) { }
     ngOnInit() { }
     ngOnDestroy() {
         this.createOrder.resetOrder();

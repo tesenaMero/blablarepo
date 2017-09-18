@@ -7,43 +7,43 @@
             </svg>
         </a>
         <div class="row title-project">
-            <h2>New Project Profile</h2>
+            <h2>{{ t.pt('views.project.profile.new') }}</h2>
         </div>
         <div class="row form-group-two">
             <div class="col-md-12">
-                <label for="name-project-profile" class="col-md-6 first-label">Define a Name for your Project Profile</label>
+                <label for="name-project-profile" class="col-md-6 first-label">{{ t.pt('views.project.profile.name') }}</label>
                 <select id="name-project-profile" class="form-control">
                 </select>
             </div>
         </div>
         <div class="row form-group-two">
             <div class="col-md-6">
-                <label for="discharge-time" class="col-md-12">Discharge Time</label>
+                <label for="discharge-time" class="col-md-12">{{ t.pt('views.project.profile.dischare_time') }}</label>
                 <select id="discharge-time" class="form-control col-md-12">   
                 </select>
             </div>
             <div class="col-md-6">
-                <label for="Transport Method">Transport Method</label>
+                <label for="Transport Method">{{ t.pt('views.project.profile.transport_method') }}</label>
                 <select id="transport-method" class="form-control col-md-12">
-                    <option value="1">Truck</option>
+                    <option value="1">{{ t.pt('views.project.profile.truck') }}</option>
                 </select>
             </div>
         </div>
         <div class="row form-group-two">
             <div class="col-md-6">
-                <label for="unload-type" class="col-md-12">Unload Type</label>
+                <label for="unload-type" class="col-md-12">{{ t.pt('views.project.profile.unload_type') }}</label>
                 <select id="unload-type" class="form-control col-md-12">   
                 </select>
             </div>
             <div class="col-md-6">
-                <label for="pump-capacity">Pump Capacity</label>
+                <label for="pump-capacity">{{ t.pt('views.project.profile.pump_capacity') }}</label>
                 <select id="pump-capacity" class="form-control col-md-12">    
                 </select>
             </div>
         </div>
         <div class="row form-group-two">
             <div class="col-md-6">
-                <label for="pump-frequency" class="col-md-12">Pump Frequency</label>
+                <label for="pump-frequency" class="col-md-12">{{ t.pt('views.project.profile.pump_frequency') }}</label>
                 <select id="pump-frequency" class="form-control col-md-12">   
                 </select>
             </div>
@@ -52,48 +52,48 @@
                     <svg class="icon-checkbox-static">
                         <use xlink:href="#icon-checkbox"></use>
                     </svg>
-                    <span>Kicker</span>
+                    <span>{{ t.pt('views.project.profile.kicker') }}</span>
                 </div>
             </div>
         </div>
         <div class="row form-group-two">
             <div class="col-md-6">
-                <label for="contact-person" class="col-md-12">Contact person</label>
+                <label for="contact-person" class="col-md-12">{{ t.pt('views.project.profile.contact_person') }}</label>
                 <select id="contact-person" class="form-control col-md-12">   
                 </select>
             </div>
         </div>
         <div class="row form-group-two">
             <div class="row col-md-12">
-                <label for="pump-frequency" class="col-md-12">Additional Services</label>
+                <label for="pump-frequency" class="col-md-12">{{ t.pt('views.project.profile.addition_services') }}</label>
                 <div class="icon-wrap-container col-md-3">
                     <svg class="icon-checkbox-static">
                         <use xlink:href="#icon-checkbox"></use>
                     </svg>
-                    <span>Extra Hours</span>
+                    <span>{{ t.pt('views.project.profile.extra_hours') }}</span>
                 </div>
                 <div class="icon-wrap-container col-md-5 col-xs-12">
                     <svg class="icon-checkbox-static">
                         <use xlink:href="#icon-checkbox"></use>
                     </svg>
-                    <span>Sunday / Holiday Service</span>
+                    <span>{{ t.pt('views.project.profile.holiday_services') }}</span>
                 </div>
                 <div class="icon-wrap-container col-md-4">
                     <svg class="icon-checkbox-static">
                         <use xlink:href="#icon-checkbox"></use>
                     </svg>
-                    <span>Pipeline</span>
+                    <span>{{ t.pt('views.project.profile.pipeline') }}</span>
                 </div>
             </div>
         </div>
         <div class="row form-group-two">
-            <label for="special-instructions" class="col-md-6">Special instructions</label>
+            <label for="special-instructions" class="col-md-6">{{ t.pt('views.project.profile.special_instr') }}</label>
             <input type="text" class="form-control" id="special-instructions" name="" value="" />
         </div>
         <div class="button-container col-md-12 col-sm-12">
             <div class="float-right">
-                <a class="button-ghost" routerLink="../orders">Cancel</a>
-                <a class="button bright-green" href="#steps-slider" role="button" data-slide="next">Confirm</a>
+                <a class="button-ghost" routerLink="../orders">{{ t.pt('views.common.cancel') }}</a>
+                <a class="button bright-green" href="#steps-slider" role="button" data-slide="next">{{ t.pt('views.common.confirm') }}</a>
             </div>
         </div>
     </div>
