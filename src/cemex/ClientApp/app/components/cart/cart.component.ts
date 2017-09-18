@@ -4,6 +4,7 @@ import { ETypeProduct, CementPackageSpecification, CartProductGroup, ReadymixSpe
 import { DraftsService } from '../../shared/services/api/drafts.service';
 import { DashboardService } from '../../shared/services/dashboard.service'
 import { WindowRef } from '../../shared/services/window-ref.service';
+import { TranslationService } from '../../shared/services/translation.service';
 import { DOCUMENT } from '@angular/platform-browser';
 import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
 import localForage = require('localforage');
@@ -24,7 +25,15 @@ export class CartComponent implements OnInit {
         order: true
     }
 
-    constructor(private drafts: DraftsService, private dashboard: DashboardService, private jsonObjService: EncodeDecodeJsonObjService, private location: Location, private windowRef: WindowRef, @Inject(DOCUMENT) private document: any) { }
+    constructor(
+        private t: TranslationService,
+        private drafts: DraftsService, 
+        private dashboard: DashboardService, 
+        private jsonObjService: EncodeDecodeJsonObjService, 
+        private location: Location, 
+        private windowRef: WindowRef, @Inject(DOCUMENT) 
+        private document: any
+    ) { }
 
     ngOnInit() {
         this.loadings.order = true;

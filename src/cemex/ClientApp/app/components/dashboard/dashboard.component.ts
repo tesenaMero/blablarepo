@@ -92,14 +92,3 @@ export class DashboardComponent implements OnInit {
         this.customerService.setCustomer(customer);
     }
 }
-
-class Language {
-    flagPath: string;
-    id: string;
-    text: string;
-    constructor(flagPath: string, id: string, text: string) {
-      this.flagPath = flagPath;
-      this.id = id;
-      this.text = text;
-    }
-  }
