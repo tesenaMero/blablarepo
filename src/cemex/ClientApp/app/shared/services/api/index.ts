@@ -17,6 +17,7 @@ import { PlantApi } from './plants.service';
 import { PurchaseOrderApi } from './pruchase-order.service'
 import { PaymentTermsApi } from './payment-terms.service';
 import { PingSalesOrderApi } from './ping-sales-order.service';
+import { SalesDocumentApi } from './sales-documents.service'
 
 export {
     ShipmentLocationApi,
@@ -35,7 +36,8 @@ export {
     CatalogApi,
     ProductColorApi,
     PlantApi,
-    PaymentTermsApi,
     PingSalesOrderApi,
-    PurchaseOrderApi
+    PurchaseOrderApi,
+    PaymentTermsApi,
+    SalesDocumentApi,
 }

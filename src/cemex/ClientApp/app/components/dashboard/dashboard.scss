@@ -59,6 +59,7 @@ nav.side-nav-bar {
 // Alert
 .alert-bar {
     transform: translateY(-40px);
+    width: calc(100% - 160px);
     position: fixed;
     transition: transform 0.2s ease;
     &.open {
