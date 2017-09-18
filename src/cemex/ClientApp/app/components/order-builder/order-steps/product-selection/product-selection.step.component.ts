@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Inject } from '@angular/core';
 import { ProductLineApi } from '../../../../shared/services/api'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
+import { DeliveryMode } from '../../../../models/delivery.model'
 
 @Component({
     selector: 'product-selection-step',
@@ -10,6 +11,7 @@ import { CreateOrderService } from '../../../../shared/services/create-order.ser
 })
 export class ProductSelectionStepComponent {
     @Output() onCompleted = new EventEmitter<any>();
+    private MODE = DeliveryMode;
 
     productLines = [];
     productLine: any;
@@ -55,6 +57,12 @@ export class ProductSelectionStepComponent {
     select(product: any) {
         this.productLine = product;
         this.orderManager.selectProductLine(product);
+
+        // Readymix case
+        if (this.productLine.productLineId == 6) {
+            this.orderManager.shippingCondition = { shippingConditionId: this.MODE.Delivery };
+        }
+
         this.onCompleted.emit(product);
     }
 

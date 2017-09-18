@@ -97,7 +97,11 @@ input {
     margin-bottom: 21px;
 }
 
-.required {
+.error-message {
+    display: none;
+}
+
+label.required {
     &:after {
         content: "*";
         color: #EE3D42;
@@ -105,11 +109,7 @@ input {
     }
 }
 
-.error-message {
-    display: none;
-}
-
-.error{
+.error {
     .error-message {
         font-size: 0.75rem;
         color: #EE3D41;
@@ -120,10 +120,13 @@ input {
     .form-control {
         border: 1px solid #EE3D41;
     }
-    .ng-invalid{
-        border: 1px solid #EE3D41;
+    .ng-invalid {
+        //border: 1px solid #EE3D41;
         display: block;
         border-radius: 3px;
+    }
+    /deep/.dropdown.selection.dropdown-inline {
+        border: 1px solid #EE3D41;
     }
 }
 

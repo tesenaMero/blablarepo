@@ -16,11 +16,16 @@ export class ModeStepComponent implements StepEventsListener {
     modes = [];
 
     constructor(@Inject(Step) private step: Step, private manager: CreateOrderService, private customerService: CustomerService) {
+        this.step.canAdvance = () => this.canAdvance();
         this.step.setEventsListener(this);
     }
 
     onShowed() {
         this.defineModes();
+    }
+
+    canAdvance() {
+        return true;
     }
 
     defineModes() {
