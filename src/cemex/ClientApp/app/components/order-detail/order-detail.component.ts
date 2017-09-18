@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { OrderDetailApi } from '../../shared/services/api/order-detail.service';
 import { ActivatedRoute } from '@angular/router';
+import { TranslationService } from '../../shared/services/translation.service';
 
 @Component({
     selector: 'order-detail-page',
@@ -16,7 +17,7 @@ export class OrderDetailComponent {
     type: string = "SLS";
     private sub: any;
 
-    constructor(private orderDetailApi: OrderDetailApi, private route: ActivatedRoute) {
+    constructor(private orderDetailApi: OrderDetailApi, private route: ActivatedRoute, private t: TranslationService) {
         this.sub = this.route.params.subscribe(params => {
             this.id = params['orderId'];
             if (params['typeCode'] && params['typeCode'] == "ZTA") {

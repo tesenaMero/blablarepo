@@ -1,26 +1,26 @@
 <div class="layout">
     <breadcrumbs>
-        <breadcrumbs-item link="../orders">Orders</breadcrumbs-item>
-        <breadcrumbs-item>Detail</breadcrumbs-item>
+        <breadcrumbs-item link="../orders">{{ t.pt('views.common.orders') }}</breadcrumbs-item>
+        <breadcrumbs-item>{{ t.pt('views.common.detail') }}</breadcrumbs-item>
     </breadcrumbs>
     <div *ngIf="!orderDetailData">
-        <p>No orders found</p>
+        <p>{{ t.pt('views.common.no_orders') }}</p>
     </div>
     <div class="row" *ngIf="orderDetailData">
         <div class="col-md-7">
             <div class="d-flex align-content-start flex-wrap mb-3">
                 <div class="title-container">
-                    <h1>Order #{{orderDetailData.orderId}}</h1>
+                    <h1>{{ t.pt('views.details.order') }} #{{orderDetailData.orderId}}</h1>
                 </div>
                 <div class="request-date align-self-center">
-                    <span class="title">Request date:</span>
+                    <span class="title">{{ t.pt('views.details.request_date') }}:</span>
                     <span class="value">{{orderDetailData.requestedDateTime | date : "dd/MM/yyyy, hh:mm"}}</span>
                 </div>
             </div>
         </div>
         <div class="col-md-5">
             <div class="cto-container center-with-steps">
-                <button class="button-ghost" routerLink="app/orders">Back</button>
+                <button class="button-ghost" routerLink="app/orders">{{ t.pt('views.common.back') }}</button>
             </div>
         </div>
     </div>
@@ -30,7 +30,7 @@
             <div class="col-md-5">
                 <div class="group">
                     <div class="title">
-                        Location:
+                        {{ t.pt('views.details.location') }}:
                     </div>
                     <div class="desc">
                         {{orderDetailData.pointOfDelivery.pointOfDeliveryDesc}}
@@ -43,7 +43,7 @@
             <div class="col-md-3">
                 <div class="group">
                     <div class="title">
-                        Point of Delivery:
+                        {{ t.pt('views.details.pod') }}:
                     </div>
                     <div class="desc">
                         {{orderDetailData.pointOfDelivery.pointOfDeliveryDesc}}
@@ -55,19 +55,19 @@
             </div>
             <div class="col-md-4">
                 <div class="info">
-                    <span class="title">Submitted:</span>
+                    <span class="title">{{ t.pt('views.details.submitted') }}:</span>
                     <span class="value">{{orderDetailData.createdDateTime | date : "dd/MM/yyyy"}}</span>
                 </div>
                 <div class="info">
-                    <span class="title">Submitted by:</span>
+                    <span class="title">{{ t.pt('views.details.submitted_by') }}:</span>
                     <span class="value">{{orderDetailData.customer.customerDesc}}</span>
                 </div>
                 <div class="info">
-                    <span class="title">Purchase order:</span>
+                    <span class="title">{{ t.pt('views.details.purchase_order') }}:</span>
                     <span class="value">{{orderDetailData.purchaseOrder}}</span>
                 </div>
                 <div class="info">
-                    <span class="title">Status:</span>
+                    <span class="title">{{ t.pt('views.details.status') }}:</span>
                     <span class="value status draft">{{orderDetailData.status.statusDesc}}</span>
                 </div>
             </div>
