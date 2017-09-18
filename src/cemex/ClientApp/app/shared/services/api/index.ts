@@ -37,5 +37,5 @@ export {
     PlantApi,
     PaymentTermsApi,
     PingSalesOrderApi,
-    PurchaseOrderApi,
+    PurchaseOrderApi
 }

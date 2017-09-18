@@ -54,13 +54,14 @@ export class Api {
         if (this.authorization)
             headers.append('Authorization', 'Bearer ' + this.authorization);
 
-        if (this.jwt)
+        if (this.jwt) 
             headers.append('jwt', this.jwt);
-            const time = new Date();
-            const sessionId = time.toISOString().replace(/-/g, '').replace(/:/g, '').replace('Z', '').replace('T', '');
+            const d = new Date();
+            const datestring = d.getFullYear() + "" + ("0"+(d.getMonth()+1)).slice(-2) + "" + ("0" + d.getDate()).slice(-2) + "" + ("0" + d.getHours()).slice(-2) + "" + ("0" + d.getMinutes()).slice(-2) + "" + ("0"+d.getSeconds()).slice(-2) + "." + performance.now().toFixed(0);
+            const sessionId = btoa(d.toISOString().replace(/-/g, '').replace(/:/g, '').replace('Z', '').replace('T', ''));
 
             headers.append('sessionId', sessionId);
-            headers.append('RequestDateTime', time.getTime().toString());
+            headers.append('RequestDateTime', datestring);
         return headers;
     }
 

@@ -186,6 +186,6 @@ export const sharedConfig: NgModule = {
         ProductColorApi,
         PlantApi,
         PingSalesOrderApi,
-        PurchaseOrderApi,
+        PurchaseOrderApi
     ]
 };
