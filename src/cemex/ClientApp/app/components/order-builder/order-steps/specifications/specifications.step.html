@@ -111,9 +111,9 @@
                         <label>Payment</label>
                         <div class="input flex-space-between dropdown">
                             <span>
-                                {{ product.payment?.name }}
+                                {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
                                 <select [(ngModel)]="product.payment" class="input behind">
-                                    <option selected *ngFor="let payment of availablePayments" [ngValue]="payment">{{ payment.name }}</option>
+                                    <option selected *ngFor="let payment of availablePayments" [ngValue]="payment">{{ payment.paymentTermType.paymentTermTypeDesc }}</option>
                                 </select>
                                 </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>

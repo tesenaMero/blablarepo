@@ -29,12 +29,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return SpecificationsStepComponent.availableUnits;
     }
 
-    static availablePayments = [
-        { name: "Cash" },
-        { name: "Credit" }
-    ];
+    static availablePayments = [];
 
     get availablePayments() {
+        console.log('get availablePayments', SpecificationsStepComponent.availablePayments)
         return SpecificationsStepComponent.availablePayments;
     }
 
@@ -100,6 +98,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
         this.getPaymentTerms();
     }
+
     getPaymentTerms() {
         let paymentTermIds = '';
         this.manager.salesArea.map((area: any) => {
@@ -107,7 +106,26 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
         
         this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
-            console.log('result: ', result.json(), result);
+            const terms = result.json().paymentTerms;
+            let uniqueTerms = [];
+
+            // find type Cache
+            const cachePayment = terms.find((term: any) => {
+                return term.paymentTermType.paymentTermTypeDesc === 'Cash';
+            });
+
+            // find type Credit
+            const creditPayment = terms.find((term: any) => {
+                return term.paymentTermType.paymentTermTypeDesc === 'Credit';
+            });
+
+
+            // push to terms array
+            cachePayment && uniqueTerms.push(cachePayment);
+            creditPayment && uniqueTerms.push(creditPayment);
+
+            console.log('uniqueTerms: ', uniqueTerms);
+            SpecificationsStepComponent.availablePayments = terms;
         });
     }
 
@@ -152,6 +170,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.selectedProduct = contract;
     }
 
+    paymentTermChanged(term) {
+        this.paymentOption = term;
+    }
+
     add() {
         this.preProducts.push(new PreProduct(this.manager));
     }
@@ -183,6 +205,7 @@ class PreProduct {
     product: any;
     plant: any;
     projectProfile: any;
+    paymentOption: any;
 
     constructor(private manager: CreateOrderService) {
         let _ = SpecificationsStepComponent;
@@ -192,6 +215,7 @@ class PreProduct {
         this.payment = _.availablePayments[0];
         if (_.availableProducts.length) { this.product = _.availableProducts[0]; }
         this.plant = _.availablePlants[0];
+        this.paymentOption = _.availablePayments[0];
         this.manager._productSelectedProduct.subscribe(product => {
             let filteredProducts = _.availableProducts.filter((availableProduct: any) => availableProduct.commercialCode === product.commercialCode);
             if(filteredProducts.length) {
