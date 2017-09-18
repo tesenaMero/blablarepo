@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SessionService } from '../../shared/services/session.service';
 import { Router } from '@angular/router';
 import { CreateOrderService } from '../../shared/services/create-order.service';
@@ -8,6 +8,7 @@ import { LegalEntitiesApi, SalesDocumentApi, ShipmentLocationApi } from '../../s
 
 import { TranslationService } from '../../shared/services/translation.service';
 
+import { CmxSidebarComponent } from '@cemex/cmx-sidebar-v1/dist';
 
 @Component({
     selector: 'app-dashboard',
@@ -15,10 +16,14 @@ import { TranslationService } from '../../shared/services/translation.service';
     styleUrls: ['./dashboard.scss']
 })
 export class DashboardComponent implements OnInit {
+
+    @ViewChild(CmxSidebarComponent)
+    private sidebar: CmxSidebarComponent;
+
     private showAlert = false;
     private alert = {
         text: "",
-        type: "info" 
+        type: "info"
     };
 
     private customers: any[];
@@ -39,7 +44,7 @@ export class DashboardComponent implements OnInit {
     ngOnInit() {
         this.createOrderService.fetchShipmentLocation();
         this.dashboard.alertSubject.subscribe((alert) => this.handleAlert(alert));
-        
+
         this.legalEnitityApi.all().subscribe((response) => {
             let legalEntities = response.json().legalEntities
             this.customers = legalEntities;
@@ -65,7 +70,7 @@ export class DashboardComponent implements OnInit {
         this.langSelected = lang;
         localStorage.setItem('Language', lang);
         //this.eventDispatcher.broadcast(this.CHANGE_LANGUAGE, lang);
-      }
+    }
 
     private handleAlert(alert: any) {
         this.showAlert = false;
@@ -96,5 +101,11 @@ export class DashboardComponent implements OnInit {
 
     private setCustomer(customer: any) {
         this.customerService.setCustomer(customer);
+    }
+
+    private clickMenuButton(event: any) {
+        this.sidebar.isCollapsed = !this.sidebar.isCollapsed;
+
+        console.log("clickMenuButton, isCollapsed:", this.sidebar.isCollapsed);
     }
 }
