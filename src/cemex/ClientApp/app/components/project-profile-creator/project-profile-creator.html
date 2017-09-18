@@ -6,25 +6,25 @@
 <div class="container-layout">
     <ng-container *ngIf="!finishedOrder && !loadingCatalog">
         <div class="title">
-            New Project Profile
+            {{ t.pt('views.project.profile.new') }}
         </div>
-        <div class="form-container">
+        <div class="form-container"> 
             <div class="row">
                 <div class="col-md-12 col-sm-12">
-                    <label for="pp-name" class="">Define a Name for your Project Profile</label>
+                    <label for="pp-name" class="">{{ t.pt('views.project.profile.name') }}</label>
                     <input [(ngModel)]="projectProfile.profileName" type="text" class="form-control " id="pp-name" name="pp-name" value="">
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <label for="pp-discharge" class="">Discharge Time</label>
+                    <label for="pp-discharge" class="">{{ t.pt('views.project.profile.dischare_time') }}</label>
                     <select (change)="onChangeDischargeTime($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
                         <option *ngFor="let entry of catalogs.DCT" [value]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
                 <div class="col-sm-6">
-                    <label for="pp-transport" class="">Transport Method</label>
+                    <label for="pp-transport" class="">{{ t.pt('views.project.profile.transport_method') }}</label>
                     <select name="pp-transport" id="pp-transport" class="form-control">
                         <option value="42" selected>Truck</option>
                     </select>
@@ -32,14 +32,14 @@
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <label for="pp-discharge" class="">Unload Type</label>
+                    <label for="pp-discharge" class="">{{ t.pt('views.project.profile.unload_type') }}</label>
                     <select (change)="onChangeUnloadType($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
                         <option *ngFor="let entry of catalogs.ULT; let i = index" [attr.data-index]="i" [value]="i">{{entry.entryDesc}}</option>
                     </select>
                 </div>
                 <div *ngIf="isUnloadTypePump" class="col-sm-6">
-                    <label for="pp-transport" class="">Pump Capacity</label>
+                    <label for="pp-transport" class="">{{ t.pt('views.project.profile.pump_capacity') }}</label>
                     <select (change)="onChangePumpCapacity($event.target.value)" name="pp-transport" id="pp-transport" class="form-control">
                         <option value="" selected disabled hidden></option>
                         <option *ngFor="let entry of catalogs.PCC" [value]="entry.entryId">{{entry.entryDesc}}</option>
@@ -67,7 +67,7 @@
                             <svg class="icon-checkbox-hover">
                                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
                             </svg>
-                            <span class="lh-19">Kicker</span>
+                            <span class="lh-19">{{ t.pt('views.project.profile.kicker') }}</span>
                         </label>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
         </div> -->
         <div class="row actions text-right">
             <div class="col">
-                <button (click)="cancel()" data-dismiss="modal" class="button-ghost mb-2">Cancel</button>
+                <button (click)="cancel()" data-dismiss="modal" class="button-ghost mb-2">{{ t.pt('views.common.cancel') }}</button>
                 <button [disabled]="postingTheOrder" (click)="confirm()" data-dismiss="modal" class="button bright-green">{{postingTheOrder ? 'Saving...': 'Confirm'}}</button>
             </div>
         </div>
@@ -134,7 +134,7 @@
         <div class="success-group">
             <span class="cmx-icon-accepted-ok"></span>
             <div class="success-text">
-                Project profile created succesfully <!-- PP Number? -->
+                {{ t.pt('views.project.profile.created') }} <!-- PP Number? -->
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-
+import { TranslationService } from '../../shared/services/translation.service';
 import { ProjectProfileApi } from '../../shared/services/api'
 
 let $ = require("jquery");
@@ -15,7 +15,7 @@ export class ProjectProfilesComponent {
     columns = [];
     rows = [];
 
-    constructor(private ppService: ProjectProfileApi, private sanitizer: DomSanitizer) {
+    constructor(private ppService: ProjectProfileApi, private sanitizer: DomSanitizer, private t: TranslationService) {
         this.fetchProjectProfiles();
     }
 

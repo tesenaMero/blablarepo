@@ -5,38 +5,38 @@
 </div>
 <div class="container-layout">
     <div class="title">
-        Search product
+        {{ t.pt('views.search.search') }}
     </div>
     <div class="form-container">
         <div class="row">
             <div class="col-sm-6">
-                <label for="ps-product-type" class="">Product Type</label>
+                <label for="ps-product-type" class="">{{ t.pt('views.search.product_type') }}</label>
                 <select [(ngModel)]="productColorSelected" (change)="productColorChanged($event.target.value)" name="ps-product-type" id="ps-product-type" class="form-control">
-                    <option [value]="productColorSelected" disabled selected hidden>Select a Product Type</option>
+                    <option [value]="productColorSelected" disabled selected hidden>{{ t.pt('views.search.select_product') }}</option>
                     <option *ngFor="let productColor of productColors" [ngValue]="productColor.productColorId">{{productColor.productColorDesc}}</option>
                 </select>
             </div>
             <div class="col-sm-6" *ngIf="orderManager?.shippingCondition?.shippingConditionId == 2">
-                <label for="ps-plant" class="">Plant</label>
+                <label for="ps-plant" class="">{{ t.pt('views.search.plant') }}</label>
                 <select [(ngModel)]="plantSelected" (change)="plantChanged($event.target.value)" name="ps-plant" id="ps-plant" class="form-control">
-                    <option [value]="plantSelected" disabled selected hidden>Select a Plant</option>
+                    <option [value]="plantSelected" disabled selected hidden>{{ t.pt('views.search.select_plant') }}</option>
                     <option *ngFor="let plant of plants" [ngValue]="plant.plantId">{{plant.plantDesc}}</option>
                 </select>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
-                <label for="product-code" class="">Product Code</label>
+                <label for="product-code" class="">{{ t.pt('views.search.product_code') }}</label>
                 <input type="text" [(ngModel)]="productCodeInput" class="form-control dls required " (keyup)="filterProductByProductCode($event)" id="product-code" placeholder="Filter by Product Code" name="product-code" />
             </div>
             <div class="col-sm-6">
-                <label for="product-description" class="">Product Description</label>
+                <label for="product-description" class="">{{ t.pt('views.search.product_description') }}</label>
                 <input type="text" [(ngModel)]="productDescriptionInput" class="form-control dls required " (keyup)="filterProductByProductDescription($event)" id="product-description" placeholder="Filter by Product Description" name="product-description" />
             </div>
         </div>
         <hr class="separator" />
         <div class="title sub">
-            Products
+            {{ t.pt('views.search.products') }}
         </div>
         <div class="row">
             <div class="col-sm-12">
@@ -52,8 +52,8 @@
     </div>
     <div class="row actions text-right">
         <div class="col">
-            <button (click)="cancel()" data-dismiss="modal" class="button-ghost mb-2">Cancel</button>
-            <button (click)="confirm()" data-dismiss="modal" class="button bright-green" #confirmSelection>Select</button>
+            <button (click)="cancel()" data-dismiss="modal" class="button-ghost mb-2">{{ t.pt('views.common.cancel') }}</button>
+            <button (click)="confirm()" data-dismiss="modal" class="button bright-green" #confirmSelection>{{ t.pt('views.common.select') }}</button>
         </div>
     </div>
 </div>

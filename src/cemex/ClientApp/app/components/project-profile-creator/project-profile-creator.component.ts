@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-
+import { TranslationService } from '../../shared/services/translation.service';
 import { CatalogApi, ProjectProfileApi } from '../../shared/services/api';
 import { CustomerService } from '../../shared/services/customer.service';
 
@@ -30,7 +30,7 @@ export class ProjectProfileCreatorComponent {
     };
 
     // CustomerService.currentCustomer().legalEntityId || 
-    constructor(private CatalogApi: CatalogApi, private ProjectProfileApi: ProjectProfileApi, private CustomerService: CustomerService) {
+    constructor(private CatalogApi: CatalogApi, private ProjectProfileApi: ProjectProfileApi, private CustomerService: CustomerService, private t: TranslationService) {
         this.loadingCatalog = true;
         const customerId = 354;
         this.CatalogApi.byProductLine(customerId, '0006').map((response) => response.json()).subscribe((response) => {

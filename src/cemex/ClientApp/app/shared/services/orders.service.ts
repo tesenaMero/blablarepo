@@ -57,6 +57,7 @@ export class OrdersService {
                 key: 'orderRequestId',
                 format: 'string',
                 value: 'orderCode',
+                ignoreValue: 'orderCode',
             },
             {
                 key: 'submitedOn',
@@ -159,7 +160,8 @@ export class OrdersService {
         this.OrdersApi.all("4169", 100)
             .map(response => response.json())
             .map(json => {
-                const flatten = this.helper.flattenData(json);
+                const requests = json.orders.filter(item => item.orderType.orderTypeCode != "DFT");
+                const flatten = this.helper.flattenData(requests);
                 const mappedData = this.helper.mapDataToResponseFormat(flatten, OrdersService.ORDER_REQUEST_MAPPING);
                 this.theOrders = mappedData;
                 const pagedOrders = this.getPagedOrders(1)

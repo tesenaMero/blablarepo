@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-
+import { TranslationService } from '../../../shared/services/translation.service';
 import { OrderRequest } from '../../../shared/models/order-request';
 
 @Component({
@@ -11,7 +11,9 @@ export class OrdersTableComponent implements OnInit {
     @Input() orders: OrderRequest;
     @Input() isLoading: boolean;
 
-    constructor() { }
+    constructor(
+        private t : TranslationService
+    ) { }
 
     ngOnInit() {
     }

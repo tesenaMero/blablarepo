@@ -1,13 +1,6 @@
 <div class="layout">
-    <breadcrumbs>
-        <breadcrumbs-item link="../orders">{{ t.pt('views.common.orders') }}</breadcrumbs-item>
-        <breadcrumbs-item>{{ t.pt('views.common.detail') }}</breadcrumbs-item>
-    </breadcrumbs>
-    <div *ngIf="!orderDetailData">
-        <p>{{ t.pt('views.common.no_orders') }}</p>
-    </div>
     <div class="row" *ngIf="orderDetailData">
-        <div class="col-md-7">
+        <div class="col-md-12">
             <div class="d-flex align-content-start flex-wrap mb-3">
                 <div class="title-container">
                     <h1>{{ t.pt('views.details.order') }} #{{orderDetailData.orderId}}</h1>
@@ -18,13 +11,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-5">
-            <div class="cto-container center-with-steps">
-                <button class="button-ghost" routerLink="app/orders">{{ t.pt('views.common.back') }}</button>
-            </div>
-        </div>
     </div>
-
+    
     <div class="location" *ngIf="orderDetailData">
         <div class="row">
             <div class="col-md-5">
@@ -33,10 +21,10 @@
                         {{ t.pt('views.details.location') }}:
                     </div>
                     <div class="desc">
-                        {{orderDetailData.pointOfDelivery.pointOfDeliveryDesc}}
+                        {{orderDetailData.jobsite.jobsiteDesc}}
                     </div>
-                    <div class="detail">
-                        {{orderDetailData.pointOfDelivery.pointOfDeliveryCode}}
+                    <div class="detail" *ngIf="streetJob">
+                        {{streetJob.domicileNum}} {{streetJob.streetName}}, {{streetJob.cityDesc}}, {{streetJob.regionDesc}}, {{streetJob.postalCode}}
                     </div>
                 </div>
             </div>
@@ -48,8 +36,8 @@
                     <div class="desc">
                         {{orderDetailData.pointOfDelivery.pointOfDeliveryDesc}}
                     </div>
-                    <div class="detail">
-                        {{orderDetailData.pointOfDelivery.pointOfDeliveryCode}}
+                    <div class="detail" *ngIf="streetPOD">
+                        {{streetPOD.domicileNum}} {{streetPOD.streetName}}, {{streetPOD.cityDesc}}, {{streetPOD.regionDesc}}, {{streetPOD.postalCode}}   
                     </div>
                 </div>
             </div>
@@ -66,32 +54,46 @@
                     <span class="title">{{ t.pt('views.details.purchase_order') }}:</span>
                     <span class="value">{{orderDetailData.purchaseOrder}}</span>
                 </div>
-                <div class="info">
-                    <span class="title">{{ t.pt('views.details.status') }}:</span>
-                    <span class="value status draft">{{orderDetailData.status.statusDesc}}</span>
-                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 info">
+                <span class="value status" [ngClass]="{
+                    canceled:   orderDetailData.status.statusDesc == 'Canceled - Hdr',
+                    confirmed:  orderDetailData.status.statusCode == 'CONF',
+                    draft:      orderDetailData.status.statusDesc == 'Draft - Hdr',
+                    draft:      orderDetailData.status.statusCode == 'DRFT',
+                    pending:    orderDetailData.status.statusCode == 'INPC',
+                    pending:    orderDetailData.status.statusDesc == 'Pending',
+                    blocked:    orderDetailData.status.statusCode == 'BLCK',
+                    holded:     orderDetailData.status.statusDesc == 'Holded - Hdr',
+                    processed:  orderDetailData.status.statusDesc == 'In process - Hdr',
+                    completed:  orderDetailData.status.statusCode == 'CMPO',
+                    completed:  orderDetailData.status.statusDesc == 'Completed',
+                    complete:   orderDetailData.status.statusDesc == 'Complete'
+                }">{{orderDetailData.status.statusDesc}}</span>
             </div>
         </div>
     </div>
-
-    <div class="nav-tab-container" *ngIf="orderDetailData">
+    
+    <div class="nav-tab-container"  *ngIf="orderDetailData">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#products" role="tab">Products</a>
+                <a class="nav-link active" data-toggle="tab" href="#products" role="tab">{{ t.pt('views.details.products') }}</a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#action-log" role="tab">Action log</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#comments" role="tab">Comments</a>
-            </li>
+            </li> -->
         </ul>
     </div>
-
+    
     <!-- Tab panes -->
-    <div class="tab-content" *ngIf="orderDetailData">
+    <div class="tab-content"  *ngIf="orderDetailData">
         <div class="tab-pane fade show active" id="products" role="tabpanel">
-            <div class="products-container">
+            <div class="products-container"> 
                 <div class="card-container product" id="products-id" *ngFor="let itemData of orderDetailData.items">
                     <div class="row">
                         <div class="col-md-4 col-sm-12 left-container">
@@ -104,7 +106,7 @@
                                 <div class="col-md-3 col-xs-6">
                                     <div class="group">
                                         <div class="title">
-                                            Quantity
+                                            {{ t.pt('views.details.quantity') }}
                                         </div>
                                         <div class="value">
                                             {{itemData.quantity}}
@@ -114,17 +116,17 @@
                                 <div class="col-md-3 col-xs-6">
                                     <div class="group">
                                         <div class="title">
-                                            Unit
+                                            {{ t.pt('views.details.unit') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.uom.unitDesc}}
+                                            {{ itemData.uom.unitDesc }}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-xs-6">
                                     <div class="group">
                                         <div class="title">
-                                            Requested date
+                                            {{ t.pt('views.details.request_date') }}
                                         </div>
                                         <div class="value">
                                             {{orderDetailData.requestedDateTime | date : "dd.MM.yyyy"}}
@@ -134,7 +136,7 @@
                                 <div class="col-md-3 col-xs-6">
                                     <div class="group">
                                         <div class="title">
-                                            Requested time
+                                            {{ t.pt('views.details.request_time') }}
                                         </div>
                                         <div class="value">
                                             {{orderDetailData.requestedDateTime | date : "hh:mm"}}
@@ -143,144 +145,149 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-md-6 col-xs-6">
                                     <div class="group">
                                         <div class="title">
-                                            Product ID
+                                            {{ t.pt('views.details.product_id') }}
                                         </div>
                                         <div class="value">
                                             {{itemData.product.productCode}}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-md-6 col-xs-6" *ngIf="itemData.agreementItem">
                                     <div class="group">
                                         <div class="title">
-                                            Contract
+                                            {{ t.pt('views.details.contract') }}
                                         </div>
                                         <div class="value">
-                                            10-201702189034 Remaining volume: 180
+                                            {{itemData.agreementItem.agreementItemCode}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.dischargeTime">
                                     <div class="group">
                                         <div class="title">
-                                            Projet profile
+                                            {{ t.pt('views.details.discharge_time') }}
                                         </div>
                                         <div class="value">
-                                            My Project Profile with quite long technical title, that it must be for more rows
+                                            {{itemData.orderItemProfile.dischargeTime.timePerDischargeDesc}}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <!-- Flex way -->
-                                    <div class="d-flex flex-wrap">
-                                        <div class="group">
-                                            <div class="title">
-                                                Discharge Time
-                                            </div>
-                                            <div class="value">
-                                                60min
-                                            </div>
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.transportMethod">
+                                    <div class="group">
+                                        <div class="title">
+                                            {{ t.pt('views.details.transport_method') }}
                                         </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Transport Method
-                                            </div>
-                                            <div class="value">
-                                                Truck
-                                            </div>
+                                        <div class="value">
+                                            {{itemData.transportMethod.transportMethodDesc}}
                                         </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Unload Type
-                                            </div>
-                                            <div class="value">
-                                                Pump
-                                            </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.unloadType">
+                                    <div class="group">
+                                        <div class="title">
+                                            {{ t.pt('views.details.unload_type') }}
                                         </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Pump Capacity Min
-                                            </div>
-                                            <div class="value">
-                                                30 m3/s
-                                            </div>
+                                        <div class="value">
+                                            {{itemData.unloadType.unloadTypeDesc}}
                                         </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Pump Capacity Max
-                                            </div>
-                                            <div class="value">
-                                                40 m<sup>3</sup>/s
-                                            </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-xs-6" *ngIf="orderDetailData.shippingCondition">
+                                    <div class="group">
+                                        <div class="title">
+                                            {{ t.pt('views.details.delivery_mode') }}
                                         </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Application
-                                            </div>
-                                            <div class="value">
-                                                Roof
-                                            </div>
-                                        </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Load Size
-                                            </div>
-                                            <div class="value">
-                                                10 tons
-                                            </div>
-                                        </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Spacing
-                                            </div>
-                                            <div class="value">
-                                                10 min
-                                            </div>
+                                        <div class="value">                                            
+                                            {{orderDetailData.shippingCondition.shippingConditionDesc}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">                                        
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.pumpCapacity">
+                                    <div class="group">
+                                        <div class="title">
+                                            {{ t.pt('views.details.pump_capacity_min') }}
+                                        </div>
+                                        <div class="value">
+                                            {{itemData.orderItemProfile.pumpCapacity.pumpCapacityDesc}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.timePerLoad">
+                                    <div class="group">
+                                        <div class="title">
+                                            {{ t.pt('views.details.pump_capacity_max') }}
+                                        </div>
+                                        <div class="value">
+                                            {{itemData?.orderItemProfile.timePerLoad.timePerLoadDesc.timePerLoadDesc}}**
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.element">
+                                    <div class="group">
+                                        <div class="title">
+                                            {{ t.pt('views.details.application') }}
+                                        </div>
+                                        <div class="value">
+                                            {{itemData.orderItemProfile.element.elementDesc}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.kicker">
+                                    <div class="group">
+                                        <div class="title">
+                                            {{ t.pt('views.details.kicker') }}
+                                        </div>
+                                        <div class="value">                                            
+                                            {{itemData.orderItemProfile.kicker}}
+                                        </div>
+                                    </div>
+                                </div>   
+                            </div>         
+                            <div class="row">  
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.loadSize">
+                                    <div class="group">
+                                        <div class="title">
+                                            {{ t.pt('views.details.load_size') }}
+                                        </div>
+                                        <div class="value">  
+                                            {{itemData.orderItemProfile.loadSize.loadSizeDesc}}
+                                        </div>
+                                    </div>
+                                </div>  
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.timePerLoad">
+                                    <div class="group">
+                                        <div class="title">
+                                            {{ t.pt('views.details.spacing') }}
+                                        </div>
+                                        <div class="value">
+                                            {{itemData.orderItemProfile.timePerLoad.timePerLoadDesc.timePerLoadDesc}}
+                                        </div>
+                                    </div>
+                                </div>        
+                            </div>   
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-8" *ngIf="itemData.orderItemProfile.additionalServices">
                                     <div class="group">
                                         <div class="title">
-                                            Additional services
+                                            {{ t.pt(views.details.addition_serv) }}
                                         </div>
                                         <div class="value">
-                                            20939302/10292/20102
+                                            {{itemData.orderItemProfile.additionalServices.additionalServiceDesc}}
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="group flex-6">
-                                            <div class="title">
-                                                Delivery mode
-                                            </div>
-                                            <div class="value">
-                                                Delivery
-                                            </div>
-                                        </div>
-                                        <div class="group">
-                                            <div class="title">
-                                                Kicker
-                                            </div>
-                                            <div class="value">
-                                                Yes
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                </div>                                            
+                            </div>         
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>          
         </div>
         <div class="tab-pane fade" id="action-log" role="tabpanel">
             <order-detail-logs orderItemId=2></order-detail-logs>
