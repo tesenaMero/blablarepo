@@ -2,13 +2,13 @@
     <div class="row">
         <div class="col-md-6">
             <div class="first-container">
-                <div class="row align-items-center mb-21px">
+                <div class="row align-items-center mb-21px" [ngClass]="{ error: validations.jobsite.showError }">
                     <div class="col-md-4 col-sm-12 select-label">
                         <label for="jobsite-select" class="select-label required">Select from existing jobsite</label>
                     </div>
-                    <div class="col-md-8 col-sm-12" [ngClass]="{ disabled: loadings.locations, error: errorLocation }">
+                    <div class="col-md-8 col-sm-12" [ngClass]="{ disabled: loadings.locations }">
                         <ss-multiselect-dropdown [options]="locations" required [texts]="jobsiteTexts" [settings]="dropDownSettings" [(ngModel)]="locationIndex" (ngModelChange)="jobsiteChanged(locations[$event[0]])"></ss-multiselect-dropdown>
-                        <span class="error-message-select" *ngIf="errorLocation">Please select location</span>
+                        <span class="error-message-select" *ngIf="validations.jobsite.showError">Please select location</span>
                     </div>
                 </div>
                 <div class="row align-items-center" *ngIf="!hiddens.pods" [ngClass]="{ disabled: loadings.pods }">

@@ -24,7 +24,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     private pod: any;
     private catalogOptions: Object = {};
     private selectedServices: Array<{ additionalServiceId: number }> = [];
-    private errorLocation: boolean;
 
     private purchaseOrder: string;
     shipmentLocationTypes;
@@ -42,6 +41,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     private validations = {
         purchaseOrder: { valid: false, mandatory: false, showError: false },
         contactPerson: { valid: false, mandatory: true, showError: false },
+        jobsite: { valid: false, mandatory: true, showError: false }
     }
 
     private hiddens = {
@@ -127,16 +127,18 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     canAdvance() {
+        let advance = true;
         for (let key in this.validations) {
             if (this.validations[key].mandatory) {
                 if (!this.validations[key].valid) {
+                    console.log(key, this.validations[key]);
                     this.validations[key].showError = true;
-                    return false;
+                    advance = false;
                 }
             }
         }
 
-        return true;
+        return advance;
     }
 
     onShowed() {
@@ -224,6 +226,14 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     // Step flow
     // =====================
     jobsiteChanged(location: any) {
+        if (!location) {
+            this.validations.jobsite.valid = false;
+            return;
+        }
+        else {
+            this.validations.jobsite.valid = true;
+        }
+
         // Set loading state
         this.loadings.pods = true;
         this.loadings.contacts = true;
@@ -234,13 +244,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.location = location;
         this.orderManager.selectJobsite(this.location);
         this.onCompleted.emit(true);
-
-        if (!location) {
-            this.errorLocation = true;
-        }
-        else {
-            this.errorLocation = false;
-        }
 
         // Fetch salesarea
         this.shipmentApi.salesAreas(this.location, this.orderManager.productLine).subscribe((salesAreas) => {
