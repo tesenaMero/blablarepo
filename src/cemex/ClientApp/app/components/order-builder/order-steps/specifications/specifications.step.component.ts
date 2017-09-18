@@ -3,7 +3,7 @@ import { ProductsApi, Api } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.service';
-import { ProjectProfileApi } from '../../../../shared/services/api';
+import { ProjectProfileApi, CatalogApi } from '../../../../shared/services/api';
 
 @Component({
     selector: 'specifications-step',
@@ -12,18 +12,15 @@ import { ProjectProfileApi } from '../../../../shared/services/api';
     host: { 'class': 'w-100' }
 })
 export class SpecificationsStepComponent implements StepEventsListener {
-    @Output() initializeProductColorsEmitter = new EventEmitter<any>();
     @Output() onCompleted = new EventEmitter<any>();
     private preProducts = [];
     private loadings = {
         products: true,
         contracts: true,
         projectProfiles: true,
+        catalog: true
     }
     private selectedProduct: any;
-    initializeProductSearch() {
-        this.manager.fetchProductColors(this.manager.productLine.productLineId);
-    }
 
     static availableUnits = [];
 
@@ -70,7 +67,20 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return SpecificationsStepComponent.projectProfiles;
     }
 
-    constructor( @Inject(Step) private step: Step, private api: ProductsApi, private manager: CreateOrderService, private ProjectProfileApi: ProjectProfileApi, private paymentTermsApi: PaymentTermsApi) {
+    static catalogs = [];
+
+    get catalogs() {
+        return SpecificationsStepComponent.catalogs;
+    }
+
+    constructor(
+        @Inject(Step) private step: Step, 
+        private api: ProductsApi, 
+        private manager: CreateOrderService, 
+        private ProjectProfileApi: ProjectProfileApi,
+        private CatalogApi: CatalogApi,
+        private paymentTermsApi: PaymentTermsApi
+    ) {
         this.step.setEventsListener(this);
         this.add(); // Push a pre product
     }
@@ -149,6 +159,14 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 SpecificationsStepComponent.projectProfiles = profiles;
             }
         });
+
+        this.loadings.catalog = true;
+        this.CatalogApi.byProductLine('354', '0006').subscribe((res: any) => {
+            this.loadings.catalog = false;
+            res.catalogs && res.catalogs.forEach((catalog) => {
+                this.catalogs[catalog.catalogCode] = catalog.entries;
+            });
+        });
     }
 
     projectProfileChange(projectProfile) {
@@ -197,7 +215,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     add() {
-        this.preProducts.push(new PreProduct(this.manager));
+        this.preProducts.push(new PreProduct());
     }
 
     remove(index: any) {
@@ -228,7 +246,7 @@ class PreProduct {
     projectProfile: any;
     paymentOption: any;
 
-    constructor(private manager: CreateOrderService) {
+    constructor() {
         let _ = SpecificationsStepComponent;
         if (_.availableProducts.length > 0) { this.product = _.availableProducts[0]; }
         this.contract = _.availableContracts[0];
