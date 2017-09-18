@@ -32,6 +32,6 @@ export {
     DraftsService,
     CatalogApi,
     ProductColorApi,
-    PlantApi
+    PlantApi,
     PaymentTermsApi
 }

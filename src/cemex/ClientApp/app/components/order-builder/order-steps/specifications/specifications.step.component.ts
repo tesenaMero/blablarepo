@@ -32,7 +32,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
     static availablePayments = [];
 
     get availablePayments() {
-        console.log('get availablePayments', SpecificationsStepComponent.availablePayments)
         return SpecificationsStepComponent.availablePayments;
     }
 
@@ -99,6 +98,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.getPaymentTerms();
     }
 
+    paymentTermChanged(term) {
+        this.selectedProduct.payment = term;
+    }
+    
     getPaymentTerms() {
         let paymentTermIds = '';
         this.manager.salesArea.map((area: any) => {
@@ -123,8 +126,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
             // push to terms array
             cachePayment && uniqueTerms.push(cachePayment);
             creditPayment && uniqueTerms.push(creditPayment);
-
-            console.log('uniqueTerms: ', uniqueTerms);
             SpecificationsStepComponent.availablePayments = terms;
         });
     }
@@ -170,10 +171,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.selectedProduct = contract;
     }
 
-    paymentTermChanged(term) {
-        this.paymentOption = term;
-    }
-
     add() {
         this.preProducts.push(new PreProduct(this.manager));
     }
@@ -181,7 +178,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
     remove(index: any) {
         let product = this.preProducts[index];
         product.deleting = true;
-        console.log(product);
         setTimeout(() => {
             this.preProducts.splice(index, 1);
         }, 400);

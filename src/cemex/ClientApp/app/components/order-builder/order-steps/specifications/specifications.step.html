@@ -113,7 +113,7 @@
                             <span>
                                 {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
                                 <select [(ngModel)]="product.payment" class="input behind">
-                                    <option selected *ngFor="let payment of availablePayments" [ngValue]="payment">{{ payment.paymentTermType.paymentTermTypeDesc }}</option>
+                                    <option selected *ngFor="let payment of availablePayments" (onChange)="paymentTermChanged($event)" [ngValue]="payment">{{ payment.paymentTermType.paymentTermTypeDesc }}</option>
                                 </select>
                                 </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
