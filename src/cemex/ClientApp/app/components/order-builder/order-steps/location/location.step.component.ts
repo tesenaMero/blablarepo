@@ -231,7 +231,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         }
         else {
             this.validations.jobsite.valid = true;
-            this.validations.jobsite.showError = true;
+            this.validations.jobsite.showError = false;
         }
 
         // Set loading state
@@ -261,8 +261,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
                 this.location.purchaseOrderValidation = shouldValidatePurchaseOrder;
                 this.validations.purchaseOrder.mandatory = shouldValidatePurchaseOrder;
-                this.loadings.purchaseOrder = false
             }
+            this.loadings.purchaseOrder = false;
         });
 
         // Fetch geolocation
