@@ -14,8 +14,16 @@ export class DraftsService {
         return this.api.post("/v4/sm/orders", order);
     }
 
+    getDraft(draftId: any): Observable<Response> {
+        return this.api.get(`/v4/sm/orders/${draftId}?orderType=DFT`);
+    }
+
     prices(draftId: any): Observable<Response> {
         return this.api.patch("/v4/sm/orders/" + draftId + "/prices");
+    }
+
+    optimalsources(draftId: any): Observable<Response> {
+        return this.api.patch("/v4/sm/orders/" + draftId + "/optimalsources");
     }
 
     createOrder(draftId: any): Observable<Response> {

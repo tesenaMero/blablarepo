@@ -62,14 +62,6 @@ export class OrderBuilderComponent {
 
     summaryStepCompleted() {
         this.stepper.complete();
-        this.dashboard.alertInfo("Saving draft...");
-        this.drafts.add(this.uglyOrder()).subscribe((response) => {
-            const res = response.json();
-            console.log('drafts.add -> ', res);
-            this.drafts.draftId(res.id);
-            this.dashboard.alertSuccess("Draft saved!");
-            this.router.navigate(['/app/cart']);
-        });
     }
 
     specificationsStepShowed() {
@@ -78,6 +70,13 @@ export class OrderBuilderComponent {
 
     specificationsStepCompleted() {
         this.stepper.complete();
+        this.dashboard.alertInfo("Saving draft...");
+        this.drafts.add(this.uglyOrder()).subscribe((response) => {
+            const res = response.json();
+            console.log('drafts.add -> ', res);
+            this.drafts.draftId(res.id);
+            this.dashboard.alertSuccess("Draft saved!");
+        });
     }
 
     finishSteps() {

@@ -20,8 +20,10 @@ export class CartComponent implements OnInit {
     _productsReadymix: ReadymixSpecification[] = [];
     _products: any[] = [];
     disableCartBtn: boolean;
+    private _draftId: any;
 
     private order: any;
+    private draftOrder: any;
     private loadings = {
         order: true
     }
@@ -35,20 +37,69 @@ export class CartComponent implements OnInit {
         private windowRef: WindowRef, 
         @Inject(DOCUMENT) private document: any,
         private orderManager: CreateOrderService
-    ) { }
+    ) {
+        this._draftId = sessionStorage.getItem('draftId');
+    }
 
     ngOnInit() {
         this.loadings.order = true;
-        this.drafts.prices(this.drafts._draftId).subscribe((response) => {
-            this.order = response.json();
-            this.mockStuff();
-            this.loadings.order = false;
+        this.drafts.optimalsources(this._draftId).subscribe(
+            (response) => {
+                this.drafts.prices(this._draftId).subscribe(
+                    (response) => {
+                        this.draftOrder = response.json();
+                        this.mockStuff();
+                        this.loadings.order = false;
+                    },
+                    (error) => {
+                        this.loadings.order = false;
+                        throw new Error('prices Error -> ' + JSON.stringify(error));
+                    }
+                );
+            }, 
+            (error) => {
+                this.loadings.order = false;
+                throw new Error('optimalsources Error -> ' + JSON.stringify(error));
+            }
+        );
+        // this.drafts.getDraft(this._draftId).subscribe(
+        //     (response) => {
+        //         this.draftOrder = response.json();
+        //     },
+        //     (error) => {
+        //         this.loadings.order = false;
+        //         throw new Error('getDraft Error -> ' + JSON.stringify(error));
+        //     }
+        // );
+    }
+
+    getSubtotal(order) {
+        let summ = 0;
+        order.items.forEach(item => {
+            summ += item.grossPrice * item.quantity;
         });
+        return summ;
+    }
+
+    getTaxes(order) {
+        let taxes = 0;
+        order.items.forEach(item => {
+            taxes += item.taxAmount * item.quantity;
+        });
+        return taxes;
+    }
+
+    getGrandTotal(order) {
+        let total = 0;
+        order.items.forEach(item => {
+            total += item.totalPrice;
+        });
+        return total;
     }
 
     makeOrder() {
         this.dashboard.alertInfo("Placing order...");
-        this.drafts.createOrder(this.drafts._draftId).subscribe((response) => {
+        this.drafts.createOrder(this._draftId).subscribe((response) => {
             this.dashboard.alertSuccess("Order placed successfully!");
         });
     }
@@ -155,12 +206,27 @@ export class CartComponent implements OnInit {
     }
 
     placeOrder() {
-        if(!Boolean(this.drafts._draftId)) {
+        if(!Boolean(this._draftId)) {
             alert('no draft order ID');
             return;
         }
         const customer = JSON.parse(sessionStorage.getItem('currentCustomer'));
-        const mock = {
+        let data = []; 
+        this.draftOrder.items.forEach(item => {
+            data.push(
+                {
+                    orderID: this.draftOrder.orderId,
+                    companyCode: this.draftOrder.salesArea.salesOrganizationCode,
+                    customerCode: customer.legalEntityTypeCode,
+                    jobSiteCode: this.draftOrder.jobsite.jobsiteCode,
+                    payerCode: customer.legalEntityTypeCode,
+                    orderAmount: item.totalPrice,
+                    documents: [
+                    ]
+                }
+            )
+        })
+        const cartItems = {
             sourceApp: "order-taking",
             date: new Date().toISOString(),
             screenToShow: "cash-sales",
@@ -168,19 +234,11 @@ export class CartComponent implements OnInit {
                 token : sessionStorage.getItem('access_token'),
                 jwt : sessionStorage.getItem('jwt')
             },
-            data: [{
-                orderID: this.drafts._draftId,
-                companyCode: "7180",
-                customerCode: customer.legalEntityTypeCode,
-                jobSiteCode: this.orderManager.jobsite.jobSiteCode || "",
-                payerCode: customer.legalEntityTypeCode,
-                orderAmount: 12.00,
-                documents: [
-                ]
-            }]
+            data: data
         }
         this.disableCartBtn = true;
-        let encoded = this.jsonObjService.encodeJson(mock);
+        let encoded = this.jsonObjService.encodeJson(cartItems);
+        sessionStorage.removeItem('draftId');
         this.document.location.href = 'https://invoices-payments-dev2.mybluemix.net/invoices-payments/open/' + encoded;
     }
 }
