@@ -13,4 +13,8 @@ export class DashboardService {
     alertSuccess(text: string) {
         this.alertSubject.next({type: "success", text: text});
     }
+
+    alertError(text: string) {
+        this.alertSubject.next({type: "error", text: text});
+    }
 }

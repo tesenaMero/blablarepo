@@ -19,6 +19,7 @@ export class ProductsApi {
         // '/v2/mm/myproducts?salesDocumentTypeId=1&shippingConditionId=1&shipmentLocationId=815.2&productId=1536'
         return this.api.get(`/v2/mm/myproducts?productId=${productId}&salesDocumentTypeId=${salesDocumentTypeId}&shippingConditionId=${shippingCondition.shippingConditionId}&shipmentLocationId=${jobsite.shipmentLocationId}.2`);
     }
+
     byProductColorAndSalesDocumentAndPlant(salesDocumentTypeId, productColorId, plantId?): Observable<Response> {
         return this.api.get(`/v2/mm/myproducts?${(plantId === void 0)?``:`plantId=${plantId}&`}salesDocumentTypeId=${salesDocumentTypeId}&productColorId=${productColorId}`);
     }

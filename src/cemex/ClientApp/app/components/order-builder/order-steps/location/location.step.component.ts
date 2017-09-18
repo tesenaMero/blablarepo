@@ -3,9 +3,10 @@ import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
 import { Step, StepEventsListener, _Step } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
-import { ShipmentLocationApi } from '../../../../shared/services/api/shipment-locations.service.api';
+import { ShipmentLocationApi, PurchaseOrderApi } from '../../../../shared/services/api';
 import { CustomerService } from '../../../../shared/services/customer.service'
 import { DeliveryMode } from '../../../../models/delivery.model'
+import { DashboardService } from '../../../../shared/services/dashboard.service'
 
 @Component({
     selector: 'location-step',
@@ -16,6 +17,7 @@ import { DeliveryMode } from '../../../../models/delivery.model'
 export class LocationStepComponent implements OnInit, StepEventsListener {
     @Input() mapOptions?: google.maps.MapOptions;
     @Output() onCompleted = new EventEmitter<any>();
+    @Output() requestNext = new EventEmitter<any>();
     MODE = DeliveryMode;
 
     // Selected data
@@ -25,7 +27,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     private catalogOptions: Object = {};
     private selectedServices: Array<{ additionalServiceId: number }> = [];
 
-    private purchaseOrder: string;
+    private purchaseOrder: string = "";
     shipmentLocationTypes;
 
     // Loading state
@@ -115,7 +117,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     private customer: any;
 
-    constructor(@Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private customerService: CustomerService) {
+    constructor(@Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private customerService: CustomerService, private purchaseOrderApi: PurchaseOrderApi, private dashboard: DashboardService) {
         this.step.canAdvance = () => this.canAdvance();
         this.step.setEventsListener(this);
     }
@@ -127,6 +129,14 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     canAdvance() {
+        // Validate purchase order
+        if (this.purchaseOrder.length > 0) {
+            this.validations.purchaseOrder.valid = true;
+        }
+        else {
+            this.validations.purchaseOrder.valid = false;
+        }
+
         let advance = true;
         for (let key in this.validations) {
             if (this.validations[key].mandatory) {
@@ -137,7 +147,30 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             }
         }
 
+        if (!advance) { return; }
+
+        // Validate purchase order
+        if (this.validations.purchaseOrder.mandatory) {
+            let result = this.validatePurchaseOrder();
+            this.dashboard.alertInfo("Validating...");
+            result.then(data => {
+                if (data.messageType == "E") {
+                    this.dashboard.alertError(data.messageText);
+                }
+                else if (data.messageType == "S") {
+                    this.dashboard.alertSuccess(data.messageText);
+                    this.requestNext.emit();
+                }
+            });
+            return false;
+        }
+        
         return advance;
+    }
+
+    async validatePurchaseOrder() {
+        let result = await this.purchaseOrderApi.validate(this.purchaseOrder, this.orderManager.productLine, this.location);
+        return result;
     }
 
     onShowed() {
@@ -324,10 +357,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     purchaseOrderChanged(purchaseOrder: string) {
         this.validations.purchaseOrder.showError = false;
-        // If mandatory check if its valid
-        if (this.validations.purchaseOrder.mandatory) {
-            this.validations.purchaseOrder.valid = this.purchaseOrder.length <= 0;
-        }
+        this.validations.purchaseOrder.valid = this.purchaseOrder.length >= 0;
     }
 
     contactChanged(contact: any) {

@@ -49,6 +49,10 @@ export class OrderBuilderComponent {
             this.stepper.uncomplete();
     }
 
+    locationStepRequestedNext(event: any) {
+        this.stepper.next();
+    }
+
     productStepCompleted(product: any) {
         this.isReadyMix = product.productLineId == this.READYMIX_ID;
         this._changeDetector.detectChanges();

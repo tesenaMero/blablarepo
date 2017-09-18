@@ -14,6 +14,7 @@ import { DraftsService } from './drafts.service';
 import { CatalogApi } from './catalog.service';
 import { ProductColorApi } from './product-colors.service';
 import { PlantApi } from './plants.service';
+import { PurchaseOrderApi } from './pruchase-order.service'
 
 export {
     ShipmentLocationApi,
@@ -31,5 +32,6 @@ export {
     DraftsService,
     CatalogApi,
     ProductColorApi,
-    PlantApi
+    PlantApi,
+    PurchaseOrderApi
 }
