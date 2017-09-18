@@ -25,4 +25,8 @@ export class DraftsService {
     draftId(id) {
         this._draftId = id;
     }
+
+    optimalSource(draftId: any): Observable<Response> {
+        return this.api.get("/v4/sm/orders/" + draftId + "/optimalsources");
+    }
 }
