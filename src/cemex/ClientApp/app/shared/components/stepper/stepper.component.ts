@@ -60,9 +60,9 @@ export class StepperComponent implements AfterContentInit {
 
     // Controls
     // ==============================================================
-    next() {
+    next(ignore = false) {
         if (!this.currentStep.completed) { return; }
-        if (!this.currentStep.canAdvance()) { return; }
+        if (!ignore && !this.currentStep.canAdvance()) { return; }
         let currentIndex = this.getActiveStepIndex();
 
         // If last step

@@ -50,7 +50,8 @@ export class OrderBuilderComponent {
     }
 
     locationStepRequestedNext(event: any) {
-        this.stepper.next();
+        this.stepper.complete();
+        this.stepper.next(true);
     }
 
     productStepCompleted(product: any) {

@@ -9,9 +9,7 @@ export class PurchaseOrderApi {
     constructor(private api: Api) {}
 
     // /v4/sm/purchaseorders/8000000610/validate?productLine=6&jobsiteId=1059
-    async validate(purchaseOrder: string, productLine: any, location: any) {
-        const response = await this.api.get("/v4/sm/purchaseorders/" + purchaseOrder + "/validate?productLine=" + productLine.productLineId + "&jobsiteId=" + location.shipmentLocationId).toPromise();
-        
-        return response.json();
+    validate(purchaseOrder: string, productLine: any, location: any) {
+        return this.api.get("/v4/sm/purchaseorders/" + purchaseOrder + "/validate?productLine=" + productLine.productLineId + "&jobsiteId=" + location.shipmentLocationId);
     }
 }
