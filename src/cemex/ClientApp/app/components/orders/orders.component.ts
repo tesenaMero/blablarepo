@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { OrdersService } from '../../shared/services/orders.service';
 import { Api } from '../../shared/services/api';
 import { PingSalesOrderApi } from '../../shared/services/api/ping-sales-order.service';
 import { OrderRequestTableComponentConfiguration } from '../../utils/order-request.helper';
 import { DashboardService } from '../../shared/services/dashboard.service';
 import { TranslationService } from '../../shared/services/translation.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'page-orders',
