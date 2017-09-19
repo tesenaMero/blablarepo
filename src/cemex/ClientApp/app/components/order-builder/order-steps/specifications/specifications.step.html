@@ -327,7 +327,7 @@
     </ng-container>
 
     <!-- Readymix Mexico Delivery -->
-    <ng-container *ngIf="false">
+    <ng-container *ngIf="true">
         <div class="product" [ngClass]="{ 
                 'exit-animation': product.deleting, 
                 'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
@@ -339,7 +339,7 @@
                         </label>
                         <div class="input product-selection dropdown">
                             <span class="selection">
-                                {{ product.product.name }}
+                                <!-- {{ product.product.name }} -->
                                 <select style="width: calc(100% - 80px);" [(ngModel)]="product.product" class="input behind">
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p.name }}</option>
                                 </select>
@@ -436,9 +436,8 @@
                         <div class="input flex-space-between dropdown">
                             <span>
                                 Select project profile to prefill specifications
-                                <select [(ngModel)]="product.payment" class="input behind">
-                                    <option>Project profile 1</option>
-                                    <option>Project profile 2</option>
+                                <select [(ngModel)]="product.projectProfile" (ngModelChange)="projectProfileChange($event)" class="input behind">
+                                    <option *ngFor="let project of projectProfiles" [ngValue]="project">{{project.profileName}}</option>
                                 </select>
                                 </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -447,46 +446,67 @@
                 </div>
             </div>
             <div class="d-flex flex-wrap rdymx-specs">
-                <div class="group disabled">
+                <div class="group">
                     <label>
                         Discharge Time
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            <select [(ngModel)]="product.unit" class="input behind">
-                                <option *ngFor="let unit of availableUnits" [ngValue]="unit">{{ unit.name  }}</option>
+                            {{product.projectProfile.dischargeTime?.timePerDischargeDesc}}
+                            <select (change)="onChangeDischargeTime($event.target.value)" class="input behind">
+                                <option value="" selected disabled hidden></option>
+                                <option *ngFor="let entry of catalogs.DCT; let i = index" [value]="i">{{entry.entryDesc}}</option>
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group disabled">
+                <div class="group">
                     <label>
                         Transport Method
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            <select [(ngModel)]="product.unit" class="input behind">
-                                <option *ngFor="let unit of availableUnits" [ngValue]="unit">{{ unit.name  }}</option>
+                            {{product.projectProfile.transportMethod?.transportMethodDesc}}
+                            <select (change)="onChangeTransportMethod($event.target.value)" class="input behind">
+                                <option value="" selected disabled hidden></option>
+                                <option *ngFor="let entry of catalogs.TPM; let i = index" [value]="i">{{entry.entryDesc}}</option>
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group disabled">
+                <div class="group">
                     <label>
                         Unload Type
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            <select [(ngModel)]="product.unit" class="input behind">
-                                <option *ngFor="let unit of availableUnits" [ngValue]="unit">{{ unit.name  }}</option>
+                            {{product.projectProfile.unloadType?.unloadTypeDesc}}
+                            <select (change)="onChangeUnloadType($event.target.value)" class="input behind">
+                                <option value="" selected disabled hidden></option>
+                                <option *ngFor="let entry of catalogs.ULT; let i = index" [value]="i">{{entry.entryDesc}}</option>
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group disabled">
+                <div class="group">
+                    <label>
+                        Pump Capacity
+                    </label>
+                    <div class="input flex-space-between dropdown">
+                        <span style="line-height: 24px;">
+                            {{product.projectProfile.pumpCapacity?.pumpCapacityDesc}}
+                            <select (change)="onChangePumpCapacity($event.target.value)" class="input behind">
+                                <option value="" selected disabled hidden></option>
+                                <option *ngFor="let entry of catalogs.PCC; let i = index" [value]="i">{{entry.entryDesc}}</option>
+                            </select>
+                        </span>
+                        <span class="arrow cmx-icon-straight-arrow-down"></span>
+                    </div>
+                </div>
+                <!-- <div class="group">
                     <label>
                         Pump Capacity Min
                     </label>
@@ -499,7 +519,7 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group disabled">
+                <div class="group">
                     <label>
                         Pump Capacity Max
                     </label>
@@ -511,44 +531,47 @@
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
-                </div>
-                <div class="group disabled">
+                </div> -->
+                <div class="group">
                     <label>
                         Aplication
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            
-                            <select [(ngModel)]="product.unit" class="input behind">
-                                <option *ngFor="let unit of availableUnits" [ngValue]="unit">{{ unit.name  }}</option>
+                            {{product.projectProfile.element?.elementDesc}}
+                            <select (change)="onChangeApplication($event.target.value)" class="input behind">
+                                <option value="" selected disabled hidden></option>
+                                <option *ngFor="let entry of catalogs.ELM; let i = index" [value]="i">{{entry.entryDesc}}</option>
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group disabled">
+                <div class="group">
                     <label>
                         Load Size
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            
-                            <select [(ngModel)]="product.unit" class="input behind">
-                                <option *ngFor="let unit of availableUnits" [ngValue]="unit">{{ unit.name  }}</option>
+                            {{product.projectProfile.loadSize?.loadSizeDesc}}
+                            <select (change)="onChangeLoadSize($event.target.value)"  class="input behind">
+                                <option value="" selected disabled hidden></option>
+                                <option *ngFor="let entry of catalogs.LSC; let i = index" [value]="i">{{entry.entryDesc}}</option>
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group disabled">
+                <div class="group">
                     <label>
                         Spacing
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            
-                            <select [(ngModel)]="product.unit" class="input behind">
-                                <option *ngFor="let unit of availableUnits" [ngValue]="unit">{{ unit.name  }}</option>
+                            {{product.projectProfile.timePerLoad?.timePerLoadDesc}}
+                            <select (change)="onChangeTimePerLoad($event.target.value)" class="input behind">
+                                <option value="" selected disabled hidden></option>
+                                <option *ngFor="let entry of catalogs.TPL; let i = index" [value]="i">{{entry.entryDesc}}</option>
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>

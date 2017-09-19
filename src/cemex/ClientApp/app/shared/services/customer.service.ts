@@ -25,6 +25,6 @@ export class CustomerService {
     }
 
     currentCustomer() {
-        return this.customerSubject.getValue();
+        return this.customerSubject.getValue() || {};
     }
 }
