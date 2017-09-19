@@ -3,6 +3,9 @@ import { Http, Headers, RequestOptions, RequestOptionsArgs, Response } from '@an
 import { Observable } from 'rxjs';
 import { WindowRef } from '../window-ref.service';
 
+const d = new Date();
+const sessionId = btoa(d.toISOString().replace(/-/g, '').replace(/:/g, '').replace('Z', '').replace('T', ''));
+
 @Injectable()
 export class Api {
     public apiRoot = this.winRef['API_HOST'] || 'https://api.us2.apiconnect.ibmcloud.com/cnx-gbl-org-development/dev';
@@ -10,7 +13,8 @@ export class Api {
     public appId = 'DCMWebTool_App';
     public acceptLanguage = 'en-US';
     private jwt = null;
-    private authorization = null;
+    private authorization = null;    
+    
 
     constructor(private _http: Http, private winRef: WindowRef) {}
 
@@ -54,14 +58,13 @@ export class Api {
         if (this.authorization)
             headers.append('Authorization', 'Bearer ' + this.authorization);
 
-        if (this.jwt) 
-            headers.append('jwt', this.jwt);
-            const d = new Date();
-            const datestring = d.getFullYear() + "" + ("0"+(d.getMonth()+1)).slice(-2) + "" + ("0" + d.getDate()).slice(-2) + "" + ("0" + d.getHours()).slice(-2) + "" + ("0" + d.getMinutes()).slice(-2) + "" + ("0"+d.getSeconds()).slice(-2) + "." + performance.now().toFixed(0);
-            const sessionId = btoa(d.toISOString().replace(/-/g, '').replace(/:/g, '').replace('Z', '').replace('T', ''));
-
+        if (this.jwt) {
+            headers.append('jwt', this.jwt);         
+            const ds = new Date();
+            const datestring = ds.getFullYear() + "" + ("0"+(ds.getMonth()+1)).slice(-2) + "" + ("0" + ds.getDate()).slice(-2) + "" + ("0" + ds.getHours()).slice(-2) + "" + ("0" + d.getMinutes()).slice(-2) + "" + ("0"+d.getSeconds()).slice(-2) + "." + performance.now().toFixed(2).replace('.','').substring(0, 7);
             headers.append('sessionId', sessionId);
             headers.append('RequestDateTime', datestring);
+        }
         return headers;
     }
 
