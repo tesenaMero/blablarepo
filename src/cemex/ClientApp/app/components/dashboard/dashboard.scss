@@ -94,3 +94,61 @@ nav.side-nav-bar {
         display: none;
     }
 }
+
+// Overrides ugly ass cmx-component
+/deep/.cmx-side-nav-bar-desk {
+    transition: tranform 0.25s ease-in-out !important;
+}
+
+/deep/.legal-entity {
+    height: 100% !important;
+    display: block !important;
+}
+
+/deep/.legal-entity.hide-tab {
+    display: none !important;
+}
+
+/deep/.title-section {
+    height: auto !important;
+    background-color: #002A59 !important;
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    padding: 8px 10px !important;
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+}
+
+/deep/.legal-entity .ul-legal-entity li p {
+    font-size: 12px !important;
+    padding: 2px 10px 2px 10px !important;
+}
+
+/deep/.legal-entity .search-legal-entity div {
+    width: 100% !important;
+    margin: 0 10px !important;
+}
+
+/deep/.legal-entity .search-legal-entity div input {
+    width: 100% !important;
+    background: #001C3B !important;
+    border: none !important;
+    outline: none !important;
+    color: #FFF !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    margin: 0px 5px !important;
+    margin-top: 8px !important;
+    font-size: 14px !important;
+}
+
+/deep/.search-legal-entity>div>span {
+    height: 15px !important;
+    margin-top: 8px !important;
+}
+
+/deep/.cmx-nav-header {
+    border-bottom: 0 !important;
+}

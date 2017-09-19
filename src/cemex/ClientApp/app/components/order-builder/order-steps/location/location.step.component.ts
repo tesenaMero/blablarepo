@@ -130,24 +130,24 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     canAdvance() {
         // Validate purchase order
-        if (this.purchaseOrder.length > 0) {
-            this.validations.purchaseOrder.valid = true;
-        }
-        else {
-            this.validations.purchaseOrder.valid = false;
-        }
+        // if (this.purchaseOrder.length > 0) {
+        //     this.validations.purchaseOrder.valid = true;
+        // }
+        // else {
+        //     this.validations.purchaseOrder.valid = false;
+        // }
 
-        let advance = true;
-        for (let key in this.validations) {
-            if (this.validations[key].mandatory) {
-                if (!this.validations[key].valid) {
-                    this.validations[key].showError = true;
-                    advance = false;
-                }
-            }
-        }
+        // let advance = true;
+        // for (let key in this.validations) {
+        //     if (this.validations[key].mandatory) {
+        //         if (!this.validations[key].valid) {
+        //             this.validations[key].showError = true;
+        //             advance = false;
+        //         }
+        //     }
+        // }
 
-        if (!advance) { return; }
+        // if (!advance) { return; }
 
         // Validate purchase order
         if (this.validations.purchaseOrder.mandatory) {
@@ -155,7 +155,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.purchaseOrderApi.validate(this.purchaseOrder, this.orderManager.productLine, this.location).subscribe((response) => {
                 let data = response.json();
                 if (data.messageType == "E") {
-                    this.dashboard.alertError(data.messageText);
+                    this.dashboard.alertError(data.messageText, 12000);
                     return;
                 }
                 else if (data.messageType == "S") {
@@ -173,7 +173,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             return false;
         }
         
-        return advance;
+        //return advance;
     }
 
     onShowed() {
