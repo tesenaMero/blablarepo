@@ -30,7 +30,7 @@ export class OrdersComponent implements OnInit {
     this.ordersService.fetchAllOrders();
   }
 
-  onclick () {
+  orderResquestClicked() {
     this.dash.alertInfo(this.t.pt('views.common.validating_connection'), 99999);
     this.ping.validatePingSalesOrder().subscribe((response) => {
       if (response.json().success === 'Y') {
