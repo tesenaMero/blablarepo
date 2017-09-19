@@ -17,4 +17,8 @@ export class DashboardService {
     alertError(text: string) {
         this.alertSubject.next({type: "error", text: text});
     }
+
+    closeAlert() {
+        this.alertSubject.next(null);
+    }
 }

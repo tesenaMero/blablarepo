@@ -73,6 +73,9 @@ nav.side-nav-bar {
         width: calc(100% - 46px);
         font-family: Roboto;
     }
+    @include media-breakpoint-down(md) {
+        width: 100%;
+    }
 }
 
 // Outside of classes to optimize a little
