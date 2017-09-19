@@ -2,9 +2,9 @@ import { Component, ViewChild, ChangeDetectorRef, NgZone } from '@angular/core';
 import { Router } from '@angular/router'
 import { StepperComponent } from '../../shared/components/stepper/';
 import { DeliveryMode } from '../../models/delivery.model';
-import { DashboardService } from '../../shared/services/dashboard.service'
-import { DraftsService } from '../../shared/services/api/drafts.service'
-import { CustomerService } from '../../shared/services/customer.service'
+import { DashboardService } from '../../shared/services/dashboard.service';
+import { DraftsService } from '../../shared/services/api/drafts.service';
+import { CustomerService } from '../../shared/services/customer.service';
 
 @Component({
     selector: 'order-builder',

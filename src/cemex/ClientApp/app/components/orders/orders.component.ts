@@ -30,17 +30,17 @@ export class OrdersComponent implements OnInit {
     this.ordersService.fetchAllOrders();
   }
 
-  onclick () {      
-    if (!this.ping.validatePingSalesOrder().subscribe((response) => {
-        if (response.json().success === 'Y') {
-          this.router.navigate(['/app/new']);
-        }
-        else {
-          this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
-        }
-      })) {
-      this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
-    }
+  orderResquestClicked() {
+    this.dash.alertInfo(this.t.pt('views.common.validating_connection'), 99999);
+    this.ping.validatePingSalesOrder().subscribe((response) => {
+      if (response.json().success === 'Y') {
+        this.router.navigate(['/app/new']);
+        this.dash.closeAlert();
+      }
+      else {
+        this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
+      }
+    });
   }
 
 }

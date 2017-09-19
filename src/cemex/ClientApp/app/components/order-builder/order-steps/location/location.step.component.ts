@@ -237,7 +237,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 location.name = location.shipmentLocationDesc;
             })
             this.loadings.locations = false;
-            if (this.locations.length > 0) {
+            if (this.locations.length > 0 && this.location == undefined) {
                 this.jobsiteChanged(this.locations[0]);
                 this.locationIndex = 0;
             }

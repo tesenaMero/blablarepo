@@ -3,6 +3,8 @@ import { ProductsApi, Api } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.service';
+import { ProjectProfileApi, CatalogApi } from '../../../../shared/services/api';
+import { CustomerService } from '../../../../shared/services/customer.service';
 
 @Component({
     selector: 'specifications-step',
@@ -13,12 +15,17 @@ import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.s
 export class SpecificationsStepComponent implements StepEventsListener {
     @Output() initializeProductColorsEmitter = new EventEmitter<any>();
     @Output() onCompleted = new EventEmitter<any>();
+    private READYMIX_LINE = 6;
+
     private preProducts = [];
     private loadings = {
         products: true,
-        contracts: true
+        contracts: true,
+        projectProfiles: true,
+        catalog: true
     }
     private selectedProduct: any;
+
     initializeProductSearch() {
         this.manager.fetchProductColors(this.manager.productLine.productLineId);
     }
@@ -62,7 +69,27 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return SpecificationsStepComponent.availablePlants;
     }
 
-    constructor( @Inject(Step) private step: Step, private api: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi) {
+    static projectProfiles = [];
+
+    get projectProfiles() {
+        return SpecificationsStepComponent.projectProfiles;
+    }
+
+    static catalogs = [];
+
+    get catalogs() {
+        return SpecificationsStepComponent.catalogs;
+    }
+
+    constructor(
+        @Inject(Step) private step: Step, 
+        private api: ProductsApi, 
+        private manager: CreateOrderService, 
+        private ProjectProfileApi: ProjectProfileApi,
+        private CatalogApi: CatalogApi,
+        private paymentTermsApi: PaymentTermsApi,
+        private CustomerService: CustomerService,
+    ) {
         this.step.setEventsListener(this);
         this.add(); // Push a pre product
     }
@@ -70,7 +97,12 @@ export class SpecificationsStepComponent implements StepEventsListener {
     onShowed() {
         this.onCompleted.emit();
         this.loadings.products = true;
-        const salesDocumentType = '3';
+        
+        let salesDocumentType = '3';
+        if (this.manager.productLine.productLineId == this.READYMIX_LINE) { 
+            salesDocumentType = '1'; 
+        }
+
         this.api.top(
             this.manager.jobsite,
             salesDocumentType,
@@ -96,6 +128,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.manager.setProducts(this.preProducts);
         });
         this.getPaymentTerms();
+        this.getProjectProfiles();
+        
     }
 
     paymentTermChanged(term) {
@@ -128,6 +162,95 @@ export class SpecificationsStepComponent implements StepEventsListener {
             creditPayment && uniqueTerms.push(creditPayment);
             SpecificationsStepComponent.availablePayments = terms;
         });
+    }
+
+    getProjectProfiles() {
+        const customerId = this.CustomerService.currentCustomer().legalEntityId;
+
+        this.loadings.projectProfiles = true;
+        this.ProjectProfileApi.all(customerId).subscribe((response) => {
+            this.loadings.projectProfiles = false;
+            const profiles = response.json().profiles;
+            if (profiles) {
+                SpecificationsStepComponent.projectProfiles = profiles;
+            }
+        });
+
+        this.loadings.catalog = true;
+        this.CatalogApi.byProductLine(customerId, '0006').subscribe((res: any) => {
+            this.loadings.catalog = false;
+            res.json().catalogs && res.json().catalogs.forEach((catalog) => {
+                this.catalogs[catalog.catalogCode] = catalog.entries;
+            });
+        });
+    }
+
+    projectProfileChange(projectProfile) {
+        // TODO use index &&  _.pick
+        this.preProducts[0].projectProfile = projectProfile.project.projectProperties;
+    }
+
+    onChangeDischargeTime(index) {
+        const entry = this.catalogs['DCT'][index];
+
+        this.preProducts[0].projectProfile.dischargeTime = {
+            dischargeTimeId: entry.entryId,
+            timePerDischargeDesc: entry.entryDesc
+        };
+    }
+
+    onChangeTransportMethod(index) {
+        const entry = this.catalogs['TPM'][index];
+
+        this.preProducts[0].projectProfile.transportMethod = {
+            transportMethodId: entry.entryId,
+            transportMethodDesc: entry.entryDesc
+        };
+    }
+
+    onChangeUnloadType(index) {
+        const entry = this.catalogs['ULT'][index];
+
+        this.preProducts[0].projectProfile.unloadType = {
+            unloadTypeId: entry.entryId,
+            unloadTypeDesc: entry.entryDesc
+        };
+    }
+
+    onChangePumpCapacity(index) {
+        const entry = this.catalogs['PCC'][index];
+
+        this.preProducts[0].projectProfile.pumpCapacity = {
+            pumpCapacityId: entry.entryId,
+            pumpCapacityDesc: entry.entryDesc
+        };
+    }
+
+    onChangeApplication(index) {
+        const entry = this.catalogs['ELM'][index];
+
+        this.preProducts[0].projectProfile.element = {
+            elementId: entry.entryId,
+            elementDesc: entry.entryDesc
+        };
+    }
+
+    onChangeLoadSize(index) {
+        const entry = this.catalogs['LSC'][index];
+
+        this.preProducts[0].projectProfile.loadSize = {
+            loadSizeId: entry.entryId,
+            loadSizeDesc: entry.entryDesc
+        };
+    }
+
+    onChangeTimePerLoad(index) {
+        const entry = this.catalogs['TPL'][index];
+
+        this.preProducts[0].projectProfile.timePerLoad = {
+            timePerLoadId: entry.entryId,
+            timePerLoadDesc: entry.entryDesc
+        }; 
     }
 
     getUnits(product) {
@@ -200,8 +323,8 @@ class PreProduct {
     contract: any;
     product: any;
     plant: any;
-    projectProfile: any;
     paymentOption: any;
+    projectProfile: any = {};
 
     constructor(private manager: CreateOrderService) {
         let _ = SpecificationsStepComponent;

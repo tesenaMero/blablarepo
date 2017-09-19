@@ -32,7 +32,7 @@ export class ProjectProfileCreatorComponent {
     // CustomerService.currentCustomer().legalEntityId || 
     constructor(private CatalogApi: CatalogApi, private ProjectProfileApi: ProjectProfileApi, private CustomerService: CustomerService, private t: TranslationService) {
         this.loadingCatalog = true;
-        const customerId = 354;
+        const customerId = this.CustomerService.currentCustomer().legalEntityId;
         this.CatalogApi.byProductLine(customerId, '0006').map((response) => response.json()).subscribe((response) => {
             response.catalogs.forEach((catalog) => {
                 this.catalogs[catalog.catalogCode] = catalog.entries;
@@ -44,7 +44,7 @@ export class ProjectProfileCreatorComponent {
     confirm() {
         // this.CustomerService.currentCustomer().legalEntityId 
         this.postingTheOrder = true;
-        const customerId = 354;
+        const customerId = this.CustomerService.currentCustomer().legalEntityId;
         this.ProjectProfileApi.create({ ...this.projectProfile, customer: { customerId }}, customerId)
             .map((response) => response.json())
             .subscribe((response) => {

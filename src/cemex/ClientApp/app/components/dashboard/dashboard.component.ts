@@ -73,13 +73,15 @@ export class DashboardComponent implements OnInit {
     }
 
     private handleAlert(alert: any) {
+        if (alert == null) { this.closeAlert(); return; }
+        
         this.showAlert = false;
         this.alert.text = alert.text;
         this.alert.type = alert.type;
         this.showAlert = true;
         setTimeout(() => {
             this.showAlert = false;
-        }, 8000);
+        }, alert.duration);
     }
 
     private closeAlert() {
@@ -105,7 +107,5 @@ export class DashboardComponent implements OnInit {
 
     private clickMenuButton(event: any) {
         this.sidebar.isCollapsed = !this.sidebar.isCollapsed;
-
-        console.log("clickMenuButton, isCollapsed:", this.sidebar.isCollapsed);
     }
 }
