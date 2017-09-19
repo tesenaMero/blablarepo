@@ -10,15 +10,26 @@ let $ = require("jquery");
 })
 export class Modal {
     text: any;
-    requestId: number = 90;
+    requestId: number = 3;
     response: any;
-    constructor(request: OrderDetailApi) {                
-        this.text = "The request " + this.requestId + " is successful created" +
-        "\n Code: " + "234DC34";        
+    constructor(request: OrderDetailApi) {     
+        request.validateRequestId(this.requestId).subscribe((response) => {
+            this.response = response.json();     
+            this.text = "The request " + this.requestId + " is successful created" +
+            "\n Code: " + this.response.orderCode +
+            "\n ";
+            let fields = this.response.messages.split('|');        
+            for (let i = 0; i < fields.length; ++i) { 
+                if (fields[i].trim()) {
+                    console.log(i, fields[i]);
+                    this.text += fields[i].trim() + " \n";
+                }
+            }    
+                    
+        });
+    }
+    openModal() {
+        // $("#app-content").addClass("blur");
         // $('#myModal').modal('show');
-        // request.validateRequestId(this.requestId).subscribe((response) => {
-        //     this.response = response.json();
-        //     console.log("validateRequestId", this.response);                 
-        // });
     }
 }
