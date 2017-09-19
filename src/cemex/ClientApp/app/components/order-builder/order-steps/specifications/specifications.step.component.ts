@@ -12,6 +12,7 @@ import { ProjectProfileApi, CatalogApi } from '../../../../shared/services/api';
     host: { 'class': 'w-100' }
 })
 export class SpecificationsStepComponent implements StepEventsListener {
+    @Output() initializeProductColorsEmitter = new EventEmitter<any>();
     @Output() onCompleted = new EventEmitter<any>();
     private preProducts = [];
     private loadings = {
@@ -21,6 +22,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         catalog: true
     }
     private selectedProduct: any;
+
+    initializeProductSearch() {
+        this.manager.fetchProductColors(this.manager.productLine.productLineId);
+    }
 
     static availableUnits = [];
 
@@ -171,11 +176,71 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     projectProfileChange(projectProfile) {
         // TODO use index &&  _.pick
+        console.log('change pp', projectProfile);
         this.preProducts[0].projectProfile = projectProfile.project.projectProperties;
     }
 
-    onChangeDischargeTime(dischargeTimeId) {
-        console.log('on change discharge time', dischargeTimeId);
+    onChangeDischargeTime(index) {
+        const entry = this.catalogs['DCT'][index];
+
+        this.preProducts[0].projectProfile.dischargeTime = {
+            dischargeTimeId: entry.entryId,
+            timePerDischargeDesc: entry.entryDesc
+        };
+    }
+
+    onChangeTransportMethod(index) {
+        const entry = this.catalogs['TPM'][index];
+
+        this.preProducts[0].projectProfile.transportMethod = {
+            transportMethodId: entry.entryId,
+            transportMethodDesc: entry.entryDesc
+        };
+    }
+
+    onChangeUnloadType(index) {
+        const entry = this.catalogs['ULT'][index];
+
+        this.preProducts[0].projectProfile.unloadType = {
+            unloadTypeId: entry.entryId,
+            unloadTypeDesc: entry.entryDesc
+        };
+    }
+
+    onChangePumpCapacity(index) {
+        const entry = this.catalogs['PCC'][index];
+
+        this.preProducts[0].projectProfile.pumpCapacity = {
+            pumpCapacityId: entry.entryId,
+            pumpCapacityDesc: entry.entryDesc
+        };
+    }
+
+    onChangeApplication(index) {
+        const entry = this.catalogs['ELM'][index];
+
+        this.preProducts[0].projectProfile.element = {
+            elementId: entry.entryId,
+            elementDesc: entry.entryDesc
+        };
+    }
+
+    onChangeLoadSize(index) {
+        const entry = this.catalogs['LSC'][index];
+
+        this.preProducts[0].projectProfile.loadSize = {
+            loadSizeId: entry.entryId,
+            loadSizeDesc: entry.entryDesc
+        };
+    }
+
+    onChangeTimePerLoad(index) {
+        const entry = this.catalogs['TPL'][index];
+
+        this.preProducts[0].projectProfile.timePerLoad = {
+            timePerLoadId: entry.entryId,
+            timePerLoadDesc: entry.entryDesc
+        }; 
     }
 
     getUnits(product) {
@@ -220,7 +285,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     add() {
-        this.preProducts.push(new PreProduct());
+        this.preProducts.push(new PreProduct(this.manager));
     }
 
     remove(index: any) {
@@ -251,7 +316,7 @@ class PreProduct {
     paymentOption: any;
     projectProfile: any = {};
 
-    constructor() {
+    constructor(private manager: CreateOrderService) {
         let _ = SpecificationsStepComponent;
         if (_.availableProducts.length > 0) { this.product = _.availableProducts[0]; }
         this.contract = _.availableContracts[0];
