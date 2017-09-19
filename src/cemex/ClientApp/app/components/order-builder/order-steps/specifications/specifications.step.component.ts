@@ -13,6 +13,8 @@ import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.s
 export class SpecificationsStepComponent implements StepEventsListener {
     @Output() initializeProductColorsEmitter = new EventEmitter<any>();
     @Output() onCompleted = new EventEmitter<any>();
+    private READYMIX_LINE = 6;
+
     private preProducts = [];
     private loadings = {
         products: true,
@@ -70,7 +72,12 @@ export class SpecificationsStepComponent implements StepEventsListener {
     onShowed() {
         this.onCompleted.emit();
         this.loadings.products = true;
-        const salesDocumentType = '3';
+        
+        let salesDocumentType = '3';
+        if (this.manager.productLine.productLineId == this.READYMIX_LINE) { 
+            salesDocumentType = '1'; 
+        }
+
         this.api.top(
             this.manager.jobsite,
             salesDocumentType,
