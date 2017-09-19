@@ -31,14 +31,16 @@ export class OrdersComponent implements OnInit {
   }
 
   onclick () {      
-    this.ping.validatePingSalesOrder().subscribe((response) => {
-      if (response.json().success === 'Y') {
-        this.router.navigate(['/app/new']);
-      }
-      else {
-        this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
-      }
-    });
+    if (!this.ping.validatePingSalesOrder().subscribe((response) => {
+        if (response.json().success === 'Y') {
+          this.router.navigate(['/app/new']);
+        }
+        else {
+          this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
+        }
+      })) {
+      this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
+    }
   }
 
 }
