@@ -31,6 +31,7 @@ import { OrderDetailCommentsComponent } from './components/order-detail/order-de
 import { OrderDetailLogsComponent } from './components/order-detail/order-detail-logs/order-detail-logs.component';
 import { SelectDropdownModule } from './shared/components/selectwithsearch/dropdown.module';
 import { CrossProductComponent } from './components/cross-product/crossProduct.component';
+import { Modal } from './shared/modal/modal.component';
 
 // Pipes
 import {
@@ -136,7 +137,8 @@ export const sharedConfig: NgModule = {
         ActionButtonComponent,
         DLSTableComponent,
         NavigationComponent,
-        FooterComponent
+        FooterComponent,
+        Modal
     ],
     imports: [
         NguiDatetimePickerModule,
@@ -158,6 +160,7 @@ export const sharedConfig: NgModule = {
                     { path: 'project-profiles', component: ProjectProfilesComponent },
                     { path: 'drafts', component: DraftsComponent },
                     { path: 'open/:id', component: CrossProductComponent },
+                    { path: 'modal', component: Modal },
                 ]
             },
             { path: '**', redirectTo: 'app' }

@@ -59,11 +59,10 @@ export class Api {
             headers.append('Authorization', 'Bearer ' + this.authorization);
 
         if (this.jwt) {
-            headers.append('jwt', this.jwt);         
-            const ds = new Date();
-            const datestring = ds.getFullYear() + "" + ("0"+(ds.getMonth()+1)).slice(-2) + "" + ("0" + ds.getDate()).slice(-2) + "" + ("0" + ds.getHours()).slice(-2) + "" + ("0" + d.getMinutes()).slice(-2) + "" + ("0"+d.getSeconds()).slice(-2) + "." + performance.now().toFixed(2).replace('.','').substring(0, 7);
+            headers.append('jwt', this.jwt);   
+            const time = new Date();
             headers.append('sessionId', sessionId);
-            headers.append('RequestDateTime', datestring);
+            headers.append('RequestDateTime', time.getTime().toString());
         }
         return headers;
     }
