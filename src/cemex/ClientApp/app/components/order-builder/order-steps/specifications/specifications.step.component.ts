@@ -4,6 +4,7 @@ import { Step, StepEventsListener } from '../../../../shared/components/stepper/
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.service';
 import { ProjectProfileApi, CatalogApi } from '../../../../shared/services/api';
+import { CustomerService } from '../../../../shared/services/customer.service';
 
 @Component({
     selector: 'specifications-step',
@@ -84,7 +85,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private manager: CreateOrderService, 
         private ProjectProfileApi: ProjectProfileApi,
         private CatalogApi: CatalogApi,
-        private paymentTermsApi: PaymentTermsApi
+        private paymentTermsApi: PaymentTermsApi,
+        private CustomerService: CustomerService,
     ) {
         this.step.setEventsListener(this);
         this.add(); // Push a pre product
@@ -156,8 +158,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     getProjectProfiles() {
+        const customerId = this.CustomerService.currentCustomer().legalEntityId;
+
         this.loadings.projectProfiles = true;
-        this.ProjectProfileApi.all('354').subscribe((response) => {
+        this.ProjectProfileApi.all(customerId).subscribe((response) => {
             this.loadings.projectProfiles = false;
             const profiles = response.json().profiles;
             if (profiles) {
@@ -166,7 +170,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
 
         this.loadings.catalog = true;
-        this.CatalogApi.byProductLine('354', '0006').subscribe((res: any) => {
+        this.CatalogApi.byProductLine(customerId, '0006').subscribe((res: any) => {
             this.loadings.catalog = false;
             res.json().catalogs && res.json().catalogs.forEach((catalog) => {
                 this.catalogs[catalog.catalogCode] = catalog.entries;
@@ -176,7 +180,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     projectProfileChange(projectProfile) {
         // TODO use index &&  _.pick
-        console.log('change pp', projectProfile);
         this.preProducts[0].projectProfile = projectProfile.project.projectProperties;
     }
 
