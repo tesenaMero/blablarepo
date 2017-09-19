@@ -341,11 +341,11 @@
                         <div class="input product-selection dropdown">
                             <span class="selection">
                                 {{ product.product?.commercialDesc }}
-                                <select style="width: calc(100% - 80px);" [(ngModel)]="product.product" class="input behind">
+                                <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged($event)" class="input behind">
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
-                            <span class="action" data-toggle="modal" data-target="#search-product">Change</span>
+                            <!-- <span class="action" data-toggle="modal" data-target="#search-product">Change</span> -->
                         </div>
                     </div>
                 </div>
@@ -372,7 +372,7 @@
                                 <span style="line-height: 24px;">
                                     {{ product.unit?.alternativeUnit?.unitDesc }}
                                     <select [(ngModel)]="product.unit" class="input behind">
-                                        <option *ngFor="let unit of availableUnits" [ngValue]="unit">{{ unit.alternativeUnit.unitDesc }}</option>
+                                        <option *ngFor="let unit of availableUnits" [selected]="selectedProduct.unitOfMeasure?.unitId == unit.alternativeUnit.unitId" [ngValue]="unit">{{ unit.alternativeUnit.unitDesc }}</option>
                                     </select>
                                 </span>
                                 <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -427,7 +427,7 @@
                                 Remaining volume: 
                                 <strong *ngIf="product.contract.salesDocument.hasOwnProperty('volume')">{{ product.contract?.salesDocument.volume?.total?.quantity?.amount }}</strong></span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
-                            <select [(ngModel)]="product.contract" class="input behind">
+                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event)" class="input behind">
                                 <option *ngFor="let contract of availableContracts; let first = first;" [ngValue]="contract">Contract: {{ contract.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Volume: {{ contract.salesDocument?.volume?.total.quantity.amount }}</option>
                             </select>
                         </div>

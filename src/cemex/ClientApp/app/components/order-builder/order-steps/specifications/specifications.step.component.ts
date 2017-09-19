@@ -268,49 +268,26 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.loadings.contracts = true;
         const salesDocumentType = '1';
 
-        if (this.manager.productLine.productLineId == this.READYMIX_LINE) {
-            this.api.fetchContracts2(
-                this.manager.jobsite,
-                salesDocumentType,
-                this.manager.productLine,
-                this.manager.shippingCondition
-            ).subscribe((result) => {
-                let contracts = result.json().products;
-                SpecificationsStepComponent.availableContracts = contracts;
-                this.preProducts.forEach(item => {
-                    if (contracts.length >= 0)
-                        item.contract = contracts[0];
-                });
-                this.preProducts[0].contract = {
-                    "salesDocument": {
-                        "salesDocumentCode": "Select Contract"
-                    }
-                }
-                this.loadings.contracts = false;
+        this.api.fetchContracts(
+            this.manager.jobsite,
+            salesDocumentType,
+            this.manager.productLine,
+            this.manager.shippingCondition,
+            el.product.productId
+        ).subscribe((result) => {
+            let contracts = result.json().products;
+            SpecificationsStepComponent.availableContracts = contracts;
+            this.preProducts.forEach(item => {
+                if (contracts.length >= 0)
+                    item.contract = contracts[0];
             });
-        }
-        else {
-            this.api.fetchContracts(
-                this.manager.jobsite,
-                salesDocumentType,
-                this.manager.productLine,
-                this.manager.shippingCondition,
-                el.product.productId
-            ).subscribe((result) => {
-                let contracts = result.json().products;
-                SpecificationsStepComponent.availableContracts = contracts;
-                this.preProducts.forEach(item => {
-                    if (contracts.length >= 0)
-                        item.contract = contracts[0];
-                });
-                this.preProducts[0].contract = {
-                    "salesDocument": {
-                        "salesDocumentCode": "Select Contract"
-                    }
+            this.preProducts[0].contract = {
+                "salesDocument": {
+                    "salesDocumentCode": "Select Contract"
                 }
-                this.loadings.contracts = false;
-            });
-        }
+            }
+            this.loadings.contracts = false;
+        });
     }
 
     contractChanged(contract) {
