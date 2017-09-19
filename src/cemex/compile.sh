@@ -14,6 +14,12 @@ if [ "$1" == "clean" ]; then
     rm -rf wwwroot/dist/
 fi
 
+export API_HOST=https://api.us2.apiconnect.ibmcloud.com/
+export API_ORG=cnx-gbl-org-development/
+export API_ENV=dev/
+export APP_CODE=OrderProductCat_App
+export CLIENT_ID=dd2ee55f-c93c-4c1b-b852-58c18cc7c277
+
 printf "Cleaning ${CYAN}dls submodule${NC} dist\n"
 rm -rf submodules/dls/node_modules
 
