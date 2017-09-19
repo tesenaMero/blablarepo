@@ -130,28 +130,28 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     canAdvance() {
         // Validate purchase order
-        // if (this.purchaseOrder.length > 0) {
-        //     this.validations.purchaseOrder.valid = true;
-        // }
-        // else {
-        //     this.validations.purchaseOrder.valid = false;
-        // }
+        if (this.purchaseOrder.length > 0) {
+            this.validations.purchaseOrder.valid = true;
+        }
+        else {
+            this.validations.purchaseOrder.valid = false;
+        }
 
-        // let advance = true;
-        // for (let key in this.validations) {
-        //     if (this.validations[key].mandatory) {
-        //         if (!this.validations[key].valid) {
-        //             this.validations[key].showError = true;
-        //             advance = false;
-        //         }
-        //     }
-        // }
+        let advance = true;
+        for (let key in this.validations) {
+            if (this.validations[key].mandatory) {
+                if (!this.validations[key].valid) {
+                    this.validations[key].showError = true;
+                    advance = false;
+                }
+            }
+        }
 
-        // if (!advance) { return; }
+        if (!advance) { return; }
 
         // Validate purchase order
         if (this.validations.purchaseOrder.mandatory) {
-            this.dashboard.alertInfo("Validating...");
+            this.dashboard.alertInfo("Validating...", 999999);
             this.purchaseOrderApi.validate(this.purchaseOrder, this.orderManager.productLine, this.location).subscribe((response) => {
                 let data = response.json();
                 if (data.messageType == "E") {

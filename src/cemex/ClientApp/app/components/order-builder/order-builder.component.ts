@@ -16,6 +16,7 @@ export class OrderBuilderComponent {
     private READYMIX_ID = 6;
     private isReadyMix: boolean = false;
     private rebuildOrder = false;
+    private currentCustomer: any;
 
     constructor(
         private _changeDetector: ChangeDetectorRef,
@@ -26,7 +27,8 @@ export class OrderBuilderComponent {
         private zone: NgZone) {
         this.rebuildOrder = false;
         this.customerService.customerSubject.subscribe((customer) => {
-            if (customer) {
+            if (customer && customer != this.currentCustomer) {
+                this.currentCustomer = customer;
                 this.rebuild();
             }
         });
