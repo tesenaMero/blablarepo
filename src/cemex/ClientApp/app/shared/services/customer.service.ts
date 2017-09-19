@@ -16,7 +16,7 @@ export class CustomerService {
     }
 
     setCustomer(entity: any) {
-        sessionStorage.setItem('currentCustomer', JSON.stringify(entity));
+        sessionStorage.setItem('user_legal_entity', JSON.stringify(entity));
         this.customerSubject.next(entity);
     }
 
