@@ -2,7 +2,8 @@
 applications:
 - name: ordertaking-dev2
   random-route: true
-  memory: 512M
+  memory: 2G
+  disk_quota: 2G
   env:
     DOTNET_CLI_TELEMETRY_OPTOUT: 1
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true

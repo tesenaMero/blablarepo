@@ -173,7 +173,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             return false;
         }
         
-        //return advance;
+        return advance;
     }
 
     onShowed() {
