@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslationService } from '../../shared/services/translation.service';
 import { ProjectProfileApi } from '../../shared/services/api'
+import { CustomerService } from '../../shared/services/customer.service';
 
 let $ = require("jquery");
 
@@ -15,7 +16,7 @@ export class ProjectProfilesComponent {
     columns = [];
     rows = [];
 
-    constructor(private ppService: ProjectProfileApi, private sanitizer: DomSanitizer, private t: TranslationService) {
+    constructor(private ppService: ProjectProfileApi, private sanitizer: DomSanitizer, private t: TranslationService, private CustomerService: CustomerService) {
         this.fetchProjectProfiles();
     }
 
@@ -24,7 +25,8 @@ export class ProjectProfilesComponent {
     }
 
     fetchProjectProfiles() {
-        this.ppService.all('354').subscribe((response) => {
+        const customerId = this.CustomerService.currentCustomer().legalEntityId;
+        this.ppService.all(customerId).subscribe((response) => {
             const profiles = response.json().profiles;
             if (profiles) {
                 this.initData(response.json().profiles);

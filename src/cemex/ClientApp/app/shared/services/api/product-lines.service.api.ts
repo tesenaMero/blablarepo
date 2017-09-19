@@ -11,12 +11,12 @@ export class ProductLineApi {
     }
 
     all(): Observable<Response> {
-        let user = sessionStorage.getItem('user_customer');
-        let customerId = this.customer.currentCustomer();
+        const user = sessionStorage.getItem('user_customer');
+        const customerId = this.customer.currentCustomer();
         if (customerId)
             return this.api.get("/v4/sm/productlines?customerId=" + customerId.legalEntityId);
         else
-            return this.api.get("/v4/sm/productlines?customerId=" + 354);
+            return this.api.get("/v4/sm/productlines?customerId=" + customerId.legalEntityId);
     }
 
 }
