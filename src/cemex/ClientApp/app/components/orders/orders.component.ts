@@ -5,6 +5,7 @@ import { PingSalesOrderApi } from '../../shared/services/api/ping-sales-order.se
 import { OrderRequestTableComponentConfiguration } from '../../utils/order-request.helper';
 import { DashboardService } from '../../shared/services/dashboard.service';
 import { TranslationService } from '../../shared/services/translation.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'page-orders',
@@ -18,7 +19,7 @@ export class OrdersComponent implements OnInit {
 
   public orderRequestConfiguration: OrderRequestTableComponentConfiguration;
 
-  constructor(private ordersService: OrdersService, private Api: Api, private t: TranslationService, private ping: PingSalesOrderApi, private dash: DashboardService) {
+  constructor(private ordersService: OrdersService, private Api: Api, private t: TranslationService, private ping: PingSalesOrderApi, private dash: DashboardService, private router: Router) {
     this.orders = ordersService.getOrders();
     this.isLoading = ordersService.isLoading();
     this.orderRequestConfiguration = OrdersService.ORDER_REQUEST_MAPPING;
@@ -32,7 +33,7 @@ export class OrdersComponent implements OnInit {
   onclick () {      
     this.ping.validatePingSalesOrder().subscribe((response) => {
       if (response.json().success === 'Y') {
-        location.href = '/app/new';
+        this.router.navigate(['/app/new']);
       }
       else {
         this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
