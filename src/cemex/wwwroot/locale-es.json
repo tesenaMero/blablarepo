@@ -1,4 +1,7 @@
 {
+    "views.header.lbl_language": "Language",
+    "views.header.lbl_logout": "Logout",
+
     "views.common.loading": "Loading",
     "views.common.back": "Back",
     "views.common.cancel": "Cancel",

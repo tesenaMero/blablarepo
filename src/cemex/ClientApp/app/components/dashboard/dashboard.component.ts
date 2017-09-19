@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit {
     }
 
     private handleAlert(alert: any) {
-        if (alert == null) { this.closeAlert(); }
+        if (alert == null) { this.closeAlert(); return; }
         
         this.showAlert = false;
         this.alert.text = alert.text;
@@ -81,7 +81,7 @@ export class DashboardComponent implements OnInit {
         this.showAlert = true;
         setTimeout(() => {
             this.showAlert = false;
-        }, 8000);
+        }, alert.duration);
     }
 
     private closeAlert() {

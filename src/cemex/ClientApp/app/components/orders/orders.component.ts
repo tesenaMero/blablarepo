@@ -31,10 +31,11 @@ export class OrdersComponent implements OnInit {
   }
 
   onclick () {
-    this.dash.alertInfo(this.t.pt('views.common.validating_connection'));
+    this.dash.alertInfo(this.t.pt('views.common.validating_connection'), 99999);
     this.ping.validatePingSalesOrder().subscribe((response) => {
       if (response.json().success === 'Y') {
         this.router.navigate(['/app/new']);
+        this.dash.closeAlert();
       }
       else {
         this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
