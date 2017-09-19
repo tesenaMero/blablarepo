@@ -52,9 +52,9 @@ export class DashboardComponent implements OnInit {
             this.customerService.setCustomer(legalEntities[0]);
         });
 
-        this.salesDocumentService.all().subscribe((response) => {
-            console.log(response.json());
-        });
+        // this.salesDocumentService.all().subscribe((response) => {
+        //     console.log(response.json());
+        // });
 
         this.initLanguage();
     }

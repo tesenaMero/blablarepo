@@ -58,7 +58,8 @@
                             <label>Request date</label>
                             <label for="date{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    {{ product.date | date: 'shortDate' }}
+                                    <!-- {{ product.date | date: 'shortDate' }} -->
+                                    <!-- -->
                                     <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" />
                                 </span>
                                 <span class="mb-0">
@@ -101,7 +102,7 @@
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
                             <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event)" class="input behind">
-                                <option *ngFor="let contract of availableContracts; let first = first;" [ngValue]="contract">{{ contract.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract.salesDocument?.volume?.total.quantity.amount }} </option>
+                                <option *ngFor="let contract of availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract.salesDocument?.volume?.total.quantity.amount }} </option>
                             </select>
                         </div>
                     </div>
@@ -339,11 +340,15 @@
                         </label>
                         <div class="input product-selection dropdown">
                             <span class="selection">
-                                <!-- {{ product.product.name }} -->
-                                <select style="width: calc(100% - 80px);" [(ngModel)]="product.product" class="input behind">
-                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p.name }}</option>
+                                {{ product.product?.commercialDesc }}
+                                <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged($event)" class="input behind">
+                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
+<<<<<<< HEAD
+=======
+                            <!-- <span class="action" data-toggle="modal" data-target="#search-product">Change</span> -->
+>>>>>>> development
                         </div>
                     </div>
                 </div>
@@ -368,9 +373,9 @@
                             </label>
                             <div class="input flex-space-between dropdown">
                                 <span style="line-height: 24px;">
-                                    {{ product.unit?.unitDesc }}
+                                    {{ product.unit?.alternativeUnit?.unitDesc }}
                                     <select [(ngModel)]="product.unit" class="input behind">
-                                        <option *ngFor="let unit of availableUnits" [ngValue]="unit">{{ unit.unitDesc }}</option>
+                                        <option *ngFor="let unit of availableUnits" [selected]="selectedProduct.unitOfMeasure?.unitId == unit.alternativeUnit.unitId" [ngValue]="unit">{{ unit.alternativeUnit.unitDesc }}</option>
                                     </select>
                                 </span>
                                 <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -384,7 +389,7 @@
                             <label>Request date</label>
                             <label for="date{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    {{ product.date | date:'dd.MM.y' }}
+                                    <!-- {{ product?.date | date:'dd.MM.y' }} -->
                                     <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" />
                                 </span>
                                 <span class="mb-0">
@@ -396,7 +401,7 @@
                             <label>Requested time</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    {{ product.time }}
+                                    <!-- {{ product.time }} -->
                                     <input id="time{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.time" ngui-datetime-picker time-only="true" right-side="true" [close-on-select]="false" hour="0" minute="0" />
                                 </span>
                                 <span class="mb-0">
@@ -419,12 +424,14 @@
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label>Contract</label>
-                        <div class="input contract dropdown flex-space-between">
-                            <span class=""><strong>{{ product.contract?.name }}</strong></span>
-                            <span class="volume">Remaining volume: <strong>{{ product.contract?.volume }}</strong></span>
+                        <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: loadings.contracts }">
+                            <span class=""><strong>{{ product.contract?.salesDocument.salesDocumentCode }}</strong></span>
+                            <span class="volume">
+                                Remaining volume: 
+                                <strong *ngIf="product.contract.salesDocument.hasOwnProperty('volume')">{{ product.contract?.salesDocument.volume?.total?.quantity?.amount }}</strong></span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
-                            <select [(ngModel)]="product.contract" class="input behind">
-                                <option *ngFor="let contract of availableContracts; let first = first;" [ngValue]="contract">{{ contract.name }} &nbsp;&nbsp;&nbsp;&nbsp;  Volume: {{ contract.volume }} </option>
+                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event)" class="input behind">
+                                <option *ngFor="let contract of availableContracts; let first = first;" [ngValue]="contract">Contract: {{ contract.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Volume: {{ contract.salesDocument?.volume?.total.quantity.amount }}</option>
                             </select>
                         </div>
                     </div>
@@ -436,7 +443,7 @@
                             <span>
                                 Select project profile to prefill specifications
                                 <select [(ngModel)]="product.projectProfile" (ngModelChange)="projectProfileChange($event)" class="input behind">
-                                    <option *ngFor="let project of projectProfiles" [ngValue]="project">{{project.profileName}}</option>
+                                    <option *ngFor="let project of projectProfiles" [ngValue]="project">{{ project?.profileName }}</option>
                                 </select>
                                 </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -451,10 +458,10 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{product.projectProfile.dischargeTime?.timePerDischargeDesc}}
+                            {{ product.projectProfile.dischargeTime?.timePerDischargeDesc }}
                             <select (change)="onChangeDischargeTime($event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
-                                <option *ngFor="let entry of catalogs.DCT; let i = index" [value]="i">{{entry.entryDesc}}</option>
+                                <option *ngFor="let entry of catalogs.DCT; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -466,10 +473,10 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{product.projectProfile.transportMethod?.transportMethodDesc}}
+                            {{ product.projectProfile.transportMethod?.transportMethodDesc }}
                             <select (change)="onChangeTransportMethod($event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
-                                <option *ngFor="let entry of catalogs.TPM; let i = index" [value]="i">{{entry.entryDesc}}</option>
+                                <option *ngFor="let entry of catalogs.TPM; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -481,10 +488,10 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{product.projectProfile.unloadType?.unloadTypeDesc}}
+                            {{ product.projectProfile.unloadType?.unloadTypeDesc }}
                             <select (change)="onChangeUnloadType($event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
-                                <option *ngFor="let entry of catalogs.ULT; let i = index" [value]="i">{{entry.entryDesc}}</option>
+                                <option *ngFor="let entry of catalogs.ULT; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -496,10 +503,10 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{product.projectProfile.pumpCapacity?.pumpCapacityDesc}}
+                            {{product.projectProfile.pumpCapacity?.pumpCapacityDesc }}
                             <select (change)="onChangePumpCapacity($event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
-                                <option *ngFor="let entry of catalogs.PCC; let i = index" [value]="i">{{entry.entryDesc}}</option>
+                                <option *ngFor="let entry of catalogs.PCC; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -537,10 +544,10 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{product.projectProfile.element?.elementDesc}}
+                            {{ product.projectProfile.element?.elementDesc }}
                             <select (change)="onChangeApplication($event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
-                                <option *ngFor="let entry of catalogs.ELM; let i = index" [value]="i">{{entry.entryDesc}}</option>
+                                <option *ngFor="let entry of catalogs.ELM; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -555,7 +562,7 @@
                             {{product.projectProfile.loadSize?.loadSizeDesc}}
                             <select (change)="onChangeLoadSize($event.target.value)"  class="input behind">
                                 <option value="" selected disabled hidden></option>
-                                <option *ngFor="let entry of catalogs.LSC; let i = index" [value]="i">{{entry.entryDesc}}</option>
+                                <option *ngFor="let entry of catalogs.LSC; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -567,10 +574,10 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{product.projectProfile.timePerLoad?.timePerLoadDesc}}
+                            {{ product?.projectProfile?.timePerLoad?.timePerLoadDesc }}
                             <select (change)="onChangeTimePerLoad($event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
-                                <option *ngFor="let entry of catalogs.TPL; let i = index" [value]="i">{{entry.entryDesc}}</option>
+                                <option *ngFor="let entry of catalogs.TPL; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>

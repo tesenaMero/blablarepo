@@ -267,6 +267,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     productChanged(el) {
         this.loadings.contracts = true;
         const salesDocumentType = '1';
+
         this.api.fetchContracts(
             this.manager.jobsite,
             salesDocumentType,

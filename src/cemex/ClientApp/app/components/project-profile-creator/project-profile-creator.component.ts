@@ -31,13 +31,20 @@ export class ProjectProfileCreatorComponent {
 
     // CustomerService.currentCustomer().legalEntityId || 
     constructor(private CatalogApi: CatalogApi, private ProjectProfileApi: ProjectProfileApi, private CustomerService: CustomerService, private t: TranslationService) {
-        this.loadingCatalog = true;
-        const customerId = this.CustomerService.currentCustomer().legalEntityId;
-        this.CatalogApi.byProductLine(customerId, '0006').map((response) => response.json()).subscribe((response) => {
-            response.catalogs.forEach((catalog) => {
-                this.catalogs[catalog.catalogCode] = catalog.entries;
-            });
-            this.loadingCatalog = false;
+        this.CustomerService.customerSubject.subscribe((customer) => {
+            if (customer) {
+                this.loadingCatalog = true;
+                const customerId = customer.legalEntityId;
+
+                let sub = this.CatalogApi.byProductLine(customerId, '0006').map((response) => response.json()).subscribe((response) => {
+                    response.catalogs.forEach((catalog) => {
+                        this.catalogs[catalog.catalogCode] = catalog.entries;
+                    });
+                    this.loadingCatalog = false;
+
+                    sub.unsubscribe();
+                });
+            }
         });
     }
 
@@ -45,15 +52,15 @@ export class ProjectProfileCreatorComponent {
         // this.CustomerService.currentCustomer().legalEntityId 
         this.postingTheOrder = true;
         const customerId = this.CustomerService.currentCustomer().legalEntityId;
-        this.ProjectProfileApi.create({ ...this.projectProfile, customer: { customerId }}, customerId)
+        this.ProjectProfileApi.create({ ...this.projectProfile, customer: { customerId } }, customerId)
             .map((response) => response.json())
             .subscribe((response) => {
                 this.postingTheOrder = false;
                 this.finishedOrder = true;
                 // TODO refetch project prorfiles on table
             }
-        );
-        
+            );
+
     }
 
     cancel() {

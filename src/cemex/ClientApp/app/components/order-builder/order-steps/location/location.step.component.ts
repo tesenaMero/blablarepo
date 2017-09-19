@@ -151,11 +151,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
         // Validate purchase order
         if (this.validations.purchaseOrder.mandatory) {
-            this.dashboard.alertInfo("Validating...");
+            this.dashboard.alertInfo("Validating...", 999999);
             this.purchaseOrderApi.validate(this.purchaseOrder, this.orderManager.productLine, this.location).subscribe((response) => {
                 let data = response.json();
                 if (data.messageType == "E") {
-                    this.dashboard.alertError(data.messageText);
+                    this.dashboard.alertError(data.messageText, 12000);
                     return;
                 }
                 else if (data.messageType == "S") {
