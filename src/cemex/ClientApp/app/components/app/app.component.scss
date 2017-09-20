@@ -22,3 +22,24 @@
         min-height: 100%;
     }
 }
+
+.success-icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 35px;
+}
+
+.success-content {
+    text-align: center;
+    padding: 75px 115px 90px;
+}
+
+.success-text {
+    font-size: 22px;
+    line-height: 25px;
+    margin-bottom: 30px;
+}
+
+#success .modal-dialog {
+    max-width: 690px;
+}

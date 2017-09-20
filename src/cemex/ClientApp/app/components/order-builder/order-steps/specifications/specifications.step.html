@@ -93,17 +93,7 @@
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label>Contract</label>
-                        <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: loadings.contracts }">
-                            <span class=""><strong>{{ product.contract?.salesDocument.salesDocumentCode }}</strong></span>
-                            <span class="volume">
-                                Remaining volume:
-                                <strong *ngIf="product.contract.salesDocument.hasOwnProperty('volume')">{{ product.contract?.salesDocument.volume?.total.quantity.amount }}</strong>
-                            </span>
-                            <span class="arrow cmx-icon-straight-arrow-down"></span>
-                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event)" class="input behind">
-                                <option *ngFor="let contract of availableContracts; let first = first;" [ngValue]="contract">{{ contract.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract.salesDocument?.volume?.total.quantity.amount }} </option>
-                            </select>
-                        </div>
+                        
                     </div>
                 </div>
                 <div class="col-md-3 mt-3">
@@ -327,7 +317,7 @@
     </ng-container>
 
     <!-- Readymix Mexico Delivery -->
-    <ng-container *ngIf="true">
+    <ng-container *ngIf="false">
         <div class="product" [ngClass]="{ 
                 'exit-animation': product.deleting, 
                 'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
