@@ -26,7 +26,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
     private selectedProduct: any;
     private shouldShowManeouvering: boolean;
-    private catalogs: any = {};
 
     initializeProductSearch() {
         this.manager.fetchProductColors(this.manager.productLine.productLineId);
@@ -126,16 +125,15 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.manager.productLine,
             this.manager.shippingCondition
         ).subscribe((result) => {
-            console.log('asd: ', result.json(),  this.manager);
             let topProducts = result.json().products;
             this.loadings.products = false;
             console.log('this.manager.salesArea', this.manager.salesArea, this.manager, SpecificationsStepComponent);
             // if is maneouvarable in Jobsite and it's cement delivery
-            console.log('info:', this.manager.salesArea.maneuverable,
+            console.log('info:', this.manager.salesArea[0].maneuverable,
                 this.manager.shippingCondition.shippingConditionId === 1, this.manager.shippingCondition.shippingConditionId,
                 this.manager.productLine.productLineId === '2,3', this.manager.productLine.productLineId)
 
-            if(this.manager.salesArea.maneuverable
+            if(this.manager.salesArea[0].maneuverable
                 && this.manager.shippingCondition.shippingConditionId === 1
                 && this.manager.productLine.productLineId === '2,3'
             ) {
