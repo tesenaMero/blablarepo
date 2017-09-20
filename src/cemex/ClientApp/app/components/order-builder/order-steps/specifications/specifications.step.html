@@ -159,7 +159,7 @@
     </ng-container>
 
     <!-- Cement Mexico Pickup -->
-    <ng-container *ngIf="false">
+    <ng-container *ngIf="true">
         <div class="product" [ngClass]="{ 
             'exit-animation': product.deleting, 
             'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
@@ -311,9 +311,9 @@
                         <label>Plant</label>
                         <div class="input contract dropdown flex-space-between">
                             <span class="">
-                                {{ product.plant.name }}
+                                {{ product.plant.plantDesc }}
                                 <select [(ngModel)]="product.plant" class="input behind">
-                                    <option *ngFor="let plant of availablePlants" [ngValue]="plant">{{ plant.name }}</option>
+                                    <option *ngFor="let plant of plants" [ngValue]="plant">{{ plant.plantDesc }}</option>
                                 </select>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
