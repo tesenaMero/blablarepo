@@ -100,7 +100,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private plantApi: PlantApi,
     ) {
         this.step.setEventsListener(this);
-        console.log('manager: ', this.manager);
         const customerId = 354;
         this.CatalogApi.byProductLine(customerId, '0006').map((response) => response.json()).subscribe((response) => {
             response.catalogs.forEach((catalog) => {
@@ -127,19 +126,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         ).subscribe((result) => {
             let topProducts = result.json().products;
             this.loadings.products = false;
-            console.log('this.manager.salesArea', this.manager.salesArea, this.manager, SpecificationsStepComponent);
-            // if is maneouvarable in Jobsite and it's cement delivery
-            console.log('info:', this.manager.salesArea[0].maneuverable,
-                this.manager.shippingCondition.shippingConditionId === 1, this.manager.shippingCondition.shippingConditionId,
-                this.manager.productLine.productLineId === '2,3', this.manager.productLine.productLineId)
-
-            if(this.manager.salesArea[0].maneuverable
-                && this.manager.shippingCondition.shippingConditionId === 1
-                && this.manager.productLine.productLineId === '2,3'
-            ) {
-                this.shouldShowManeouvering = true;
-                console.log('enable maneouvering', this.selectedProduct);
-            }
             if (!topProducts.length) { return; }
 
             SpecificationsStepComponent.availableProducts = topProducts;
@@ -150,6 +136,21 @@ export class SpecificationsStepComponent implements StepEventsListener {
             });
 
             this.selectedProduct = topProducts[0];
+
+            // Maneouvering additional service
+            if(this.manager.shippingCondition.shippingConditionId === 1
+                && (this.selectedProduct.product.productLine.productLineId === 2 || this.selectedProduct.product.productLine.productLineId === 3)
+            ) {
+                let area = this.manager.salesArea.find((a) => {
+                    let id = this.selectedProduct.product.productLine.productLineId;
+                    return id === 2 ? a.salesArea.salesAreaId === 2 : a.salesArea.salesAreaId === 219;
+                });
+
+                // check if salesarea has maneouvering enabled
+                if (area && area.maneuverable) {
+                    this.shouldShowManeouvering = true;
+                }
+            }
 
             this.getUnits(topProducts[0].product.productId);
             this.productChanged(topProducts[0]);
@@ -177,7 +178,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
     
     getPaymentTerms() {
-        // console.log('get payment terms', this.manager)
         let paymentTermIds = '';
         this.manager.salesArea.map((area: any) => {
             paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
@@ -185,7 +185,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         
         this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
             const terms = result.json().paymentTerms;
-            console.log('terms: ', terms);
             let uniqueTerms = [];
 
             // find type Cache
@@ -339,6 +338,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     add() {
+        console.log('this.preProducts[0], ', this.preProducts[0]);
         this.preProducts.push(new PreProduct(this.manager));
     }
 
