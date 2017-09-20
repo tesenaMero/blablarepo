@@ -15,9 +15,13 @@ export interface POD {
 
 @Injectable()
 export class CreateOrderService {
+    // Move this to service later
+    // --------------------------------------------------
     public _shipmentLocationType: BehaviorSubject<any>;
     public _productColors: BehaviorSubject<any>;
     public _productSelectedProduct: BehaviorSubject<any>;
+    // --------------------------------------------------
+
     public orderId: number;
     public orderCode: string;
     public orderName: string;
@@ -35,7 +39,7 @@ export class CreateOrderService {
     public jobsite: any;
     public pointOfDelivery: POD;
     public instructions: string;
-    public contact: types.Contact;
+    public contact: any;
     public user: types.User;
     public items: types.Items;
     public loads: types.Loads;
@@ -44,11 +48,18 @@ export class CreateOrderService {
     public products: Array<any>;
     public product: any;
 
+    // Const
+    READYMIX_LINE = 6;
+
     constructor(private shipmentLocationApi: ShipmentLocationApi, private productColorApi: ProductColorApi) {
         this.initializeOrder();
+        
+        // Move this to service later
+        // --------------------------------------------------
         this._shipmentLocationType = <BehaviorSubject<any>>new BehaviorSubject(undefined);
         this._productColors = <BehaviorSubject<any>>new BehaviorSubject(undefined);
         this._productSelectedProduct = <BehaviorSubject<any>>new BehaviorSubject({});
+        // --------------------------------------------------
     }
 
     public fetchProductColors(productLineId: number) {
@@ -146,6 +157,15 @@ export class CreateOrderService {
 
     setProduct(product) {
         this.product = product;
+    }
+
+    getSalesDocumentType() {
+        let salesDocumentType = '3';
+        if (this.productLine.productLineId == this.READYMIX_LINE) {
+            salesDocumentType = '1';
+        }
+
+        return salesDocumentType;
     }
 
     resetOrder() {

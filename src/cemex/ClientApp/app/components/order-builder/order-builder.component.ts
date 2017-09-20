@@ -90,22 +90,11 @@ export class OrderBuilderComponent {
     private uglyOrder() {
         const orderService = this.manager
         return {
-            "orderCode": "",
-            "orderName": orderService.product.commercialDesc,
-            "createdDateTime": orderService.createdDateTime,
-            "updatedDateTime": orderService.updatedDateTime,
-            "programmedDateTime": "2017-09-07T15:00:00.000Z",
-            "requestedDateTime": "2017-09-10T15:00:00.000Z",
-            "draftDateTime": "2017-09-07T14:28:18.814Z",
-            "purchaseOrder": "PO_JVC",
-            "status": {
-                "statusId": 1
-            },
+            "orderName": "Cement Bag Online Order",
+            "requestedDateTime": "2017-09-20T15:00:00.000Z",
+            "purchaseOrder": "PO_JVCM",
             "salesArea": {
                 "salesAreaId": 2
-            },
-            "orderType": {
-                "orderTypeId": 450
             },
             "customer": {
                 "customerId": 122
@@ -114,25 +103,23 @@ export class OrderBuilderComponent {
                 "shippingConditionId": 1
             },
             "jobsite": {
-                "jobsiteId": orderService.jobsite
+                "jobsiteId": 59
             },
             "pointOfDelivery": {
-                "pointOfDeliveryId": orderService.pointOfDelivery
+                "pointOfDeliveryId": 393
             },
-            "instructions": orderService.instructions,
-            "contact": orderService.contact,
-            "user": {
-                "userId": 50
+            "instructions": "Instrucciones de entrega",
+            "contact": {
+                "contactName": "Ivan el Terrible",
+                "contactPhone": "821920192102"
             },
             "items": [
                 {
-                    "orderItemId": 56,
                     "itemSeqNum": 10,
-                    "purchaseOrder": "PO_JVC",
+                    "purchaseOrder": "PO_JVCM",
                     "requestedDateTime": "2017-09-05T14:28:18.814Z",
-                    "programmedDateTime": "2017-09-05T14:28:18.814Z",
                     "currency": {
-                        "currencyId": 1
+                        "currencyCode": "MXN"
                     },
                     "quantity": 50,
                     "product": {
@@ -144,16 +131,10 @@ export class OrderBuilderComponent {
                     "paymentTerm": {
                         "paymentTermId": 43
                     },
-                    "shippingSource": {
-                        "shippingSourceId": 387
-                    },
                     "orderItemProfile": {
-                        "transportMethod": {
-                            "transportMethodId": 26
-                        },
                         "additionalServices": [
                             {
-                                "additionalServiceId": 4
+                                "additionalServiceCode": "MANEUVERING"
                             }
                         ]
                     }

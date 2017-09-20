@@ -31,7 +31,7 @@ export class SummaryStepComponent implements StepEventsListener {
     }
 
     onShowed() {
-        this.onCompleted.emit({});
+        this.onCompleted.emit();
 
         // Load map
         if (!this.isMapLoaded) {

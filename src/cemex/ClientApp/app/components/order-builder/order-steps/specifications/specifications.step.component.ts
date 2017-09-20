@@ -15,15 +15,20 @@ import { CustomerService } from '../../../../shared/services/customer.service';
 export class SpecificationsStepComponent implements StepEventsListener {
     @Output() initializeProductColorsEmitter = new EventEmitter<any>();
     @Output() onCompleted = new EventEmitter<any>();
-    private READYMIX_LINE = 6;
 
+    // One box one preProduct
     private preProducts = [];
+
+    // Consts
+    private SALES_DOCUMENT_TYPE = '1';
+
     private loadings = {
         products: true,
         contracts: true,
         projectProfiles: true,
         catalog: true
     }
+
     private selectedProduct: any;
 
     initializeProductSearch() {
@@ -31,13 +36,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     static availableUnits = [];
-
     get availableUnits() {
         return SpecificationsStepComponent.availableUnits;
     }
 
     static availablePayments = [];
-
     get availablePayments() {
         return SpecificationsStepComponent.availablePayments;
     }
@@ -49,13 +52,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
             }
         }
     ];
-
     get availableContracts() {
         return SpecificationsStepComponent.availableContracts;
     }
 
     static availableProducts = [];
-
     get availableProducts() {
         return SpecificationsStepComponent.availableProducts;
     }
@@ -64,38 +65,33 @@ export class SpecificationsStepComponent implements StepEventsListener {
         { name: "Cemex, Mladá Boleslav, Palackeho 50, Mladá Boleslav II, Czechia" },
         { name: "Cemex, Monterrey Mex, La arrolladora, El komander, Fierro" },
     ];
-
     get availablePlants() {
         return SpecificationsStepComponent.availablePlants;
     }
 
     static projectProfiles = [];
-
     get projectProfiles() {
         return SpecificationsStepComponent.projectProfiles;
     }
 
     static catalogs = [];
-
     get catalogs() {
         return SpecificationsStepComponent.catalogs;
     }
 
     static plants = [];
-
     get plants() {
         return SpecificationsStepComponent.plants;
     }
 
-
     constructor(
-        @Inject(Step) private step: Step, 
-        private api: ProductsApi, 
-        private manager: CreateOrderService, 
+        @Inject(Step) private step: Step,
+        private api: ProductsApi,
+        private manager: CreateOrderService,
         private ProjectProfileApi: ProjectProfileApi,
-        private CatalogApi: CatalogApi,
+        private catalogApi: CatalogApi,
+        private customerService: CustomerService,
         private paymentTermsApi: PaymentTermsApi,
-        private CustomerService: CustomerService,
         private plantApi: PlantApi,
     ) {
         this.step.setEventsListener(this);
@@ -104,37 +100,32 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     onShowed() {
         this.onCompleted.emit();
-        this.loadings.products = true;
-        
-        let salesDocumentType = '3';
-        if (this.manager.productLine.productLineId == this.READYMIX_LINE) { 
-            salesDocumentType = '1'; 
-        }
 
-        this.api.top(
-            this.manager.jobsite,
-            salesDocumentType,
-            this.manager.productLine,
-            this.manager.shippingCondition
-        ).subscribe((result) => {
+        // Set loading state
+        this.preProducts.forEach((item) => {
+            item.loadings.products = true;
+        });
+
+        let salesDocumentType = this.manager.getSalesDocumentType();
+
+        this.api.top(this.manager.jobsite, salesDocumentType, this.manager.productLine, this.manager.shippingCondition).subscribe((result) => {
             let topProducts = result.json().products;
-            this.loadings.products = false;
             if (!topProducts.length) { return; }
 
             SpecificationsStepComponent.availableProducts = topProducts;
-            // Set defaults value
-            this.preProducts.forEach(item => {
+
+            // Set defaults value(
+            this.preProducts.forEach((item) => {
+                item.loadings.products = false;
                 if (topProducts.length > 0)
                     item.product = topProducts[0];
+                this.productChanged(item);
             });
 
-            this.selectedProduct = topProducts[0];
-
             this.getUnits(topProducts[0].product.productId);
-            this.productChanged(topProducts[0]);
-
             this.manager.setProducts(this.preProducts);
         });
+
         this.getPaymentTerms();
         this.getProjectProfiles();
         this.getPlants();
@@ -142,41 +133,39 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     getPlants() {
         if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == 2) {
-            this.plantApi.byCountryCodeAndRegionCode(
-                this.manager.jobsite.address.countryCode, 
-                this.manager.jobsite.address.regionCode
-            ).subscribe((response) => { 
-                SpecificationsStepComponent.plants = response.json().plants; 
+            this.plantApi.byCountryCodeAndRegionCode(this.manager.jobsite.address.countryCode, this.manager.jobsite.address.regionCode).subscribe((response) => {
+                SpecificationsStepComponent.plants = response.json().plants;
             });
         }
     }
 
     paymentTermChanged(term) {
-        this.selectedProduct.payment = term;
+        //this.selectedProduct.payment = term;
     }
-    
+
     getPaymentTerms() {
         let paymentTermIds = '';
+
         this.manager.salesArea.map((area: any) => {
             paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
         });
-        
+
         this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
             const terms = result.json().paymentTerms;
             let uniqueTerms = [];
 
-            // find type Cache
+            // Find type Cash
             const cachePayment = terms.find((term: any) => {
                 return term.paymentTermType.paymentTermTypeDesc === 'Cash';
             });
 
-            // find type Credit
+            // Find type Credit
             const creditPayment = terms.find((term: any) => {
                 return term.paymentTermType.paymentTermTypeDesc === 'Credit';
             });
 
 
-            // push to terms array
+            // Push to terms array
             cachePayment && uniqueTerms.push(cachePayment);
             creditPayment && uniqueTerms.push(creditPayment);
             SpecificationsStepComponent.availablePayments = terms;
@@ -184,7 +173,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     getProjectProfiles() {
-        const customerId = this.CustomerService.currentCustomer().legalEntityId;
+        const customerId = this.customerService.currentCustomer().legalEntityId;
 
         this.loadings.projectProfiles = true;
         this.ProjectProfileApi.all(customerId).subscribe((response) => {
@@ -196,7 +185,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
 
         this.loadings.catalog = true;
-        this.CatalogApi.byProductLine(customerId, '0006').subscribe((res: any) => {
+        this.catalogApi.byProductLine(customerId, '0006').subscribe((res: any) => {
             this.loadings.catalog = false;
             res.json().catalogs && res.json().catalogs.forEach((catalog) => {
                 this.catalogs[catalog.catalogCode] = catalog.entries;
@@ -269,49 +258,52 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.preProducts[0].projectProfile.timePerLoad = {
             timePerLoadId: entry.entryId,
             timePerLoadDesc: entry.entryDesc
-        }; 
+        };
     }
 
     getUnits(product) {
         this.api.units(product).subscribe((result) => {
             let units = result.json().productUnitConversions;
+            SpecificationsStepComponent.availableUnits = units
             this.preProducts.forEach(item => {
                 if (units.length > 0)
                     item.unit = units[0];
             });
-            SpecificationsStepComponent.availableUnits = units
         });
     }
 
-    productChanged(el) {
-        this.loadings.contracts = true;
-        const salesDocumentType = '1';
-        this.manager.setProduct(el);
+    productChanged(preProduct: any) {
+        let product = preProduct.product;
+        preProduct.loadings.contracts = true;
+
         this.api.fetchContracts(
             this.manager.jobsite,
-            salesDocumentType,
+            this.SALES_DOCUMENT_TYPE,
             this.manager.productLine,
             this.manager.shippingCondition,
-            el.product.productId
+            preProduct.product.product.productId
         ).subscribe((result) => {
             let contracts = result.json().products;
             SpecificationsStepComponent.availableContracts = contracts;
+
             this.preProducts.forEach(item => {
                 if (contracts.length >= 0)
                     item.contract = contracts[0];
             });
+
             this.preProducts[0].contract = {
                 "salesDocument": {
                     "salesDocumentCode": "Select Contract"
                 }
             }
-            this.loadings.contracts = false;
+
+            preProduct.loadings.contracts = false;
         });
     }
 
     contractChanged(contract) {
         this.getUnits(contract.salesDocument.salesDocumentId);
-        this.selectedProduct = contract;
+        //this.selectedProduct = contract;
     }
 
     add() {
@@ -346,18 +338,29 @@ class PreProduct {
     paymentOption: any;
     projectProfile: any = {};
 
+    loadings = {
+        products: true,
+        contracts: true,
+        projectProfiles: true,
+        catalog: true
+    }
+
     constructor(private manager: CreateOrderService) {
         let _ = SpecificationsStepComponent;
-        if (_.availableProducts.length > 0) { this.product = _.availableProducts[0]; }
+
         this.contract = _.availableContracts[0];
         this.unit = _.availableUnits[0];
         this.payment = _.availablePayments[0];
-        if (_.availableProducts.length) { this.product = _.availableProducts[0]; }
         this.plant = _.availablePlants[0];
         this.paymentOption = _.availablePayments[0];
+
+        if (_.availableProducts.length) { this.product = _.availableProducts[0]; }
+
+        // What the f is this
         this.manager._productSelectedProduct.subscribe(product => {
             let filteredProducts = _.availableProducts.filter((availableProduct: any) => availableProduct.commercialCode === product.commercialCode);
-            if(filteredProducts.length) {
+
+            if (filteredProducts.length) {
                 this.product = filteredProducts[0];
             } else {
                 _.availableProducts.push(product);
