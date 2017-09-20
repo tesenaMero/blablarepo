@@ -16,29 +16,15 @@ export class ProjectProfilesComponent {
     columns = [];
     rows = [];
 
+    private loading = true;
+
     constructor(private ppService: ProjectProfileApi, private sanitizer: DomSanitizer, private t: TranslationService, private CustomerService: CustomerService) {
         this.CustomerService.customerSubject.subscribe((customer) => {
             if (customer) {
                 this.fetchProjectProfiles(customer);
             }
         });
-    }
 
-    openModal() {
-        $("#app-content").addClass("blur");
-    }
-
-    fetchProjectProfiles(customer = this.CustomerService.currentCustomer()) {
-        const customerId = customer.legalEntityId;
-        this.ppService.all(customerId).subscribe((response) => {
-            const profiles = response.json().profiles;
-            if (profiles) {
-                this.initData(response.json().profiles);
-            }
-        });
-    }
-
-    initData(profiles: any) {
         this.columns = [
             //{ inner: '<i class="star cmx-icon-favourite-active" aria-hidden="true"></i>', width: 5 },
             { name: "Name", width: 20 },
@@ -50,7 +36,25 @@ export class ProjectProfilesComponent {
             { name: "", width: 5, sortable: false },
             { name: "", width: 10, sortable: false },
         ]
+    }
 
+    openModal() {
+        $("#app-content").addClass("blur");
+    }
+
+    fetchProjectProfiles(customer = this.CustomerService.currentCustomer()) {
+        this.loading = true;
+        const customerId = customer.legalEntityId;
+        this.ppService.all(customerId).subscribe((response) => {
+            this.loading = false;
+            const profiles = response.json().profiles;
+            if (profiles) {
+                this.initData(response.json().profiles);
+            }
+        });
+    }
+
+    initData(profiles: any) {
         this.rows = profiles.map((profile) => {
             return [
                 { inner: profile.profileName }, 

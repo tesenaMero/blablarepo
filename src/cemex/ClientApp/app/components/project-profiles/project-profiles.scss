@@ -1,5 +1,7 @@
 @import "~bootstrap/scss/bootstrap-grid.scss";
 @import "../../scss/responsive.scss";
+@import "../../scss/mixins/animations.scss";
+
 $link-blue: #3FA9F5;
 .layout {
     padding: 34px 26px 34px 26px;
@@ -59,4 +61,12 @@ $link-blue: #3FA9F5;
 
 /deep/.capitalize {
     text-transform: capitalize;
+}
+
+.pulse {
+    background-color: rgba(128, 128, 128, .1);
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0) !important;
+    @include animation('pulse 1s alternate infinite');
+    height: 40px;
+    margin-bottom: 15px;
 }
