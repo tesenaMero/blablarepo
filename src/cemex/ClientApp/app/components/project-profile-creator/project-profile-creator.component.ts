@@ -82,4 +82,16 @@ export class ProjectProfileCreatorComponent {
     onChangeDischargeTime(value) {
         this.projectProfile.project.projectProperties.dischargeTime = { dischargeTimeId: Number(value) };
     }
+
+    onChangeApplicationType(value) {
+        this.projectProfile.project.projectProperties.element = { elementId: Number(value) };
+    }
+    
+    onChangeSpacing(value) {
+        this.projectProfile.project.projectProperties.timePerLoad = { timePerLoadId: Number(value) };
+    }
+
+    onChangeLoadSize(value) {
+        this.projectProfile.project.projectProperties.loadSize = { loadSizeId: Number(value) };
+    }
 }
