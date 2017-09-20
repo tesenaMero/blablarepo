@@ -197,11 +197,16 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 return term.paymentTermType.paymentTermTypeDesc === 'Credit';
             });
 
+            
 
             // push to terms array
             cachePayment && uniqueTerms.push(cachePayment);
             creditPayment && uniqueTerms.push(creditPayment);
-            SpecificationsStepComponent.availablePayments = terms;
+            SpecificationsStepComponent.availablePayments = uniqueTerms;
+            
+            this.paymentTermsApi.getCashTerm(122).subscribe((result) => {
+                SpecificationsStepComponent.availablePayments.push(result.json().paymentTerms[0]);
+            });
         });
     }
 
