@@ -15,7 +15,6 @@ import { ProjectProfileCreatorComponent } from './components/project-profile-cre
 import { OrdersTableComponent } from './components/orders-table/orders-table.component';
 import { LoadingTableComponent } from './components/orders-table/loading-table/loading-table.component';
 import { NewOrderComponent } from './components/new-order/new-order.component';
-import { NewProjectProfile } from './components/new-project-profile/new-project-profile.component';
 import { OrderDetailComponent } from './components/order-detail/order-detail.component';
 import { CartComponent } from './components/cart/cart.component';
 import { OrderBuilderComponent } from './components/order-builder/order-builder.component';
@@ -103,7 +102,6 @@ export const sharedConfig: NgModule = {
         OrdersComponent,
         NewOrderComponent,
         CartComponent,
-        NewProjectProfile,
         OrderDetailComponent,
         LoginComponent,
 
@@ -155,7 +153,6 @@ export const sharedConfig: NgModule = {
                     { path: 'orders', component: OrdersComponent },
                     { path: 'new', component: NewOrderComponent },
                     { path: 'cart', component: CartComponent },
-                    { path: 'new-project', component: NewProjectProfile },
                     { path: 'order-detail', component: OrderDetailComponent },
                     { path: 'project-profiles', component: ProjectProfilesComponent },
                     { path: 'drafts', component: DraftsComponent },
