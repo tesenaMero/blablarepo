@@ -25,6 +25,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         catalog: true
     }
     private selectedProduct: any;
+    private shouldShowManeouvering: boolean;
+    private catalogs: any = {};
 
     initializeProductSearch() {
         this.manager.fetchProductColors(this.manager.productLine.productLineId);
@@ -89,9 +91,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
 
     constructor(
-        @Inject(Step) private step: Step, 
-        private api: ProductsApi, 
-        private manager: CreateOrderService, 
+        @Inject(Step) private step: Step,
+        private api: ProductsApi,
+        private manager: CreateOrderService,
         private ProjectProfileApi: ProjectProfileApi,
         private CatalogApi: CatalogApi,
         private paymentTermsApi: PaymentTermsApi,
@@ -99,16 +101,23 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private plantApi: PlantApi,
     ) {
         this.step.setEventsListener(this);
+        console.log('manager: ', this.manager);
+        const customerId = 354;
+        this.CatalogApi.byProductLine(customerId, '0006').map((response) => response.json()).subscribe((response) => {
+            response.catalogs.forEach((catalog) => {
+                this.catalogs[catalog.catalogCode] = catalog.entries;
+            });
+        });
         this.add(); // Push a pre product
     }
 
     onShowed() {
         this.onCompleted.emit();
         this.loadings.products = true;
-        
+
         let salesDocumentType = '3';
-        if (this.manager.productLine.productLineId == this.READYMIX_LINE) { 
-            salesDocumentType = '1'; 
+        if (this.manager.productLine.productLineId == this.READYMIX_LINE) {
+            salesDocumentType = '1';
         }
 
         this.api.top(
@@ -117,8 +126,22 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.manager.productLine,
             this.manager.shippingCondition
         ).subscribe((result) => {
+            console.log('asd: ', result.json(),  this.manager);
             let topProducts = result.json().products;
             this.loadings.products = false;
+            console.log('this.manager.salesArea', this.manager.salesArea, this.manager, SpecificationsStepComponent);
+            // if is maneouvarable in Jobsite and it's cement delivery
+            console.log('info:', this.manager.salesArea.maneuverable,
+                this.manager.shippingCondition.shippingConditionId === 1, this.manager.shippingCondition.shippingConditionId,
+                this.manager.productLine.productLineId === '2,3', this.manager.productLine.productLineId)
+
+            if(this.manager.salesArea.maneuverable
+                && this.manager.shippingCondition.shippingConditionId === 1
+                && this.manager.productLine.productLineId === '2,3'
+            ) {
+                this.shouldShowManeouvering = true;
+                console.log('enable maneouvering', this.selectedProduct);
+            }
             if (!topProducts.length) { return; }
 
             SpecificationsStepComponent.availableProducts = topProducts;
@@ -143,10 +166,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
     getPlants() {
         if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == 2) {
             this.plantApi.byCountryCodeAndRegionCode(
-                this.manager.jobsite.address.countryCode, 
+                this.manager.jobsite.address.countryCode,
                 this.manager.jobsite.address.regionCode
-            ).subscribe((response) => { 
-                SpecificationsStepComponent.plants = response.json().plants; 
+            ).subscribe((response) => {
+                SpecificationsStepComponent.plants = response.json().plants;
             });
         }
     }
@@ -156,6 +179,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
     
     getPaymentTerms() {
+        // console.log('get payment terms', this.manager)
         let paymentTermIds = '';
         this.manager.salesArea.map((area: any) => {
             paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
@@ -163,6 +187,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         
         this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
             const terms = result.json().paymentTerms;
+            console.log('terms: ', terms);
             let uniqueTerms = [];
 
             // find type Cache
@@ -269,7 +294,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.preProducts[0].projectProfile.timePerLoad = {
             timePerLoadId: entry.entryId,
             timePerLoadDesc: entry.entryDesc
-        }; 
+        };
     }
 
     getUnits(product) {
@@ -295,6 +320,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             el.product.productId
         ).subscribe((result) => {
             let contracts = result.json().products;
+            console.log('contracts: ', result.json,  this.manager);
             SpecificationsStepComponent.availableContracts = contracts;
             this.preProducts.forEach(item => {
                 if (contracts.length >= 0)
@@ -363,10 +389,11 @@ class PreProduct {
                 _.availableProducts.push(product);
                 this.product = product;
             }
-        })
+        });
     }
 
     setProduct(product: any[]) {
+        console.log('product: ', this.manager);
         this.product = product;
     }
 }

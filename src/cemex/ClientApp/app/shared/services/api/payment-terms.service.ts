@@ -9,7 +9,6 @@ export class PaymentTermsApi {
     }
 
     getJobsitePaymentTerms(termId: any) {
-        console.log('api call? ', termId)
         return this.api.get(`/v1/im/paymentterms?paymentTermId=${termId}`);
     }
 }
