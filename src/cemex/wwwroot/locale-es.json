@@ -21,7 +21,7 @@
     "views.common.select": "Select",
     "views.common.validating_connection": "Validating connection",
     "views.common.connected": "Connected",
-    "views.common.ping_unsuccessful": "Bd inaccesible",
+    "views.common.ping_unsuccessful": "Sistema no disponible. Toma de pedidos no puede ser utilizada.",
 
     "views.cart.title": "Shopping cart",
     "views.cart.product_description": "Product Description",
