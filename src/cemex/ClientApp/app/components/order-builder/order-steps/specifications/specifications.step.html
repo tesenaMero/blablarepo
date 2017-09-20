@@ -123,7 +123,9 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3" 
+                    *ngIf="shouldShowManeouvering"
+                >
                     <div class="group">
                         <label>Additional services</label>
                         <div class="service">
@@ -283,7 +285,7 @@
                     <div class="flex-container justify-content-between">
                         <div class="group">
                             <label>Additional services</label>
-                            <div class="service spaced-top">
+                            <div class="service spaced-top" ng-if>
                                 <input [(ngModel)]="product.maneuvering" checked type="checkbox" id="maneuvering{{ index }}">
                                 <label for="maneuvering{{ index }}">
                                     <svg class="icon-checkbox-active">
@@ -583,7 +585,8 @@
                 <div class="col-md-3 mt-3">
                     <div class="group">
                         <label>Additional services</label>
-                        <div class="service">
+                        <!-- rmx services  -->
+                        <!-- <div class="service">
                             <input [(ngModel)]="product.maneuvering" checked type="checkbox" id="maneuvering{{ index }}">
                             <label for="maneuvering{{ index }}">
                                 <svg class="icon-checkbox-active">
@@ -597,7 +600,7 @@
                                 </svg>
                                 <span>Maneuvering</span>
                             </label>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="col-md-3 mt-3">
