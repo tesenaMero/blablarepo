@@ -39,7 +39,7 @@ export class CreateOrderService {
 
     constructor(private shipmentLocationApi: ShipmentLocationApi, private productColorApi: ProductColorApi) {
         this.initializeOrder();
-        this._shipmentLocationType = <BehaviorSubject<any>>new BehaviorSubject({});
+        this._shipmentLocationType = <BehaviorSubject<any>>new BehaviorSubject(undefined);
         this._productColors = <BehaviorSubject<any>>new BehaviorSubject(undefined);
         this._productSelectedProduct = <BehaviorSubject<any>>new BehaviorSubject({});
     }

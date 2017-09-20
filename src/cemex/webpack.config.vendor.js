@@ -7,6 +7,9 @@ module.exports = (env) => {
     const extractCSS = new ExtractTextPlugin('vendor.css');
     const isDevBuild = !(env && env.prod);
     const sharedConfig = {
+        watchOptions: {
+            ignored: /node_modules/
+        },
         stats: { modules: false },
         resolve: { extensions: ['.js'] },
         module: {

@@ -12,6 +12,9 @@ module.exports = (env) => {
     // Configuration in common to both client-side and server-side bundles
     const isDevBuild = !(env && env.prod);
     const sharedConfig = {
+        watchOptions: {
+            ignored: /node_modules/
+        },
         stats: { modules: false },
         context: __dirname,
         resolve: { extensions: ['.js', '.ts'] },
