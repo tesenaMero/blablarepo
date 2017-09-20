@@ -21,4 +21,14 @@
         </div>
     </div>
     <dls-table [rows]="rows" [columns]="columns"></dls-table>
+    <div *ngIf="loading">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="pulse"></div>
+            </div>
+            <div class="col-sm-12">
+                <div class="pulse"></div>
+            </div>
+        </div>
+    </div>
 </div>

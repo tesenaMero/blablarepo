@@ -47,6 +47,31 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-sm-6">
+                    <label for="pp-discharge" class="">Aplication</label>
+                    <select (change)="onChangeApplicationType($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
+                        <option value="" selected disabled hidden></option>
+                        <option *ngFor="let entry of catalogs.ELM; let i = index" [attr.data-index]="i" [value]="i">{{entry.entryDesc}}</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <label for="pp-transport" class="">Spacing</label>
+                    <select (change)="onChangeSpacing($event.target.value)" name="pp-transport" id="pp-transport" class="form-control">
+                        <option value="" selected disabled hidden></option>
+                        <option *ngFor="let entry of catalogs.TPL" [value]="entry.entryId">{{entry.entryDesc}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="pp-discharge" class="">Load Size</label>
+                    <select (change)="onChangeLoadSize($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
+                        <option value="" selected disabled hidden></option>
+                        <option *ngFor="let entry of catalogs.LSC; let i = index" [attr.data-index]="i" [value]="i">{{entry.entryDesc}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
                 <!-- <div class="col-sm-6">
                     <label for="pp-discharge" class="">Pump Frequency</label>
                     <select name="pp-discharge" id="pp-discharge" class="form-control">
