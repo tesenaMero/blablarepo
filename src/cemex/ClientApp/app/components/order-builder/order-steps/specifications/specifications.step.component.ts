@@ -3,7 +3,7 @@ import { ProductsApi, Api } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.service';
-import { ProjectProfileApi, CatalogApi } from '../../../../shared/services/api';
+import { ProjectProfileApi, CatalogApi, PlantApi } from '../../../../shared/services/api';
 import { CustomerService } from '../../../../shared/services/customer.service';
 
 @Component({
@@ -25,6 +25,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         catalog: true
     }
     private selectedProduct: any;
+    private shouldShowManeouvering: boolean;
 
     initializeProductSearch() {
         this.manager.fetchProductColors(this.manager.productLine.productLineId);
@@ -81,26 +82,40 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return SpecificationsStepComponent.catalogs;
     }
 
+    static plants = [];
+
+    get plants() {
+        return SpecificationsStepComponent.plants;
+    }
+
+
     constructor(
-        @Inject(Step) private step: Step, 
-        private api: ProductsApi, 
-        private manager: CreateOrderService, 
+        @Inject(Step) private step: Step,
+        private api: ProductsApi,
+        private manager: CreateOrderService,
         private ProjectProfileApi: ProjectProfileApi,
         private CatalogApi: CatalogApi,
         private paymentTermsApi: PaymentTermsApi,
         private CustomerService: CustomerService,
+        private plantApi: PlantApi,
     ) {
         this.step.setEventsListener(this);
+        const customerId = 354;
+        this.CatalogApi.byProductLine(customerId, '0006').map((response) => response.json()).subscribe((response) => {
+            response.catalogs.forEach((catalog) => {
+                this.catalogs[catalog.catalogCode] = catalog.entries;
+            });
+        });
         this.add(); // Push a pre product
     }
 
     onShowed() {
         this.onCompleted.emit();
         this.loadings.products = true;
-        
+
         let salesDocumentType = '3';
-        if (this.manager.productLine.productLineId == this.READYMIX_LINE) { 
-            salesDocumentType = '1'; 
+        if (this.manager.productLine.productLineId == this.READYMIX_LINE) {
+            salesDocumentType = '1';
         }
 
         this.api.top(
@@ -122,6 +137,21 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
             this.selectedProduct = topProducts[0];
 
+            // Maneouvering additional service
+            if(this.manager.shippingCondition.shippingConditionId === 1
+                && (this.selectedProduct.product.productLine.productLineId === 2 || this.selectedProduct.product.productLine.productLineId === 3)
+            ) {
+                let area = this.manager.salesArea.find((a) => {
+                    let id = this.selectedProduct.product.productLine.productLineId;
+                    return id === 2 ? a.salesArea.salesAreaId === 2 : a.salesArea.salesAreaId === 219;
+                });
+
+                // check if salesarea has maneouvering enabled
+                if (area && area.maneuverable) {
+                    this.shouldShowManeouvering = true;
+                }
+            }
+
             this.getUnits(topProducts[0].product.productId);
             this.productChanged(topProducts[0]);
 
@@ -129,7 +159,18 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
         this.getPaymentTerms();
         this.getProjectProfiles();
-        
+        this.getPlants();
+    }
+
+    getPlants() {
+        if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == 2) {
+            this.plantApi.byCountryCodeAndRegionCode(
+                this.manager.jobsite.address.countryCode,
+                this.manager.jobsite.address.regionCode
+            ).subscribe((response) => {
+                SpecificationsStepComponent.plants = response.json().plants;
+            });
+        }
     }
 
     paymentTermChanged(term) {
@@ -156,11 +197,16 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 return term.paymentTermType.paymentTermTypeDesc === 'Credit';
             });
 
+            
 
             // push to terms array
             cachePayment && uniqueTerms.push(cachePayment);
             creditPayment && uniqueTerms.push(creditPayment);
-            SpecificationsStepComponent.availablePayments = terms;
+            SpecificationsStepComponent.availablePayments = uniqueTerms;
+            
+            this.paymentTermsApi.getCashTerm(122).subscribe((result) => {
+                SpecificationsStepComponent.availablePayments.push(result.json().paymentTerms[0]);
+            });
         });
     }
 
@@ -250,7 +296,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.preProducts[0].projectProfile.timePerLoad = {
             timePerLoadId: entry.entryId,
             timePerLoadDesc: entry.entryDesc
-        }; 
+        };
     }
 
     getUnits(product) {
@@ -267,7 +313,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     productChanged(el) {
         this.loadings.contracts = true;
         const salesDocumentType = '1';
-
+        this.manager.setProduct(el);
         this.api.fetchContracts(
             this.manager.jobsite,
             salesDocumentType,
@@ -276,6 +322,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             el.product.productId
         ).subscribe((result) => {
             let contracts = result.json().products;
+            console.log('contracts: ', result.json,  this.manager);
             SpecificationsStepComponent.availableContracts = contracts;
             this.preProducts.forEach(item => {
                 if (contracts.length >= 0)
@@ -296,6 +343,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     add() {
+        console.log('this.preProducts[0], ', this.preProducts[0]);
         this.preProducts.push(new PreProduct(this.manager));
     }
 
@@ -344,10 +392,11 @@ class PreProduct {
                 _.availableProducts.push(product);
                 this.product = product;
             }
-        })
+        });
     }
 
     setProduct(product: any[]) {
+        console.log('product: ', this.manager);
         this.product = product;
     }
 }

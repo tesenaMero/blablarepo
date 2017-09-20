@@ -99,7 +99,7 @@ export class CartComponent implements OnInit {
 
     makeOrder() {
         this.dashboard.alertInfo("Placing order...");
-        this.drafts.createOrder(this._draftId).subscribe((response) => {
+        this.drafts.createOrder(this._draftId, {}).subscribe((response) => {
             this.dashboard.alertSuccess("Order placed successfully!");
         });
     }

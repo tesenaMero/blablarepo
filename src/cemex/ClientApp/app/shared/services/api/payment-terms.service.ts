@@ -9,7 +9,10 @@ export class PaymentTermsApi {
     }
 
     getJobsitePaymentTerms(termId: any) {
-        console.log('api call? ', termId)
         return this.api.get(`/v1/im/paymentterms?paymentTermId=${termId}`);
+    }
+    getCashTerm(customerId: number) {
+        `/v1/im/paymentterms?customerId=${customerId}&paymentTermCode=ZCON`
+        return this.api.get(`/v1/im/paymentterms?customerId=122&paymentTermCode=ZCON`);
     }
 }

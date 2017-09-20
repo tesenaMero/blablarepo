@@ -166,7 +166,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 else {
                     this.dashboard.alertSuccess(data.messageText);
                     this.requestNext.emit();
-                    return;
                 }
             });
             
@@ -237,7 +236,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 location.name = location.shipmentLocationDesc;
             })
             this.loadings.locations = false;
-            if (this.locations.length > 0 && this.location == undefined) {
+            if (this.locations.length > 0) {
                 this.jobsiteChanged(this.locations[0]);
                 this.locationIndex = 0;
             }
