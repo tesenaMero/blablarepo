@@ -5,6 +5,7 @@ import { DeliveryMode } from '../../models/delivery.model';
 import { DashboardService } from '../../shared/services/dashboard.service';
 import { DraftsService } from '../../shared/services/api/drafts.service';
 import { CustomerService } from '../../shared/services/customer.service';
+import { CreateOrderService } from '../../shared/services/create-order.service';
 
 @Component({
     selector: 'order-builder',
@@ -24,6 +25,7 @@ export class OrderBuilderComponent {
         private dashboard: DashboardService,
         private drafts: DraftsService,
         private customerService: CustomerService,
+        private manager: CreateOrderService,
         private zone: NgZone) {
         this.rebuildOrder = false;
         this.customerService.customerSubject.subscribe((customer) => {
@@ -86,12 +88,12 @@ export class OrderBuilderComponent {
     }
 
     private uglyOrder() {
+        const orderService = this.manager
         return {
-            "orderId": 51,
             "orderCode": "",
-            "orderName": "Cement Online Order Mock",
-            "createdDateTime": "2017-09-07T15:00:00.000Z",
-            "updatedDateTime": "2017-09-07T15:00:00.000Z",
+            "orderName": orderService.product.commercialDesc,
+            "createdDateTime": orderService.createdDateTime,
+            "updatedDateTime": orderService.updatedDateTime,
             "programmedDateTime": "2017-09-07T15:00:00.000Z",
             "requestedDateTime": "2017-09-10T15:00:00.000Z",
             "draftDateTime": "2017-09-07T14:28:18.814Z",
@@ -112,17 +114,13 @@ export class OrderBuilderComponent {
                 "shippingConditionId": 1
             },
             "jobsite": {
-                "jobsiteId": 59
+                "jobsiteId": orderService.jobsite
             },
             "pointOfDelivery": {
-                "pointOfDeliveryId": 393
+                "pointOfDeliveryId": orderService.pointOfDelivery
             },
-            "instructions": "Instrucciones de entrega",
-            "contact": {
-                "contactId": "2298",
-                "contactName": "Ivan el Terrible",
-                "contactPhone": "821920192102"
-            },
+            "instructions": orderService.instructions,
+            "contact": orderService.contact,
             "user": {
                 "userId": 50
             },

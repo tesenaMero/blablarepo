@@ -62,6 +62,7 @@ export interface PointOfDelivery {
 export interface Contact {
     contactName: string;
     contactPhone: string;
+    contactId: number;
 }
 
 export interface User {

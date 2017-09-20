@@ -166,7 +166,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 else {
                     this.dashboard.alertSuccess(data.messageText);
                     this.requestNext.emit();
-                    return;
                 }
             });
             

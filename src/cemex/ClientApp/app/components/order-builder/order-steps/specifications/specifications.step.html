@@ -160,7 +160,7 @@
 
     <!-- Cement Mexico Pickup -->
     <!-- TODO only mexico -->
-    <ng-container *ngIf="manager?.productLine?.productLineId != READYMIX_LINE ">
+    <ng-container *ngIf="false">
         <div class="product" [ngClass]="{ 
             'exit-animation': product.deleting, 
             'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
@@ -387,7 +387,7 @@
                             <label>Request date</label>
                             <label for="date{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    <!-- {{ product?.date | date:'dd.MM.y' }} -->
+                                    {{ product.date | date:'dd.MM.y' }}
                                     <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" />
                                 </span>
                                 <span class="mb-0">
@@ -399,7 +399,7 @@
                             <label>Requested time</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    <!-- {{ product.time }} -->
+                                    {{ product.time }}
                                     <input id="time{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.time" ngui-datetime-picker time-only="true" right-side="true" [close-on-select]="false" hour="0" minute="0" />
                                 </span>
                                 <span class="mb-0">
