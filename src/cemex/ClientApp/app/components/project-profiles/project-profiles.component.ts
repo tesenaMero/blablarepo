@@ -17,15 +17,19 @@ export class ProjectProfilesComponent {
     rows = [];
 
     constructor(private ppService: ProjectProfileApi, private sanitizer: DomSanitizer, private t: TranslationService, private CustomerService: CustomerService) {
-        this.fetchProjectProfiles();
+        this.CustomerService.customerSubject.subscribe((customer) => {
+            if (customer) {
+                this.fetchProjectProfiles(customer);
+            }
+        });
     }
 
     openModal() {
         $("#app-content").addClass("blur");
     }
 
-    fetchProjectProfiles() {
-        const customerId = this.CustomerService.currentCustomer().legalEntityId;
+    fetchProjectProfiles(customer = this.CustomerService.currentCustomer()) {
+        const customerId = customer.legalEntityId;
         this.ppService.all(customerId).subscribe((response) => {
             const profiles = response.json().profiles;
             if (profiles) {
