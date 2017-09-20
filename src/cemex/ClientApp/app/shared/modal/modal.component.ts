@@ -15,9 +15,7 @@ export class Modal {
     constructor(request: OrderDetailApi) {     
         request.validateRequestId(this.requestId).subscribe((response) => {
             this.response = response.json();     
-            this.text = "The request " + this.requestId + " is successful created" +
-            "\n Code: " + this.response.orderCode +
-            "\n ";
+            this.text = this.response.orderCode.trim() + "\n";     
             let fields = this.response.messages.split('|');        
             for (let i = 0; i < fields.length; ++i) { 
                 if (fields[i].trim()) {
