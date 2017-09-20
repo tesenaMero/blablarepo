@@ -1,0 +1,34 @@
+<!-- <div class="table-header hidden-lg-up">
+    <span class="roboto-bold date-text">JANUARY  15 - 21, 2017</span>
+</div> -->
+
+<div class="layout">
+    <breadcrumbs>
+        <breadcrumbs-item link="../orders">{{ t.pt('views.common.orders') }}</breadcrumbs-item>
+        <breadcrumbs-item>{{ t.pt('views.common.project_profiles') }}</breadcrumbs-item>
+    </breadcrumbs>
+    <div class="title-container row align-items-center">
+        <div class="col-sm-8">
+            <h1>{{ t.pt('views.common.project_profiles') }}</h1>
+            <svg class="icon-down-single-black">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-down-single"></use>
+            </svg>
+        </div>
+        <div class="cto-container col-sm-4">
+            <div class="float-sm-right">
+                <button (click)="openModal()" data-toggle="modal" data-target="#pp-creator" class="button-ghost">{{ t.pt('views.project.profile.create') }}</button>
+            </div>
+        </div>
+    </div>
+    <dls-table [rows]="rows" [columns]="columns"></dls-table>
+    <div *ngIf="loading">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="pulse"></div>
+            </div>
+            <div class="col-sm-12">
+                <div class="pulse"></div>
+            </div>
+        </div>
+    </div>
+</div>

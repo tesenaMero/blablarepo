@@ -29,6 +29,7 @@
         "aspnet-webpack": "^2.0.1",
         "awesome-typescript-loader": "3.2.2",
         "bootstrap": "^4.0.0-beta",
+        "core-decorators": "^0.20.0",
         "css": "2.2.1",
         "es6-shim": "0.35.3",
         "event-source-polyfill": "0.0.9",

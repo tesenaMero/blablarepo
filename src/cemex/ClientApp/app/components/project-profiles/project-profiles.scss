@@ -1,0 +1,72 @@
+@import "~bootstrap/scss/bootstrap-grid.scss";
+@import "../../scss/responsive.scss";
+@import "../../scss/mixins/animations.scss";
+
+$link-blue: #3FA9F5;
+.layout {
+    padding: 34px 26px 34px 26px;
+    @include media-breakpoint-down(sm) {
+        padding: 34px 17px 34px 17px;
+    }
+}
+
+.title-container {
+    padding-top: 7px;
+    padding-bottom: 16px;
+    white-space: nowrap;
+    h1 {
+        display: inline;
+        // &:after {
+        //     content: "";
+        //     position: absolute;
+        //     background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='17' height='8' fill='@{bgColor}' stroke='none'><path class='icon-down-single' d='M15.83.26a.71.71,0,0,0-1-.09L8,5.86,1.17.17A.71.71,0,0,0,.26,1.26L7.54,7.33a.71.71,0,0,0,.91,0l7.29-6.08A.71.71,0,0,0,15.83.26Z' transform='translate(0 0)'></path></svg>") no-repeat;
+        //     height: 8px;
+        //     width: 17px;
+        //     margin-left: 15px;
+        //     top: 23px;
+        // }
+        @include media-breakpoint-down(sm) {
+            font-size: 30px;
+        }
+    }
+    @include media-breakpoint-down(sm) {
+        margin-bottom: 0;
+    }
+    .icon-down-single-black {
+        height: 8px;
+        width: 17px;
+        vertical-align: 10px;
+        margin-left: 11px;
+    }
+}
+
+.cto-container {
+    &.center-with-steps a {
+        margin-bottom: 16px;
+    }
+    a:not(:last-child) {
+        margin-right: 8px;
+    }
+    @include media-breakpoint-down(sm) {
+        margin-top: 16px;
+    }
+}
+
+/deep/.action-button {
+    color: #51A4F4;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/deep/.capitalize {
+    text-transform: capitalize;
+}
+
+.pulse {
+    background-color: rgba(128, 128, 128, .1);
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0) !important;
+    @include animation('pulse 1s alternate infinite');
+    height: 40px;
+    margin-bottom: 15px;
+}
