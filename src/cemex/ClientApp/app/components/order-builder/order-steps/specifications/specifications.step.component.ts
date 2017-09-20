@@ -3,7 +3,7 @@ import { ProductsApi, Api } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.service';
-import { ProjectProfileApi, CatalogApi } from '../../../../shared/services/api';
+import { ProjectProfileApi, CatalogApi, PlantApi } from '../../../../shared/services/api';
 import { CustomerService } from '../../../../shared/services/customer.service';
 
 @Component({
@@ -81,6 +81,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return SpecificationsStepComponent.catalogs;
     }
 
+    static plants = [];
+
+    get plants() {
+        return SpecificationsStepComponent.plants;
+    }
+
+
     constructor(
         @Inject(Step) private step: Step, 
         private api: ProductsApi, 
@@ -89,6 +96,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private CatalogApi: CatalogApi,
         private paymentTermsApi: PaymentTermsApi,
         private CustomerService: CustomerService,
+        private plantApi: PlantApi,
     ) {
         this.step.setEventsListener(this);
         this.add(); // Push a pre product
@@ -129,7 +137,18 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
         this.getPaymentTerms();
         this.getProjectProfiles();
-        
+        this.getPlants();
+    }
+
+    getPlants() {
+        if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == 2) {
+            this.plantApi.byCountryCodeAndRegionCode(
+                this.manager.jobsite.address.countryCode, 
+                this.manager.jobsite.address.regionCode
+            ).subscribe((response) => { 
+                SpecificationsStepComponent.plants = response.json().plants; 
+            });
+        }
     }
 
     paymentTermChanged(term) {
