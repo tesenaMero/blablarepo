@@ -22,7 +22,7 @@ export class CartComponent implements OnInit {
     disableCartBtn: boolean;
     private _draftId: any;
 
-    private order: any;
+    private order: any; 
     private draftOrder: any;
     private loadings = {
         order: true
@@ -39,6 +39,7 @@ export class CartComponent implements OnInit {
         private orderManager: CreateOrderService
     ) {
         this._draftId = sessionStorage.getItem('draftId');
+        console.log(this.orderManager.shippingCondition);
     }
 
     ngOnInit() {
@@ -47,7 +48,6 @@ export class CartComponent implements OnInit {
             return this.drafts.prices(this._draftId);
         }).subscribe((response) => {
             this.draftOrder = response.json();
-            this.mockStuff();
             this.loadings.order = false;
         }, (error) => {
             this.loadings.order = false;
@@ -56,25 +56,25 @@ export class CartComponent implements OnInit {
         });
     }
 
-    getSubtotal(order) {
+    getSubtotal() {
         let summ = 0;
-        order.items.forEach(item => {
+        this.draftOrder.items.forEach(item => {
             summ += item.grossPrice * item.quantity;
         });
         return summ;
     }
 
-    getTaxes(order) {
+    getTaxes() {
         let taxes = 0;
-        order.items.forEach(item => {
+        this.draftOrder.items.forEach(item => {
             taxes += item.taxAmount * item.quantity;
         });
         return taxes;
     }
 
-    getGrandTotal(order) {
+    getGrandTotal() {
         let total = 0;
-        order.items.forEach(item => {
+        this.draftOrder.items.forEach(item => {
             total += item.totalPrice;
         });
         return total;
