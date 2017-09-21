@@ -19,7 +19,6 @@ export class CreateOrderService {
     // --------------------------------------------------
     public _shipmentLocationType: BehaviorSubject<any>;
     public _productColors: BehaviorSubject<any>;
-    public _productSelectedProduct: BehaviorSubject<any>;
     // --------------------------------------------------
 
     public orderId: number;
@@ -37,7 +36,7 @@ export class CreateOrderService {
     public customer: types.Customer;
     public shippingCondition: types.ShippingCondition;
     public jobsite: any;
-    public pointOfDelivery: POD;
+    public pointOfDelivery: any;
     public instructions: string;
     public contact: any;
     public user: types.User;
@@ -48,9 +47,6 @@ export class CreateOrderService {
     public products: Array<any>;
     public product: any;
 
-    // Const
-    READYMIX_LINE = 6;
-
     constructor(private shipmentLocationApi: ShipmentLocationApi, private productColorApi: ProductColorApi) {
         this.initializeOrder();
         
@@ -58,7 +54,6 @@ export class CreateOrderService {
         // --------------------------------------------------
         this._shipmentLocationType = <BehaviorSubject<any>>new BehaviorSubject(undefined);
         this._productColors = <BehaviorSubject<any>>new BehaviorSubject(undefined);
-        this._productSelectedProduct = <BehaviorSubject<any>>new BehaviorSubject({});
         // --------------------------------------------------
     }
 
@@ -90,7 +85,7 @@ export class CreateOrderService {
         customer?: types.Customer,
         shippingCondition?: types.ShippingCondition,
         jobsite?: types.Jobsite,
-        pointOfDelivery?: POD,
+        pointOfDelivery?: any,
         instructions?: string,
         contact?: any,
         user?: types.User,
@@ -160,8 +155,9 @@ export class CreateOrderService {
     }
 
     getSalesDocumentType() {
+        const READYMIX_LINE = 6;
         let salesDocumentType = '3';
-        if (this.productLine.productLineId == this.READYMIX_LINE) {
+        if (this.productLine.productLineId == READYMIX_LINE) {
             salesDocumentType = '1';
         }
 

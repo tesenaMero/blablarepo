@@ -62,6 +62,7 @@ import { DashboardService } from './shared/services/dashboard.service';
 import { CustomerService } from './shared/services/customer.service';
 import { Broadcaster } from './shared/types/Broadcaster';
 import { TranslationService } from './shared/services/translation.service';
+import { SearchProductService } from './shared/services/product-search.service';
 
 import {
     Api,
@@ -200,5 +201,6 @@ export const sharedConfig: NgModule = {
         PingSalesOrderApi,
         PurchaseOrderApi,
         SalesDocumentApi,
+        SearchProductService,
     ]
 };

@@ -9,8 +9,8 @@
         <step title="Location">
             <location-step (requestNext)="locationStepRequestedNext($event)" (onCompleted)="locationStepCompleted($event)"></location-step>
         </step>
-        <step title="Specifications" (onShowed)="specificationsStepShowed()" title="Specifications">
-            <specifications-step (onCompleted)="specificationsStepCompleted()"></specifications-step>
+        <step title="Specifications" title="Specifications">
+            <specifications-step (onCompleted)="specificationsStepCompleted($event)"></specifications-step>
         </step>
         <step title="Summary">
             <summary-step (onCompleted)="summaryStepCompleted()"></summary-step>

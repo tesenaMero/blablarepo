@@ -18,7 +18,7 @@
     </div>
 
     <div *ngIf="false" class="orders-container">
-        <div class="order" *ngFor="let item of order.items">
+        <div class="order" *ngFor="let item of order?.items">
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-3"></div>
@@ -35,7 +35,7 @@
     </div>
 
     <div class="cart-group">
-        <div class="row cart-items-container" *ngFor="let productDto of draftOrder.items">
+        <div class="row cart-items-container" *ngFor="let productDto of draftOrder?.items">
             <div class="cart-item-container col-md-10 row">
                 <div class="product-field col-md-4">
                     <div class="label-field roboto">{{ t.pt('views.cart.product_description') }}</div>
@@ -81,14 +81,9 @@
                     <div class="label-field roboto">{{ t.pt('views.cart.pod') }}</div>
                     <p class="product-type roboto-bold">{{draftOrder.pointOfDelivery.pointOfDeliveryDesc}}</p>
                 </div>
-                <div
-                    *ngIf="productDto.orderItemProfile.additionalServices.length" 
-                    class="product-field col-md-3"
-                >
+                <div *ngIf="productDto?.orderItemProfile?.additionalServices?.length" class="product-field col-md-3">
                     <div class="label-field roboto">{{ t.pt('views.cart.aditional_services') }}</div>
-                    <p 
-                        class="product-type" 
-                        *ngFor="let service of productDto.orderItemProfile.additionalServices">
+                    <p class="product-type" *ngFor="let service of productDto.orderItemProfile.additionalServices">
                         {{service.additionalServiceDesc}}
                     </p>
                 </div>
@@ -188,7 +183,7 @@
         <div class="spacer-16"></div>
     </div>
 
-    <ng-container *ngIf="draftOrder.salesArea.businessLine.businessLineCode === 'RMX'">
+    <ng-container *ngIf="draftOrder?.salesArea.businessLine.businessLineCode === 'RMX'">
         <div class="row cart-items-container" *ngFor="let productDto of _productsReadymix">
             <div class="cart-item-container col-md-10 row">
                 <div class="product-field col-md-3">

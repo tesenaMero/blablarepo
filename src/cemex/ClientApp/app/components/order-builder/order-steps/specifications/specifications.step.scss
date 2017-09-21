@@ -207,6 +207,17 @@
     z-index: 101;
 }
 
+.input-date {
+    outline: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    font-family: Roboto;
+    width: 100%;
+}
+
 .flex-space-between {
     justify-content: space-between;
     display: flex;

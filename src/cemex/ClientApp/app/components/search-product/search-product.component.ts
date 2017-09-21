@@ -4,6 +4,7 @@ import { CreateOrderService } from '../../shared/services/create-order.service';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../shared/components/selectwithsearch/";
 import { Plant, ProductColor, ProductWrapper } from '../../shared/types';
 import { TranslationService } from '../../shared/services/translation.service';
+import { SearchProductService } from '../../shared/services/product-search.service';
 
 @Component({
     selector: 'search-product',
@@ -29,8 +30,14 @@ export class SearchProductComponent {
     private productColorSelected = null;
     private plantSelected = null;
 
-    constructor(private orderManager: CreateOrderService, private plantApi: PlantApi, private t: TranslationService,
-        private productColorApi: ProductColorApi, private productsApi: ProductsApi, private shipmentLocationApi: ShipmentLocationApi) {
+    constructor(
+        private orderManager: CreateOrderService, 
+        private plantApi: PlantApi, 
+        private t: TranslationService,
+        private productColorApi: ProductColorApi, 
+        private productsApi: ProductsApi, 
+        private shipmentLocationApi: ShipmentLocationApi, 
+        private searchProductService: SearchProductService) {
         this.orderManager._productColors.subscribe(response => {
             if (!response) {
                 return;
@@ -89,7 +96,7 @@ export class SearchProductComponent {
     }
 
     confirm() {
-        this.orderManager._productSelectedProduct.next(this.selectedProduct);
+        this.searchProductService.searchedProduct.next(this.selectedProduct);
         this.confirmed.emit();
     }
 
