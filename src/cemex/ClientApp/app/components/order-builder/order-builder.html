@@ -1,5 +1,5 @@
 <div *ngIf="rebuildOrder">
-    <stepper finishText="Order">
+    <stepper (onFinish)="finishSteps()" finishText="Order">
         <step title="Product line" [showExit]="true" [showControls]="true">
             <product-selection-step (onCompleted)="productStepCompleted($event)"></product-selection-step>
         </step>

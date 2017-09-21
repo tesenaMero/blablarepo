@@ -25,19 +25,16 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
 
     MODE = DeliveryMode;
 
-    constructor(@Inject(Step) private step: Step, private manager: CreateOrderService, private dashboard: DashboardService, private drafts: DraftsService, private customerService: CustomerService, private jsonObjService: EncodeDecodeJsonObjService, @Inject(DOCUMENT) private document: any,) {
-        this.step.canAdvance = () => this.canAdvance();
+    constructor(@Inject(Step) private step: Step, 
+                private manager: CreateOrderService, 
+                private dashboard: DashboardService, 
+                private drafts: DraftsService) {
         this.step.setEventsListener(this);
     }
 
     // Interfaces
     // ======================
     ngOnInit() {}
-
-    canAdvance(): boolean {
-        this.placeOrder()
-        return true;
-    }
 
     onShowed() {
         console.log("Draft:", this.draftId);
@@ -47,7 +44,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         }).subscribe((response) => {
             this.draftOrder = response.json();
             console.log("Draft order", this.draftOrder);
-            this.onCompleted.emit(true);
+            this.onCompleted.emit(this.draftOrder);
             this.dashboard.alertSuccess("Prices recovered successfully");
         }, (error) => {
             this.dashboard.alertError("Something wrong happened");
@@ -63,39 +60,5 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
             summ += item.grossPrice * item.quantity;
         });
         return summ;
-    }
-
-    placeOrder() {
-        this.dashboard.alertInfo("Placing order" + this.draftOrder.orderId);
-        const customer = this.customerService.currentCustomer();
-        let data = [];
-
-        this.draftOrder.items.forEach(item => {
-            data.push({
-                    orderID: this.draftOrder.orderId,
-                    companyCode: this.draftOrder.salesArea.salesOrganizationCode,
-                    customerCode: customer.legalEntityTypeCode,
-                    jobSiteCode: this.draftOrder.jobsite.jobsiteCode,
-                    payerCode: customer.legalEntityTypeCode,
-                    orderAmount: item.totalPrice,
-                    documents: []
-                }
-            )
-        })
-        
-        const cartItems = {
-            sourceApp: "order-taking",
-            date: new Date().toISOString(),
-            screenToShow: "cash-sales",
-            credentials: {
-                token: sessionStorage.getItem('access_token'),
-                jwt: sessionStorage.getItem('jwt')
-            },
-            data: data
-        }
-
-        this.onCompleted.emit(false)
-        let encoded = this.jsonObjService.encodeJson(cartItems);
-        this.document.location.href = 'https://invoices-payments-dev2.mybluemix.net/invoices-payments/open/' + encoded;
     }
 }

@@ -1,4 +1,5 @@
-import { Component, ViewChild, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef, NgZone, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/platform-browser';
 import { Router } from '@angular/router'
 import { StepperComponent } from '../../shared/components/stepper/';
 import { DeliveryMode } from '../../models/delivery.model';
@@ -6,6 +7,7 @@ import { DashboardService } from '../../shared/services/dashboard.service';
 import { DraftsService } from '../../shared/services/api/drafts.service';
 import { CustomerService } from '../../shared/services/customer.service';
 import { CreateOrderService } from '../../shared/services/create-order.service';
+import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
 
 @Component({
     selector: 'order-builder',
@@ -20,6 +22,7 @@ export class OrderBuilderComponent {
     private currentCustomer: any;
 
     private draftId: any;
+    private draftOrder: any;
 
     constructor(
         private _changeDetector: ChangeDetectorRef,
@@ -28,7 +31,9 @@ export class OrderBuilderComponent {
         private drafts: DraftsService,
         private customerService: CustomerService,
         private manager: CreateOrderService,
-        private zone: NgZone) {
+        private zone: NgZone,
+        private jsonObjService: EncodeDecodeJsonObjService, 
+        @Inject(DOCUMENT) private document: any) {
         this.rebuildOrder = false;
         this.customerService.customerSubject.subscribe((customer) => {
             if (customer && customer != this.currentCustomer) {
@@ -62,7 +67,6 @@ export class OrderBuilderComponent {
     }
 
     productStepCompleted(product: any) {
-        console.log("completed");
         this.isReadyMix = product.productLineId == this.READYMIX_ID;
         this._changeDetector.detectChanges();
         this.stepper.complete();
@@ -78,8 +82,10 @@ export class OrderBuilderComponent {
         }
     }
 
-    checkoutCompleted(event) {
-        if (event) {
+    checkoutCompleted(draftOrder) {
+        if (draftOrder) {
+            console.log("order", draftOrder);
+            this.draftOrder = draftOrder;
             this.stepper.complete();
         }
         else {
@@ -101,5 +107,40 @@ export class OrderBuilderComponent {
     }
 
     finishSteps() {
+        console.log("finish", this.draftOrder);
+        this.placeOrder();
+    }
+
+    placeOrder() {
+        this.dashboard.alertInfo("Placing order" + this.draftOrder.orderId);
+        const customer = this.customerService.currentCustomer();
+        let data = [];
+
+        this.draftOrder.items.forEach(item => {
+            data.push({
+                    orderID: this.draftOrder.orderId,
+                    companyCode: this.draftOrder.salesArea.salesOrganizationCode,
+                    customerCode: customer.legalEntityTypeCode,
+                    jobSiteCode: this.draftOrder.jobsite.jobsiteCode,
+                    payerCode: customer.legalEntityTypeCode,
+                    orderAmount: item.totalPrice,
+                    documents: []
+                }
+            )
+        })
+        
+        const cartItems = {
+            sourceApp: "order-taking",
+            date: new Date().toISOString(),
+            screenToShow: "cash-sales",
+            credentials: {
+                token: sessionStorage.getItem('access_token'),
+                jwt: sessionStorage.getItem('jwt')
+            },
+            data: data
+        }
+
+        let encoded = this.jsonObjService.encodeJson(cartItems);
+        this.document.location.href = 'https://invoices-payments-dev2.mybluemix.net/invoices-payments/open/' + encoded;
     }
 }
