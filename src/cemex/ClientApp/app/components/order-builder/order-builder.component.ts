@@ -154,7 +154,7 @@ export class OrderBuilderComponent {
 
     private generateOrderObj() {
         let _ = this.manager;
-        return {
+        let result = {
             "orderName": _.productLine.productLineDesc + "Online Order",
             "requestedDateTime": new Date().toISOString(),
             "purchaseOrder": _.purchaseOrder ? _.purchaseOrder : "",
@@ -179,7 +179,11 @@ export class OrderBuilderComponent {
                 "contactPhone": this.safeContactPhone()
             },
             "items": this.makeItems()
+        };
+        if (!_.pointOfDelivery) {
+            delete result.pointOfDelivery;
         }
+        return result;
     }
 
     private makeItems(): any[] {

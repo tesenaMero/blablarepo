@@ -43,7 +43,7 @@
                 </div>
                 <div class="product-field col-md-2">
                     <div class="label-field roboto">{{ t.pt('views.cart.quantity') }}</div>
-                    <p class="product-type">{{productDto.product.quantity}}</p>
+                    <p class="product-type">{{productDto.quantity}}</p>
                 </div>
                 <div class="product-field col-md-1">
                     <div class="label-field roboto">{{ t.pt('views.cart.unit') }}</div>
@@ -289,19 +289,19 @@
         </div>
     </ng-container>
     <div class="spacer-24"></div>
-    <div class="row">
+    <div class="row" *ngIf="draftOrder">
         <div class="col-md-12">
             <div class="order-total float-right text-right">
                 <div class="row concepts-total">
                     <h4 class="col-md-6">{{ t.pt('views.cart.subtotal') }}:</h4>
-                    <p class="col-md-6 roboto-bold">{{ getSubtotal(draftOrder) | currency : 'USD' : true }}</p>
+                    <p class="col-md-6 roboto-bold">{{ getSubtotal() | currency : 'USD' : true }}</p>
                 </div>
                 <div class="row concepts-total">
                     <h4 class="col-md-6">{{ t.pt('views.cart.taxes') }}:</h4>
-                    <p class="col-md-6 roboto-bold">{{ getTaxes(draftOrder) | currency : 'USD' : true }}</p>
+                    <p class="col-md-6 roboto-bold">{{ getTaxes() | currency : 'USD' : true }}</p>
                 </div>
                 <div class="spacer-24"></div>
-                <div class="size-48 roboto-bold">{{ getGrandTotal(draftOrder) | currency : 'USD' : true}}</div>
+                <div class="size-48 roboto-bold">{{ getGrandTotal() | currency : 'USD' : true}}</div>
                 <button (click)="placeOrder()" class="button bright-green" [ngClass]="{disabled: disableCartBtn}" [disabled]="disableCartBtn">
                     {{ t.pt('views.cart.order') }}
                 </button>
