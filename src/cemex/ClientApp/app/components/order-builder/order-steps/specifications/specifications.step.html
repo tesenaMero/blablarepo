@@ -1,6 +1,6 @@
 <div class="products">
     <!-- Cement Mexico Delivery -->
-    <ng-container *ngIf="true">
+    <ng-container *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">
         <div class="product" [ngClass]="{ 
                 'exit-animation': product.deleting, 
                 'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
@@ -161,8 +161,7 @@
     </ng-container>
 
     <!-- Cement Mexico Pickup -->
-    <!-- TODO only mexico -->
-    <ng-container *ngIf="false">
+    <ng-container *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">
         <div class="product" [ngClass]="{ 
             'exit-animation': product.deleting, 
             'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
