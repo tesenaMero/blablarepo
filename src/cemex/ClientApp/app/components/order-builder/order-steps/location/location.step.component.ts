@@ -225,7 +225,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     shouldShowPOD(): boolean {
-        if (this.orderManager.productLine.productLineId == 6) { return true; }
+        if (this.orderManager.productLine.productLineId == 6 || this.orderManager.productLine.productLineId == 1) { return true; }
         else if (this.orderManager.shippingCondition.shippingConditionId == this.MODE.Pickup) { return false; }
         else { return true; }
     }
