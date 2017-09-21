@@ -14,8 +14,9 @@ export class CatalogApi {
     }
 
     byProductLine(customerId, productLineId): Observable<Response> {
-        if (productLineId = "2,3") { productLineId = "2"; }
+        if (productLineId === "2,3") { productLineId = "2"; }
+        if (productLineId === 6) { productLineId = "0006"; }
+        
         return this.Api.get(`/v1/sm/catalogs?customerId=${customerId}&productLine=${productLineId}`);
     }
 }
-  

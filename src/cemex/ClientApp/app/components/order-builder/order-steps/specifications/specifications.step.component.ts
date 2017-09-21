@@ -3,7 +3,7 @@ import { ProductsApi, Api } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.service';
-import { ProjectProfileApi, CatalogApi, PlantApi } from '../../../../shared/services/api';
+import { ProjectProfileApi, CatalogApi, PlantApi, ContractsApi } from '../../../../shared/services/api';
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { SearchProductService } from '../../../../shared/services/product-search.service';
 import { DeliveryMode } from '../../../../models/delivery.model';
@@ -52,6 +52,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return SpecificationsStepComponent.projectProfiles;
     }
 
+    private readyMixAdditionalServices = [];
+
     static catalogs = [];
     get catalogs() {
         return SpecificationsStepComponent.catalogs;
@@ -69,6 +71,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private ProjectProfileApi: ProjectProfileApi,
         private catalogApi: CatalogApi,
         private customerService: CustomerService,
+        private contractsApi: ContractsApi,
         private paymentTermsApi: PaymentTermsApi,
         private plantApi: PlantApi,
         private searchProductService: SearchProductService
@@ -104,6 +107,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     onShowed() {
         // Add a pre product by default
         if (this.preProducts.length <= 0) { this.add(); }
+        console.log(' this.manager.productLine: ',  this.manager.productLine,  this.manager);
 
         const customerId = this.customerService.currentCustomer().legalEntityId;
         const productLineId = this.manager.productLine.productLineId;
@@ -112,13 +116,14 @@ export class SpecificationsStepComponent implements StepEventsListener {
             response.catalogs.forEach((catalog) => {
                 this.catalogs[catalog.catalogCode] = catalog.entries;
             });
+            this.readyMixAdditionalServices = this.catalogs['ASC'];
+            console.log('this: ',  this, )
         });
 
         // Set loading state
         this.preProducts.forEach((item) => {
             item.loadings.products = true;
         });
-
         this.fetchProducts();
         this.getPaymentTerms();
         this.getProjectProfiles();
@@ -165,6 +170,14 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 SpecificationsStepComponent.plants = response.json().plants;
             });
         }
+    }
+
+    getContracts(productLineId) {
+        const customerId = this.customerService.currentCustomer().legalEntityId;
+
+        this.contractsApi.byProductTypeId(customerId, productLineId).subscribe((res) => {
+            console.log('res: ', res.json())
+        })
     }
 
     getPaymentTerms() {
@@ -399,6 +412,7 @@ class PreProduct {
             this.product.product.productId
         ).subscribe((result) => {
             let contracts = result.json().products;
+            console.log('contracts: ', contracts);
             this.availableContracts = contracts;
 
             if (contracts.length > 0) {
