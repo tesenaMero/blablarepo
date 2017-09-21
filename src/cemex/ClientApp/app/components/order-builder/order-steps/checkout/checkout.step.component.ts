@@ -48,7 +48,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
             this.draftOrder = response.json();
             console.log("Draft order", this.draftOrder);
             this.onCompleted.emit(true);
-            this.dashboard.alertInfo("Prices recovered successfully");
+            this.dashboard.alertSuccess("Prices recovered successfully");
         }, (error) => {
             this.dashboard.alertError("Something wrong happened");
             console.error('prices Error -> ' + JSON.stringify(error));
