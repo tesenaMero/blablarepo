@@ -25,13 +25,13 @@ export class ShipmentLocationApi {
 
     jobsites(productLine) {
         return this.locationTypes()
-        .map(types => types.json().shipmentLocationTypes)
-        .flatMap((types) => {
-            let type = types.find(item => item.shipmentLocationTypeCode === 'J');
-            let customerId = this.customerService.currentCustomer().legalEntityId;
-            return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${type.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`)
-        })
-        .map(jobsites => jobsites);
+            .map(types => types.json().shipmentLocationTypes)
+            .flatMap((types) => {
+                let type = types.find(item => item.shipmentLocationTypeCode === 'J');
+                let customerId = this.customerService.currentCustomer().legalEntityId;
+                return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${type.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`)
+            })
+            .map(jobsites => jobsites);
     }
 
     pods(shipmentLocation: any, shipmentLocationTypes, legalEntityId?, productLine?): Observable<Response> {
@@ -54,21 +54,26 @@ export class ShipmentLocationApi {
     // Chain combines address() + geo()
     jobsiteGeo(shipmentLocation: any): Observable<Response> {
         return this.address(shipmentLocation)
-        .flatMap((address) => { return this.geo(address.json()); })
-        .map(geo => geo);
+            .flatMap((address) => { return this.geo(address.json()); })
+            .map(geo => geo);
     }
 
     address(shipmentLocation: any): Observable<Response> {
         return this.api.get(shipmentLocation.address.links.self);
     }
-    
+
     geo(address: any): Observable<Response> {
         //return this.api.get(address.geoPlace.links.self);
         return this.api.get(address.geoPlace.links.self);
     }
 
+    // contacts(shipmentLocation: any): Observable<Response> {
+    //     return this.api.get("/v1/crm/jobsitecontacts?jobsiteId=" + shipmentLocation.shipmentLocationId);
+    // }
+
     contacts(shipmentLocation: any): Observable<Response> {
-        return this.api.get("/v1/crm/jobsitecontacts?jobsiteId=" + shipmentLocation.shipmentLocationId);
+        const customerId = this.customerService.currentCustomer().legalEntityId; 
+        return this.api.get(`/v2/crm/mycontacts?customerId=${customerId}&jobsiteId=${shipmentLocation.shipmentLocationId}&contactType=jobsite,customer`); 
     }
 
 }

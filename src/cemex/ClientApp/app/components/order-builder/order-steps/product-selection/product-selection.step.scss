@@ -1,59 +1,152 @@
+@import "~bootstrap/scss/bootstrap-grid.scss";
+@import "bourbon";
 // Step 2. 
 // Product selection
 // ============================================
-// .products {
-//     border: 1px solid #D6D7E0;
-//     border-radius: 3px;
-//     width: 100%;
-//     padding: 17px 18px 32px 18px;
-//     .product {
-//         width: 262px;
-//         height: 175px;
-//         background-color: #FFFFFF;
-//         box-shadow: 0 1px 5px 0 rgba(23, 103, 160, 0.07);
-//     }
-// }
-.products {
-    margin-top: 12px;
-}
-
 .select-product {
-    color: #001C3B;
-    font-size: 18px;
-    font-weight: bold;
-    line-height: 50px;
-}
-
-.products div {
-    height: 135px;
-    min-width: 215px;
-    padding: 0px 23px;
-    &:not(:last-child) {
-        margin-bottom: 35px;
-    }
-}
-
-.product-desc {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    color: #001C3B;
+    color: #001B3A;
     font-size: 20px;
-    line-height: 26px;
-    border: 1px solid #D1D1D1;
+    line-height: 24px;
+}
+
+.products {
+    // border: 1px solid #D6D7E0;
+    border-radius: 3px;
+    width: 100%;
+    padding-bottom: 32px;
+    margin-top: 15px;
+    .product {
+        height: 80px;
+        width: 270px;
+        border-radius: 2px;
+        background-color: #FFFFFF;
+        box-shadow: 0 1px 5px 0 rgba(23, 103, 160, 0.07);
+        flex: 0 1 auto;
+        margin-bottom: 10px;
+        margin-top: 17px;
+        margin-left: 17px;
+        margin-right: 17px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        @include media-breakpoint-down(md) {
+            width: 100%;
+        }
+        >.desc {
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            padding-left: 26px;
+        }
+        >.ic {
+            font-size: 40px;
+            width: auto;
+            height: auto;
+            transition: color 0.5s ease;
+            padding-left: 17px;
+        }
+        &.selected {
+            .ic {
+                color: #3FA9F5;
+            }
+            .desc {
+                color: #3FA9F5;
+            }
+        }
+    }
+}
+
+// Radios
+
+/* Variables
+ ------------------------------------------------------------- */
+
+$primary-color: #999999;
+$secondary-color: #3FA9F5;
+$medium-color: #999999;
+
+/* Animation from Animate.css
+  ------------------------------------------------------------- */
+
+@include keyframes(cardEnter) {
+    0%,
+    20%,
+    40%,
+    60%,
+    80%,
+    100% {
+        transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    }
+    0% {
+        opacity: 0;
+        @include transform(scale3d(.3, .3, .3));
+    }
+    20% {
+        @include transform(scale3d(1.1, 1.1, 1.1));
+    }
+    40% {
+        @include transform(scale3d(.9, .9, .9));
+    }
+    60% {
+        opacity: 1;
+        @include transform(scale3d(1.03, 1.03, 1.03));
+    }
+    80% {
+        @include transform(scale3d(.97, .97, .97));
+    }
+    100% {
+        opacity: 1;
+        @include transform(scale3d(1, 1, 1));
+    }
+}
+
+
+/* Individual Controls
+  ------------------------------------------------------------- */
+
+.radio {
+    display: inline-block;
     cursor: pointer;
-    .icon {
-        font-size: 40px;
-        margin-bottom: 17px;
-        margin-right: 27px;
+    &:hover .inner {
+        @include transform(scale(.5));
+        opacity: .5;
     }
-    &:hover {
-        border: 1px solid #3FA9F5;
+    // Native input control and checked events
+    input {
+        @include size(1px);
+        opacity: 0; // Hide input, but leave it available for tabbing
+        &:checked+.outer .inner {
+            @include transform(scale(1));
+            opacity: 1;
+        }
+        &:checked+.outer {
+            border: 2px solid #999999;
+        }
+        &:focus+.outer .inner {
+            @include transform(scale(1));
+            opacity: 1;
+            background-color: darken($secondary-color, 10);
+        }
     }
-    &:active {
-        border: 1px solid #2684c7;
+    // Outer ring of custom radio
+    .outer {
+        @include size(16px);
+        display: block;
+        float: left;
+        margin: 24px 9px 11px 16px;
+        border: 2px solid #999999;
+        border-radius: 50%;
+        background-color: #fff;
     }
-    &.selected {
-        border: 1px solid #2684c7;
+    // Inner ring of custom radio
+    .inner {
+        @include transition(all .25s ease-in-out);
+        @include size(8px);
+        @include transform(scale(0));
+        display: block;
+        margin: 2px;
+        border-radius: 50%;
+        background-color: $secondary-color;
+        opacity: 0;
     }
 }

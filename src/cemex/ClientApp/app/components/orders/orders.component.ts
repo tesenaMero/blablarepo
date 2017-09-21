@@ -18,20 +18,20 @@ export class OrdersComponent implements OnInit {
   isLoading: any;
   totalPages: any;
   customer: any;
-
+  
   public orderRequestConfiguration: OrderRequestTableComponentConfiguration;
-
+  
   constructor(private ordersService: OrdersService, private Api: Api, private t: TranslationService, private ping: PingSalesOrderApi, private dash: DashboardService, private router: Router, private customerService:CustomerService) {
     this.orders = ordersService.getOrders();
     this.isLoading = ordersService.isLoading();
     this.orderRequestConfiguration = OrdersService.ORDER_REQUEST_MAPPING;
     this.totalPages = ordersService.getTotalPages();
   }
-
+  
   ngOnInit() {
     this.ordersService.fetchAllOrders();
   }
-
+  
   orderResquestClicked() {
     // Set customer
     this.customer = this.customerService.currentCustomer();
@@ -46,6 +46,9 @@ export class OrdersComponent implements OnInit {
         else {
           this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
         }
+      },
+      error => {
+        this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
       });
     }
     else {
@@ -53,3 +56,4 @@ export class OrdersComponent implements OnInit {
     }
   }
 }
+

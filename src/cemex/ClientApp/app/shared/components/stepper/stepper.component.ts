@@ -28,6 +28,7 @@ export class StepperComponent implements AfterContentInit {
 
     nextAvailable: boolean = false;
     backAvailable: boolean = true;
+    isFirstStep: boolean = true;
     overlay: boolean = false;
 
     @ContentChildren(Step) steps: QueryList<Step>;
@@ -44,6 +45,10 @@ export class StepperComponent implements AfterContentInit {
         if (activeSteps.length === 0) {
             this.selectStep(this.steps.first);
         }
+
+        let currentIndex = this.getActiveStepIndex();
+        if (currentIndex == 0) { this.isFirstStep = true; }
+        else { this.isFirstStep = false; }
     }
 
     makeStepperClass(size: number) {
@@ -63,6 +68,7 @@ export class StepperComponent implements AfterContentInit {
     next(ignore = false) {
         if (!this.currentStep.completed) { return; }
         if (!ignore && !this.currentStep.canAdvance()) { return; }
+        
         let currentIndex = this.getActiveStepIndex();
 
         // If last step
@@ -76,6 +82,7 @@ export class StepperComponent implements AfterContentInit {
 
     prev() {
         let currentIndex = this.getActiveStepIndex();
+
         // If last step or index not found
         if (currentIndex <= 0) { return; }
         this.animatePrev(currentIndex - 1);
@@ -133,7 +140,14 @@ export class StepperComponent implements AfterContentInit {
         // Deactivate all steps except one
         this.steps.toArray().forEach(step => step.active = false);
         this.currentStep = step;
+
         step.active = true;
+
+        let currentIndex = this.getActiveStepIndex();
+        console.log("current index", currentIndex);
+        if (currentIndex == 0) { this.isFirstStep = true; }
+        else { this.isFirstStep = false; }
+
         step.show();
     }
 

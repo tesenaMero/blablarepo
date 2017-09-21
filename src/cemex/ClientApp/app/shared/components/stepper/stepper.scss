@@ -31,6 +31,22 @@
     }
 }
 
+.cmx-stepper .cmx-step.active .cmx-step-icon {
+    background: #00AFFD;
+}
+
+.cmx-stepper .cmx-step.completed .cmx-step-icon {
+    background: #00D000;
+}
+
+.cmx-step.active p {
+    color: #001B3A;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 18px;
+}
+
+// Mobile
 .mobile-stepper {
     position: fixed;
     bottom: 0;
@@ -53,15 +69,14 @@
     color: #fff;
     font-size: 1rem;
     padding: 0;
-    
-    .step{
-        a{
+    .step {
+        a {
             color: #29a6f3;
         }
     }
 }
 
-.stepper-overlay{
+.stepper-overlay {
     background: black;
     position: fixed;
     top: 0;
@@ -82,8 +97,9 @@
     }
 }
 
-.jobsite-builder-container {
+.builder-container {
     margin: 58px 0;
+    margin-bottom: 0;
     @include media-breakpoint-down(sm) {
         margin: 20px 0;
     }

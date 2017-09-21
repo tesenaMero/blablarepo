@@ -2,18 +2,11 @@
     <div class="row" style="margin-left: 8px;">
         <div class="select-product">Select a product</div>
     </div>
-    <!-- <div class="d-flex flex-wrap products">
-        <div *ngFor="let product of productLines" class="product">
-            <span>{{product.productLineDesc}}</span>
-        </div>
-    </div> -->
-
-    <div class="row products">
-        <div *ngFor="let product of productLines" class="col-md-4">
-            <div class="product-desc align-items-center" [ngClass]="{ 'selected': isSelected(product) }" (click)="select(product)">
-                <span class="icon cmx-icon-driver"></span>
-                <span>{{product.productLineDesc}}</span>
-            </div>
+    <div class="d-flex flex-wrap products">
+        <div *ngFor="let product of productLines" class="product" [ngClass]="{ selected: isSelected(product) }" (click)="select(product)">
+            <label class="radio"><input id="radio1" type="radio" name="radios" [checked]="isSelected(product)"><span class="outer"><span class="inner"></span></span></label>
+            <span class="cmx-icon-driver ic"></span>
+            <span class="desc">{{product.productLineDesc}}</span>
         </div>
     </div>
 </div>
