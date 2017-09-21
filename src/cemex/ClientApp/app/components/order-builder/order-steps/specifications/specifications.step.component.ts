@@ -192,6 +192,12 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 if (paymentTerms.length) {
                     SpecificationsStepComponent.availablePayments.push(paymentTerms[0]);
                 }
+
+                if (SpecificationsStepComponent.availablePayments.length) {
+                    this.preProducts.forEach((item) => {
+                        item.payment = SpecificationsStepComponent.availablePayments[0];
+                    });
+                }
             });
         });
     }

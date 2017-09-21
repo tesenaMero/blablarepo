@@ -54,11 +54,27 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
 
     // Logic
     // ======================
-    getSubtotal(order) {
+    getSubtotal() {
         let summ = 0;
-        order.items.forEach(item => {
+        this.draftOrder.items.forEach(item => {
             summ += item.grossPrice * item.quantity;
         });
         return summ;
+    }
+
+    getTaxes() {
+        let taxes = 0;
+        this.draftOrder.items.forEach(item => {
+            taxes += item.taxAmount * item.quantity;
+        });
+        return taxes;
+    }
+
+    getGrandTotal() {
+        let total = 0;
+        this.draftOrder.items.forEach(item => {
+            total += item.totalPrice;
+        });
+        return total;
     }
 }

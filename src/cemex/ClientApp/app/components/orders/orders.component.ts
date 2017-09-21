@@ -40,6 +40,9 @@ export class OrdersComponent implements OnInit {
       else {
         this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
       }
+    },
+    error => {
+      this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
     });
   }
 

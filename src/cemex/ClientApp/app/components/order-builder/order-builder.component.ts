@@ -140,7 +140,16 @@ export class OrderBuilderComponent {
             data: data
         }
 
+        this.drafts.createOrder(this.draftId, this.draftOrder).subscribe((response) => {
+            console.log("order created", response.json());
+            this.dashboard.alertSuccess("Order placed successfully");
+        }, 
+        error => {
+            console.error(error)
+            this.dashboard.alertError("Error placing order");
+        });
+
         let encoded = this.jsonObjService.encodeJson(cartItems);
-        this.document.location.href = 'https://invoices-payments-dev2.mybluemix.net/invoices-payments/open/' + encoded;
+        // this.document.location.href = 'https://invoices-payments-dev2.mybluemix.net/invoices-payments/open/' + encoded;
     }
 }
