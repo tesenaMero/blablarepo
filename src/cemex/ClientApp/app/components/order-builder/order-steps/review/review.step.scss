@@ -78,11 +78,6 @@
                 width: 50%;
             }
         }
-        .row:not(.no-mt) {
-            @include media-breakpoint-up(md) {
-                margin-top: 25px;
-            }
-        }
         .group {
             max-width: 340px;
             min-width: 115px;
