@@ -8,12 +8,12 @@ import { DeliveryMode } from '../../../../models/delivery.model';
 import { } from '@types/googlemaps';
 
 @Component({
-    selector: 'summary-step',
-    templateUrl: './summary.step.html',
-    styleUrls: ['./summary.step.scss'],
+    selector: 'review-step',
+    templateUrl: './review.step.html',
+    styleUrls: ['./review.step.scss'],
     host: { 'class': 'w-100' }
 })
-export class SummaryStepComponent implements StepEventsListener {
+export class ReviewStepComponent implements StepEventsListener {
     @Output() onCompleted = new EventEmitter<any>();
     private isMapLoaded: boolean = false;
 

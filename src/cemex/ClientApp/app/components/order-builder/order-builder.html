@@ -12,8 +12,11 @@
         <step title="Specifications" title="Specifications">
             <specifications-step (onCompleted)="specificationsStepCompleted($event)"></specifications-step>
         </step>
-        <step title="Summary">
-            <summary-step (onCompleted)="summaryStepCompleted()"></summary-step>
+        <step title="Review">
+            <review-step (onCompleted)="summaryStepCompleted()"></review-step>
         </step>
+        <!-- <step>
+            <checkout-step (onCompleted)="checkoutCompleted()"></checkout-step>
+        </step> -->
     </stepper>
 </div>

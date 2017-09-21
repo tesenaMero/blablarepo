@@ -38,6 +38,7 @@ export class OrderBuilderComponent {
 
     rebuild() {
         // Add instruction to event queue
+        this.manager.resetOrder();
         setTimeout(() => { this.rebuildOrder = false; }, 0);
         setTimeout(() => { this.rebuildOrder = true; }, 0);
     }
@@ -72,6 +73,10 @@ export class OrderBuilderComponent {
             this.drafts.draftId(res.id);
             this.dashboard.alertSuccess("Draft saved!");
         });
+    }
+
+    checkoutCompleted() {
+        this.stepper.complete();
     }
 
     specificationsStepShowed() {

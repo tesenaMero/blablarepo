@@ -19,12 +19,13 @@ import { NewProjectProfile } from './components/new-project-profile/new-project-
 import { OrderDetailComponent } from './components/order-detail/order-detail.component';
 import { CartComponent } from './components/cart/cart.component';
 import { OrderBuilderComponent } from './components/order-builder/order-builder.component';
-import { SummaryStepComponent } from './components/order-builder/order-steps/summary/summary.step.component';
 import {
     LocationStepComponent,
     ProductSelectionStepComponent,
     SpecificationsStepComponent,
     ModeStepComponent,
+    ReviewStepComponent,
+    CheckoutStepComponent,
 } from './components/order-builder/order-steps';
 import { SearchProductComponent } from './components/search-product/search-product.component';
 import { OrderDetailCommentsComponent } from './components/order-detail/order-detail-comments/order-detail-comments.component';
@@ -124,7 +125,8 @@ export const sharedConfig: NgModule = {
         ModeStepComponent,
         ProjectProfileCreatorComponent,
         SearchProductComponent,
-        SummaryStepComponent,
+        ReviewStepComponent,
+        CheckoutStepComponent,
         OrderDetailCommentsComponent,
         OrderDetailLogsComponent,
         CrossProductComponent,

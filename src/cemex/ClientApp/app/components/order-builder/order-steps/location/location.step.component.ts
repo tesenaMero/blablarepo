@@ -43,7 +43,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     private validations = {
         purchaseOrder: { valid: false, mandatory: false, showError: false },
-        contactPerson: { valid: false, mandatory: false, showError: false },
+        contactPerson: { valid: false, mandatory: true, showError: false },
         jobsite: { valid: false, mandatory: true, showError: false }
     }
 
