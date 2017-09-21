@@ -16,6 +16,7 @@ export class OrderBuilderComponent {
     @ViewChild(StepperComponent) stepper;
     private READYMIX_ID = 6;
     private isReadyMix: boolean = false;
+    private BULKCEMENT_ID = 1;
     private rebuildOrder = false;
     private currentCustomer: any;
 
@@ -60,7 +61,7 @@ export class OrderBuilderComponent {
     }
 
     productStepCompleted(product: any) {
-        this.isReadyMix = product.productLineId == this.READYMIX_ID;
+        this.isReadyMix = product.productLineId == this.READYMIX_ID || product.productLineId == this.BULKCEMENT_ID;
         this._changeDetector.detectChanges();
         this.stepper.complete();
     }

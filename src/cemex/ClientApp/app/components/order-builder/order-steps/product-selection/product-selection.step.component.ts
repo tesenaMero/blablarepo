@@ -58,8 +58,8 @@ export class ProductSelectionStepComponent {
         this.productLine = product;
         this.orderManager.selectProductLine(product);
 
-        // Readymix case
-        if (this.productLine.productLineId == 6) {
+        // Readymix case and Bulk Cement
+        if (this.productLine.productLineId == 6 || this.orderManager.productLine.productLineId == 1) {
             this.orderManager.shippingCondition = { shippingConditionId: this.MODE.Delivery };
         }
 
