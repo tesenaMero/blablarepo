@@ -8,7 +8,7 @@ import { TranslationService } from '../../shared/services/translation.service';
     templateUrl: './order-detail.component.html',
     styleUrls: [
         './order-detail.component.scss',
-        '../order-builder/order-steps/summary/summary.step.scss'
+        '../order-builder/order-steps/review/review.step.scss'
     ]
 })
 export class OrderDetailComponent {   

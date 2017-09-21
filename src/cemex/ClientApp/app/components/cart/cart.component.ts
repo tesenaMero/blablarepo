@@ -30,11 +30,11 @@ export class CartComponent implements OnInit {
 
     constructor(
         private t: TranslationService,
-        private drafts: DraftsService, 
-        private dashboard: DashboardService, 
-        private jsonObjService: EncodeDecodeJsonObjService, 
-        private location: Location, 
-        private windowRef: WindowRef, 
+        private drafts: DraftsService,
+        private dashboard: DashboardService,
+        private jsonObjService: EncodeDecodeJsonObjService,
+        private location: Location,
+        private windowRef: WindowRef,
         @Inject(DOCUMENT) private document: any,
         private orderManager: CreateOrderService
     ) {
@@ -43,34 +43,17 @@ export class CartComponent implements OnInit {
 
     ngOnInit() {
         this.loadings.order = true;
-        this.drafts.optimalsources(this._draftId).subscribe(
-            (response) => {
-                this.drafts.prices(this._draftId).subscribe(
-                    (response) => {
-                        this.draftOrder = response.json();
-                        this.mockStuff();
-                        this.loadings.order = false;
-                    },
-                    (error) => {
-                        this.loadings.order = false;
-                        throw new Error('prices Error -> ' + JSON.stringify(error));
-                    }
-                );
-            }, 
-            (error) => {
-                this.loadings.order = false;
-                throw new Error('optimalsources Error -> ' + JSON.stringify(error));
-            }
-        );
-        // this.drafts.getDraft(this._draftId).subscribe(
-        //     (response) => {
-        //         this.draftOrder = response.json();
-        //     },
-        //     (error) => {
-        //         this.loadings.order = false;
-        //         throw new Error('getDraft Error -> ' + JSON.stringify(error));
-        //     }
-        // );
+        this.drafts.optimalSourcesPatch(this._draftId).flatMap((x) => {
+            return this.drafts.prices(this._draftId);
+        }).subscribe((response) => {
+            this.draftOrder = response.json();
+            this.mockStuff();
+            this.loadings.order = false;
+        }, (error) => {
+            this.loadings.order = false;
+            this.dashboard.alertError("Something wrong happened");
+            throw new Error('prices Error -> ' + JSON.stringify(error));
+        });
     }
 
     getSubtotal(order) {
@@ -206,12 +189,12 @@ export class CartComponent implements OnInit {
     }
 
     placeOrder() {
-        if(!Boolean(this._draftId)) {
+        if (!Boolean(this._draftId)) {
             alert('no draft order ID');
             return;
         }
         const customer = JSON.parse(sessionStorage.getItem('currentCustomer'));
-        let data = []; 
+        let data = [];
         this.draftOrder.items.forEach(item => {
             data.push(
                 {
@@ -230,9 +213,9 @@ export class CartComponent implements OnInit {
             sourceApp: "order-taking",
             date: new Date().toISOString(),
             screenToShow: "cash-sales",
-            credentials : {
-                token : sessionStorage.getItem('access_token'),
-                jwt : sessionStorage.getItem('jwt')
+            credentials: {
+                token: sessionStorage.getItem('access_token'),
+                jwt: sessionStorage.getItem('jwt')
             },
             data: data
         }

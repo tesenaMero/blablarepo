@@ -22,7 +22,7 @@ export class DraftsService {
         return this.api.patch("/v4/sm/orders/" + draftId + "/prices");
     }
 
-    optimalsources(draftId: any): Observable<Response> {
+    optimalSourcesPatch(draftId: any): Observable<Response> {
         return this.api.patch("/v4/sm/orders/" + draftId + "/optimalsources");
     }
 

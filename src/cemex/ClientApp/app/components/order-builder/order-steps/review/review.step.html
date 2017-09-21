@@ -8,16 +8,17 @@
                 <div class="description">
                     {{ manager.jobsite?.shipmentLocationDesc }}
                 </div>
-                <div class="details" [ngClass]="{ invisible: loadings.address }">
+                <div class="details">
                     {{ manager.jobsite?.address?.streetName }} {{ manager.jobsite?.address?.settlementDesc }}, {{ manager.jobsite?.address?.regionDesc }}, {{ manager.jobsite?.address?.cityDesc }}, {{ manager.jobsite?.address?.postalCode }}
                 </div>
             </div>
-            <div class="item">
+            <div class="item" [ngClass]="{ invisible: !manager.pointOfDelivery }">
                 <div class="title">
                     Point of Delivery:
                 </div>
                 <div class="description">
-                    Backstreet yard
+                    {{ manager.pointOfDelivery?.address?.streetName }} {{ manager.pointOfDelivery?.address?.settlementDesc }}, {{ manager.pointOfDelivery?.address?.regionDesc }}, {{ manager.pointOfDelivery?.address?.cityDesc }}, {{ manager.pointOfDelivery?.address?.postalCode
+                    }}
                 </div>
                 <div class="details">
                     N: 50°46’ 23.92” E: 14°07’ 18.85”
@@ -28,7 +29,7 @@
                     Purchase Order
                 </div>
                 <div class="description">
-                    CZ201700049
+                    {{ manager?.purchaseOrder }}
                 </div>
             </div>
             <div class="item">
@@ -36,10 +37,10 @@
                     Contact person
                 </div>
                 <div class="description">
-                    Andrew Zacek
+                    {{ manager?.contact?.name }}
                 </div>
                 <div class="details">
-                    +420 129 123 145, e-ozacek@neoris.com
+                    {{ manager?.contact?.phone }} {{ manager?.contact?.email }}
                 </div>
             </div>
         </div>
@@ -66,7 +67,7 @@
                         Quantity
                     </div>
                     <div class="value">
-                        1
+                        {{ item.quantity }}
                     </div>
                 </div>
             </div>
@@ -76,7 +77,7 @@
                         Unit
                     </div>
                     <div class="value">
-                        tons
+                        {{ item.unit.alternativeUnit.unitDesc }}
                     </div>
                 </div>
             </div>
@@ -86,7 +87,7 @@
                         Requested date
                     </div>
                     <div class="value">
-                        13.07.2017
+                        {{ item.date | date:'dd.MM.yyyy' }}
                     </div>
                 </div>
             </div>
@@ -96,7 +97,7 @@
                         Requested time
                     </div>
                     <div class="value">
-                        15.00 - 16.00
+                        {{ item.time }}
                     </div>
                 </div>
             </div>
@@ -106,7 +107,7 @@
                         Payment
                     </div>
                     <div class="value">
-                        Credit
+                        {{ item.payment.paymentTermType.paymentTermTypeDesc }}
                     </div>
                 </div>
             </div>
@@ -118,7 +119,7 @@
                         Product ID
                     </div>
                     <div class="value">
-                        20939302/10292/20102
+                        {{ item.product.product.productId }}
                     </div>
                 </div>
             </div>
@@ -138,7 +139,7 @@
                         Contract
                     </div>
                     <div class="value">
-                        39-201702189034 Remaining volume: 81
+                        Contract {{ item?.contract?.salesDocument?.salesDocumentCode }} Remaining volume: {{ item?.contract?.salesDocument?.volume?.total.quantity.amount }}
                     </div>
                 </div>
             </div>
@@ -151,7 +152,7 @@
                         Additional services
                     </div>
                     <div class="value">
-                        Maneuvering
+                        <span *ngIf="item.maneuvering">Maneuvering</span>
                     </div>
                 </div>
             </div>
@@ -162,7 +163,8 @@
                             Delivery mode
                         </div>
                         <div class="value">
-                            Delivery
+                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">Delivery</span>
+                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">Pickup</span>
                         </div>
                     </div>
                 </div>
@@ -172,7 +174,7 @@
 </div>
 
 
-<div *ngIf="false" class="card-container row product">
+<div *ngIf="flase" class="card-container row product">
     <div class="col-md-4 col-sm-12 left-container">
         <div class="name">
             ReadyMix CHM89

@@ -13,8 +13,9 @@ export class CatalogApi {
         return this.Api.get(`/v4/ce/catalogs?code=${code}`);
     }
 
-    byProductLine(customerId, productCode): Observable<Response> {
-        return this.Api.get(`/v1/sm/catalogs?customerId=${customerId}&productLine=${productCode}`);
+    byProductLine(customerId, productLineId): Observable<Response> {
+        if (productLineId = "2,3") { productLineId = "2"; }
+        return this.Api.get(`/v1/sm/catalogs?customerId=${customerId}&productLine=${productLineId}`);
     }
 }
   

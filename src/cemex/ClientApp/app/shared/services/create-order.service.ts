@@ -15,9 +15,12 @@ export interface POD {
 
 @Injectable()
 export class CreateOrderService {
+    // Move this to service later
+    // --------------------------------------------------
     public _shipmentLocationType: BehaviorSubject<any>;
     public _productColors: BehaviorSubject<any>;
-    public _productSelectedProduct: BehaviorSubject<any>;
+    // --------------------------------------------------
+
     public orderId: number;
     public orderCode: string;
     public orderName: string;
@@ -33,9 +36,9 @@ export class CreateOrderService {
     public customer: types.Customer;
     public shippingCondition: types.ShippingCondition;
     public jobsite: any;
-    public pointOfDelivery: POD;
+    public pointOfDelivery: any;
     public instructions: string;
-    public contact: types.Contact;
+    public contact: any;
     public user: types.User;
     public items: types.Items;
     public loads: types.Loads;
@@ -46,9 +49,12 @@ export class CreateOrderService {
 
     constructor(private shipmentLocationApi: ShipmentLocationApi, private productColorApi: ProductColorApi) {
         this.initializeOrder();
+        
+        // Move this to service later
+        // --------------------------------------------------
         this._shipmentLocationType = <BehaviorSubject<any>>new BehaviorSubject(undefined);
         this._productColors = <BehaviorSubject<any>>new BehaviorSubject(undefined);
-        this._productSelectedProduct = <BehaviorSubject<any>>new BehaviorSubject({});
+        // --------------------------------------------------
     }
 
     public fetchProductColors(productLineId: number) {
@@ -79,7 +85,7 @@ export class CreateOrderService {
         customer?: types.Customer,
         shippingCondition?: types.ShippingCondition,
         jobsite?: types.Jobsite,
-        pointOfDelivery?: POD,
+        pointOfDelivery?: any,
         instructions?: string,
         contact?: any,
         user?: types.User,
@@ -146,6 +152,16 @@ export class CreateOrderService {
 
     setProduct(product) {
         this.product = product;
+    }
+
+    getSalesDocumentType() {
+        const READYMIX_LINE = 6;
+        let salesDocumentType = '3';
+        if (this.productLine.productLineId == READYMIX_LINE) {
+            salesDocumentType = '1';
+        }
+
+        return salesDocumentType;
     }
 
     resetOrder() {

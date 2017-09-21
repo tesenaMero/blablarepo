@@ -28,6 +28,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     private selectedServices: Array<{ additionalServiceId: number }> = [];
 
     private purchaseOrder: string = "";
+    private specialInstructions: string = "";
     shipmentLocationTypes;
 
     // Loading state
@@ -124,10 +125,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     // Interfaces
     // ======================
-    ngOnInit() {
-        this.getCatalog();
-    }
-
+    ngOnInit() {}
+    
     canAdvance() {
         // Validate purchase order
         if (this.purchaseOrder.length > 0) {
@@ -220,6 +219,9 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 google.maps.event.trigger(this.map, "resize");
             });
         }
+        else {
+            google.maps.event.trigger(this.map, "resize");
+        }
     }
 
     shouldShowPOD(): boolean {
@@ -241,20 +243,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 this.locationIndex = 0;
             }
         });
-
-        // this.shipmentApi.jobsites(this.orderManager.productLine).subscribe((response) => {
-        //     //this.locations = response.json().shipmentLocations;
-        //     console.log("shipment locations", response.json().shipmentLocations);
-        // });
-    }
-
-    getCatalog() {
-        this.orderManager.getCatalogOptions().then(data => {
-            data.catalogs.map((item) => {
-                this.catalogOptions[item.catalogCode] = item;
-                return item;
-            });
-        })
     }
 
     // Step flow
@@ -278,7 +266,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         // Set current shipment location
         this.location = location;
         this.orderManager.selectJobsite(this.location);
-        this.onCompleted.emit(true);
 
         // Fetch salesarea
         this.shipmentApi.salesAreas(this.location, this.orderManager.productLine).subscribe((salesAreas) => {
@@ -298,6 +285,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 this.validations.purchaseOrder.mandatory = shouldValidatePurchaseOrder;
             }
             this.loadings.purchaseOrder = false;
+            this.onCompleted.emit(true);
         });
 
         // Fetch geolocation
@@ -307,6 +295,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             return this.shipmentApi.geo(address.json()); 
         })
         .subscribe((geo) => {
+            this.location.geo = geo.json();
             this.cleanJobsiteMarker();
             this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
             this.addMarkerToMap(this.jobsiteMarker);
@@ -349,15 +338,31 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.orderManager.selectPointOfDelivery(pod);
 
         this.loadings.map = true;
-        this.shipmentApi.jobsiteGeo(pod).subscribe((geo) => {
+
+        // Fetch geolocation
+        this.shipmentApi.address(this.location)
+        .flatMap((address) => {
+            this.pod.address = address.json();
+            return this.shipmentApi.geo(address.json()); 
+        })
+        .subscribe((geo) => {
+            this.pod.geo = geo.json();
             this.cleanJobsiteMarker();
             this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
             this.addMarkerToMap(this.jobsiteMarker);
             this.loadings.map = false;
         });
+
+        // this.shipmentApi.jobsiteGeo(pod).subscribe((geo) => {
+        //     this.cleanJobsiteMarker();
+        //     this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
+        //     this.addMarkerToMap(this.jobsiteMarker);
+        //     this.loadings.map = false;
+        // });
     }
 
     purchaseOrderChanged(purchaseOrder: string) {
+        this.orderManager.purchaseOrder = this.purchaseOrder;
         this.validations.purchaseOrder.showError = false;
         this.validations.purchaseOrder.valid = this.purchaseOrder.length >= 0;
     }

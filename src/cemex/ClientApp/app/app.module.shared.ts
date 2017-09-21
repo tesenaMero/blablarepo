@@ -18,12 +18,13 @@ import { NewOrderComponent } from './components/new-order/new-order.component';
 import { OrderDetailComponent } from './components/order-detail/order-detail.component';
 import { CartComponent } from './components/cart/cart.component';
 import { OrderBuilderComponent } from './components/order-builder/order-builder.component';
-import { SummaryStepComponent } from './components/order-builder/order-steps/summary/summary.step.component';
 import {
     LocationStepComponent,
     ProductSelectionStepComponent,
     SpecificationsStepComponent,
     ModeStepComponent,
+    ReviewStepComponent,
+    CheckoutStepComponent,
 } from './components/order-builder/order-steps';
 import { SearchProductComponent } from './components/search-product/search-product.component';
 import { OrderDetailCommentsComponent } from './components/order-detail/order-detail-comments/order-detail-comments.component';
@@ -61,6 +62,7 @@ import { DashboardService } from './shared/services/dashboard.service';
 import { CustomerService } from './shared/services/customer.service';
 import { Broadcaster } from './shared/types/Broadcaster';
 import { TranslationService } from './shared/services/translation.service';
+import { SearchProductService } from './shared/services/product-search.service';
 
 import {
     Api,
@@ -121,7 +123,8 @@ export const sharedConfig: NgModule = {
         ModeStepComponent,
         ProjectProfileCreatorComponent,
         SearchProductComponent,
-        SummaryStepComponent,
+        ReviewStepComponent,
+        CheckoutStepComponent,
         OrderDetailCommentsComponent,
         OrderDetailLogsComponent,
         CrossProductComponent,
@@ -197,5 +200,6 @@ export const sharedConfig: NgModule = {
         PingSalesOrderApi,
         PurchaseOrderApi,
         SalesDocumentApi,
+        SearchProductService,
     ]
 };
