@@ -141,10 +141,10 @@ $medium-color: #999999;
     // Inner ring of custom radio
     .inner {
         @include transition(all .25s ease-in-out);
-        @include size(10px);
+        @include size(8px);
         @include transform(scale(0));
         display: block;
-        margin: 1px;
+        margin: 2px;
         border-radius: 50%;
         background-color: $secondary-color;
         opacity: 0;

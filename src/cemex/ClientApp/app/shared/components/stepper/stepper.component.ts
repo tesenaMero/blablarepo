@@ -68,10 +68,8 @@ export class StepperComponent implements AfterContentInit {
     next(ignore = false) {
         if (!this.currentStep.completed) { return; }
         if (!ignore && !this.currentStep.canAdvance()) { return; }
+        
         let currentIndex = this.getActiveStepIndex();
-
-        if (currentIndex == 0) { this.isFirstStep = true; }
-        else { this.isFirstStep = false; }
 
         // If last step
         if (this.isLastStep()) { return; }
@@ -84,8 +82,6 @@ export class StepperComponent implements AfterContentInit {
 
     prev() {
         let currentIndex = this.getActiveStepIndex();
-        if (currentIndex == 0) { this.isFirstStep = true; }
-        else { this.isFirstStep = false; }
 
         // If last step or index not found
         if (currentIndex <= 0) { return; }
@@ -146,6 +142,12 @@ export class StepperComponent implements AfterContentInit {
         this.currentStep = step;
 
         step.active = true;
+
+        let currentIndex = this.getActiveStepIndex();
+        console.log("current index", currentIndex);
+        if (currentIndex == 0) { this.isFirstStep = true; }
+        else { this.isFirstStep = false; }
+
         step.show();
     }
 
