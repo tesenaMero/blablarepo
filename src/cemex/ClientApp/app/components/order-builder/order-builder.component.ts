@@ -115,7 +115,7 @@ export class OrderBuilderComponent {
     }
 
     placeOrder() {
-        this.dashboard.alertInfo("Placing order" + this.draftOrder.orderId);
+        this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId);
         const customer = this.customerService.currentCustomer();
         let data = [];
 
@@ -142,18 +142,39 @@ export class OrderBuilderComponent {
             },
             data: data
         }
-
-        this.drafts.createOrder(this.draftId, "").subscribe((response) => {
-            console.log("order created", response.json());
-            this.dashboard.alertSuccess("Order placed successfully");
-        }, 
-        error => {
-            console.error(error)
-            this.dashboard.alertError("Error placing order");
-        });
+        
+        if ((!this.isReadyMix) && (this.isMexico())) {
+            this.drafts.createOrder(this.draftId, '')
+            .flatMap((response) => {
+                console.log("order created", response.json());
+                this.dashboard.alertSuccess("Order placed successfully");  
+                return this.drafts.validateRequestId(response.json().id);
+            })
+            .subscribe((response) => {
+                console.log("vali", response.json());
+            }, error => {
+                console.error(error)
+                this.dashboard.alertError("Error placing order");
+            })
+        }
+        else {
+            this.drafts.createOrder(this.draftId, "").subscribe((response) => {
+                console.log("order created", response.json());
+                this.dashboard.alertSuccess("Order placed successfully");
+            }, 
+            error => {
+                console.error(error)
+                this.dashboard.alertError("Error placing order");
+            });
+    
+        }
 
         let encoded = this.jsonObjService.encodeJson(cartItems);
         // this.document.location.href = 'https://invoices-payments-dev2.mybluemix.net/invoices-payments/open/' + encoded;
+    }
+
+    isMexico() {
+        return this.customerService.currentCustomer().countryCode.trim() == "MX";
     }
 
     shouldShowDeliveryMode() {

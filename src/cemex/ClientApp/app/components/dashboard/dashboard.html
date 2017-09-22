@@ -1,6 +1,6 @@
-<navigation [customers]="customers" [notifications]="[]" (logout)="logout($event)" (customerChange)="setCustomer($event)"></navigation>
-<!-- <cmx-nav-header (clickMenuButton)="clickMenuButton($event)"></cmx-nav-header> -->
-<!-- <cmx-sidebar></cmx-sidebar> -->
+<!-- <navigation [customers]="customers" [notifications]="[]" (logout)="logout($event)" (customerChange)="setCustomer($event)"></navigation> -->
+<cmx-nav-header (clickMenuButton)="clickMenuButton($event)"></cmx-nav-header>
+<cmx-sidebar></cmx-sidebar>
 
 <div id="layout" class="content">
     <div class="alert-bar {{ alertClass(alert) }}" [ngClass]="{ open: showAlert }">

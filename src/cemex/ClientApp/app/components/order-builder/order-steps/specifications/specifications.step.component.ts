@@ -42,10 +42,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return SpecificationsStepComponent.availableProducts;
     }
 
-    static availablePlants = [
-        { name: "Cemex, Mladá Boleslav, Palackeho 50, Mladá Boleslav II, Czechia" },
-        { name: "Cemex, Monterrey Mex, La arrolladora, El komander, Fierro" },
-    ];
+    static availablePlants = [];
     get availablePlants() {
         return SpecificationsStepComponent.availablePlants;
     }
@@ -108,8 +105,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         // Add a pre product by default
         if (this.preProducts.length <= 0) { this.add(); }
 
-        console.log(this.manager);
-
         const customerId = this.customerService.currentCustomer().legalEntityId;
         const productLineId = this.manager.productLine.productLineId;
 
@@ -164,7 +159,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     getPlants() {
         if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == 2) {
             this.plantApi.byCountryCodeAndRegionCode(
-                this.manager.jobsite.address.countryCode,
+                this.manager.jobsite.address.countryCode.trim(),
                 this.manager.jobsite.address.regionCode
             ).subscribe((response) => {
                 SpecificationsStepComponent.plants = response.json().plants;
@@ -308,9 +303,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     // TODO
-    contractChanged(contract) {
-        //this.getUnits(contract.salesDocument.salesDocumentId);
-        //this.selectedProduct = contract;
+    contractChanged(contract: any, preProduct: PreProduct) {
+        preProduct.contractChanged();
     }
 
     add() {
@@ -408,7 +402,7 @@ class PreProduct {
             this.availableContracts = contracts;
 
             if (contracts.length > 0) {
-                this.availableContracts.unshift({});
+                this.availableContracts.unshift(undefined);
                 this.loadings.contracts = false; 
             }
             else { this.loadings.contracts = true; } // Disable it if no contracts
@@ -418,6 +412,24 @@ class PreProduct {
     fetchUnits() {
         this.loadings.units = true;
         this.productsApi.units(this.product.product.productId).subscribe((result) => {
+            let units = result.json().productUnitConversions;
+            this.availableUnits = units;
+
+            this.loadings.units = false;
+
+            if (units.length > 0)
+                this.unit = units[0];
+        });
+    }
+
+    contractChanged() {
+        if (this.contract) { this.fetchUnitsFromContract(); }
+        else { this.fetchUnits(); }
+    }
+
+    fetchUnitsFromContract() {
+        this.loadings.units = true;
+        this.productsApi.units(this.contract.salesDocument.salesDocumentId).subscribe((result) => {
             let units = result.json().productUnitConversions;
             this.availableUnits = units;
 

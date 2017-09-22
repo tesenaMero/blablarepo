@@ -102,8 +102,8 @@
                                 <strong *ngIf="product.contract?.salesDocument?.hasOwnProperty('volume')">{{ product.contract?.salesDocument?.volume?.total.quantity.amount }}</strong>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
-                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event)" class="input behind">
-                                <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract.salesDocument?.volume?.total.quantity.amount }} </option>
+                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event, product)" class="input behind">
+                                <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract?.salesDocument?.volume?.total.quantity.amount }} </option>
                             </select>
                         </div>
                     </div>
@@ -264,7 +264,7 @@
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
                             <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event)" class="input behind">
-                            <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract.salesDocument?.volume?.total.quantity.amount }}
+                            <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract?.salesDocument?.volume?.total.quantity.amount }}
                             </option>
                         </select>
                         </div>
@@ -286,11 +286,11 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4 mt-3" [ngClass]="{ invisible: !product.maneuveringAvailable }">
+                <div class="col-md-4 mt-3">
                     <div class="flex-container justify-content-between">
                         <div class="group">
                             <label>Additional services</label>
-                            <div class="service spaced-top" ng-if>
+                            <div class="service spaced-top" [ngClass]="{ invisible: !product.maneuveringAvailable }">
                                 <input [(ngModel)]="product.maneuvering" checked type="checkbox" id="maneuvering{{ index }}">
                                 <label for="maneuvering{{ index }}">
                                     <svg class="icon-checkbox-active">
@@ -320,7 +320,7 @@
                         <label>Plant</label>
                         <div class="input contract dropdown flex-space-between">
                             <span class="">
-                                {{ product.plant.plantDesc }}
+                                {{ product?.plant?.plantDesc }}
                                 <select [(ngModel)]="product.plant" class="input behind">
                                     <option *ngFor="let plant of plants" [ngValue]="plant">{{ plant.plantDesc }}</option>
                                 </select>
@@ -434,7 +434,7 @@
                             <span class=""><strong>Contract {{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
                             <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event)" class="input behind">
-                                <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract: {{ contract.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;</option>
+                                <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract: {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;</option>
                             </select>
                         </div>
                     </div>

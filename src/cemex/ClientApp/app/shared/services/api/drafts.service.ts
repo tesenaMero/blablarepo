@@ -38,4 +38,8 @@ export class DraftsService {
     optimalSource(draftId: any): Observable<Response> {
         return this.api.get("/v4/sm/orders/" + draftId + "/optimalsources");
     }
+
+    validateRequestId(id) {
+        return this.api.get("/v4/sm/orders/" + id + "?orderType=SLS");
+    }
 }
