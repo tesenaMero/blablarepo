@@ -1,21 +1,21 @@
 <div *ngIf="rebuildOrder">
     <stepper (onFinish)="finishSteps()" finishText="Order">
-        <step title="Product line" [showExit]="true" [showControls]="true">
+        <step name="Product line" [showExit]="true" [showControls]="true">
             <product-selection-step (onCompleted)="productStepCompleted($event)"></product-selection-step>
         </step>
         <step *ngIf="!isReadyMix" [automatic]="true" [showControls]="true" [showExit]="false" [inLine]="false" title="Delivery mode">
             <mode-step (onCompleted)="modeStepCompleted($event)"></mode-step>
         </step>
-        <step title="Location">
+        <step name="Location">
             <location-step (requestNext)="locationStepRequestedNext($event)" (onCompleted)="locationStepCompleted($event)"></location-step>
         </step>
-        <step title="Specifications" title="Specifications">
+        <step name="Specifications">
             <specifications-step (onCompleted)="specificationsStepCompleted($event)"></specifications-step>
         </step>
-        <step title="Review">
+        <step name="Review">
             <review-step (onCompleted)="reviewStepCompleted($event)"></review-step>
         </step>
-        <step title="Summary">
+        <step name="Summary">
             <checkout-step [draftId]="draftId" (onCompleted)="checkoutCompleted($event)"></checkout-step>
         </step>
     </stepper>

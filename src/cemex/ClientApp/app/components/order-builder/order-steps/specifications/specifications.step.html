@@ -613,7 +613,8 @@
                     <div class="group">
                         <label>Delivery Mode</label>
                         <div class="service">
-                            <span>Delivery</span>
+                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">Delivery</span>
+                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">Pickup</span>
                         </div>
                     </div>
                 </div>
