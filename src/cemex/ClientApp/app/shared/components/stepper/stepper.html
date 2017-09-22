@@ -15,7 +15,7 @@
                         {{i + 1}}
                     </div>
                 </div>
-                <p>{{step.title}}</p>
+                <p>{{step.name}}</p>
             </div>
         </div>
     </div>
@@ -54,7 +54,7 @@
     </div>
     <div class="current" (click)="changeShowOverlay()">
         <a data-toggle="collapse" href="#collapse-steps">
-            {{currentStep.title}}
+            {{currentStep.name}}
             <svg class="icon-up-single">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-up-single"></use>
             </svg>
@@ -79,7 +79,7 @@
                     </div>
                     <div *ngIf="!last" class="bottom-connector"></div>
                 </div>
-                <a href="#">{{step.title}}</a>
+                <a href="#">{{step.name}}</a>
             </div>
         </div>
     </div>
