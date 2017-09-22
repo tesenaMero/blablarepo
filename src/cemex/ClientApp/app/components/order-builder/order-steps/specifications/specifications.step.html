@@ -84,7 +84,7 @@
                 </div>
             </div>
             <div class="row">
-                 <div class="col-md 4 mt-3">
+                <div class="col-md 4 mt-3">
                     <div class="group">
                         <label>Product ID</label>
                         <div class="input">
@@ -245,7 +245,7 @@
                 </div>
             </div>
             <div class="row">
-                 <div class="col-md 4 mt-3">
+                <div class="col-md 4 mt-3">
                     <div class="group">
                         <label>Product ID</label>
                         <div class="input">
@@ -419,7 +419,7 @@
                 </div>
             </div>
             <div class="row">
-                 <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3">
                     <div class="group">
                         <label>Product ID</label>
                         <div class="input">
@@ -588,20 +588,17 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-9 mt-3" >
+                <div class="col-md-9">
                     <div class="row">
-                        <div class="col-md-12">
-                            <label>Additional services</label>
+                        <div class="col-md-12 mt-3">
+                            <label class="additional-services">Additional services</label>
                         </div>
                         <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let index = index;">
                             <div class="group">
                                 <!-- rmx services  -->
                                 <!-- (change)="changeAditionalService(readyMixAdditionalServices[0])" -->
                                 <div class="service">
-                                    <input
-                                        (change)="changeAditionalService($event.target, index)"
-                                        type="checkbox"
-                                        id="{{rmxService.entryCode}}">
+                                    <input (change)="changeAditionalService($event.target, index)" type="checkbox" id="{{rmxService.entryCode}}">
                                     <label for="{{rmxService.entryCode}}">
                                         <svg class="icon-checkbox-active">
                                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
@@ -619,10 +616,8 @@
                         </div>
                     </div>
                 </div>
-
-
-                <div class="col-md-3 mt-3">
-                    <div class="group">
+                <div class="col-md-3">
+                    <div class="group mt-3">
                         <label>Delivery Mode</label>
                         <div class="service">
                             <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">Delivery</span>
@@ -630,7 +625,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 mt-3 flex-end">
+                <div class="col-md-12 mt-3 flex-end">
                     <button (click)="remove(index)" class="noborder">Remove product</button>
                 </div>
             </div>

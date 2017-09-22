@@ -34,7 +34,7 @@ export class OrderBuilderComponent {
         private customerService: CustomerService,
         private manager: CreateOrderService,
         private zone: NgZone,
-        private jsonObjService: EncodeDecodeJsonObjService, 
+        private jsonObjService: EncodeDecodeJsonObjService,
         @Inject(DOCUMENT) private document: any) {
         this.rebuildOrder = false;
         this.customerService.customerSubject.subscribe((customer) => {
@@ -116,22 +116,47 @@ export class OrderBuilderComponent {
 
     placeOrder() {
         this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId, 0);
+
+        if (this.hasCashPayment()) {
+            this.flowMidCash();
+        }
+        else if ((!this.isReadyMix) && (this.isMexico())) {
+            this.flowCementMX();
+        }
+        else {
+            this.basicFlow();
+        }
+    }
+
+    hasCashPayment() {
+        for (let item of this.manager.products) {
+            if (item.payment)
+                if (item.payment.paymentTermType)
+                    if (item.payment.paymentTermType.paymentTermTypeCode)
+                        if (item.payment.paymentTermType.paymentTermTypeCode == "CASH")
+                            return true;
+        }
+
+        return false;
+    }
+
+    flowMidCash() {
         const customer = this.customerService.currentCustomer();
         let data = [];
 
         this.draftOrder.items.forEach(item => {
             data.push({
-                    orderID: this.draftOrder.orderId,
-                    companyCode: this.draftOrder.salesArea.salesOrganizationCode,
-                    customerCode: customer.legalEntityTypeCode,
-                    jobSiteCode: this.draftOrder.jobsite.jobsiteCode,
-                    payerCode: customer.legalEntityTypeCode,
-                    orderAmount: item.totalPrice,
-                    documents: []
-                }
+                orderID: this.draftOrder.orderId,
+                companyCode: this.draftOrder.salesArea.salesOrganizationCode,
+                customerCode: customer.legalEntityTypeCode,
+                jobSiteCode: this.draftOrder.jobsite.jobsiteCode,
+                payerCode: customer.legalEntityTypeCode,
+                orderAmount: item.totalPrice,
+                documents: []
+            }
             )
         })
-        
+
         const cartItems = {
             sourceApp: "order-taking",
             date: new Date().toISOString(),
@@ -142,9 +167,13 @@ export class OrderBuilderComponent {
             },
             data: data
         }
-        
-        if ((!this.isReadyMix) && (this.isMexico())) {
-            this.drafts.createOrder(this.draftId, '')
+
+        let encoded = this.jsonObjService.encodeJson(cartItems);
+        this.document.location.href = 'https://invoices-payments-dev2.mybluemix.net/invoices-payments/open/' + encoded;
+    }
+
+    flowCementMX() {
+        this.drafts.createOrder(this.draftId, '')
             .flatMap((response) => {
                 console.log("order created", response.json());
                 this.dashboard.alertSuccess("Order placed successfully, requesting order code...", 0);
@@ -155,22 +184,18 @@ export class OrderBuilderComponent {
             }, error => {
                 this.dashboard.alertError("Error placing order", 10000);
             })
-        }
-        else {
-            this.drafts.createOrder(this.draftId, "").subscribe((response) => {
-                console.log("order created", response.json());
-                this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId);
-                this.dashboard.alertSuccess("Order #" + this.draftOrder.orderId + " placed successfully", 30000);
-            }, 
+    }
+
+    basicFlow() {
+        this.drafts.createOrder(this.draftId, "").subscribe((response) => {
+            console.log("order created", response.json());
+            this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId);
+            this.dashboard.alertSuccess("Order #" + this.draftOrder.orderId + " placed successfully", 30000);
+        },
             error => {
                 console.error(error)
                 this.dashboard.alertError("Error placing order", 10000);
             });
-    
-        }
-
-        let encoded = this.jsonObjService.encodeJson(cartItems);
-        // this.document.location.href = 'https://invoices-payments-dev2.mybluemix.net/invoices-payments/open/' + encoded;
     }
 
     isMexico() {
