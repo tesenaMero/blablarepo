@@ -3,7 +3,7 @@
         <step title="Product line" [showExit]="true" [showControls]="true">
             <product-selection-step (onCompleted)="productStepCompleted($event)"></product-selection-step>
         </step>
-        <step *ngIf="!isReadyMix" [automatic]="true" [showControls]="true" [showExit]="false" [inLine]="false" title="Delivery mode">
+        <step *ngIf="shouldShowDeliveryMode()" [automatic]="true" [showControls]="true" [showExit]="false" [inLine]="false" title="Delivery mode">
             <mode-step (onCompleted)="modeStepCompleted($event)"></mode-step>
         </step>
         <step title="Location">
