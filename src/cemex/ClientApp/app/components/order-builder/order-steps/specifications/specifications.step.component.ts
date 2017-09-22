@@ -302,6 +302,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         };
     }
 
+    changeAditionalService(target, index) {
+        console.log('changeAditionalService: = ', this.readyMixAdditionalServices, target.checked, index );
+    }
+
     onChangeTimePerLoad(index) {
         const entry = this.catalogs['TPL'][index];
 
