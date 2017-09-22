@@ -42,6 +42,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return SpecificationsStepComponent.availableProducts;
     }
 
+    static additionalServices = [];
+    get additionalServices() {
+        return SpecificationsStepComponent.additionalServices;
+    }
+
     static availablePlants = [];
     get availablePlants() {
         return SpecificationsStepComponent.availablePlants;
@@ -303,7 +308,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     changeAditionalService(target, index) {
-        console.log('changeAditionalService: = ', this.readyMixAdditionalServices, target.checked, index );
+        if( target.checked ) {
+            this.additionalServices.push(this.readyMixAdditionalServices[index]);
+        } else {
+            const idx = this.additionalServices.indexOf(this.readyMixAdditionalServices[index]);
+            this.additionalServices.splice(idx, 1);
+        }
+        this.manager.selectAdditionalServices(this.additionalServices);
     }
 
     onChangeTimePerLoad(index) {
