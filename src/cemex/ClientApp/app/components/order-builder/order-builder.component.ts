@@ -151,7 +151,7 @@ export class OrderBuilderComponent {
                 return this.drafts.validateRequestId(response.json().id);
             })
             .subscribe((response) => {
-                this.dashboard.alertSuccess("Order code:" + response.json().orderCode + " placed successfully", 30000);
+                this.dashboard.alertSuccess("Order code: #" + response.json().orderCode + " placed successfully", 30000);
             }, error => {
                 this.dashboard.alertError("Error placing order", 10000);
             })
