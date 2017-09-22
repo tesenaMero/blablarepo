@@ -37,7 +37,7 @@ export class OrdersComponent implements OnInit {
     this.customer = this.customerService.currentCustomer();
     // Only for MX validate BD conexion
     if (this.customer.countryCode.trim() === 'MX' ) {
-      this.dash.alertInfo(this.t.pt('views.common.validating_connection'), 99999);
+      this.dash.alertInfo(this.t.pt('views.common.validating_connection'), 0);
       this.ping.validatePingSalesOrder().subscribe((response) => {
         if (response.json().success === 'Y') {
           this.router.navigate(['/app/new']);

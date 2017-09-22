@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Inject } from '@angular/core';
 import { ProductLineApi } from '../../../../shared/services/api'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { DeliveryMode } from '../../../../models/delivery.model'
+import { CustomerService } from '../../../../shared/services/customer.service'
 
 @Component({
     selector: 'product-selection-step',
@@ -12,11 +13,15 @@ import { DeliveryMode } from '../../../../models/delivery.model'
 export class ProductSelectionStepComponent {
     @Output() onCompleted = new EventEmitter<any>();
     private MODE = DeliveryMode;
+    private PRODUCT_LINES = {
+        Readymix: 6,
+        CementBulk: 1
+    }
 
     productLines = [];
     productLine: any;
 
-    constructor(private api: ProductLineApi, private orderManager: CreateOrderService) {
+    constructor(private api: ProductLineApi, private orderManager: CreateOrderService, private customerService: CustomerService) {
         this.api.all().subscribe((response) => {
             let productLines = response.json().productLines;
 
@@ -57,13 +62,20 @@ export class ProductSelectionStepComponent {
     select(product: any) {
         this.productLine = product;
         this.orderManager.selectProductLine(product);
+        console.log(product);
+        console.log(this.orderManager);
 
         // Readymix case and Bulk Cement
-        if (this.productLine.productLineId == 6 || this.orderManager.productLine.productLineId == 1) {
+        if (this.productLine.productLineId == this.PRODUCT_LINES.Readymix || this.isBulkCementUSA()) {
             this.orderManager.shippingCondition = { shippingConditionId: this.MODE.Delivery };
         }
 
         this.onCompleted.emit(product);
+    }
+
+    isBulkCementUSA(): boolean {
+        return this.productLine.productLineId == this.PRODUCT_LINES.CementBulk
+                && this.customerService.currentCustomer().countryCode.trim() == "US"
     }
 
     isSelected(product: any) {

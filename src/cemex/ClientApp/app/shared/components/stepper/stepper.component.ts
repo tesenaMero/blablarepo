@@ -144,7 +144,6 @@ export class StepperComponent implements AfterContentInit {
         step.active = true;
 
         let currentIndex = this.getActiveStepIndex();
-        console.log("current index", currentIndex);
         if (currentIndex == 0) { this.isFirstStep = true; }
         else { this.isFirstStep = false; }
 

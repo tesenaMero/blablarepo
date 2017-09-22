@@ -1,6 +1,6 @@
 <div class="products">
     <!-- Cement Mexico Delivery -->
-    <ng-container *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">
+    <ng-container *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery && manager?.productLine?.productLineId != 6">
         <div class="product" [ngClass]="{ 
                 'exit-animation': product.deleting, 
                 'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
@@ -161,7 +161,7 @@
     </ng-container>
 
     <!-- Cement Mexico Pickup -->
-    <ng-container *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">
+    <ng-container *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup && manager?.productLine?.productLineId != 6">
         <div class="product" [ngClass]="{ 
             'exit-animation': product.deleting, 
             'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
@@ -337,7 +337,7 @@
     </ng-container>
 
     <!-- Readymix Mexico Delivery -->
-    <ng-container *ngIf="false">
+    <ng-container *ngIf="manager?.productLine?.productLineId == 6">
         <div class="product" [ngClass]="{ 
                 'exit-animation': product.deleting, 
                 'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">

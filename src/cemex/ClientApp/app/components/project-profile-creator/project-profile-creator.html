@@ -8,7 +8,7 @@
         <div class="title">
             {{ t.pt('views.project.profile.new') }}
         </div>
-        <div class="form-container"> 
+        <div class="form-container">
             <div class="row">
                 <div class="col-md-12 col-sm-12">
                     <label for="pp-name" class="">{{ t.pt('views.project.profile.name') }}</label>
@@ -151,7 +151,7 @@
         <div class="row actions text-right">
             <div class="col">
                 <button (click)="cancel()" data-dismiss="modal" class="button-ghost mb-2">{{ t.pt('views.common.cancel') }}</button>
-                <button [disabled]="postingTheOrder" (click)="confirm()" data-dismiss="modal" class="button bright-green">{{postingTheOrder ? 'Saving...': 'Confirm'}}</button>
+                <button [disabled]="postingTheOrder" (click)="confirm()" data-dismiss="modal" class="button bright-green">{{ postingTheOrder ? 'Saving...': 'Confirm' }}</button>
             </div>
         </div>
     </ng-container>
@@ -159,7 +159,8 @@
         <div class="success-group">
             <span class="cmx-icon-accepted-ok"></span>
             <div class="success-text">
-                {{ t.pt('views.project.profile.created') }} <!-- PP Number? -->
+                {{ t.pt('views.project.profile.created') }}
+                <!-- PP Number? -->
             </div>
         </div>
     </div>

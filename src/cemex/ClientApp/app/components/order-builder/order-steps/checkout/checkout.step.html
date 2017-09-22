@@ -146,144 +146,166 @@
 
 <!-- Cement MX -->
 <ng-container *ngIf="true">
-    <ng-container *ngFor="let item of manager.products">
+    <ng-container *ngFor="let item of manager.products, let index = index">
         <div class="product">
             <div class="row">
-                <div class="col-md-3">
-                    <div class="group">
-                        <div class="title">
-                            Product description
+                <div class="col-md-10 left-side">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="group">
+                                <div class="title">
+                                    Product description
+                                </div>
+                                <div class="desc bold">
+                                    {{ item?.product?.commercialDesc }}
+                                </div>
+                            </div>
                         </div>
-                        <div class="desc bold">
-                            {{ item?.product?.commercialDesc }}
+                        <div class="col-md-3">
+                            <div class="group">
+                                <div class="title">
+                                    Quantity
+                                </div>
+                                <div class="desc">
+                                    {{ item?.quantity }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="group">
+                                <div class="title">
+                                    Units
+                                </div>
+                                <div class="desc">
+                                    {{ item?.unit.alternativeUnit.unitDesc }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="group">
+                                <div class="title">
+                                    Requested date
+                                </div>
+                                <div class="desc">
+                                    {{ item?.date | date:'dd.MM.yyyy' }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="group">
+                                <div class="title">
+                                    Requested time
+                                </div>
+                                <div class="desc">
+                                    {{ item?.time }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="group">
+                                <div class="title">
+                                    Payment
+                                </div>
+                                <div class="desc">
+                                    {{ item?.payment.paymentTermType.paymentTermTypeDesc }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mt-4">
+                            <div class="group">
+                                <div class="title">
+                                    Location
+                                </div>
+                                <div class="desc bold">
+                                    {{ manager.jobsite?.shipmentLocationDesc }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mt-4">
+                            <div class="group">
+                                <div class="title">
+                                    Product ID
+                                </div>
+                                <div class="desc">
+                                    {{ item?.product.product.productId }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mt-4">
+                            <div class="group">
+                                <div class="title">
+                                    Maximum Capacity
+                                </div>
+                                <div class="desc">
+                                    10 tons
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mt-4">
+                            <div class="group">
+                                <div class="title">
+                                    Contract
+                                </div>
+                                <div class="desc">
+                                    {{ item?.contract?.salesDocument?.salesDocumentCode }} Remaining volume: {{ item?.contract?.salesDocument?.volume?.total.quantity.amount }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mt-4">
+                            <div class="group">
+                                <div class="title">
+                                    Point of Delivery
+                                </div>
+                                <div class="desc bold" [ngClass]="{ invisible: !manager.pointOfDelivery }">
+                                    {{ manager.pointOfDelivery?.address?.streetName }} {{ manager.pointOfDelivery?.address?.settlementDesc }}, {{ manager.pointOfDelivery?.address?.regionDesc }}, {{ manager.pointOfDelivery?.address?.cityDesc }}, {{ manager.pointOfDelivery?.address?.postalCode
+                                    }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mt-4">
+                            <div class="group">
+                                <div class="title">
+                                    Additional services
+                                </div>
+                                <div class="desc">
+                                    <span *ngIf="item?.maneuvering">Maneuvering</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mt-4">
+                            <div class="group">
+                                <div class="title">
+                                    Delivery Mode
+                                </div>
+                                <div class="desc">
+                                    <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">Delivery</span>
+                                    <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">Pickup</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="group">
+                <div class="col-md-2 right-side">
+                    <div class="price-group">
                         <div class="title">
-                            Quantity
+                            Price
                         </div>
                         <div class="desc">
-                            {{ item?.quantity }}
+                            {{ draftOrder?.items[index]?.totalPrice | currency : 'USD' : true }}
                         </div>
                     </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="group">
+                    <!-- <div class="price-group mt-2">
                         <div class="title">
-                            Units
+                            Material Value
                         </div>
                         <div class="desc">
-                            {{ item?.unit.alternativeUnit.unitDesc }}
+                            $20,000.00
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="group">
-                        <div class="title">
-                            Requested date
-                        </div>
-                        <div class="desc">
-                            {{ item?.date | date:'dd.MM.yyyy' }}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-1">
-                    <div class="group">
-                        <div class="title">
-                            Requested time
-                        </div>
-                        <div class="desc">
-                            {{ item?.time }}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-1">
-                    <div class="group">
-                        <div class="title">
-                            Payment
-                        </div>
-                        <div class="desc">
-                            {{ item?.payment.paymentTermType.paymentTermTypeDesc }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 mt-4">
-                    <div class="group">
-                        <div class="title">
-                            Location
-                        </div>
-                        <div class="desc bold">
-                            {{ manager.jobsite?.shipmentLocationDesc }}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mt-4">
-                    <div class="group">
-                        <div class="title">
-                            Product ID
-                        </div>
-                        <div class="desc">
-                            {{ item?.product.product.productId }}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mt-4">
-                    <div class="group">
-                        <div class="title">
-                            Maximum Capacity
-                        </div>
-                        <div class="desc">
-                            10 tons
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mt-4">
-                    <div class="group">
-                        <div class="title">
-                            Contract
-                        </div>
-                        <div class="desc">
-                            {{ item?.contract?.salesDocument?.salesDocumentCode }} Remaining volume: {{ item?.contract?.salesDocument?.volume?.total.quantity.amount }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 mt-4">
-                    <div class="group">
-                        <div class="title">
-                            Point of Delivery
-                        </div>
-                        <div class="desc bold">
-                            {{ manager.pointOfDelivery?.address?.streetName }} {{ manager.pointOfDelivery?.address?.settlementDesc }}, {{ manager.pointOfDelivery?.address?.regionDesc }}, {{ manager.pointOfDelivery?.address?.cityDesc }}, {{ manager.pointOfDelivery?.address?.postalCode
-                            }}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mt-4">
-                    <div class="group">
-                        <div class="title">
-                            Additional services
-                        </div>
-                        <div class="desc">
-                            <span *ngIf="item?.maneuvering">Maneuvering</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mt-4">
-                    <div class="group">
-                        <div class="title">
-                            Delivery Mode
-                        </div>
-                        <div class="desc">
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">Delivery</span>
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">Pickup</span>
-                        </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -291,19 +313,19 @@
 </ng-container>
 
 
-<div class="price" *ngIf="draftOrder">
+<div class="price">
     <div class="float-right text-right">
         <div class="subtotal">
             <div>
                 Subtotal:
-                <span class="desc">{{ getSubtotal() | currency : 'USD' : true }}</span>
+                <span class="desc" *ngIf="draftOrder">{{ getSubtotal() | currency : 'USD' : true }}</span>
             </div>
             <div>
                 Taxes:
-                <span class="desc">{{ getTaxes() | currency : 'USD' : true }}</span>
+                <span class="desc" *ngIf="draftOrder">{{ getTaxes() | currency : 'USD' : true }}</span>
             </div>
         </div>
-        <div class="grand-total">
+        <div class="grand-total" *ngIf="draftOrder">
             {{ getGrandTotal() | currency : 'USD' : true }}
         </div>
     </div>

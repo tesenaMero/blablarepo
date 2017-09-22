@@ -17,8 +17,9 @@ import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJs
 export class OrderBuilderComponent {
     @ViewChild(StepperComponent) stepper;
     private READYMIX_ID = 6;
-    private isReadyMix: boolean = false;
     private BULKCEMENT_ID = 1;
+    private isReadyMix: boolean = false;
+    private isBulkCementUSA: boolean = false;
     private rebuildOrder = false;
     private currentCustomer: any;
 
@@ -68,7 +69,8 @@ export class OrderBuilderComponent {
     }
 
     productStepCompleted(product: any) {
-        this.isReadyMix = product.productLineId == this.READYMIX_ID || product.productLineId == this.BULKCEMENT_ID;
+        this.isReadyMix = product.productLineId == this.READYMIX_ID;
+        this.isBulkCementUSA = (product.productLineId == this.BULKCEMENT_ID) && (this.currentCustomer.countryCode.trim() == "US");
         this._changeDetector.detectChanges();
         this.stepper.complete();
     }
@@ -141,7 +143,7 @@ export class OrderBuilderComponent {
             data: data
         }
 
-        this.drafts.createOrder(this.draftId, this.draftOrder).subscribe((response) => {
+        this.drafts.createOrder(this.draftId, "").subscribe((response) => {
             console.log("order created", response.json());
             this.dashboard.alertSuccess("Order placed successfully");
         }, 
@@ -152,5 +154,17 @@ export class OrderBuilderComponent {
 
         let encoded = this.jsonObjService.encodeJson(cartItems);
         // this.document.location.href = 'https://invoices-payments-dev2.mybluemix.net/invoices-payments/open/' + encoded;
+    }
+
+    shouldShowDeliveryMode() {
+        if (this.isReadyMix) {
+            return false;
+        }
+        else if (this.isBulkCementUSA) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }

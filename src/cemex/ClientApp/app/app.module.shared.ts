@@ -88,7 +88,6 @@ import {
 } from './shared/services/api';
 
 import { EncodeDecodeJsonObjService } from './shared/services/encodeDecodeJsonObj.service';
-
 import { CmxSharedModule } from '@cemex/cmx-shared-v1/dist'
 import { CmxCoreCommonModule } from '@cemex-core/angular-services-v2/dist';
 import { FlexLayoutModule } from '@angular/flex-layout';

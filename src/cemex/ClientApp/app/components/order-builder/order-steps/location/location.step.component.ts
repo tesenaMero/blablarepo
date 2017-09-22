@@ -19,6 +19,10 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     @Output() onCompleted = new EventEmitter<any>();
     @Output() requestNext = new EventEmitter<any>();
     MODE = DeliveryMode;
+    private PRODUCT_LINES = {
+        Readymix: 6,
+        CementBulk: 1
+    }
 
     // Selected data
     private location: any;
@@ -175,6 +179,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     onShowed() {
+        console.log(this.orderManager);
         // Reset validations
         this.resetValidations();
 
@@ -194,7 +199,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.hiddens.pods = !this.shouldShowPOD();
 
         // Purchase order
-        if (this.customer.countryCode.trim() == "USA") {
+        if (this.customer.countryCode.trim() == "US") {
             this.validations.purchaseOrder.mandatory = false;
         }
         else if (this.customer.countryCode.trim() == "MX") {
@@ -225,9 +230,14 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     shouldShowPOD(): boolean {
-        if (this.orderManager.productLine.productLineId == 6 || this.orderManager.productLine.productLineId == 1) { return true; }
+        if (this.customerService.currentCustomer().countryCode.trim() == "US") { return false; }
         else if (this.orderManager.shippingCondition.shippingConditionId == this.MODE.Pickup) { return false; }
         else { return true; }
+    }
+
+    isBulkCementUSA(): boolean {
+        return this.orderManager.productLine.productLineId == this.PRODUCT_LINES.CementBulk
+                && this.customerService.currentCustomer().countryCode.trim() == "US"
     }
 
     fetchJobsites(shipmentLocationTypes) {

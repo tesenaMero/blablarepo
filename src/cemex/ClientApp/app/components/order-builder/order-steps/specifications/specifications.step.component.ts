@@ -108,6 +108,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         // Add a pre product by default
         if (this.preProducts.length <= 0) { this.add(); }
 
+        console.log(this.manager);
+
         const customerId = this.customerService.currentCustomer().legalEntityId;
         const productLineId = this.manager.productLine.productLineId;
 
@@ -130,22 +132,32 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     fetchProducts() {
         let salesDocumentType = this.manager.getSalesDocumentType();
-        this.productsApi.top(this.manager.jobsite, salesDocumentType, this.manager.productLine, this.manager.shippingCondition).subscribe((result) => {
-            let topProducts = result.json().products;
-            SpecificationsStepComponent.availableProducts = topProducts;
 
-            // Set defaults value
-            this.preProducts.forEach((item: PreProduct) => {
-                item.loadings.products = false;
-                if (topProducts.length > 0) {
-                    item.setProduct(topProducts[0])
-                    this.onCompleted.emit(true);
-                }
-                else {
-                    item.setProduct(undefined);
-                    this.onCompleted.emit(false);
-                }
-            });
+        // Disable contracts while fetching products
+        this.preProducts.forEach((item: PreProduct) => {
+            item.loadings.contracts = true;
+        });
+
+        this.productsApi.top(
+            this.manager.jobsite, 
+            salesDocumentType, 
+            this.manager.productLine, 
+            this.manager.shippingCondition).subscribe((result) => {
+                let topProducts = result.json().products;
+                SpecificationsStepComponent.availableProducts = topProducts;
+
+                // Set defaults value
+                this.preProducts.forEach((item: PreProduct) => {
+                    item.loadings.products = false;
+                    if (topProducts.length > 0) {
+                        item.setProduct(topProducts[0])
+                        this.onCompleted.emit(true);
+                    }
+                    else {
+                        item.setProduct(undefined);
+                        this.onCompleted.emit(false);
+                    }
+                });
         });
     }
 
@@ -395,7 +407,10 @@ class PreProduct {
             let contracts = result.json().products;
             this.availableContracts = contracts;
 
-            if (contracts.length > 0) { this.loadings.contracts = false; }
+            if (contracts.length > 0) {
+                this.availableContracts.unshift({});
+                this.loadings.contracts = false; 
+            }
             else { this.loadings.contracts = true; } // Disable it if no contracts
         });
     }
