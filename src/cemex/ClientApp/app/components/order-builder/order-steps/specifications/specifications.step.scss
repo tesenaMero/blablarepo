@@ -62,7 +62,6 @@
                 display: flex;
                 span.selection {
                     width: 100%;
-                    border-right: 1px solid #D7D7D7;
                     padding-right: 10px;
                     padding-left: 4px;
                     overflow: hidden;
@@ -78,6 +77,7 @@
                     padding-left: 10px;
                     cursor: pointer;
                     align-self: center;
+                    border-left: 1px solid #D7D7D7;
                 }
             }
             &.dropdown {
