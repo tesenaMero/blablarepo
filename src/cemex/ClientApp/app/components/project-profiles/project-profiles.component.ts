@@ -44,6 +44,7 @@ export class ProjectProfilesComponent {
 
     fetchProjectProfiles(customer = this.CustomerService.currentCustomer()) {
         this.loading = true;
+        this.rows = [];
         const customerId = customer.legalEntityId;
         this.ppService.all(customerId).subscribe((response) => {
             this.loading = false;
