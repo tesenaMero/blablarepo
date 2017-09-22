@@ -7,6 +7,8 @@ import { ProjectProfileApi, CatalogApi, PlantApi, ContractsApi } from '../../../
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { SearchProductService } from '../../../../shared/services/product-search.service';
 import { DeliveryMode } from '../../../../models/delivery.model';
+import { DashboardService } from '../../../../shared/services/dashboard.service'
+import * as _ from 'lodash';
 
 @Component({
     selector: 'specifications-step',
@@ -79,7 +81,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private contractsApi: ContractsApi,
         private paymentTermsApi: PaymentTermsApi,
         private plantApi: PlantApi,
-        private searchProductService: SearchProductService
+        private searchProductService: SearchProductService,
+        private dashboard: DashboardService
     ) {
         this.step.setEventsListener(this);
         this.step.canAdvance = () => this.canAdvance();
@@ -356,9 +359,45 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     qty(product: any, toAdd: number) {
+        // minimum 1
         if (product.quantity <= 1 && toAdd < 0) { return; }
-        if (product.quantity >= 100 && toAdd > 0) { return; }
-        product.quantity += toAdd;
+        // if (product.quantity >= 100 && toAdd > 0) { return; }
+
+        const newQty = product.quantity + toAdd;
+        const jobsite = this.manager.jobsite;
+        const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId'); 
+        const isPickup =  shippingConditionId === this.MODE.Pickup;
+        const salesArea = this.manager.salesArea.find((sa) => jobsite && jobsite.shipmentLocationId === jobsite.shipmentLocationId);
+        const maxJobsiteQty = salesArea && salesArea.maximumLot.amount;
+        const isVolumeContract = false;
+
+        // if contract selected
+        if (product.contract) {
+            if (isVolumeContract) {
+                // check qty in TN from remaining from contact
+                // TODO
+            } else {
+                if (isPickup) {
+                    product.quantity = newQty;
+                } else {
+                    if (newQty <= maxJobsiteQty) {
+                        product.quantity = newQty;
+                    } else {
+                        this.dashboard.alertError("Jobsite qty limit reached", 10000);
+                    }
+                }
+            }
+        } else {
+            if (isPickup) {
+                product.quantity = newQty;
+            } else {
+                if (newQty <= maxJobsiteQty) {
+                    product.quantity = newQty;
+                } else {
+                    this.dashboard.alertError("Jobsite qty limit reached", 10000);
+                }
+            }
+        }
     }
 }
 
@@ -393,13 +432,13 @@ class PreProduct {
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService) {
-        let _ = SpecificationsStepComponent;
+        let SSC = SpecificationsStepComponent;
 
-        this.payment = _.availablePayments[0];
-        this.plant = _.availablePlants[0];
+        this.payment = SSC.availablePayments[0];
+        this.plant = SSC.availablePlants[0];
 
-        if (_.availableProducts.length) {
-            this.setProduct(_.availableProducts[0]);
+        if (SSC.availableProducts.length) {
+            this.setProduct(SSC.availableProducts[0]);
             this.loadings.products = false;
         }
         else {
