@@ -10,8 +10,7 @@ import { DashboardService } from '../../shared/services/dashboard.service';
 
 @Component({
     selector: 'crossProduct',
-    template: '<div style="padding: 80px;text-align:center;">Processing... <button #successBtn data-toggle="modal" data-target="#success" class="button-ghost"></button></div>',
-    providers: [EncodeDecodeJsonObjService]
+    template: '<div style="padding: 80px;text-align:center;">Processing... <button #successBtn data-toggle="modal" data-target="#success" class="button-ghost"></button></div>'
 })
 export class CrossProductComponent implements OnInit {
     private _paramsObservable: any;

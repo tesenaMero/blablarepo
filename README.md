@@ -1,5 +1,5 @@
 Setup project
-=================
+==================
 1. Clone this repository (with submodules)
 ```sh
 > git clone --recursive -b development https://bitbucket.org/cemex/rewebapporderproductcust2.git

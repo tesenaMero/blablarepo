@@ -55,7 +55,7 @@ export class ReviewStepComponent implements StepEventsListener {
     }
 
     saveDraft() {
-        this.dashboard.alertInfo("Saving draft...");
+        this.dashboard.alertInfo("Saving draft...", 0);
         this.drafts.add(this.generateOrderObj()).subscribe((response) => {
             this.dashboard.alertSuccess("Draft saved!");
             this.onCompleted.emit(response.json().id)

@@ -1,6 +1,6 @@
 <div class="products">
     <!-- Cement Mexico Delivery -->
-    <ng-container *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">
+    <ng-container *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery && manager?.productLine?.productLineId != 6">
         <div class="product" [ngClass]="{ 
                 'exit-animation': product.deleting, 
                 'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
@@ -8,13 +8,13 @@
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
                         <label>
-                            Product description
+                            Product
                         </label>
                         <div class="input product-selection dropdown" [ngClass]="{ disabled: product.loadings.products }">
                             <span class="selection">
-                                {{ product.product?.commercialDesc }}
+                                {{ product?.product?.commercialCode }} - {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
-                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc  }}</option>
+                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode  }} - {{ p?.commercialDesc  }}</option>
                                 </select>
                             </span>
                             <span class="action" data-toggle="modal" data-target="#search-product" (click)="openProductSearch(product)">Change</span>
@@ -84,14 +84,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md 4 mt-3">
+                <!-- <div class="col-md 4 mt-3">
                     <div class="group">
                         <label>Product ID</label>
                         <div class="input">
                             <span>{{ product?.product?.commercialCode }}</span>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label>Contract</label>
@@ -161,7 +161,7 @@
     </ng-container>
 
     <!-- Cement Mexico Pickup -->
-    <ng-container *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">
+    <ng-container *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup && manager?.productLine?.productLineId != 6">
         <div class="product" [ngClass]="{ 
             'exit-animation': product.deleting, 
             'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
@@ -169,13 +169,13 @@
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
                         <label>
-                            Product description
+                            Product
                         </label>
                         <div class="input product-selection dropdown" [ngClass]="{ disabled: product.loadings.products }">
                             <span class="selection">
-                                {{ product.product?.commercialDesc }}
+                                {{ product?.product?.commercialCode }} - {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
-                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc  }}</option>
+                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode  }} - {{ p?.commercialDesc  }}</option>
                                 </select>
                             </span>
                             <span class="action" data-toggle="modal" data-target="#search-product" (click)="openProductSearch(product)">Change</span>
@@ -245,14 +245,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md 4 mt-3">
+                <!-- <div class="col-md 4 mt-3">
                     <div class="group">
                         <label>Product ID</label>
                         <div class="input">
                             <span>{{ product?.product?.commercialCode }}</span>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label>Contract</label>
@@ -337,7 +337,7 @@
     </ng-container>
 
     <!-- Readymix Mexico Delivery -->
-    <ng-container *ngIf="false">
+    <ng-container *ngIf="manager?.productLine?.productLineId == 6">
         <div class="product" [ngClass]="{ 
                 'exit-animation': product.deleting, 
                 'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
@@ -345,13 +345,13 @@
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
                         <label>
-                            Product description
+                            Product
                         </label>
                         <div class="input product-selection dropdown">
                             <span class="selection">
-                                {{ product.product?.commercialDesc }}
+                                {{ product?.product?.commercialCode }} - {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged($event)" class="input behind">
-                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc }}</option>
+                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode  }} - {{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
                             <!-- <span class="action" data-toggle="modal" data-target="#search-product">Change</span> -->
@@ -419,14 +419,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 mt-3">
+                <!-- <div class="col-md-3 mt-3">
                     <div class="group">
                         <label>Product ID</label>
                         <div class="input">
                             <span>20939302/10292/10102</span>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label>Contract</label>
@@ -613,7 +613,8 @@
                     <div class="group">
                         <label>Delivery Mode</label>
                         <div class="service">
-                            <span>Delivery</span>
+                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">Delivery</span>
+                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">Pickup</span>
                         </div>
                     </div>
                 </div>
