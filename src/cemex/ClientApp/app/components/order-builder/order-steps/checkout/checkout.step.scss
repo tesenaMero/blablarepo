@@ -5,6 +5,22 @@
     padding: 25px 33px;
     padding-bottom: 43px;
     margin-bottom: 10px;
+    .left-side {
+        border-right: 1px solid #DFE4EB;
+    }
+    .right-side {
+        .title {
+            color: #9CA4AE;
+            font-size: 12px;
+            text-align: right;
+        }
+        .desc {
+            color: #2A2A2A;
+            font-size: 19px;
+            font-weight: bold;
+            text-align: right;
+        }
+    }
     .group {
         .title {
             color: #9CA4AE;

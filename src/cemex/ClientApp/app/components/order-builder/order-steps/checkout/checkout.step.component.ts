@@ -21,35 +21,61 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     @Output() onCompleted = new EventEmitter<any>();
     @Input() draftId: any;
 
+    MODE = DeliveryMode;
+    private PRODUCT_LINES = {
+        Readymix: 6,
+        CementBulk: 1
+    }
+
     draftOrder: any;
 
-    MODE = DeliveryMode;
-
-    constructor(@Inject(Step) private step: Step, 
-                private manager: CreateOrderService, 
-                private dashboard: DashboardService, 
-                private drafts: DraftsService) {
+    constructor( @Inject(Step) private step: Step,
+        private manager: CreateOrderService,
+        private dashboard: DashboardService,
+        private drafts: DraftsService,
+        private customerService: CustomerService) {
         this.step.setEventsListener(this);
     }
 
     // Interfaces
     // ======================
-    ngOnInit() {}
+    ngOnInit() { }
 
     onShowed() {
-        console.log("Draft:", this.draftId);
-        this.dashboard.alertInfo("Recovering prices", 0);
-        this.drafts.optimalSourcesPatch(this.draftId).flatMap((x) => {
-            return this.drafts.prices(this.draftId);
-        }).subscribe((response) => {
-            this.draftOrder = response.json();
-            console.log("Draft order", this.draftOrder);
-            this.onCompleted.emit(this.draftOrder);
-            this.dashboard.alertSuccess("Prices recovered successfully");
-        }, (error) => {
-            this.dashboard.alertError("Something wrong happened");
-            console.error("Prices error", error);
-        });
+        // Patch optimal sources then recovers prices
+        if (this.shouldCallOptimalSource()) {
+            this.dashboard.alertInfo("Recovering prices", 0);
+            this.drafts.optimalSourcesPatch(this.draftId).flatMap((x) => {
+                return this.drafts.prices(this.draftId);
+            }).subscribe((response) => {
+                this.handlePrices(response);
+            }, (error) => {
+                this.dashboard.alertError("Something wrong happened");
+                console.error("Prices error", error);
+            });
+        }
+        else if (this.shouldCallPrices()) {
+            this.drafts.prices(this.draftId).subscribe((response) => {
+                this.handlePrices(response);
+            });
+        }
+    }
+
+    shouldCallOptimalSource() {
+        return this.customerService.currentCustomer().countryCode.trim() == "MX"
+            && this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix
+            && this.manager.shippingCondition.shippingConditionId == this.MODE.Delivery
+    }
+
+    shouldCallPrices() {
+        return this.customerService.currentCustomer().countryCode.trim() == "MX"
+                && this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix
+    }
+
+    handlePrices(response) {
+        this.draftOrder = response.json();
+        this.onCompleted.emit(this.draftOrder);
+        this.dashboard.alertSuccess("Prices recovered successfully");
     }
 
     // Logic
@@ -57,7 +83,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     getSubtotal() {
         let summ = 0;
         this.draftOrder.items.forEach(item => {
-            summ += item.grossPrice * item.quantity;
+            summ += item.grossPrice;
         });
         return summ;
     }
@@ -65,7 +91,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     getTaxes() {
         let taxes = 0;
         this.draftOrder.items.forEach(item => {
-            taxes += item.taxAmount * item.quantity;
+            taxes += item.taxAmount;
         });
         return taxes;
     }

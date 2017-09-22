@@ -407,7 +407,10 @@ class PreProduct {
             let contracts = result.json().products;
             this.availableContracts = contracts;
 
-            if (contracts.length > 0) { this.loadings.contracts = false; }
+            if (contracts.length > 0) {
+                this.availableContracts.unshift({});
+                this.loadings.contracts = false; 
+            }
             else { this.loadings.contracts = true; } // Disable it if no contracts
         });
     }

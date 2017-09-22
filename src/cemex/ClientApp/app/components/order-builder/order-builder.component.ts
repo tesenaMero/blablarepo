@@ -143,7 +143,7 @@ export class OrderBuilderComponent {
             data: data
         }
 
-        this.drafts.createOrder(this.draftId, this.draftOrder).subscribe((response) => {
+        this.drafts.createOrder(this.draftId, "").subscribe((response) => {
             console.log("order created", response.json());
             this.dashboard.alertSuccess("Order placed successfully");
         }, 
