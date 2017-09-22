@@ -8,6 +8,9 @@ export class PaymentTermsApi {
     constructor(private api: Api) {
     }
 
+    getJobsiteById(termId: any) {
+        return this.api.get(`/v1/im/paymentterms?paymentTermId=${termId}`);
+    }
     getJobsitePaymentTerms(termId: any) {
         return this.api.get(`/v1/im/paymentterms?paymentTermId=${termId}`);
     }

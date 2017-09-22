@@ -112,7 +112,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
     onShowed() {
         // Add a pre product by default
         if (this.preProducts.length <= 0) { this.add(); }
-        console.log(' this.manager.productLine: ',  this.manager.productLine,  this.manager);
 
         const customerId = this.customerService.currentCustomer().legalEntityId;
         const productLineId = this.manager.productLine.productLineId;
@@ -122,7 +121,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 this.catalogs[catalog.catalogCode] = catalog.entries;
             });
             this.readyMixAdditionalServices = this.catalogs['ASC'];
-            console.log('this: ',  this, )
         });
 
         // Set loading state
@@ -144,9 +142,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
 
         this.productsApi.top(
-            this.manager.jobsite, 
-            salesDocumentType, 
-            this.manager.productLine, 
+            this.manager.jobsite,
+            salesDocumentType,
+            this.manager.productLine,
             this.manager.shippingCondition).subscribe((result) => {
                 let topProducts = result.json().products;
                 SpecificationsStepComponent.availableProducts = topProducts;
@@ -182,6 +180,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         this.contractsApi.byProductTypeId(customerId, productLineId).subscribe((res) => {
             console.log('res: ', res.json())
+        })
+    }
+
+    getContractPaymentTerm(termId: any) {
+        this.paymentTermsApi.getJobsiteById(termId).subscribe((result) => {
+            const contractPaymentTerm = result.json().paymentTerms;
+            SpecificationsStepComponent.availablePayments = contractPaymentTerm;
         })
     }
 
@@ -333,6 +338,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
     // TODO
     contractChanged(contract: any, preProduct: PreProduct) {
         preProduct.contractChanged();
+        if(contract.salesDocument.paymentTerm) {
+            this.getContractPaymentTerm(contract.salesDocument.paymentTerm.paymentTermId);
+        }
     }
 
     add() {
@@ -427,7 +435,6 @@ class PreProduct {
             this.product.product.productId
         ).subscribe((result) => {
             let contracts = result.json().products;
-            console.log('contracts: ', contracts);
             this.availableContracts = contracts;
 
             if (contracts.length > 0) {
