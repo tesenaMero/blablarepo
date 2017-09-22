@@ -291,19 +291,19 @@
 </ng-container>
 
 
-<div class="price" *ngIf="draftOrder">
+<div class="price">
     <div class="float-right text-right">
         <div class="subtotal">
             <div>
                 Subtotal:
-                <span class="desc">{{ getSubtotal() | currency : 'USD' : true }}</span>
+                <span class="desc" *ngIf="draftOrder">{{ getSubtotal() | currency : 'USD' : true }}</span>
             </div>
             <div>
                 Taxes:
-                <span class="desc">{{ getTaxes() | currency : 'USD' : true }}</span>
+                <span class="desc" *ngIf="draftOrder">{{ getTaxes() | currency : 'USD' : true }}</span>
             </div>
         </div>
-        <div class="grand-total">
+        <div class="grand-total" *ngIf="draftOrder">
             {{ getGrandTotal() | currency : 'USD' : true }}
         </div>
     </div>

@@ -38,7 +38,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
 
     onShowed() {
         console.log("Draft:", this.draftId);
-        this.dashboard.alertInfo("Recovering prices", 9999999);
+        this.dashboard.alertInfo("Recovering prices", 0);
         this.drafts.optimalSourcesPatch(this.draftId).flatMap((x) => {
             return this.drafts.prices(this.draftId);
         }).subscribe((response) => {
@@ -48,7 +48,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
             this.dashboard.alertSuccess("Prices recovered successfully");
         }, (error) => {
             this.dashboard.alertError("Something wrong happened");
-            console.error('prices Error -> ' + JSON.stringify(error));
+            console.error("Prices error", error);
         });
     }
 
