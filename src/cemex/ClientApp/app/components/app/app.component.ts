@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
     closeModal() {
         $("#app-content").removeClass("blur");
     }
+
     @Autobind
     backToOrders() {
         let that = this;

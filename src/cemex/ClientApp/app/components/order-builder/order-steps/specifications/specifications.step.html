@@ -84,14 +84,14 @@
                 </div>
             </div>
             <div class="row">
-                 <div class="col-md 4 mt-3">
+                <div class="col-md 4 mt-3">
                     <div class="group">
                         <label>Product ID</label>
                         <div class="input">
                             <span>{{ product?.product?.commercialCode }}</span>
                         </div>
                     </div>
-                </div> 
+                </div>
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label>Contract</label>
@@ -102,8 +102,8 @@
                                 <strong *ngIf="product.contract?.salesDocument?.hasOwnProperty('volume')">{{ product.contract?.salesDocument?.volume?.total.quantity.amount }}</strong>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
-                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event)" class="input behind">
-                                <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract.salesDocument?.volume?.total.quantity.amount }} </option>
+                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event, product)" class="input behind">
+                                <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract?.salesDocument?.volume?.total.quantity.amount }} </option>
                             </select>
                         </div>
                     </div>
@@ -245,14 +245,14 @@
                 </div>
             </div>
             <div class="row">
-                 <div class="col-md 4 mt-3">
+                <div class="col-md 4 mt-3">
                     <div class="group">
                         <label>Product ID</label>
                         <div class="input">
                             <span>{{ product?.product?.commercialCode }}</span>
                         </div>
                     </div>
-                </div> 
+                </div>
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label>Contract</label>
@@ -264,7 +264,7 @@
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
                             <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event)" class="input behind">
-                            <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract.salesDocument?.volume?.total.quantity.amount }}
+                            <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract?.salesDocument?.volume?.total.quantity.amount }}
                             </option>
                         </select>
                         </div>
@@ -286,11 +286,11 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4 mt-3" [ngClass]="{ invisible: !product.maneuveringAvailable }">
+                <div class="col-md-4 mt-3">
                     <div class="flex-container justify-content-between">
                         <div class="group">
                             <label>Additional services</label>
-                            <div class="service spaced-top" ng-if>
+                            <div class="service spaced-top" [ngClass]="{ invisible: !product.maneuveringAvailable }">
                                 <input [(ngModel)]="product.maneuvering" checked type="checkbox" id="maneuvering{{ index }}">
                                 <label for="maneuvering{{ index }}">
                                     <svg class="icon-checkbox-active">
@@ -320,7 +320,7 @@
                         <label>Plant</label>
                         <div class="input contract dropdown flex-space-between">
                             <span class="">
-                                {{ product.plant.plantDesc }}
+                                {{ product?.plant?.plantDesc }}
                                 <select [(ngModel)]="product.plant" class="input behind">
                                     <option *ngFor="let plant of plants" [ngValue]="plant">{{ plant.plantDesc }}</option>
                                 </select>
@@ -419,14 +419,14 @@
                 </div>
             </div>
             <div class="row">
-                 <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3">
                     <div class="group">
                         <label>Product ID</label>
                         <div class="input">
                             <span>20939302/10292/10102</span>
                         </div>
                     </div>
-                </div> 
+                </div>
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label>Contract</label>
@@ -434,7 +434,7 @@
                             <span class=""><strong>Contract {{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
                             <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event)" class="input behind">
-                                <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract: {{ contract.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;</option>
+                                <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract: {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;</option>
                             </select>
                         </div>
                     </div>
@@ -588,29 +588,36 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 mt-3">
-                    <div class="group">
-                        <label>Additional services</label>
-                        <!-- rmx services  -->
-                        <!-- <div class="service">
-                            <input [(ngModel)]="product.maneuvering" checked type="checkbox" id="maneuvering{{ index }}">
-                            <label for="maneuvering{{ index }}">
-                                <svg class="icon-checkbox-active">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
-                                </svg>
-                                <svg class="icon-checkbox-static">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
-                                </svg>
-                                <svg class="icon-checkbox-hover">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
-                                </svg>
-                                <span>Maneuvering</span>
-                            </label>
-                        </div> -->
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-12 mt-3">
+                            <label class="additional-services">Additional services</label>
+                        </div>
+                        <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let index = index;">
+                            <div class="group">
+                                <!-- rmx services  -->
+                                <!-- (change)="changeAditionalService(readyMixAdditionalServices[0])" -->
+                                <div class="service">
+                                    <input (change)="changeAditionalService($event.target, index)" type="checkbox" id="{{rmxService.entryCode}}">
+                                    <label for="{{rmxService.entryCode}}">
+                                        <svg class="icon-checkbox-active">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
+                                        </svg>
+                                        <svg class="icon-checkbox-static">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                                        </svg>
+                                        <svg class="icon-checkbox-hover">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                                        </svg>
+                                        <span>{{rmxService.entryDesc}}</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-3 mt-3">
-                    <div class="group">
+                <div class="col-md-3">
+                    <div class="group mt-3">
                         <label>Delivery Mode</label>
                         <div class="service">
                             <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">Delivery</span>
@@ -618,7 +625,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 mt-3 flex-end">
+                <div class="col-md-12 mt-3 flex-end">
                     <button (click)="remove(index)" class="noborder">Remove product</button>
                 </div>
             </div>

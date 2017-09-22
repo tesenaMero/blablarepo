@@ -112,7 +112,7 @@ export class ReviewStepComponent implements StepEventsListener {
 
     private makeItem(preProduct, index) {
         let _ = this.manager;
-        return {
+        let baseItem = {
             "itemSeqNum": 10 * (index + 1),
             "purchaseOrder": _.purchaseOrder ? _.purchaseOrder : "",
             "requestedDateTime": this.combineDateTime(preProduct).toISOString(),
@@ -133,6 +133,22 @@ export class ReviewStepComponent implements StepEventsListener {
                 "additionalServices": this.makeAdditionalServices(preProduct)
             }
         }
+
+        // Add contract if any
+        if (preProduct.contract && preProduct.contract.salesDocument && preProduct.contract.salesDocument.salesDocumentItemId) {
+            baseItem["agreementItem"] = {
+                "agreementItemId": preProduct.contract.salesDocument.salesDocumentItemId
+            }
+        }
+
+        // Add plant if any
+        if (preProduct.plant && preProduct.plant.plantId) {
+            baseItem["shippingSource"] = {
+                "shippingSourceId": preProduct.plant.plantId
+            }
+        }
+
+        return baseItem;
     }
 
     private makeAdditionalServices(preProduct): any[] {

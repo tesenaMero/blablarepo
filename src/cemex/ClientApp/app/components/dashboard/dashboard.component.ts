@@ -74,7 +74,7 @@ export class DashboardComponent implements OnInit {
 
     private handleAlert(alert: any) {
         if (alert == null) { this.closeAlert(); return; }
-    
+
         this.showAlert = false;
         this.alert.text = alert.text;
         this.alert.type = alert.type;
@@ -84,6 +84,9 @@ export class DashboardComponent implements OnInit {
             setTimeout(() => {
                 this.showAlert = false;
             }, alert.duration);
+        }
+        else {
+            this.showAlert = true;
         }
     }
 
