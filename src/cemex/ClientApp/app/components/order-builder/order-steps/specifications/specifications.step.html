@@ -8,13 +8,13 @@
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
                         <label>
-                            Product
+                            Product description
                         </label>
                         <div class="input product-selection dropdown" [ngClass]="{ disabled: product.loadings.products }">
                             <span class="selection">
-                                {{ product?.product?.commercialCode }} - {{ product.product?.commercialDesc }}
+                                {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
-                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode  }} - {{ p?.commercialDesc  }}</option>
+                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc  }}</option>
                                 </select>
                             </span>
                             <span class="action" data-toggle="modal" data-target="#search-product" (click)="openProductSearch(product)">Change</span>
@@ -84,14 +84,14 @@
                 </div>
             </div>
             <div class="row">
-                <!-- <div class="col-md 4 mt-3">
+                 <div class="col-md 4 mt-3">
                     <div class="group">
                         <label>Product ID</label>
                         <div class="input">
                             <span>{{ product?.product?.commercialCode }}</span>
                         </div>
                     </div>
-                </div> -->
+                </div> 
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label>Contract</label>
@@ -169,13 +169,13 @@
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
                         <label>
-                            Product
+                            Product description
                         </label>
                         <div class="input product-selection dropdown" [ngClass]="{ disabled: product.loadings.products }">
                             <span class="selection">
-                                {{ product?.product?.commercialCode }} - {{ product.product?.commercialDesc }}
+                                {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
-                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode  }} - {{ p?.commercialDesc  }}</option>
+                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc  }}</option>
                                 </select>
                             </span>
                             <span class="action" data-toggle="modal" data-target="#search-product" (click)="openProductSearch(product)">Change</span>
@@ -245,14 +245,14 @@
                 </div>
             </div>
             <div class="row">
-                <!-- <div class="col-md 4 mt-3">
+                 <div class="col-md 4 mt-3">
                     <div class="group">
                         <label>Product ID</label>
                         <div class="input">
                             <span>{{ product?.product?.commercialCode }}</span>
                         </div>
                     </div>
-                </div> -->
+                </div> 
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label>Contract</label>
@@ -345,13 +345,13 @@
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
                         <label>
-                            Product
+                            Product description
                         </label>
                         <div class="input product-selection dropdown">
                             <span class="selection">
-                                {{ product?.product?.commercialCode }} - {{ product.product?.commercialDesc }}
+                                {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged($event)" class="input behind">
-                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode  }} - {{ p?.commercialDesc }}</option>
+                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
                             <!-- <span class="action" data-toggle="modal" data-target="#search-product">Change</span> -->
@@ -419,14 +419,14 @@
                 </div>
             </div>
             <div class="row">
-                <!-- <div class="col-md-3 mt-3">
+                 <div class="col-md-3 mt-3">
                     <div class="group">
                         <label>Product ID</label>
                         <div class="input">
                             <span>20939302/10292/10102</span>
                         </div>
                     </div>
-                </div> -->
+                </div> 
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label>Contract</label>
