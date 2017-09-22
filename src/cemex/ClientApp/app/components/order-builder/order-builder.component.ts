@@ -115,7 +115,7 @@ export class OrderBuilderComponent {
     }
 
     placeOrder() {
-        this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId);
+        this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId, 0);
         const customer = this.customerService.currentCustomer();
         let data = [];
 
@@ -147,24 +147,24 @@ export class OrderBuilderComponent {
             this.drafts.createOrder(this.draftId, '')
             .flatMap((response) => {
                 console.log("order created", response.json());
-                this.dashboard.alertSuccess("Order placed successfully");  
+                this.dashboard.alertSuccess("Order placed successfully, requesting order code...", 0);
                 return this.drafts.validateRequestId(response.json().id);
             })
             .subscribe((response) => {
-                console.log("vali", response.json());
+                this.dashboard.alertSuccess("Order code:" + response.json().orderCode + " placed successfully", 30000);
             }, error => {
-                console.error(error)
-                this.dashboard.alertError("Error placing order");
+                this.dashboard.alertError("Error placing order", 10000);
             })
         }
         else {
             this.drafts.createOrder(this.draftId, "").subscribe((response) => {
                 console.log("order created", response.json());
-                this.dashboard.alertSuccess("Order placed successfully");
+                this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId);
+                this.dashboard.alertSuccess("Order #" + this.draftOrder.orderId + " placed successfully", 30000);
             }, 
             error => {
                 console.error(error)
-                this.dashboard.alertError("Error placing order");
+                this.dashboard.alertError("Error placing order", 10000);
             });
     
         }
