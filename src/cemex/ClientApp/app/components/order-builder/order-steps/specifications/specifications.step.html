@@ -91,7 +91,7 @@
                             <span>{{ product?.product?.commercialCode }}</span>
                         </div>
                     </div>
-                </div> 
+                </div>
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label>Contract</label>
@@ -252,7 +252,7 @@
                             <span>{{ product?.product?.commercialCode }}</span>
                         </div>
                     </div>
-                </div> 
+                </div>
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label>Contract</label>
@@ -426,7 +426,7 @@
                             <span>20939302/10292/10102</span>
                         </div>
                     </div>
-                </div> 
+                </div>
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label>Contract</label>
@@ -588,27 +588,39 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 mt-3">
-                    <div class="group">
-                        <label>Additional services</label>
-                        <!-- rmx services  -->
-                        <!-- <div class="service">
-                            <input [(ngModel)]="product.maneuvering" checked type="checkbox" id="maneuvering{{ index }}">
-                            <label for="maneuvering{{ index }}">
-                                <svg class="icon-checkbox-active">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
-                                </svg>
-                                <svg class="icon-checkbox-static">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
-                                </svg>
-                                <svg class="icon-checkbox-hover">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
-                                </svg>
-                                <span>Maneuvering</span>
-                            </label>
-                        </div> -->
+                <div class="col-md-9 mt-3" >
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Additional services</label>
+                        </div>
+                        <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let index = index;">
+                            <div class="group">
+                                <!-- rmx services  -->
+                                <!-- (change)="changeAditionalService(readyMixAdditionalServices[0])" -->
+                                <div class="service">
+                                    <input
+                                        (change)="changeAditionalService($event.target, index)"
+                                        type="checkbox"
+                                        id="{{rmxService.entryCode}}">
+                                    <label for="{{rmxService.entryCode}}">
+                                        <svg class="icon-checkbox-active">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
+                                        </svg>
+                                        <svg class="icon-checkbox-static">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                                        </svg>
+                                        <svg class="icon-checkbox-hover">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                                        </svg>
+                                        <span>{{rmxService.entryDesc}}</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+
                 <div class="col-md-3 mt-3">
                     <div class="group">
                         <label>Delivery Mode</label>

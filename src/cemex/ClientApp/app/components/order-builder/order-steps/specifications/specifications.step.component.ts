@@ -3,7 +3,7 @@ import { ProductsApi, Api } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.service';
-import { ProjectProfileApi, CatalogApi, PlantApi } from '../../../../shared/services/api';
+import { ProjectProfileApi, CatalogApi, PlantApi, ContractsApi } from '../../../../shared/services/api';
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { SearchProductService } from '../../../../shared/services/product-search.service';
 import { DeliveryMode } from '../../../../models/delivery.model';
@@ -42,6 +42,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return SpecificationsStepComponent.availableProducts;
     }
 
+    static additionalServices = [];
+    get additionalServices() {
+        return SpecificationsStepComponent.additionalServices;
+    }
+
     static availablePlants = [];
     get availablePlants() {
         return SpecificationsStepComponent.availablePlants;
@@ -51,6 +56,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
     get projectProfiles() {
         return SpecificationsStepComponent.projectProfiles;
     }
+
+    private readyMixAdditionalServices = [];
 
     static catalogs = [];
     get catalogs() {
@@ -69,6 +76,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private ProjectProfileApi: ProjectProfileApi,
         private catalogApi: CatalogApi,
         private customerService: CustomerService,
+        private contractsApi: ContractsApi,
         private paymentTermsApi: PaymentTermsApi,
         private plantApi: PlantApi,
         private searchProductService: SearchProductService
@@ -112,13 +120,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
             response.catalogs.forEach((catalog) => {
                 this.catalogs[catalog.catalogCode] = catalog.entries;
             });
+            this.readyMixAdditionalServices = this.catalogs['ASC'];
         });
 
         // Set loading state
         this.preProducts.forEach((item) => {
             item.loadings.products = true;
         });
-
         this.fetchProducts();
         this.getPaymentTerms();
         this.getProjectProfiles();
@@ -134,9 +142,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
 
         this.productsApi.top(
-            this.manager.jobsite, 
-            salesDocumentType, 
-            this.manager.productLine, 
+            this.manager.jobsite,
+            salesDocumentType,
+            this.manager.productLine,
             this.manager.shippingCondition).subscribe((result) => {
                 let topProducts = result.json().products;
                 SpecificationsStepComponent.availableProducts = topProducts;
@@ -165,6 +173,21 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 SpecificationsStepComponent.plants = response.json().plants;
             });
         }
+    }
+
+    getContracts(productLineId) {
+        const customerId = this.customerService.currentCustomer().legalEntityId;
+
+        this.contractsApi.byProductTypeId(customerId, productLineId).subscribe((res) => {
+            console.log('res: ', res.json())
+        })
+    }
+
+    getContractPaymentTerm(termId: any) {
+        this.paymentTermsApi.getJobsiteById(termId).subscribe((result) => {
+            const contractPaymentTerm = result.json().paymentTerms;
+            SpecificationsStepComponent.availablePayments = contractPaymentTerm;
+        })
     }
 
     getPaymentTerms() {
@@ -289,6 +312,16 @@ export class SpecificationsStepComponent implements StepEventsListener {
         };
     }
 
+    changeAditionalService(target, index) {
+        if( target.checked ) {
+            this.additionalServices.push(this.readyMixAdditionalServices[index]);
+        } else {
+            const idx = this.additionalServices.indexOf(this.readyMixAdditionalServices[index]);
+            this.additionalServices.splice(idx, 1);
+        }
+        this.manager.selectAdditionalServices(this.additionalServices);
+    }
+
     onChangeTimePerLoad(index) {
         const entry = this.catalogs['TPL'][index];
 
@@ -305,6 +338,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
     // TODO
     contractChanged(contract: any, preProduct: PreProduct) {
         preProduct.contractChanged();
+        if(contract.salesDocument.paymentTerm) {
+            this.getContractPaymentTerm(contract.salesDocument.paymentTerm.paymentTermId);
+        }
     }
 
     add() {

@@ -10,7 +10,8 @@ export class ContractsApi {
     constructor(private Api: Api) {}
     
     all(customerId: string): Observable<Response> {
-        return this.Api.get(`/v1/qm/myagreements?status=ORDERTAKING&customerId=${customerId}&activeOn=${new Date().toISOString()}&include=jobsite,address,geodata,items,pointofdelivery,geodata`);
+        // `/v1/qm/myagreements?status=ORDERTAKING&include=jobsite,address,geodata,segmentation,items,pointofdelivery,businesslines,geodata&productTypeId=6`
+        return this.Api.get(`/v1/qm/myagreements?status=ORDERTAKING&customerId=${customerId}&include=jobsite,address,geodata,items,pointofdelivery,geodata`);
     }
 
     editPurchaseOrderNumber(agreementId: any, purchaseOrderNumber: string): Observable<Response> {
