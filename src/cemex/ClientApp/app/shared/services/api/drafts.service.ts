@@ -26,8 +26,8 @@ export class DraftsService {
         return this.api.patch("/v4/sm/orders/" + draftId + "/optimalsources");
     }
 
-    createOrder(draftId: any, data?: any): Observable<Response> {
-        return this.api.patch("/v4/sm/orders/" + draftId + "/requested", data);
+    createOrder(draftId: any): Observable<Response> {
+        return this.api.patch("/v4/sm/orders/" + draftId + "/requested", '');
     }
 
     draftId(id) {
