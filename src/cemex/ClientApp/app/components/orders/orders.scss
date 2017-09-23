@@ -1,7 +1,6 @@
 @import "~bootstrap/scss/bootstrap-grid.scss";
 @import "../../scss/responsive.scss";
 $link-blue: #3FA9F5;
-
 .layout {
     padding: 34px 26px 34px 26px;
     @include media-breakpoint-down(sm) {

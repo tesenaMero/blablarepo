@@ -3,6 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { TranslationService } from '../../shared/services/translation.service';
 import { ProjectProfileApi } from '../../shared/services/api'
 import { CustomerService } from '../../shared/services/customer.service';
+import { ModalService } from '../../shared/components/modal'
 
 let $ = require("jquery");
 
@@ -18,7 +19,7 @@ export class ProjectProfilesComponent {
 
     private loading = true;
 
-    constructor(private ppService: ProjectProfileApi, private sanitizer: DomSanitizer, private t: TranslationService, private CustomerService: CustomerService) {
+    constructor(private ppService: ProjectProfileApi, private sanitizer: DomSanitizer, private t: TranslationService, private CustomerService: CustomerService, private modalService: ModalService) {
         this.CustomerService.customerSubject.subscribe((customer) => {
             if (customer) {
                 this.fetchProjectProfiles(customer);
@@ -38,8 +39,12 @@ export class ProjectProfilesComponent {
         ]
     }
 
-    openModal() {
-        $("#app-content").addClass("blur");
+    closeModal(id: string){
+        this.modalService.close(id);
+    }
+
+    openModal(id?: string) {
+        this.modalService.open(id);
     }
 
     fetchProjectProfiles(customer = this.CustomerService.currentCustomer()) {
