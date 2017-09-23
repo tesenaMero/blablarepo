@@ -12,7 +12,7 @@ export class TranslationService {
     constructor(private _http: Http, private eventDispatcher: Broadcaster) {
         if (TranslationService.st('lang').indexOf('NOT:') !== -1) {
             this.eventDispatcher.broadcast('LANGUAGE_LOADED', false);
-            this._http.get("/ordersnproduct/locale-en.json")
+            this._http.get("/ordersnproduct/dist/locale-en.json")
                 .toPromise()
                 .then(response => {
                     this.eventDispatcher.broadcast('LANGUAGE_LOADED', true);
@@ -33,7 +33,7 @@ export class TranslationService {
     public lang(lang: string): void {
         TranslationService.language = lang;
         this.eventDispatcher.broadcast('LANGUAGE_LOADED', false);
-        this._http.get('/ordersnproduct/locale-' + lang + '.json')
+        this._http.get('/ordersnproduct/dist/locale-' + lang + '.json')
             .toPromise()
             .then(response => {
                 this.eventDispatcher.broadcast('LANGUAGE_LOADED', true);
