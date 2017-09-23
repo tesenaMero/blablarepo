@@ -130,9 +130,6 @@ export class ReviewStepComponent implements StepEventsListener {
             "uom": {
                 "unitId": preProduct.product.unitOfMeasure.unitId
             },
-            "paymentTerm": {
-                "paymentTermId": this.safePaymentTerm(preProduct)
-            },
             "orderItemProfile": {
                 "additionalServices": this.makeAdditionalServices(preProduct)
             }
@@ -140,6 +137,17 @@ export class ReviewStepComponent implements StepEventsListener {
 
         const shouldHidePayment = this.customerService.currentCustomer().countryCode.trim() == "US"
                                 || this.manager.productLine.productId == this.PRODUCT_LINES.Readymix;
+
+        // Add payment if needed and any
+        if (!shouldHidePayment) {
+            if (preProduct.payment) {
+                if (preProduct.payment.paymentTermId) {
+                    baseItem["paymentTerm"] = {
+                        "paymentTermId": preProduct.payment.paymentTermId
+                    }
+                }
+            }
+        }
 
         // Add contract if any
         if (preProduct.contract && preProduct.contract.salesDocument && preProduct.contract.salesDocument.salesDocumentItemId) {

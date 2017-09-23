@@ -111,7 +111,7 @@
                 <div class="col-md-3 mt-3" [ngClass]="{ invisible: shouldHidePayment }">
                     <div class="group">
                         <label>Payment</label>
-                        <div class="input flex-space-between dropdown">
+                        <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.payments }">
                             <span>
                                 {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
                                 <select [(ngModel)]="product.payment" class="input behind">
@@ -270,10 +270,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3" [ngClass]="{ invisible: shouldHidePayment }">
                     <div class="group">
                         <label>Payment</label>
-                        <div class="input flex-space-between dropdown">
+                        <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.payments }">
                             <span>
                                 {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
                                 <select [(ngModel)]="product.payment" class="input behind">

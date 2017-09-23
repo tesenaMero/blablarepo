@@ -343,10 +343,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
     // TODO
     contractChanged(contract: any, preProduct: PreProduct) {
         preProduct.contractChanged();
-        if (contract.salesDocument.paymentTerm) {
-            this.getContractPaymentTerm(contract.salesDocument.paymentTerm.paymentTermId);
-        }
-
         preProduct.quantity = 1;
     }
 
@@ -434,12 +430,13 @@ class PreProduct {
         projectProfiles: true,
         catalog: true,
         units: true,
-        payment: true
+        payments: true
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi) {
         const SSC = SpecificationsStepComponent;
         this.availablePayments = SSC.availablePayments;
+        this.loadings.payments = false
 
         this.payment = SSC.availablePayments[0];
         this.plant = SSC.availablePlants[0];
@@ -513,15 +510,18 @@ class PreProduct {
                 this.getContractPaymentTerm(this.contract.salesDocument.paymentTerm.paymentTermId);
             }
         }
-        else { this.fetchUnits(); }
+        else { 
+            this.fetchUnits();
+            this.availablePayments = SpecificationsStepComponent.availablePayments;
+        }
     }
 
     getContractPaymentTerm(termId: any) {
-        this.loadings.payment = true;
+        this.loadings.payments = true;
         this.paymentTermsApi.getJobsiteById(termId).subscribe((result) => {
             const contractPaymentTerm = result.json().paymentTerms;
             this.availablePayments = contractPaymentTerm;
-            this.loadings.payment = false;
+            this.loadings.payments = false;
         })
     }
 
