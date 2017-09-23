@@ -9,10 +9,17 @@ export class ProductsApi {
     constructor(private api: Api) {
     }
 
-    top(jobsite, salesDocumentTypeId, productLine, shippingCondition): Observable<Response> {
+    top(jobsite, salesDocumentTypeId, productLine, shippingCondition, purchaseOrder?): Observable<Response> {
         // 'https://api.us2.apiconnect.ibmcloud.com/cnx-gbl-org-development/dev/v2/mm/myproducts?shipmentLocationId=59.5&salesDocumentTypeId=3&productLineId=2'
         // 'https://api.us2.apiconnect.ibmcloud.com/cnx-gbl-org-development/dev/v2/mm/myproducts?salesDocumentTypeId=3&productLineId=1&shippingConditionId=1&shipmentLocationId=253.2'
-        return this.api.get(`/v2/mm/myproducts?salesDocumentTypeId=${salesDocumentTypeId}&productLineId=${productLine.productLineId}&shippingConditionId=${shippingCondition.shippingConditionId}&shipmentLocationId=${jobsite.shipmentLocationId}.2`);
+        // 'https://api.us2.apiconnect.ibmcloud.com/cnx-gbl-org-development/dev/v2/mm/myproducts?salesDocumentTypeId=3&productLineId=1&shippingConditionId=1&shipmentLocationId=253.2&PONumber=123A'
+        // return this.api.get(`/v2/mm/myproducts?salesDocumentTypeId=${salesDocumentTypeId}&productLineId=${productLine.productLineId}&shippingConditionId=${shippingCondition.shippingConditionId}&shipmentLocationId=${jobsite.shipmentLocationId}.2&PONumber=123A`);
+        if (purchaseOrder === undefined) {
+            return this.api.get(`/v2/mm/myproducts?salesDocumentTypeId=${salesDocumentTypeId}&productLineId=${productLine.productLineId}&shippingConditionId=${shippingCondition.shippingConditionId}&shipmentLocationId=${jobsite.shipmentLocationId}.2`);
+        }
+        else {
+            return this.api.get(`/v2/mm/myproducts?salesDocumentTypeId=${salesDocumentTypeId}&productLineId=${productLine.productLineId}&shippingConditionId=${shippingCondition.shippingConditionId}&shipmentLocationId=${jobsite.shipmentLocationId}.2&PONumber=${purchaseOrder}`);
+        }
     }
 
     fetchContracts(jobsite, salesDocumentTypeId, productLine, shippingCondition, productId): Observable<Response> {
