@@ -430,7 +430,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
         const isPickup = shippingConditionId === this.MODE.Pickup;
         const salesArea = this.manager.salesArea.find((sa) => jobsite && jobsite.shipmentLocationId === jobsite.shipmentLocationId);
-        const maxJobsiteQty = salesArea;// && salesArea.maximumLot.amount; //doesn´t exist the path salesArea.maximumLot
+        const maxJobsiteQty = salesArea && salesArea.maximumLot.amount; //doesn´t exist the path salesArea.maximumLot
         const unlimited = 99999;
 
         if (contract) {
