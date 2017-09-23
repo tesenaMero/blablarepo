@@ -44,8 +44,8 @@ module.exports = (env) => {
             library: '[name]_[hash]'
         },
         plugins: [
-            new CopyWebpackPlugin([{ from: path.join(__dirname, './wwwroot/vendor/locale-en.json'), to: path.join(__dirname, './wwwroot/ordersnproduct/locale-en.json') }]),
-            new CopyWebpackPlugin([{ from: path.join(__dirname, './wwwroot/vendor/locale-es.json'), to: path.join(__dirname, './wwwroot/ordersnproduct/locale-es.json') }]),
+            new CopyWebpackPlugin([{ from: path.join(__dirname, './wwwroot/vendor/locale-en.json'), to: path.join(__dirname, './wwwroot/ordersnproduct/dist/locale-en.json') }]),
+            new CopyWebpackPlugin([{ from: path.join(__dirname, './wwwroot/vendor/locale-es.json'), to: path.join(__dirname, './wwwroot/ordersnproduct/dist/locale-es.json') }]),
             new webpack.ContextReplacementPlugin(/\@angular\b.*\b(bundles|linker)/, path.join(__dirname, './ClientApp')), // Workaround for https://github.com/angular/angular/issues/11580
             new webpack.ContextReplacementPlugin(/angular(\\|\/)core(\\|\/)@angular/, path.join(__dirname, './ClientApp')), // Workaround for https://github.com/angular/angular/issues/14898
             new webpack.IgnorePlugin(/^vertx$/) // Workaround for https://github.com/stefanpenner/es6-promise/issues/100
