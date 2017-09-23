@@ -140,20 +140,21 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.preProducts.forEach((item) => {
             item.loadings.products = true;
         });
+
+        // Fetch products
         if (this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix) {
-            this.fetchProductsReadyMix();
+            this.fetchProductsReadyMix(this.manager.getSalesDocumentType());
         }
-        else {
-            this.fetchProducts();
+        else { 
+            this.fetchProducts(this.manager.getSalesDocumentType()); 
         }
+
         this.getPaymentTerms();
         this.getProjectProfiles();
         this.getPlants();
     }
 
-    fetchProducts() {
-        let salesDocumentType = this.manager.getSalesDocumentType();
-
+    fetchProducts(salesDocumentType) {
         // Disable contracts while fetching products
         this.preProducts.forEach((item: PreProduct) => {
             item.loadings.contracts = true;
@@ -182,9 +183,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
     }
 
-    fetchProductsReadyMix() {
-        let salesDocumentType = this.manager.getSalesDocumentType();
-        
+    fetchProductsReadyMix(salesDocumentType) {
         // Disable contracts while fetching products
         this.preProducts.forEach((item: PreProduct) => {
             item.loadings.contracts = true;
@@ -213,29 +212,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
                         }
                     });
                 }
-                else { //call again without PO
-                    this.productsApi.top(
-                        this.manager.jobsite,
-                        salesDocumentType,
-                        this.manager.productLine,
-                        this.manager.shippingCondition).subscribe((result) => {
-                            let topProducts = result.json().products;
-                            SpecificationsStepComponent.availableProducts = topProducts;
-                            
-                            // Set defaults value
-                            this.preProducts.forEach((item: PreProduct) => {
-                                item.loadings.products = false;
-                                if (topProducts.length > 0) {
-                                    item.setProduct(topProducts[0])
-                                    this.onCompleted.emit(true);
-                                }
-                                else {
-                                    item.setProduct(undefined);
-                                    this.onCompleted.emit(false);
-                                }
-                            });
-                            
-                        });
+                else { 
+                    this.fetchProducts(salesDocumentType)
                 }
             });
     }
