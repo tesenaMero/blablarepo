@@ -140,7 +140,12 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.preProducts.forEach((item) => {
             item.loadings.products = true;
         });
-        this.fetchProducts();
+        if (this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix) {
+            this.fetchProductsReadyMix();
+        }
+        else {
+            this.fetchProducts();
+        }
         this.getPaymentTerms();
         this.getProjectProfiles();
         this.getPlants();
@@ -177,6 +182,65 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
     }
 
+    fetchProductsReadyMix() {
+        let salesDocumentType = this.manager.getSalesDocumentType();
+        
+        // Disable contracts while fetching products
+        this.preProducts.forEach((item: PreProduct) => {
+            item.loadings.contracts = true;
+        });
+        
+        this.productsApi.top(
+            this.manager.jobsite,
+            salesDocumentType,
+            this.manager.productLine,
+            this.manager.shippingCondition,
+            this.manager.purchaseOrder).subscribe((result) => {
+                if (result.json().totalCount > 0) { 
+                    let topProducts = result.json().products;
+                    SpecificationsStepComponent.availableProducts = topProducts;
+                    
+                    // Set defaults value
+                    this.preProducts.forEach((item: PreProduct) => {
+                        item.loadings.products = false;
+                        if (topProducts.length > 0) {
+                            item.setProduct(topProducts[0])
+                            this.onCompleted.emit(true);
+                        }
+                        else {
+                            item.setProduct(undefined);
+                            this.onCompleted.emit(false);
+                        }
+                    });
+                }
+                else { //call again without PO
+                    this.productsApi.top(
+                        this.manager.jobsite,
+                        salesDocumentType,
+                        this.manager.productLine,
+                        this.manager.shippingCondition).subscribe((result) => {
+                            let topProducts = result.json().products;
+                            SpecificationsStepComponent.availableProducts = topProducts;
+                            
+                            // Set defaults value
+                            this.preProducts.forEach((item: PreProduct) => {
+                                item.loadings.products = false;
+                                if (topProducts.length > 0) {
+                                    item.setProduct(topProducts[0])
+                                    this.onCompleted.emit(true);
+                                }
+                                else {
+                                    item.setProduct(undefined);
+                                    this.onCompleted.emit(false);
+                                }
+                            });
+                            
+                        });
+                }
+            });
+    }
+
+    
     getPlants() {
         if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == 2) {
             this.plantApi.byCountryCodeAndRegionCode(
