@@ -33,7 +33,8 @@ x86/
 
 # Build files
 /src/cemex/wwwroot/dist/
-/src/cemex/ClientApp/dist/
+/src/cemex/wwwroot/ordersnproduct/dist/
+/src/cemex/ClientApp/ordersnproduct/dist/
 
 
 # dls files
