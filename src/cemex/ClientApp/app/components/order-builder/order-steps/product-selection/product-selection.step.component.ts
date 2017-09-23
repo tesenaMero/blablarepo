@@ -43,7 +43,7 @@ export class ProductSelectionStepComponent {
                 }
             }
 
-            this.productLines = productLines;
+            this.productLines = productLines.filter((x) => { return x.productLineId != 5; });
         });
     }
 
