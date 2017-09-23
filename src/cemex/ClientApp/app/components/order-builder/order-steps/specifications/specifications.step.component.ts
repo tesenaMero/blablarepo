@@ -232,10 +232,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     getPaymentTerms() {
         let paymentTermIds = '';
-
-        this.manager.salesArea.map((area: any) => {
-            paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
-        });
+        // doesn´t exists path area.paymentTerm
+        // this.manager.salesArea.map((area: any) => {
+        //     console.log("area", area);
+        //     paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
+        // });
 
         this.preProducts.forEach((item: PreProduct) => {
             item.loadings.payments = true;
@@ -244,7 +245,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
             const terms = result.json().paymentTerms;
             let uniqueTerms = [];
-
             // Find type Cash
             const cashPayment = terms.find((term: any) => {
                 return term.paymentTermType.paymentTermTypeDesc === 'Cash';
@@ -420,7 +420,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId'); 
         const isPickup =  shippingConditionId === this.MODE.Pickup;
         const salesArea = this.manager.salesArea.find((sa) => jobsite && jobsite.shipmentLocationId === jobsite.shipmentLocationId);
-        const maxJobsiteQty = salesArea && salesArea.maximumLot.amount;
+        const maxJobsiteQty = salesArea;// && salesArea.maximumLot.amount; //doesn´t exist the path salesArea.maximumLot
         const unlimited = 99999;
 
         if (contract) {
