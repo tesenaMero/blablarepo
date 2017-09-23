@@ -344,6 +344,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         if(contract.salesDocument.paymentTerm) {
             this.getContractPaymentTerm(contract.salesDocument.paymentTerm.paymentTermId);
         }
+
+        preProduct.quantity = 1;
     }
 
     add() {
@@ -359,43 +361,43 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     qty(product: any, toAdd: number) {
-        // minimum 1
         if (product.quantity <= 1 && toAdd < 0) { return; }
-        // if (product.quantity >= 100 && toAdd > 0) { return; }
 
         const newQty = product.quantity + toAdd;
+        const maxCapacity = this.getMaximumCapacity(product.contract);
+
+        if (newQty <= maxCapacity) {
+            return product.quantity = newQty;
+        }
+
+        return this.dashboard.alertError("Maxiumum capacity limit reached", 10000);
+    }
+
+    getMaximumCapacity(contract?) {
         const jobsite = this.manager.jobsite;
         const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId'); 
         const isPickup =  shippingConditionId === this.MODE.Pickup;
         const salesArea = this.manager.salesArea.find((sa) => jobsite && jobsite.shipmentLocationId === jobsite.shipmentLocationId);
         const maxJobsiteQty = salesArea && salesArea.maximumLot.amount;
-        const isVolumeContract = false;
+        const unlimited = 99999;
 
-        // if contract selected
-        if (product.contract) {
-            if (isVolumeContract) {
-                // check qty in TN from remaining from contact
-                // TODO
+        if (contract) {
+            const volume = _.get(contract, 'salesDocument.volume');
+            if (volume) {
+                const maxContractVolume = _.get(volume, 'total.quantity.amount');
+                return maxContractVolume;
             } else {
                 if (isPickup) {
-                    product.quantity = newQty;
+                    return unlimited;
                 } else {
-                    if (newQty <= maxJobsiteQty) {
-                        product.quantity = newQty;
-                    } else {
-                        this.dashboard.alertError("Jobsite qty limit reached", 10000);
-                    }
+                    return maxJobsiteQty;
                 }
             }
         } else {
             if (isPickup) {
-                product.quantity = newQty;
+                return unlimited;
             } else {
-                if (newQty <= maxJobsiteQty) {
-                    product.quantity = newQty;
-                } else {
-                    this.dashboard.alertError("Jobsite qty limit reached", 10000);
-                }
+                return maxJobsiteQty;
             }
         }
     }
