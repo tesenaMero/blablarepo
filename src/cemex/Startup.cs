@@ -10,6 +10,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.ResponseCompression;
 
+using System.IO;
+
+
+using Microsoft.AspNetCore.Http;
+
+using Microsoft.Extensions.FileProviders;
+
 namespace WebApplicationBasic
 {
     public class Startup
@@ -54,6 +61,7 @@ namespace WebApplicationBasic
 
                 options.EnableForHttps = true;
             });
+            services.AddDirectoryBrowser();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,6 +84,12 @@ namespace WebApplicationBasic
             }
 
             app.UseStaticFiles();
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions()
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot", "")),
+                RequestPath = new PathString("/browser")
+            });
 
             app.UseMvc(routes =>
             {
