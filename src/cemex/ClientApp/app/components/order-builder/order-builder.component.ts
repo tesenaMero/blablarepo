@@ -173,7 +173,7 @@ export class OrderBuilderComponent {
     }
 
     flowCementMX() {
-        this.drafts.createOrder(this.draftId, '')
+        this.drafts.createOrder(this.draftId)
             .flatMap((response) => {
                 console.log("order created", response.json());
                 this.dashboard.alertSuccess("Order placed successfully, requesting order code...", 0);
@@ -187,7 +187,7 @@ export class OrderBuilderComponent {
     }
 
     basicFlow() {
-        this.drafts.createOrder(this.draftId, "").subscribe((response) => {
+        this.drafts.createOrder(this.draftId).subscribe((response) => {
             console.log("order created", response.json());
             this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId);
             this.dashboard.alertSuccess("Order #" + this.draftOrder.orderId + " placed successfully", 30000);
