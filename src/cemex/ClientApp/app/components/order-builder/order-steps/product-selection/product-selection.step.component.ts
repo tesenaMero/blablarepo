@@ -24,6 +24,7 @@ export class ProductSelectionStepComponent {
     constructor(private api: ProductLineApi, private orderManager: CreateOrderService, private customerService: CustomerService) {
         this.api.all().subscribe((response) => {
             let productLines = response.json().productLines;
+            console.log("Rendering");
 
             let bagCement = this.getBagCement(productLines);
             let multiproduct = this.getMultiproduct(productLines)
@@ -47,6 +48,8 @@ export class ProductSelectionStepComponent {
                     }
                 }
             }
+
+            this.productLines = productLines;
         });
     }
 
