@@ -7,6 +7,8 @@ import { ProjectProfileApi, CatalogApi, PlantApi, ContractsApi } from '../../../
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { SearchProductService } from '../../../../shared/services/product-search.service';
 import { DeliveryMode } from '../../../../models/delivery.model';
+import { DashboardService } from '../../../../shared/services/dashboard.service'
+import * as _ from 'lodash';
 
 @Component({
     selector: 'specifications-step',
@@ -79,7 +81,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private contractsApi: ContractsApi,
         private paymentTermsApi: PaymentTermsApi,
         private plantApi: PlantApi,
-        private searchProductService: SearchProductService
+        private searchProductService: SearchProductService,
+        private dashboard: DashboardService
     ) {
         this.step.setEventsListener(this);
         this.step.canAdvance = () => this.canAdvance();
@@ -341,6 +344,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         if(contract.salesDocument.paymentTerm) {
             this.getContractPaymentTerm(contract.salesDocument.paymentTerm.paymentTermId);
         }
+
+        preProduct.quantity = 1;
     }
 
     add() {
@@ -357,8 +362,44 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     qty(product: any, toAdd: number) {
         if (product.quantity <= 1 && toAdd < 0) { return; }
-        if (product.quantity >= 100 && toAdd > 0) { return; }
-        product.quantity += toAdd;
+
+        const newQty = product.quantity + toAdd;
+        const maxCapacity = this.getMaximumCapacity(product.contract);
+
+        if (newQty <= maxCapacity) {
+            return product.quantity = newQty;
+        }
+
+        return this.dashboard.alertError("Maxiumum capacity limit reached", 10000);
+    }
+
+    getMaximumCapacity(contract?) {
+        const jobsite = this.manager.jobsite;
+        const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId'); 
+        const isPickup =  shippingConditionId === this.MODE.Pickup;
+        const salesArea = this.manager.salesArea.find((sa) => jobsite && jobsite.shipmentLocationId === jobsite.shipmentLocationId);
+        const maxJobsiteQty = salesArea && salesArea.maximumLot.amount;
+        const unlimited = 99999;
+
+        if (contract) {
+            const volume = _.get(contract, 'salesDocument.volume');
+            if (volume) {
+                const maxContractVolume = _.get(volume, 'total.quantity.amount');
+                return maxContractVolume;
+            } else {
+                if (isPickup) {
+                    return unlimited;
+                } else {
+                    return maxJobsiteQty;
+                }
+            }
+        } else {
+            if (isPickup) {
+                return unlimited;
+            } else {
+                return maxJobsiteQty;
+            }
+        }
     }
 }
 
@@ -393,13 +434,13 @@ class PreProduct {
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService) {
-        let _ = SpecificationsStepComponent;
+        let SSC = SpecificationsStepComponent;
 
-        this.payment = _.availablePayments[0];
-        this.plant = _.availablePlants[0];
+        this.payment = SSC.availablePayments[0];
+        this.plant = SSC.availablePlants[0];
 
-        if (_.availableProducts.length) {
-            this.setProduct(_.availableProducts[0]);
+        if (SSC.availableProducts.length) {
+            this.setProduct(SSC.availableProducts[0]);
             this.loadings.products = false;
         }
         else {

@@ -33,7 +33,7 @@
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info">
-                                Maximum Capacity 100 tons
+                                Maximum Capacity {{getMaximumCapacity(product.contract)}} tons
                             </div>
                         </div>
                         <div class="group w40">
@@ -194,7 +194,7 @@
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info">
-                                Maximum Capacity 100 tons
+                                Maximum Capacity {{getMaximumCapacity(product.contract)}} tons
                             </div>
                         </div>
                         <div class="group w40">
@@ -263,7 +263,7 @@
                                 <strong *ngIf="product.contract?.salesDocument?.hasOwnProperty('volume')">{{ product.contract?.salesDocument?.volume?.total.quantity.amount }}</strong>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
-                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event)" class="input behind">
+                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event, product)" class="input behind">
                             <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract?.salesDocument?.volume?.total.quantity.amount }}
                             </option>
                         </select>
@@ -370,7 +370,7 @@
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info">
-                                Maximum Capacity 100 tons
+                                Maximum Capacity {{getMaximumCapacity(product.contract)}} tons
                             </div>
                         </div>
                         <div class="group w40">
@@ -433,7 +433,7 @@
                         <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.loadings.contracts }">
                             <span class=""><strong>Contract {{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
-                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event)" class="input behind">
+                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event, product)" class="input behind">
                                 <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract: {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;</option>
                             </select>
                         </div>
