@@ -145,8 +145,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         if (this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix) {
             this.fetchProductsReadyMix(this.manager.getSalesDocumentType());
         }
-        else { 
-            this.fetchProducts(this.manager.getSalesDocumentType()); 
+        else {
+            this.fetchProducts(this.manager.getSalesDocumentType());
         }
 
         this.getPaymentTerms();
@@ -180,7 +180,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                         this.onCompleted.emit(false);
                     }
                 });
-        });
+            });
     }
 
     fetchProductsReadyMix(salesDocumentType) {
@@ -188,17 +188,17 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.preProducts.forEach((item: PreProduct) => {
             item.loadings.contracts = true;
         });
-        
+
         this.productsApi.top(
             this.manager.jobsite,
             salesDocumentType,
             this.manager.productLine,
             this.manager.shippingCondition,
             this.manager.purchaseOrder).subscribe((result) => {
-                if (result.json().totalCount > 0) { 
+                if (result.json().totalCount > 0) {
                     let topProducts = result.json().products;
                     SpecificationsStepComponent.availableProducts = topProducts;
-                    
+
                     // Set defaults value
                     this.preProducts.forEach((item: PreProduct) => {
                         item.loadings.products = false;
@@ -212,13 +212,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
                         }
                     });
                 }
-                else { 
+                else {
                     this.fetchProducts(salesDocumentType)
                 }
             });
     }
 
-    
+
     getPlants() {
         if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == 2) {
             this.plantApi.byCountryCodeAndRegionCode(
@@ -234,7 +234,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
         let paymentTermIds = '';
 
         this.manager.salesArea.map((area: any) => {
-            paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
+            if (area) {
+                if (area.paymentTerm) {
+                    paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
+                }
+            }
         });
 
         this.preProducts.forEach((item: PreProduct) => {
@@ -362,7 +366,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     changeAditionalService(target, index) {
-        if( target.checked ) {
+        if (target.checked) {
             this.additionalServices.push(this.readyMixAdditionalServices[index]);
         } else {
             const idx = this.additionalServices.indexOf(this.readyMixAdditionalServices[index]);
@@ -403,22 +407,29 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     qty(product: any, toAdd: number) {
-        if (product.quantity <= 1 && toAdd < 0) { return; }
+        if (this.isMXCustomer()) {
+            if (product.quantity <= 1 && toAdd < 0) { return; }
 
-        const newQty = product.quantity + toAdd;
-        const maxCapacity = this.getMaximumCapacity(product.contract);
+            const newQty = product.quantity + toAdd;
+            const maxCapacity = this.getMaximumCapacity(product.contract);
 
-        if (newQty <= maxCapacity) {
-            return product.quantity = newQty;
+            if (newQty <= maxCapacity) {
+                return product.quantity = newQty;
+            }
+
+            return this.dashboard.alertError("Maxiumum capacity limit reached", 10000);
         }
-
-        return this.dashboard.alertError("Maxiumum capacity limit reached", 10000);
+        else {
+            if (product.quantity <= 1 && toAdd < 0) { return; }
+            if (product.quantity >= 100 && toAdd > 0) { return; }
+            product.quantity += toAdd;
+        }
     }
 
     getMaximumCapacity(contract?) {
         const jobsite = this.manager.jobsite;
-        const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId'); 
-        const isPickup =  shippingConditionId === this.MODE.Pickup;
+        const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
+        const isPickup = shippingConditionId === this.MODE.Pickup;
         const salesArea = this.manager.salesArea.find((sa) => jobsite && jobsite.shipmentLocationId === jobsite.shipmentLocationId);
         const maxJobsiteQty = salesArea && salesArea.maximumLot.amount;
         const unlimited = 99999;
@@ -442,6 +453,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 return maxJobsiteQty;
             }
         }
+    }
+
+    isMXCustomer() {
+        return this.customerService.currentCustomer().countryCode.trim() == "MX";
     }
 }
 
@@ -535,7 +550,7 @@ class PreProduct {
 
             if (contracts.length > 0) {
                 this.availableContracts.unshift(undefined);
-                this.loadings.contracts = false; 
+                this.loadings.contracts = false;
             }
             else { this.loadings.contracts = true; } // Disable it if no contracts
         });
@@ -555,7 +570,7 @@ class PreProduct {
     }
 
     contractChanged() {
-        if (this.contract) { 
+        if (this.contract) {
             this.fetchUnitsFromContract();
 
             // If should get payment terms from contract
@@ -563,7 +578,7 @@ class PreProduct {
                 this.getContractPaymentTerm(this.contract.salesDocument.paymentTerm.paymentTermId);
             }
         }
-        else { 
+        else {
             this.fetchUnits();
             this.availablePayments = SpecificationsStepComponent.availablePayments;
         }

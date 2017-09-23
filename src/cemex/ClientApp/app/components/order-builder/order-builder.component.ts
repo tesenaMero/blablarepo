@@ -26,6 +26,11 @@ export class OrderBuilderComponent {
     private draftId: any;
     private draftOrder: any;
 
+    private PRODUCT_LINES = {
+        Readymix: 6,
+        CementBulk: 1
+    }
+
     constructor(
         private _changeDetector: ChangeDetectorRef,
         private router: Router,
@@ -85,14 +90,15 @@ export class OrderBuilderComponent {
         }
     }
 
-    checkoutCompleted(draftOrder) {
+    checkoutCompleted(draftOrder?: any) {
         if (draftOrder) {
             console.log("order", draftOrder);
             this.draftOrder = draftOrder;
             this.stepper.complete();
         }
         else {
-            this.stepper.uncomplete();
+            if (this.isUSA()) { this.stepper.complete(); }
+            else { this.stepper.uncomplete(); }
         }
     }
 
@@ -115,13 +121,18 @@ export class OrderBuilderComponent {
     }
 
     placeOrder() {
-        this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId, 0);
+        if (this.isMexico() && this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix) {
+            this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId, 0);
 
-        if (this.hasCashPayment()) {
-            this.flowMidCash();
-        }
-        else if ((!this.isReadyMix) && (this.isMexico())) {
-            this.flowCementMX();
+            if (this.hasCashPayment()) {
+                this.flowMidCash();
+            }
+            else if ((!this.isReadyMix) && (this.isMexico())) {
+                this.flowCementMX();
+            }
+            else {
+                this.basicFlow();
+            }
         }
         else {
             this.basicFlow();
@@ -189,17 +200,25 @@ export class OrderBuilderComponent {
     basicFlow() {
         this.drafts.createOrder(this.draftId, '').subscribe((response) => {
             console.log("order created", response.json());
-            this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId);
-            this.dashboard.alertSuccess("Order #" + this.draftOrder.orderId + " placed successfully", 30000);
-        },
-            error => {
-                console.error(error)
-                this.dashboard.alertError("Error placing order", 10000);
-            });
+            if (this.draftOrder) {
+                this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId);
+                this.dashboard.alertSuccess("Order #" + this.draftOrder.orderId + " placed successfully", 30000);
+            }
+            else {
+                this.dashboard.alertSuccess("Draft #" + this.draftId + " placed successfully", 30000);
+            }
+        }, error => {
+            console.error(error)
+            this.dashboard.alertError("Error placing order", 10000);
+        });
     }
 
     isMexico() {
         return this.customerService.currentCustomer().countryCode.trim() == "MX";
+    }
+
+    isUSA() {
+        return this.customerService.currentCustomer().countryCode.trim() == "US";
     }
 
     shouldShowDeliveryMode() {
