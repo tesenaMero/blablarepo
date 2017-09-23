@@ -248,7 +248,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
             const terms = result.json().paymentTerms;
             let uniqueTerms = [];
-
             // Find type Cash
             const cashPayment = terms.find((term: any) => {
                 return term.paymentTermType.paymentTermTypeDesc === 'Cash';
@@ -421,7 +420,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
         else {
             if (product.quantity <= 1 && toAdd < 0) { return; }
-            if (product.quantity >= 100 && toAdd > 0) { return; }
+            if (product.quantity >= 99999 && toAdd > 0) { return; }
             product.quantity += toAdd;
         }
     }
@@ -431,7 +430,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
         const isPickup = shippingConditionId === this.MODE.Pickup;
         const salesArea = this.manager.salesArea.find((sa) => jobsite && jobsite.shipmentLocationId === jobsite.shipmentLocationId);
-        const maxJobsiteQty = salesArea && salesArea.maximumLot.amount;
+        const maxJobsiteQty = salesArea;// && salesArea.maximumLot.amount; //doesn´t exist the path salesArea.maximumLot
         const unlimited = 99999;
 
         if (contract) {
