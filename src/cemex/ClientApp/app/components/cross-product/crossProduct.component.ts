@@ -38,8 +38,12 @@ export class CrossProductComponent implements OnInit {
             if (!this.checkPayment(jObj)){
                 return;
             }
+
+            let data = {
+                documents: jObj.data[0].documents
+            }
             this.dashboard.alertInfo("Placing order...");
-            this.drafts.createOrder(jObj.data[0].orderID).subscribe((response) => {
+            this.drafts.createCashOrder(jObj.data[0].orderID, data).subscribe((response) => {
                 this.dashboard.alertSuccess("Order placed successfully!");
                 console.log(response);
                 this.successBtn.nativeElement.click();
