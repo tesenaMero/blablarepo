@@ -8,8 +8,8 @@ const sessionId = btoa(d.toISOString().replace(/-/g, '').replace(/:/g, '').repla
 
 @Injectable()
 export class Api {
-    public apiRoot = this.winRef['API_HOST'] || 'https://api.us2.apiconnect.ibmcloud.com/cnx-gbl-org-development/dev';
-    public clientId = this.winRef['CLIENT_ID'] || 'dd2ee55f-c93c-4c1b-b852-58c18cc7c277';
+    public apiRoot = (<any>global)['API_HOST_FULL'] || 'https://api.us2.apiconnect.ibmcloud.com/cnx-gbl-org-development/dev';
+    public clientId = (<any>global)['CLIENT_ID'] || 'dd2ee55f-c93c-4c1b-b852-58c18cc7c277';
     public appId = 'DCMWebTool_App';
     public acceptLanguage = 'en-US';
     private jwt = null;
