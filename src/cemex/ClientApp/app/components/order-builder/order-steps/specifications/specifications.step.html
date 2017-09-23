@@ -396,7 +396,8 @@
                             <label for="date{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
                                     <!-- {{ product.date | date:'dd.MM.y' }} -->
-                                    <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" />
+                                    <!-- <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" /> -->
+                                    <input type="date" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event"/>
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-calendar"></span></span>
@@ -407,8 +408,9 @@
                             <label>Requested time</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    {{ product.time }}
-                                    <input id="time{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.time" ngui-datetime-picker time-only="true" right-side="true" [close-on-select]="false" hour="0" minute="0" />
+                                    <!-- {{ product.time }} -->
+                                    <!-- <input id="time{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.time" ngui-datetime-picker time-only="true" right-side="true" [close-on-select]="false" hour="0" minute="0" /> -->
+                                    <input type="time" name="time{{ index }}" class="input-date" id="time{{ index }}" [ngModel]="product.time" (ngModelChange)="product.time = $event"/>
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-clock"></span></span>

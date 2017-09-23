@@ -188,18 +188,15 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
     }
 
-    getContractPaymentTerm(termId: any) {
-        this.paymentTermsApi.getJobsiteById(termId).subscribe((result) => {
-            const contractPaymentTerm = result.json().paymentTerms;
-            SpecificationsStepComponent.availablePayments = contractPaymentTerm;
-        })
-    }
-
     getPaymentTerms() {
         let paymentTermIds = '';
 
         this.manager.salesArea.map((area: any) => {
             paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
+        });
+
+        this.preProducts.forEach((item: PreProduct) => {
+            item.loadings.payments = true;
         });
 
         this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
@@ -220,6 +217,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
             cashPayment && uniqueTerms.push(cashPayment);
             creditPayment && uniqueTerms.push(creditPayment);
             SpecificationsStepComponent.availablePayments = uniqueTerms;
+
+            this.preProducts.forEach((item: PreProduct) => {
+                item.availablePayments = SpecificationsStepComponent.availablePayments;
+                item.loadings.payments = false;
+            })
 
             let customerId = this.customerService.currentCustomer().legalEntityId;
             this.paymentTermsApi.getCashTerm(customerId).subscribe((result) => {
@@ -422,6 +424,7 @@ class PreProduct {
     availableUnits = [];
     availableContracts = [];
     availablePayments = [];
+    availableAditionalServices = [];
     maneuveringAvailable: boolean = false;
 
     loadings = {
@@ -435,8 +438,16 @@ class PreProduct {
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi) {
         const SSC = SpecificationsStepComponent;
+
         this.availablePayments = SSC.availablePayments;
-        this.loadings.payments = false
+        if (this.availablePayments.length > 0) {
+            this.payment = this.availablePayments[0];
+            this.loadings.payments = false;
+        }
+        else {
+            this.payment = undefined;
+            this.loadings.payments = true;
+        }
 
         this.payment = SSC.availablePayments[0];
         this.plant = SSC.availablePlants[0];
@@ -521,7 +532,15 @@ class PreProduct {
         this.paymentTermsApi.getJobsiteById(termId).subscribe((result) => {
             const contractPaymentTerm = result.json().paymentTerms;
             this.availablePayments = contractPaymentTerm;
-            this.loadings.payments = false;
+
+            if (this.availablePayments.length > 0) {
+                this.payment = this.availablePayments[0];
+                this.loadings.payments = false;
+            }
+            else {
+                this.payment = undefined;
+                this.loadings.payments = true;
+            }
         })
     }
 
