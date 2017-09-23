@@ -22,6 +22,10 @@ export class ReviewStepComponent implements StepEventsListener {
 
     // Consts
     private MODE = DeliveryMode;
+    private PRODUCT_LINES = {
+        Readymix: 6,
+        CementBulk: 1
+    }
 
     // Google map
     private map: any; // Map instance
@@ -133,6 +137,9 @@ export class ReviewStepComponent implements StepEventsListener {
                 "additionalServices": this.makeAdditionalServices(preProduct)
             }
         }
+
+        const shouldHidePayment = this.customerService.currentCustomer().countryCode.trim() == "US"
+                                || this.manager.productLine.productId == this.PRODUCT_LINES.Readymix;
 
         // Add contract if any
         if (preProduct.contract && preProduct.contract.salesDocument && preProduct.contract.salesDocument.salesDocumentItemId) {

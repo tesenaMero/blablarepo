@@ -62,8 +62,6 @@ export class ProductSelectionStepComponent {
     select(product: any) {
         this.productLine = product;
         this.orderManager.selectProductLine(product);
-        console.log(product);
-        console.log(this.orderManager);
 
         // Readymix case and Bulk Cement
         if (this.productLine.productLineId == this.PRODUCT_LINES.Readymix || this.isBulkCementUSA()) {

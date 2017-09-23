@@ -108,14 +108,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3 mt-3" [ngClass]="{ invisible: shouldHidePayment }">
                     <div class="group">
                         <label>Payment</label>
                         <div class="input flex-space-between dropdown">
                             <span>
                                 {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
                                 <select [(ngModel)]="product.payment" class="input behind">
-                                    <option selected *ngFor="let payment of availablePayments" [ngValue]="payment">{{ payment.paymentTermType.paymentTermTypeDesc }}</option>
+                                    <option selected *ngFor="let payment of product.availablePayments" [ngValue]="payment">{{ payment.paymentTermType.paymentTermTypeDesc }}</option>
                                 </select>
                                 </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -277,7 +277,7 @@
                             <span>
                                 {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
                                 <select [(ngModel)]="product.payment" class="input behind">
-                                    <option selected *ngFor="let payment of availablePayments" [ngValue]="payment">{{ payment.paymentTermType.paymentTermTypeDesc }}</option>
+                                    <option selected *ngFor="let payment of product.availablePayments" [ngValue]="payment">{{ payment.paymentTermType.paymentTermTypeDesc }}</option>
                                 </select>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>

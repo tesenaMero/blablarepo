@@ -23,6 +23,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     // Consts
     private MODE = DeliveryMode;
+    private PRODUCT_LINES = {
+        Readymix: 6,
+        CementBulk: 1
+    }
+
     private SALES_DOCUMENT_TYPE = '1';
 
     private loadings = {
@@ -31,6 +36,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
         projectProfiles: true,
         catalog: true
     }
+
+    // Statics
+    private shouldHidePayment = false;
 
     static availablePayments = [];
     get availablePayments() {
@@ -113,10 +121,12 @@ export class SpecificationsStepComponent implements StepEventsListener {
         // Add a pre product by default
         if (this.preProducts.length <= 0) { this.add(); }
 
-        const customerId = this.customerService.currentCustomer().legalEntityId;
+        const customer = this.customerService.currentCustomer();
         const productLineId = this.manager.productLine.productLineId;
 
-        this.catalogApi.byProductLine(customerId, productLineId).map((response) => response.json()).subscribe((response) => {
+        this.shouldHidePayment = customer.countryCode.trim() == "US" || this.manager.productLine.productId == this.PRODUCT_LINES.Readymix;
+
+        this.catalogApi.byProductLine(customer.legalEntityId, productLineId).map((response) => response.json()).subscribe((response) => {
             response.catalogs.forEach((catalog) => {
                 this.catalogs[catalog.catalogCode] = catalog.entries;
             });
@@ -173,14 +183,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 SpecificationsStepComponent.plants = response.json().plants;
             });
         }
-    }
-
-    getContracts(productLineId) {
-        const customerId = this.customerService.currentCustomer().legalEntityId;
-
-        this.contractsApi.byProductTypeId(customerId, productLineId).subscribe((res) => {
-            console.log('res: ', res.json())
-        })
     }
 
     getContractPaymentTerm(termId: any) {
@@ -338,13 +340,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
     // TODO
     contractChanged(contract: any, preProduct: PreProduct) {
         preProduct.contractChanged();
-        if(contract.salesDocument.paymentTerm) {
+        if (contract.salesDocument.paymentTerm) {
             this.getContractPaymentTerm(contract.salesDocument.paymentTerm.paymentTermId);
         }
     }
 
     add() {
-        this.preProducts.push(new PreProduct(this.productsApi, this.manager));
+        this.preProducts.push(new PreProduct(this.productsApi, this.manager, this.paymentTermsApi));
     }
 
     remove(index: any) {
@@ -382,6 +384,7 @@ class PreProduct {
     availableProducts = [];
     availableUnits = [];
     availableContracts = [];
+    availablePayments = [];
     maneuveringAvailable: boolean = false;
 
     loadings = {
@@ -390,10 +393,12 @@ class PreProduct {
         projectProfiles: true,
         catalog: true,
         units: true,
+        payment: true
     }
 
-    constructor(private productsApi: ProductsApi, private manager: CreateOrderService) {
-        let _ = SpecificationsStepComponent;
+    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi) {
+        const _ = SpecificationsStepComponent;
+        this.availablePayments = _.availablePayments;
 
         this.payment = _.availablePayments[0];
         this.plant = _.availablePlants[0];
@@ -459,8 +464,24 @@ class PreProduct {
     }
 
     contractChanged() {
-        if (this.contract) { this.fetchUnitsFromContract(); }
+        if (this.contract) { 
+            this.fetchUnitsFromContract();
+
+            // If should get payment terms from contract
+            if (this.contract.salesDocument.paymentTerm) {
+                this.getContractPaymentTerm(this.contract.salesDocument.paymentTerm.paymentTermId);
+            }
+        }
         else { this.fetchUnits(); }
+    }
+
+    getContractPaymentTerm(termId: any) {
+        this.loadings.payment = true;
+        this.paymentTermsApi.getJobsiteById(termId).subscribe((result) => {
+            const contractPaymentTerm = result.json().paymentTerms;
+            this.availablePayments = contractPaymentTerm;
+            this.loadings.payment = false;
+        })
     }
 
     fetchUnitsFromContract() {
