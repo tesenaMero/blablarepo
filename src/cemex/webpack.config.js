@@ -110,7 +110,7 @@ module.exports = (env) => {
         output: {
             path: path.join(__dirname, clientBundleOutputDir, 'dls'),
             filename: '[name].bundle.js',
-            publicPath: '/dist/dls/'
+            publicPath: '/ordersnproduct/dist/dls/'
         },
         module: {
             rules: [

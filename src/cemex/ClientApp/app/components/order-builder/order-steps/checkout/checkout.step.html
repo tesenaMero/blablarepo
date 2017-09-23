@@ -1,5 +1,5 @@
 <!-- Cement USA -->
-<ng-container *ngIf="false">
+<ng-container *ngIf="isUSACustomer()">
     <ng-container *ngFor="let item of manager.products">
         <div class="product">
             <div class="row">
@@ -54,12 +54,12 @@
                     </div>
                 </div>
                 <div class="col-md-1">
-                    <div class="group">
+                    <div class="group" [ngClass]="{ invisible: isUSACustomer() }">
                         <div class="title">
                             Payment
                         </div>
                         <div class="desc">
-                            {{ item?.payment.paymentTermType.paymentTermTypeDesc }}
+                            {{ item?.payment?.paymentTermType?.paymentTermTypeDesc }}
                         </div>
                     </div>
                 </div>
@@ -145,7 +145,7 @@
 </ng-container>
 
 <!-- Cement MX -->
-<ng-container *ngIf="true">
+<ng-container *ngIf="!isUSACustomer()">
     <ng-container *ngFor="let item of manager.products, let index = index">
         <div class="product">
             <div class="row">
@@ -207,7 +207,7 @@
                                     Payment
                                 </div>
                                 <div class="desc">
-                                    {{ item?.payment.paymentTermType.paymentTermTypeDesc }}
+                                    {{ item?.payment?.paymentTermType?.paymentTermTypeDesc }}
                                 </div>
                             </div>
                         </div>
@@ -313,7 +313,7 @@
 </ng-container>
 
 
-<div class="price">
+<div class="price" *ngIf="shouldShowPrices()">
     <div class="float-right text-right">
         <div class="subtotal">
             <div>

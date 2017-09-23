@@ -60,6 +60,9 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
                 this.handlePrices(response);
             });
         }
+        else {
+            this.onCompleted.emit(false);
+        }
     }
 
     shouldCallOptimalSource() {
@@ -77,6 +80,14 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         this.draftOrder = response.json();
         this.onCompleted.emit(this.draftOrder);
         this.dashboard.alertSuccess("Prices recovered successfully");
+    }
+
+    isMXCustomer() {
+        return this.customerService.currentCustomer().countryCode.trim() == "MX";
+    }
+
+    isUSACustomer() {
+        return this.customerService.currentCustomer().countryCode.trim() == "US";
     }
 
     // Logic
@@ -103,5 +114,9 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
             total += item.totalPrice;
         });
         return total;
+    }
+
+    shouldShowPrices(): boolean {
+        return !this.isUSACustomer();
     }
 }

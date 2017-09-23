@@ -28,23 +28,30 @@ export class ProductSelectionStepComponent {
             let bagCement = this.getBagCement(productLines);
             let multiproduct = this.getMultiproduct(productLines)
 
-            // Bag cement
-            if (bagCement || multiproduct) {
-                bagCement && productLines.splice(productLines.indexOf(bagCement), 1);
+            if (!this.isMexico()) {
                 multiproduct && productLines.splice(productLines.indexOf(multiproduct), 1);
+            }
+            else {
+                // Bag cement
+                if (bagCement || multiproduct) {
+                    bagCement && productLines.splice(productLines.indexOf(bagCement), 1);
+                    multiproduct && productLines.splice(productLines.indexOf(multiproduct), 1);
 
-                if (bagCement && multiproduct) {
-                    let cementPackageMultiproducts = this.joinProductLines(bagCement, multiproduct, "Cement Package Multiproducts");
-                    productLines.push(cementPackageMultiproducts);
-                }
-                else {
-                    let cementPackageMultiproducts = this.joinProductLines({ productLineId: 2 }, { productLineId: 3 }, "Cement Package Multiproducts");
-                    productLines.push(cementPackageMultiproducts);
+                    if (bagCement && multiproduct) {
+                        let cementPackageMultiproducts = this.joinProductLines(bagCement, multiproduct, "Cement Package Multiproducts");
+                        productLines.push(cementPackageMultiproducts);
+                    }
+                    else {
+                        let cementPackageMultiproducts = this.joinProductLines({ productLineId: 2 }, { productLineId: 3 }, "Cement Package Multiproducts");
+                        productLines.push(cementPackageMultiproducts);
+                    }
                 }
             }
-
-            this.productLines = productLines;
         });
+    }
+
+    shouldHide(productLine: any): boolean {
+        return productLine.productLineId == 5;
     }
 
     getBagCement(productLines: any[]) {
@@ -73,7 +80,11 @@ export class ProductSelectionStepComponent {
 
     isBulkCementUSA(): boolean {
         return this.productLine.productLineId == this.PRODUCT_LINES.CementBulk
-                && this.customerService.currentCustomer().countryCode.trim() == "US"
+            && this.customerService.currentCustomer().countryCode.trim() == "US"
+    }
+
+    isMexico(): boolean {
+        return this.customerService.currentCustomer().countryCode.trim() == "MX";
     }
 
     isSelected(product: any) {
