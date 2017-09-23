@@ -187,7 +187,7 @@ export class OrderBuilderComponent {
     }
 
     basicFlow() {
-        this.drafts.createOrder(this.draftId, "").subscribe((response) => {
+        this.drafts.createOrder(this.draftId, '').subscribe((response) => {
             console.log("order created", response.json());
             this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId);
             this.dashboard.alertSuccess("Order #" + this.draftOrder.orderId + " placed successfully", 30000);

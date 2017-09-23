@@ -179,7 +179,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     onShowed() {
-        console.log(this.orderManager);
         // Reset validations
         this.resetValidations();
 

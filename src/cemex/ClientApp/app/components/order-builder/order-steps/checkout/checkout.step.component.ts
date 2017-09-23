@@ -43,6 +43,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
 
     onShowed() {
         // Patch optimal sources then recovers prices
+        this.onCompleted.emit(false);
         if (this.shouldCallOptimalSource()) {
             this.dashboard.alertInfo("Recovering prices", 0);
             this.drafts.optimalSourcesPatch(this.draftId).flatMap((x) => {
