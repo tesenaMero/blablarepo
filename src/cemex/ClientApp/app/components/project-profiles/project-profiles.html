@@ -16,11 +16,17 @@
         </div>
         <div class="cto-container col-sm-4">
             <div class="float-sm-right">
-                <button (click)="openModal()" data-toggle="modal" data-target="#pp-creator" class="button-ghost">{{ t.pt('views.project.profile.create') }}</button>
+                <button (click)="openModal('pp-creator')" class="button-ghost">{{ t.pt('views.project.profile.create') }}</button>
             </div>
         </div>
     </div>
+
+    <modal id="pp-creator">
+        <project-profile-creator (confirmed)="closeModal('pp-creator')" (canceled)="closeModal('pp-creator')"></project-profile-creator>
+    </modal>
+
     <dls-table [rows]="rows" [columns]="columns"></dls-table>
+
     <div *ngIf="loading">
         <div class="row">
             <div class="col-sm-12">
