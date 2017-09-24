@@ -35,7 +35,7 @@
                         <label for="conctact-select" [ngClass]="{ required: validations.contactPerson.mandatory }" class="select-label">Contact person</label>
                     </div>
                     <div class="col-md-8 col-sm-12 " [ngClass]="{ disabled: loadings.contacts }">
-                        <ss-multiselect-dropdown [options]="contacts" [texts]="contactsTexts" [settings]="contactsSettings" [(ngModel)]="contactsIndex" (ngModelChange)="contactChanged(contacts[$event[0]])"></ss-multiselect-dropdown>
+                        <ss-multiselect-dropdown [options]="contacts" [texts]="contactsTexts" [settings]="contactsSettings" [(ngModel)]="contactsIndex" (onManualInput)="manualContact($event)" (ngModelChange)="contactChanged($event)"></ss-multiselect-dropdown>
                         <span class="error-message ">Please select a contact</span>
                     </div>
                 </div>

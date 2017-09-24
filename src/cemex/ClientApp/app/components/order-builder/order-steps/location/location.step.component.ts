@@ -47,7 +47,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     private validations = {
         purchaseOrder: { valid: false, mandatory: false, showError: false },
-        contactPerson: { valid: false, mandatory: false, showError: false },
+        contactPerson: { valid: false, mandatory: true, showError: false },
         jobsite: { valid: false, mandatory: true, showError: false }
     }
 
@@ -122,15 +122,15 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     private customer: any;
 
-    constructor(@Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private customerService: CustomerService, private purchaseOrderApi: PurchaseOrderApi, private dashboard: DashboardService) {
+    constructor( @Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private customerService: CustomerService, private purchaseOrderApi: PurchaseOrderApi, private dashboard: DashboardService) {
         this.step.canAdvance = () => this.canAdvance();
         this.step.setEventsListener(this);
     }
 
     // Interfaces
     // ======================
-    ngOnInit() {}
-    
+    ngOnInit() { }
+
     canAdvance() {
         // Validate purchase order
         if (this.purchaseOrder.length > 0) {
@@ -171,11 +171,15 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                     this.requestNext.emit();
                 }
             });
-            
+
             return false;
         }
-        
+
         return advance;
+    }
+
+    manualContact(event) {
+        console.log(event);
     }
 
     onShowed() {
@@ -236,7 +240,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     isBulkCementUSA(): boolean {
         return this.orderManager.productLine.productLineId == this.PRODUCT_LINES.CementBulk
-                && this.customerService.currentCustomer().countryCode.trim() == "US"
+            && this.customerService.currentCustomer().countryCode.trim() == "US"
     }
 
     fetchJobsites(shipmentLocationTypes) {
@@ -299,17 +303,17 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
         // Fetch geolocation
         this.shipmentApi.address(this.location)
-        .flatMap((address) => {
-            this.location.address = address.json();
-            return this.shipmentApi.geo(address.json()); 
-        })
-        .subscribe((geo) => {
-            this.location.geo = geo.json();
-            this.cleanJobsiteMarker();
-            this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
-            this.addMarkerToMap(this.jobsiteMarker);
-            this.loadings.map = false;
-        });
+            .flatMap((address) => {
+                this.location.address = address.json();
+                return this.shipmentApi.geo(address.json());
+            })
+            .subscribe((geo) => {
+                this.location.geo = geo.json();
+                this.cleanJobsiteMarker();
+                this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
+                this.addMarkerToMap(this.jobsiteMarker);
+                this.loadings.map = false;
+            });
 
         // Fetch pods
         this.shipmentApi.pods(this.location, this.shipmentLocationTypes, null, this.orderManager.productLine).subscribe((response) => {
@@ -350,17 +354,17 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
         // Fetch geolocation
         this.shipmentApi.address(this.location)
-        .flatMap((address) => {
-            this.pod.address = address.json();
-            return this.shipmentApi.geo(address.json()); 
-        })
-        .subscribe((geo) => {
-            this.pod.geo = geo.json();
-            this.cleanJobsiteMarker();
-            this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
-            this.addMarkerToMap(this.jobsiteMarker);
-            this.loadings.map = false;
-        });
+            .flatMap((address) => {
+                this.pod.address = address.json();
+                return this.shipmentApi.geo(address.json());
+            })
+            .subscribe((geo) => {
+                this.pod.geo = geo.json();
+                this.cleanJobsiteMarker();
+                this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
+                this.addMarkerToMap(this.jobsiteMarker);
+                this.loadings.map = false;
+            });
 
         // this.shipmentApi.jobsiteGeo(pod).subscribe((geo) => {
         //     this.cleanJobsiteMarker();
@@ -376,15 +380,36 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.validations.purchaseOrder.valid = this.purchaseOrder.length >= 0;
     }
 
-    contactChanged(contact: any) {
-        this.contact = contact;
-        this.validations.contactPerson.showError = false;
-        if (contact) {
-            this.validations.contactPerson.valid = true;
-            this.orderManager.selectContact(this.contact);
+    contactChanged(event: any) {
+        console.log(event);
+        if (!event) { this.validations.contactPerson.valid = false; return; }
+
+        // If picked form dropdown: model will be []
+        if (event.constructor === Array && event.length > 0) {
+            let contact = this.contacts[event[0]];
+            this.contact = contact;
+            this.validations.contactPerson.showError = false;
+            if (contact) {
+                this.validations.contactPerson.valid = true;
+                this.orderManager.selectContact(this.contact);
+            }
+        }
+        // If manually wrote
+        else if ((!!event) && (event.constructor === Object)) {
+            if (event.phone.length > 0 && event.name.length > 0) {
+                this.contact = event;
+                this.validations.contactPerson.showError = false;
+                this.validations.contactPerson.valid = true;
+                this.orderManager.selectContact(this.contact);
+            }
+            else {
+                this.validations.contactPerson.valid = false;
+                return;    
+            }
         }
         else {
             this.validations.contactPerson.valid = false;
+            return;
         }
     }
 

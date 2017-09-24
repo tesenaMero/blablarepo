@@ -10,6 +10,6 @@
         "lib": ["es6", "dom"],
         "types": ["node", "jasmine"]
     },
-    "exclude": ["bin", "node_modules", "**/*.spec.ts","**/*.d.ts"],
+    "exclude": ["bin", "node_modules", "**/*.spec.ts", "**/*.d.ts"],
     "atom": { "rewriteTsconfig": false }
 }

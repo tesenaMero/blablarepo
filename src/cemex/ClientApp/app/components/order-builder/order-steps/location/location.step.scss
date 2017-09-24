@@ -115,7 +115,8 @@ label.required {
         color: #EE3D41;
         width: 100%;
         display: block;
-        text-align: right;
+        text-align: left;
+        line-height: 22px;
     }
     .form-control {
         border: 1px solid #EE3D41;
@@ -135,7 +136,6 @@ label.required {
     color: #EE3D41;
     width: 100%;
     display: block;
-    text-align: right;
 }
 
 .form-field {
