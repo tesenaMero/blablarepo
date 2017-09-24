@@ -102,15 +102,12 @@ export class SpecificationsStepComponent implements StepEventsListener {
         // What the f is this
         this.searchProductService.searchedProduct.subscribe(product => {
             if (product) {
-                let filteredProducts = SpecificationsStepComponent.availableProducts.filter((availableProduct: any) => availableProduct.commercialCode === product.commercialCode);
-
+                let filteredProducts =  SpecificationsStepComponent.availableProducts.filter((x) => {return x.commercialCode === product.commercialCode;});                                       
                 if (filteredProducts.length) { preProduct.product = filteredProducts[0]; }
-
-                // Ask reio wtf is this
-                // else {
-                //     SpecificationsStepComponent.availableProducts.push(product);
-                //     preProduct.product = product;
-                // }
+                else {
+                    SpecificationsStepComponent.availableProducts.push(product);
+                    preProduct.product = product;
+                }
             }
         });
     }
