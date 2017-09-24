@@ -174,6 +174,13 @@ export class ReviewStepComponent implements StepEventsListener {
             additionalServices.push({ "additionalServiceCode": "MANEUVERING" });
         }
 
+        // Others additional services
+        if (preProduct.additionalServices) {
+            preProduct.additionalServices.forEach((item) => {
+                additionalServices.push({ "additionalServiceCode": item.entryCode });
+            });
+        }
+
         return additionalServices;
     }
 
