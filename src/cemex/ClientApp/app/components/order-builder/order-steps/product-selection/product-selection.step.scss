@@ -150,3 +150,20 @@ $medium-color: #999999;
         opacity: 0;
     }
 }
+
+.loading {
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    opacity: .53;
+    z-index: 1;
+    background: url(../cemex-loading.gif) no-repeat 0 0;
+    min-height: 400px;
+    background-position: center;
+}
+
+.no-lines {
+    margin-left: 8px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}

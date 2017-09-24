@@ -32,8 +32,8 @@
                                 <span class="value">{{ product.quantity }}</span>
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="isMXCustomer()">
-                                Maximum Capacity {{getMaximumCapacity(product.contract)}} tons
+                            <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacity()">
+                                Maximum Capacity {{ product.getMaximumCapacity() }} tons
                             </div>
                         </div>
                         <div class="group w40">
@@ -193,8 +193,8 @@
                                 <span class="value">{{ product.quantity }}</span>
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="isMXCustomer()">
-                                Maximum Capacity {{getMaximumCapacity(product.contract)}} tons
+                            <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacity()">
+                                Maximum Capacity {{ product.getMaximumCapacity() }} tons
                             </div>
                         </div>
                         <div class="group w40">
@@ -350,7 +350,7 @@
                         <div class="input product-selection dropdown">
                             <span class="selection">
                                 {{ product.product?.commercialDesc }}
-                                <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged($event)" class="input behind">
+                                <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
@@ -369,8 +369,8 @@
                                 <span class="value">{{ product.quantity }}</span>
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="isMXCustomer()">
-                                Maximum Capacity {{getMaximumCapacity(product.contract)}} tons
+                            <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacity()">
+                                Maximum Capacity {{ product.getMaximumCapacity() }} tons
                             </div>
                         </div>
                         <div class="group w40">
@@ -444,11 +444,11 @@
                 <div class="col-md-4 mt-3">
                     <div class="group">
                         <label>Project profile</label>
-                        <div class="input flex-space-between dropdown">
+                        <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.projectProfiles }">
                             <span>
                                 <!-- Select project profile to prefill specifications -->
                                 {{ product?.projectProfile?.profileName }}
-                                <select (change)="projectProfileChange(product, $event)" class="input behind">
+                                <select [(ngModel)]="product.templateProfile" (ngModelChange)="projectProfileChanged(product, $event)" class="input behind">
                                     <option *ngFor="let project of projectProfiles" [ngValue]="project">{{ project?.profileName }}</option>
                                 </select>
                                 </span>
@@ -457,7 +457,7 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex flex-wrap rdymx-specs">
+            <div class="d-flex flex-wrap rdymx-specs" [ngClass]="{ disabled: product.loadings.catalogs }">
                 <div class="group">
                     <label>
                         Discharge Time
@@ -596,13 +596,13 @@
                         <div class="col-md-12 mt-3">
                             <label class="additional-services">Additional services</label>
                         </div>
-                        <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let index = index;">
+                        <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let i = index;">
                             <div class="group">
                                 <!-- rmx services  -->
                                 <!-- (change)="changeAditionalService(readyMixAdditionalServices[0])" -->
                                 <div class="service">
-                                    <input (change)="changeAditionalService($event.target, index)" type="checkbox" id="{{rmxService.entryCode}}">
-                                    <label for="{{rmxService.entryCode}}">
+                                    <input (change)="changeAditionalService(product, $event.target, i)" type="checkbox" id="{{ rmxService.entryCode }}{{ index }}">
+                                    <label for="{{ rmxService.entryCode }}{{ index }}">
                                         <svg class="icon-checkbox-active">
                                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
                                         </svg>

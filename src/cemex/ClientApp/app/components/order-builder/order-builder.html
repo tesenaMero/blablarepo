@@ -20,3 +20,17 @@
         </step>
     </stepper>
 </div>
+
+<modal id="success-placement">
+    <div class="container-fluid">
+        <div class="container-layout center-text center-content">
+            <div class="success-group">
+                <span class="cmx-icon-accepted-ok"></span>
+                <div class="success-text">
+                    Your order #{{ orderCode }} was successfully submited
+                </div>
+                <button class="button back-to-orders" (click)="closeModal()">Back to orders history</button>
+            </div>
+        </div>
+    </div>
+</modal>

@@ -8,6 +8,7 @@ import { DraftsService } from '../../shared/services/api/drafts.service';
 import { CustomerService } from '../../shared/services/customer.service';
 import { CreateOrderService } from '../../shared/services/create-order.service';
 import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
+import { ModalService } from '../../shared/components/modal'
 
 @Component({
     selector: 'order-builder',
@@ -26,6 +27,8 @@ export class OrderBuilderComponent {
     private draftId: any;
     private draftOrder: any;
 
+    private orderCode: any;
+
     private PRODUCT_LINES = {
         Readymix: 6,
         CementBulk: 1
@@ -40,6 +43,7 @@ export class OrderBuilderComponent {
         private manager: CreateOrderService,
         private zone: NgZone,
         private jsonObjService: EncodeDecodeJsonObjService,
+        private modal: ModalService,
         @Inject(DOCUMENT) private document: any) {
         this.rebuildOrder = false;
         this.customerService.customerSubject.subscribe((customer) => {
@@ -92,12 +96,14 @@ export class OrderBuilderComponent {
 
     checkoutCompleted(draftOrder?: any) {
         if (draftOrder) {
-            console.log("order", draftOrder);
             this.draftOrder = draftOrder;
             this.stepper.complete();
         }
         else {
             if (this.isUSA()) { this.stepper.complete(); }
+            else if (this.isMexico() && this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix) {
+                this.stepper.complete();
+            }
             else { this.stepper.uncomplete(); }
         }
     }
@@ -116,7 +122,6 @@ export class OrderBuilderComponent {
     }
 
     finishSteps() {
-        console.log("finish", this.draftOrder);
         this.placeOrder();
     }
 
@@ -186,12 +191,12 @@ export class OrderBuilderComponent {
     flowCementMX() {
         this.drafts.createOrder(this.draftId, '')
             .flatMap((response) => {
-                console.log("order created", response.json());
                 this.dashboard.alertSuccess("Order placed successfully, requesting order code...", 0);
                 return this.drafts.validateRequestId(response.json().id);
             })
             .subscribe((response) => {
                 this.dashboard.alertSuccess("Order code: #" + response.json().orderCode + " placed successfully", 30000);
+                this.showSuccessModal(response.json().orderCode);
             }, error => {
                 this.dashboard.alertError("Error placing order", 10000);
             })
@@ -199,18 +204,28 @@ export class OrderBuilderComponent {
 
     basicFlow() {
         this.drafts.createOrder(this.draftId, '').subscribe((response) => {
-            console.log("order created", response.json());
             if (this.draftOrder) {
                 this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId);
                 this.dashboard.alertSuccess("Order #" + this.draftOrder.orderId + " placed successfully", 30000);
+                this.showSuccessModal(this.draftOrder.orderId);
             }
             else {
                 this.dashboard.alertSuccess("Draft #" + this.draftId + " placed successfully", 30000);
+                this.showSuccessModal(this.draftId);
             }
         }, error => {
-            console.error(error)
             this.dashboard.alertError("Error placing order", 10000);
         });
+    }
+
+    showSuccessModal(orderCode) {
+        this.orderCode = orderCode;
+        this.modal.open('success-placement');
+    }
+
+    closeModal() {
+        this.router.navigate(['/app/orders']);
+        this.modal.close('success-placement');
     }
 
     isMexico() {

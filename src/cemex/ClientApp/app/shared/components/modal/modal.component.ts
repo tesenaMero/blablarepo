@@ -6,7 +6,7 @@ import { ModalService } from './modal.service';
 @Component({
     moduleId: module.id.toString(),
     selector: 'modal',
-    styles: ['.hidden { display: none; visibility: hidden; }'],
+    styleUrls: ['./modal.scss'],
     template: `
     <div class="modal fade" data-backdrop="static" data-keyboard="false" id="{{id}}-modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -15,10 +15,10 @@ import { ModalService } from './modal.service';
                     <ng-content></ng-content>
                 </div>
             </div>
+            <button #modalCloser data-dismiss="modal" class="hidden"></button>
         </div>
     </div>
     <button #modalOpener data-toggle="modal" [attr.data-target]="'#' + id + '-modal'" class="hidden"></button>
-    <button #modalCloser data-dismiss="modal" class="hidden"></button>
     `
 })
 
