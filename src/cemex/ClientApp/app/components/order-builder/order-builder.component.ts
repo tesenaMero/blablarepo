@@ -98,6 +98,9 @@ export class OrderBuilderComponent {
         }
         else {
             if (this.isUSA()) { this.stepper.complete(); }
+            else if (this.isMexico() && this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix) {
+                this.stepper.complete();
+            }
             else { this.stepper.uncomplete(); }
         }
     }

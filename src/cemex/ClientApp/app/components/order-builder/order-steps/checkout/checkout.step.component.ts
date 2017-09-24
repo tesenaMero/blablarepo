@@ -29,6 +29,13 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
 
     draftOrder: any;
 
+    // Readymix
+    prices = {
+        subtotal: 0,
+        taxes: 0,
+        total: 0
+    }
+
     constructor( @Inject(Step) private step: Step,
         private manager: CreateOrderService,
         private dashboard: DashboardService,
@@ -42,6 +49,10 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     ngOnInit() { }
 
     onShowed() {
+        if (this.isReadyMix()) {
+            this.calculatePrices();
+        }
+
         // Patch optimal sources then recovers prices
         this.onCompleted.emit(false);
         if (this.shouldCallOptimalSource()) {
@@ -73,7 +84,16 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
 
     shouldCallPrices() {
         return this.customerService.currentCustomer().countryCode.trim() == "MX"
-                && this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix
+            && this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix
+    }
+
+    // Readymix only
+    calculatePrices() {
+        this.manager.products.forEach(item => {
+            this.prices.subtotal += (item.contract.unitaryPrice.net * item.quantity);
+            this.prices.taxes += (item.contract.unitaryPrice.tax * item.quantity);
+            this.prices.total += (item.contract.unitaryPrice.gross * item.quantity);
+        });
     }
 
     handlePrices(response) {
@@ -90,6 +110,10 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         return this.customerService.currentCustomer().countryCode.trim() == "US";
     }
 
+    isReadyMix() {
+        return this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix
+    }
+
     // Logic
     // ======================
     getSubtotal() {
@@ -97,6 +121,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         this.draftOrder.items.forEach(item => {
             summ += item.grossPrice;
         });
+
         return summ;
     }
 
@@ -113,6 +138,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         this.draftOrder.items.forEach(item => {
             total += item.totalPrice;
         });
+
         return total;
     }
 

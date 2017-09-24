@@ -129,13 +129,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         this.shouldHidePayment = customer.countryCode.trim() == "US" || this.manager.productLine.productId == this.PRODUCT_LINES.Readymix;
 
-        this.catalogApi.byProductLine(customer.legalEntityId, productLineId).map((response) => response.json()).subscribe((response) => {
-            response.catalogs.forEach((catalog) => {
-                this.catalogs[catalog.catalogCode] = catalog.entries;
-            });
-            this.readyMixAdditionalServices = this.catalogs['ASC'];
-        });
-
         // Set loading state
         this.preProducts.forEach((item) => {
             item.loadings.products = true;
@@ -144,11 +137,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
         // Fetch products
         if (this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix) {
             this.fetchProductsReadyMix(this.manager.getSalesDocumentType());
+            
         }
         else {
             this.fetchProducts(this.manager.getSalesDocumentType());
         }
 
+        this.getAdditionalServices();
         this.getPaymentTerms();
         this.getProjectProfiles();
         this.getPlants();
@@ -218,6 +213,14 @@ export class SpecificationsStepComponent implements StepEventsListener {
             });
     }
 
+    getAdditionalServices() {
+        this.catalogApi.byProductLine(this.customerService.currentCustomer().legalEntityId, this.manager.productLine.productLineId).map((response) => response.json()).subscribe((response) => {
+            response.catalogs.forEach((catalog) => {
+                this.catalogs[catalog.catalogCode] = catalog.entries;
+            });
+            this.readyMixAdditionalServices = this.catalogs['ASC'];
+        });
+    }
 
     getPlants() {
         if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == 2) {
@@ -317,8 +320,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
     }
 
-    projectProfileChange(preProduct: PreProduct, projectProfile) {
-        console.log("changed");
+    projectProfileChanged(preProduct: PreProduct, projectProfile) {
         // Prefill
         preProduct.projectProfile.profileId = projectProfile.profileId;
         preProduct.projectProfile.profileName = projectProfile.profileName;
@@ -390,14 +392,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
         };
     }
 
-    changeAditionalService(target, index) {
+    changeAditionalService(preProduct: PreProduct, target, index) {
         if (target.checked) {
-            this.additionalServices.push(this.readyMixAdditionalServices[index]);
+            preProduct.additionalServices.push(this.readyMixAdditionalServices[index]);
         } else {
             const idx = this.additionalServices.indexOf(this.readyMixAdditionalServices[index]);
-            this.additionalServices.splice(idx, 1);
+            preProduct.additionalServices.splice(idx, 1);
         }
-        this.manager.selectAdditionalServices(this.additionalServices);
     }
 
     productChanged(preProduct: PreProduct) {
@@ -491,13 +492,14 @@ class PreProduct {
     product: any;
     plant: any;
     projectProfile: any = {};
+    templateProfile: any = {};
+    additionalServices = [];
 
     // Availables
     availableProducts = [];
     availableUnits = [];
     availableContracts = [];
     availablePayments = [];
-    availableAditionalServices = [];
     maneuveringAvailable: boolean = false;
 
     loadings = {
@@ -533,19 +535,16 @@ class PreProduct {
             this.loadings.products = true;
         }
 
+        if (SSC.projectProfiles.length) { this.loadings.projectProfiles = false; }
+        else { this.loadings.projectProfiles = true; }
+
+        if (SSC.catalogs) { this.loadings.catalogs = false; }
+        else { this.loadings.catalogs = true; }
+
         // Base project profile
         this.projectProfile = {
             project: {
                 projectProperties: {
-                    dischargeTime: undefined,
-                    element: undefined,
-                    kicker: undefined,
-                    loadSize: undefined,
-                    pumpCapacity: undefined,
-                    slump: undefined,
-                    timePerLoad: undefined,
-                    transportMethod: undefined,
-                    unloadType: undefined
                 }
             }
         }

@@ -167,7 +167,7 @@ export class ReviewStepComponent implements StepEventsListener {
     }
 
     private makeAdditionalServices(preProduct): any[] {
-        let additionalServices = []
+        let additionalServices = [];
 
         // Maneuvering
         if (preProduct.maneuvering) {
