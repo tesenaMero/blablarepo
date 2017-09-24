@@ -423,12 +423,12 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }, 400);
     }
 
-    qty(product: any, toAdd: number) {
+    qty(product: PreProduct, toAdd: number) {
         if (this.isMXCustomer()) {
             if (product.quantity <= 1 && toAdd < 0) { return; }
 
-            const newQty = product.quantity + toAdd;
-            const maxCapacity = this.getMaximumCapacity(product.contract);
+            let newQty = product.quantity + toAdd;
+            let maxCapacity = product.getMaximumCapacity() || Number.MAX_SAFE_INTEGER;
 
             if (newQty <= maxCapacity) {
                 return product.quantity = newQty;
@@ -438,37 +438,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
         else {
             if (product.quantity <= 1 && toAdd < 0) { return; }
-            if (product.quantity >= 99999 && toAdd > 0) { return; }
+            if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
             product.quantity += toAdd;
-        }
-    }
-
-    getMaximumCapacity(contract?) {
-        const jobsite = this.manager.jobsite;
-        const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
-        const isPickup = shippingConditionId === this.MODE.Pickup;
-        const salesArea = this.manager.salesArea.find((sa) => jobsite && jobsite.shipmentLocationId === jobsite.shipmentLocationId);
-        const maxJobsiteQty = salesArea && salesArea.maximumLot.amount; //doesn´t exist the path salesArea.maximumLot
-        const unlimited = 99999;
-
-        if (contract) {
-            const volume = _.get(contract, 'salesDocument.volume');
-            if (volume) {
-                const maxContractVolume = _.get(volume, 'total.quantity.amount');
-                return maxContractVolume;
-            } else {
-                if (isPickup) {
-                    return unlimited;
-                } else {
-                    return maxJobsiteQty;
-                }
-            }
-        } else {
-            if (isPickup) {
-                return unlimited;
-            } else {
-                return maxJobsiteQty;
-            }
         }
     }
 
@@ -659,6 +630,37 @@ class PreProduct {
             // check if salesarea has maneouvering enabled
             if (area && area.maneuverable) {
                 this.maneuveringAvailable = true;
+            }
+        }
+    }
+
+    getMaximumCapacity() {
+        if (!this.contract) { return undefined; }
+
+        const jobsite = this.manager.jobsite;
+        const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
+        const isPickup = shippingConditionId === this.MODE.Pickup;
+        const salesArea = this.manager.salesArea.find((sa) => jobsite && jobsite.shipmentLocationId === jobsite.shipmentLocationId);
+        const maxJobsiteQty = salesArea && salesArea.maximumLot.amount; //doesn´t exist the path salesArea.maximumLot
+        const unlimited = undefined;
+
+        if (this.contract) {
+            const volume = _.get(this.contract, 'salesDocument.volume');
+            if (volume) {
+                const maxContractVolume = _.get(volume, 'total.quantity.amount');
+                return maxContractVolume;
+            } else {
+                if (isPickup) {
+                    return unlimited;
+                } else {
+                    return maxJobsiteQty;
+                }
+            }
+        } else {
+            if (isPickup) {
+                return unlimited;
+            } else {
+                return maxJobsiteQty;
             }
         }
     }

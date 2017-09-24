@@ -2,6 +2,11 @@
     <div class="row" style="margin-left: 8px;">
         <div class="select-product">Select a product</div>
     </div>
+    <div class="loading" *ngIf="loading" class="loading">
+    </div>
+    <div class="no-lines" *ngIf="productLines.length == 0 && !loading">
+        No product lines found for this customer
+    </div>
     <div class="d-flex flex-wrap products">
         <ng-container *ngFor="let product of productLines">
             <div *ngIf="!shouldHide(product)" class="product" [ngClass]="{ selected: isSelected(product) }" (click)="select(product)">

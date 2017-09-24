@@ -12,6 +12,7 @@ import { CustomerService } from '../../../../shared/services/customer.service'
 })
 export class ProductSelectionStepComponent {
     @Output() onCompleted = new EventEmitter<any>();
+    private loading = true;
     private MODE = DeliveryMode;
     private PRODUCT_LINES = {
         Readymix: 6,
@@ -22,6 +23,7 @@ export class ProductSelectionStepComponent {
     productLine: any;
 
     constructor(private api: ProductLineApi, private orderManager: CreateOrderService, private customerService: CustomerService) {
+        this.loading = true;
         this.api.all().subscribe((response) => {
             let productLines = response.json().productLines;
 
@@ -49,6 +51,7 @@ export class ProductSelectionStepComponent {
             }
 
             this.productLines = productLines;
+            this.loading = false;
         });
     }
 

@@ -1,0 +1,25 @@
+@import "~bootstrap/scss/bootstrap-grid.scss";
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+
+.modal-dialog {
+    @include media-breakpoint-down(sm) {
+        margin: 0 !important;
+        max-width: unset;
+        height: 100%;
+    }
+    @include media-breakpoint-only(md) {
+        margin: 30px auto;
+        //max-width: 500px;
+    }
+}
+
+.modal-content {
+    border: 0;
+    border-radius: 0;
+    @include media-breakpoint-down(sm) {
+        min-height: 100%;
+    }
+}

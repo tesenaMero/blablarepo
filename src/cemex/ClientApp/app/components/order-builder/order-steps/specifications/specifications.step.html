@@ -32,8 +32,8 @@
                                 <span class="value">{{ product.quantity }}</span>
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="isMXCustomer()">
-                                Maximum Capacity {{getMaximumCapacity(product.contract)}} tons
+                            <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacity()">
+                                Maximum Capacity {{ product.getMaximumCapacity() }} tons
                             </div>
                         </div>
                         <div class="group w40">
@@ -193,8 +193,8 @@
                                 <span class="value">{{ product.quantity }}</span>
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="isMXCustomer()">
-                                Maximum Capacity {{getMaximumCapacity(product.contract)}} tons
+                            <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacity()">
+                                Maximum Capacity {{ product.getMaximumCapacity() }} tons
                             </div>
                         </div>
                         <div class="group w40">
@@ -369,8 +369,8 @@
                                 <span class="value">{{ product.quantity }}</span>
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="isMXCustomer()">
-                                Maximum Capacity {{getMaximumCapacity(product.contract)}} tons
+                            <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacity()">
+                                Maximum Capacity {{ product.getMaximumCapacity() }} tons
                             </div>
                         </div>
                         <div class="group w40">
