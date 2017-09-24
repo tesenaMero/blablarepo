@@ -47,7 +47,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     private validations = {
         purchaseOrder: { valid: false, mandatory: false, showError: false },
-        contactPerson: { valid: false, mandatory: true, showError: false },
+        contactPerson: { valid: false, mandatory: false, showError: false },
         jobsite: { valid: false, mandatory: true, showError: false }
     }
 
@@ -176,10 +176,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         }
 
         return advance;
-    }
-
-    manualContact(event) {
-        console.log(event);
     }
 
     onShowed() {
@@ -381,7 +377,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     contactChanged(event: any) {
-        console.log(event);
         if (!event) { this.validations.contactPerson.valid = false; return; }
 
         // If picked form dropdown: model will be []

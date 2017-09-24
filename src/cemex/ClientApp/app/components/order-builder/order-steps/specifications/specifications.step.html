@@ -446,8 +446,9 @@
                         <label>Project profile</label>
                         <div class="input flex-space-between dropdown">
                             <span>
-                                Select project profile to prefill specifications
-                                <select [(ngModel)]="product.projectProfile" (ngModelChange)="projectProfileChange($event)" class="input behind">
+                                <!-- Select project profile to prefill specifications -->
+                                {{ product?.projectProfile?.profileName }}
+                                <select (change)="projectProfileChange(product, $event)" class="input behind">
                                     <option *ngFor="let project of projectProfiles" [ngValue]="project">{{ project?.profileName }}</option>
                                 </select>
                                 </span>
@@ -463,8 +464,8 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{ product.projectProfile.dischargeTime?.timePerDischargeDesc }}
-                            <select (change)="onChangeDischargeTime($event.target.value)" class="input behind">
+                            {{ product?.projectProfile?.project?.projectProperties?.dischargeTime?.timePerDischargeDesc }}
+                            <select (change)="onChangeDischargeTime(product, $event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.DCT; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
@@ -478,8 +479,8 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{ product.projectProfile.transportMethod?.transportMethodDesc }}
-                            <select (change)="onChangeTransportMethod($event.target.value)" class="input behind">
+                            {{ product?.projectProfile?.project?.projectProperties?.transportMethod?.transportMethodDesc }}
+                            <select (change)="onChangeTransportMethod(product, $event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.TPM; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
@@ -493,8 +494,8 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{ product.projectProfile.unloadType?.unloadTypeDesc }}
-                            <select (change)="onChangeUnloadType($event.target.value)" class="input behind">
+                            {{ product?.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeDesc }}
+                            <select (change)="onChangeUnloadType(product, $event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.ULT; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
@@ -508,8 +509,8 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{product.projectProfile.pumpCapacity?.pumpCapacityDesc }}
-                            <select (change)="onChangePumpCapacity($event.target.value)" class="input behind">
+                            {{product.projectProfile?.project?.projectProperties?.pumpCapacity?.pumpCapacityDesc }}
+                            <select (change)="onChangePumpCapacity(product, $event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.PCC; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
@@ -549,8 +550,8 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{ product.projectProfile.element?.elementDesc }}
-                            <select (change)="onChangeApplication($event.target.value)" class="input behind">
+                            {{ product?.projectProfile?.project?.projectProperties?.element?.elementDesc }}
+                            <select (change)="onChangeApplication(product, $event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.ELM; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
@@ -564,8 +565,8 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{product.projectProfile.loadSize?.loadSizeDesc}}
-                            <select (change)="onChangeLoadSize($event.target.value)"  class="input behind">
+                            {{product?.projectProfile?.project?.projectProperties?.loadSize?.loadSizeDesc}}
+                            <select (change)="onChangeLoadSize(product, $event.target.value)"  class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.LSC; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
@@ -579,8 +580,8 @@
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{ product?.projectProfile?.timePerLoad?.timePerLoadDesc }}
-                            <select (change)="onChangeTimePerLoad($event.target.value)" class="input behind">
+                            {{ product?.projectProfile?.project?.projectProperties?.timePerLoad?.timePerLoadDesc }}
+                            <select (change)="onChangeTimePerLoad(product, $event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.TPL; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
