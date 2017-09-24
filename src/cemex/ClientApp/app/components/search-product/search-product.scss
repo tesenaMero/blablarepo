@@ -12,6 +12,11 @@
     }
 }
 
+.requiredPt {
+    border-color: #EE3D42 !important;
+    color: #EE3D42 !important;
+}
+
 .container-layout {
     padding: 50px 58px;
     padding-top: 50px;
@@ -30,7 +35,7 @@
     color: #000000;
     font-size: 30px;
     line-height: 40px;
-
+    
     &.sub {
         font-size: 20px;
         line-height: 30px;
@@ -69,7 +74,7 @@
     list-style: none;
     padding: 0;
     margin-top: 20px;
-
+    
     li {
         padding: 10px;
         &:hover {
@@ -176,10 +181,9 @@ div.select-label {
 
 select {
     border: 1px solid transparent;
-     &.ng-pristine{
-       color: darken($white, 50%);
+    &.ng-pristine{
+        color: darken($white, 50%);
     }
     padding: 5px;
 }
 
-   
