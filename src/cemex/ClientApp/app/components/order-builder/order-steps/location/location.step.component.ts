@@ -294,13 +294,16 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 this.validations.purchaseOrder.mandatory = shouldValidatePurchaseOrder;
             }
             this.loadings.purchaseOrder = false;
-            this.onCompleted.emit(true);
         });
 
         // Fetch geolocation
         this.shipmentApi.address(this.location)
             .flatMap((address) => {
                 this.location.address = address.json();
+                
+                // Complete step after fetching address 
+                // since the next step will use the object stores in manager
+                this.onCompleted.emit(true);
                 return this.shipmentApi.geo(address.json());
             })
             .subscribe((geo) => {

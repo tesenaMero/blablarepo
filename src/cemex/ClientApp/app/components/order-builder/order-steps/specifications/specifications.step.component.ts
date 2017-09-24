@@ -146,6 +146,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.getAdditionalServices();
         this.getPaymentTerms();
         this.getProjectProfiles();
+
+        // Only in pickup
         this.getPlants();
     }
 
@@ -223,9 +225,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     getPlants() {
-        if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == 2) {
+        console.log("manager", this.manager);
+        if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == this.MODE.Pickup) {
+            let countryCode = this.manager.jobsite.address.countryCode || this.customerService.currentCustomer().countryCode;
             this.plantApi.byCountryCodeAndRegionCode(
-                this.manager.jobsite.address.countryCode.trim(),
+                countryCode.trim(),
                 this.manager.jobsite.address.regionCode
             ).subscribe((response) => {
                 SpecificationsStepComponent.plants = response.json().plants;
