@@ -284,80 +284,106 @@ export class SpecificationsStepComponent implements StepEventsListener {
     getProjectProfiles() {
         const customerId = this.customerService.currentCustomer().legalEntityId;
 
-        this.loadings.projectProfiles = true;
+        this.preProducts.forEach((item: PreProduct) => {
+            item.loadings.projectProfiles = true;
+        });
+
         this.ProjectProfileApi.all(customerId).subscribe((response) => {
-            this.loadings.projectProfiles = false;
             const profiles = response.json().profiles;
             if (profiles) {
                 SpecificationsStepComponent.projectProfiles = profiles;
             }
+
+            this.preProducts.forEach((item: PreProduct) => {
+                item.loadings.projectProfiles = false;
+            });
         });
 
-        this.loadings.catalog = true;
+        this.preProducts.forEach((item: PreProduct) => {
+            item.loadings.catalogs = true;
+        });
+
         this.catalogApi.byProductLine(customerId, this.manager.productLine.productLineId).subscribe((res: any) => {
             this.loadings.catalog = false;
             res.json().catalogs && res.json().catalogs.forEach((catalog) => {
                 this.catalogs[catalog.catalogCode] = catalog.entries;
             });
+            this.preProducts.forEach((item: PreProduct) => {
+                item.loadings.catalogs = false;
+            });
         });
     }
 
-    projectProfileChange(projectProfile) {
-        // TODO use index &&  _.pick
-        this.preProducts[0].projectProfile = projectProfile.project.projectProperties;
+    projectProfileChange(preProduct: PreProduct, projectProfile) {
+        console.log("changed");
+        // Prefill
+        preProduct.projectProfile.profileId = projectProfile.profileId;
+        preProduct.projectProfile.profileName = projectProfile.profileName;
+
+        // Clone project object
+        preProduct.projectProfile.project.projectProperties = JSON.parse(JSON.stringify(projectProfile.project.projectProperties));
     }
 
-    onChangeDischargeTime(index) {
+    onChangeDischargeTime(preProduct, index) {
         const entry = this.catalogs['DCT'][index];
 
-        this.preProducts[0].projectProfile.dischargeTime = {
+        preProduct.projectProfile.project.projectProperties.dischargeTime = {
             dischargeTimeId: entry.entryId,
             timePerDischargeDesc: entry.entryDesc
         };
     }
 
-    onChangeTransportMethod(index) {
+    onChangeTransportMethod(preProduct, index) {
         const entry = this.catalogs['TPM'][index];
 
-        this.preProducts[0].projectProfile.transportMethod = {
+        preProduct.projectProfile.project.projectProperties.transportMethod = {
             transportMethodId: entry.entryId,
             transportMethodDesc: entry.entryDesc
         };
     }
 
-    onChangeUnloadType(index) {
+    onChangeUnloadType(preProduct, index) {
         const entry = this.catalogs['ULT'][index];
 
-        this.preProducts[0].projectProfile.unloadType = {
+        preProduct.projectProfile.project.projectProperties.unloadType = {
             unloadTypeId: entry.entryId,
             unloadTypeDesc: entry.entryDesc
         };
     }
 
-    onChangePumpCapacity(index) {
+    onChangePumpCapacity(preProduct, index) {
         const entry = this.catalogs['PCC'][index];
 
-        this.preProducts[0].projectProfile.pumpCapacity = {
+        preProduct.projectProfile.project.projectProperties.pumpCapacity = {
             pumpCapacityId: entry.entryId,
             pumpCapacityDesc: entry.entryDesc
         };
     }
 
-    onChangeApplication(index) {
+    onChangeApplication(preProduct, index) {
         const entry = this.catalogs['ELM'][index];
 
-        this.preProducts[0].projectProfile.element = {
+        preProduct.projectProfile.project.projectProperties.element = {
             elementId: entry.entryId,
             elementDesc: entry.entryDesc
         };
     }
 
-    onChangeLoadSize(index) {
+    onChangeLoadSize(preProduct, index) {
         const entry = this.catalogs['LSC'][index];
 
-        this.preProducts[0].projectProfile.loadSize = {
+        preProduct.projectProfile.project.projectProperties.loadSize = {
             loadSizeId: entry.entryId,
             loadSizeDesc: entry.entryDesc
+        };
+    }
+
+    onChangeTimePerLoad(preProduct, index) {
+        const entry = this.catalogs['TPL'][index];
+
+        preProduct.projectProfile.project.projectProperties.timePerLoad = {
+            timePerLoadId: entry.entryId,
+            timePerLoadDesc: entry.entryDesc
         };
     }
 
@@ -369,15 +395,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.additionalServices.splice(idx, 1);
         }
         this.manager.selectAdditionalServices(this.additionalServices);
-    }
-
-    onChangeTimePerLoad(index) {
-        const entry = this.catalogs['TPL'][index];
-
-        this.preProducts[0].projectProfile.timePerLoad = {
-            timePerLoadId: entry.entryId,
-            timePerLoadDesc: entry.entryDesc
-        };
     }
 
     productChanged(preProduct: PreProduct) {
@@ -484,7 +501,7 @@ class PreProduct {
         products: false,
         contracts: true,
         projectProfiles: true,
-        catalog: true,
+        catalogs: true,
         units: true,
         payments: true
     }
@@ -511,6 +528,23 @@ class PreProduct {
         }
         else {
             this.loadings.products = true;
+        }
+
+        // Base project profile
+        this.projectProfile = {
+            project: {
+                projectProperties: {
+                    dischargeTime: undefined,
+                    element: undefined,
+                    kicker: undefined,
+                    loadSize: undefined,
+                    pumpCapacity: undefined,
+                    slump: undefined,
+                    timePerLoad: undefined,
+                    transportMethod: undefined,
+                    unloadType: undefined
+                }
+            }
         }
     }
 
