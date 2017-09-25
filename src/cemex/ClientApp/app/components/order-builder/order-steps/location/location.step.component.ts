@@ -4,9 +4,10 @@ import { Step, StepEventsListener, _Step } from '../../../../shared/components/s
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
 import { ShipmentLocationApi, PurchaseOrderApi } from '../../../../shared/services/api';
-import { CustomerService } from '../../../../shared/services/customer.service'
-import { DeliveryMode } from '../../../../models/delivery.model'
-import { DashboardService } from '../../../../shared/services/dashboard.service'
+import { CustomerService } from '../../../../shared/services/customer.service';
+import { DeliveryMode } from '../../../../models/delivery.model';
+import { DashboardService } from '../../../../shared/services/dashboard.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'location-step',
@@ -302,7 +303,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 this.location.address = address.json();
                 
                 // Complete step after fetching address 
-                // since the next step will use the object stores in manager
+                // since the next step will use the object stored in manager
                 this.onCompleted.emit(true);
                 return this.shipmentApi.geo(address.json());
             })

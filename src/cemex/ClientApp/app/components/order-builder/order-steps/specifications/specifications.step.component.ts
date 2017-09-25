@@ -8,6 +8,8 @@ import { CustomerService } from '../../../../shared/services/customer.service';
 import { SearchProductService } from '../../../../shared/services/product-search.service';
 import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service'
+import { Observable } from 'rxjs/Observable';
+
 import * as _ from 'lodash';
 
 @Component({
@@ -130,8 +132,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
     onShowed() {
         // Add a pre product by default
         if (this.preProducts.length <= 0) { this.add(); }
-
-        console.log(this.manager);
 
         const customer = this.customerService.currentCustomer();
         const productLineId = this.manager.productLine.productLineId;
@@ -293,7 +293,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     item.loadings.payments = false;
                 });
             }
-            
+
         });
     }
 
@@ -498,6 +498,7 @@ class PreProduct {
     payment: any;
     contract: any;
     product: any;
+    productBaseUnit: any;
     plant: any;
     projectProfile: any = {};
     templateProfile: any = {};
@@ -596,7 +597,10 @@ class PreProduct {
 
     contractChanged() {
         if (this.contract) { this.validations.contract.valid = true; }
-        else { this.validations.contract.valid = false; }
+        else {
+            this.validations.contract.valid = false;
+            this.fetchUnits();
+        }
 
         // TODO:
         // Set minimum quantity
@@ -650,14 +654,32 @@ class PreProduct {
 
     fetchUnits() {
         this.loadings.units = true;
-        this.productsApi.units(this.product.product.productId).subscribe((result) => {
-            let units = result.json().productUnitConversions;
-            this.availableUnits = units;
 
-            this.loadings.units = false;
+        // Fetch product base unit + alt units parallel
+        Observable.forkJoin(
+            this.productsApi.unit(this.product).map((result) => {
+                this.product.unitOfMeasure = result.json();
+            }),
+            this.productsApi.units(this.product.product.productId).map((result) => {
+                let units = result.json().productUnitConversions;
+                this.availableUnits = units;
 
-            if (units.length > 0)
-                this.unit = units[0];
+                this.loadings.units = false;
+
+                if (units.length > 0)
+                    this.unit = units[0];
+            })
+        ).subscribe((response) => {
+            // Map product base unit with available units and map it
+            let matchingUnit = this.availableUnits.find((unit) => {
+                return unit.alternativeUnit.unitCode == this.product.unitOfMeasure.unitCode;
+            });
+
+            // Preselect it
+            if (matchingUnit) { this.unit = matchingUnit; }
+            else {
+                if (this.availableUnits.length) { this.unit = this.availableUnits[0]; }
+            }
         });
     }
 
@@ -678,15 +700,58 @@ class PreProduct {
     }
 
     fetchUnitsFromContract() {
+        if (this.contract.unitOfMeasure) {
+            this.forkUnitsFromContracts();
+        }
+        else {
+            this.productsApi.units(this.contract.salesDocument.salesDocumentId).subscribe((result) => {
+                let units = result.json().productUnitConversions;
+                this.availableUnits = units;
+                if (units.length) {
+                    this.unit = units[0];
+                }
+                else {
+                    this.unit = undefined;
+                }
+            });
+        }
+    }
+
+    private forkUnitsFromContracts() {
         this.loadings.units = true;
-        this.productsApi.units(this.contract.salesDocument.salesDocumentId).subscribe((result) => {
-            let units = result.json().productUnitConversions;
-            this.availableUnits = units;
 
-            this.loadings.units = false;
+        // Fetch parallel units from contract + contract base unit
+        Observable.forkJoin(
+            this.productsApi.units(this.contract.salesDocument.salesDocumentId).map((result) => {
+                let units = result.json().productUnitConversions;
+                this.availableUnits = units;
+            }),
+            this.productsApi.unitByUnitOfMeasure(this.contract.unitOfMeasure).map((result) => {
+                this.contract.unitOfMeasure = result.json();
+                return result.json();
+            })
+        ).subscribe((response) => {
+            // Match unit of measure and preselect it
+            let matchingUnit = this.availableUnits.find((unit) => {
+                return unit.alternativeUnit.unitCode == this.product.unitOfMeasure.unitCode;
+            });
 
-            if (units.length > 0)
-                this.unit = units[0];
+            // Preselect it and dont let the user change it
+            if (matchingUnit) {
+                this.unit = matchingUnit;
+                this.loadings.units = true;
+            }
+            else {
+                // Preselect first one and let the user change it
+                if (this.availableUnits.length) {
+                    this.unit = this.availableUnits[0];
+                    this.loadings.units = false;
+                }
+                // No units available so disable it
+                else {
+                    this.loadings.units = true;
+                }
+            }
         });
     }
 
@@ -801,6 +866,12 @@ class PreProduct {
                     return false;
                 }
             }
+        }
+
+        // Validate unit
+        if (!this.unit) {
+            this.dashboard.alertError("Verify unit section");
+            return false;
         }
 
         return valid
