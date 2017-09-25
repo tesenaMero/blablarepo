@@ -137,7 +137,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         // Fetch products
         if (this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix) {
             this.fetchProductsReadyMix(this.manager.getSalesDocumentType());
-            
+
         }
         else {
             this.fetchProducts(this.manager.getSalesDocumentType());
@@ -254,54 +254,109 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
             const terms = result.json().paymentTerms;
             let uniqueTerms = [];
-
             // Find type Cash
             const cashPayment = terms.find((term: any) => {
-                return term.paymentTermType.paymentTermTypeCode === 'CASH';
+                return term.paymentTermType.paymentTermTypeDesc === 'Cash';
             });
 
             // Find type Credit
             const creditPayment = terms.find((term: any) => {
-                return term.paymentTermType.paymentTermTypeCode === 'CREDIT';
+                return term.paymentTermType.paymentTermTypeDesc === 'Credit';
             });
 
             // Push to terms array
-            if (cashPayment) { uniqueTerms = uniqueTerms.concat(cashPayment) };
-            if (creditPayment) { uniqueTerms = uniqueTerms.concat(creditPayment) };
-            
+            cashPayment && uniqueTerms.push(cashPayment);
+            creditPayment && uniqueTerms.push(creditPayment);
             SpecificationsStepComponent.availablePayments = uniqueTerms;
 
-            // If cash already came with the payment terms
-            console.log("cash", cashPayment)
-            if (cashPayment) {
-                this.preProducts.forEach((item: PreProduct) => {
-                    item.availablePayments = SpecificationsStepComponent.availablePayments;
-                    item.payment = SpecificationsStepComponent.availablePayments[0];
-                    item.loadings.payments = false;
-                })
-            }
-            // Else add cash manually
-            else {
+            this.preProducts.forEach((item: PreProduct) => {
+                item.availablePayments = SpecificationsStepComponent.availablePayments;
+            })
+
+            if (!cashPayment) {
                 let customerId = this.customerService.currentCustomer().legalEntityId;
                 this.paymentTermsApi.getCashTerm(customerId).subscribe((result) => {
                     let paymentTerms = result.json().paymentTerms;
                     if (paymentTerms.length) {
                         SpecificationsStepComponent.availablePayments.push(paymentTerms[0]);
                     }
-    
+
                     if (SpecificationsStepComponent.availablePayments.length) {
                         this.preProducts.forEach((item) => {
-                            if (paymentTerms.length) {
-                                item.availablePayments = item.availablePayments.push(paymentTerms[0]);
-                            }
-
                             item.payment = SpecificationsStepComponent.availablePayments[0];
                             item.loadings.payments = false;
                         });
                     }
                 });
             }
+            else {
+                this.preProducts.forEach((item) => {
+                    item.payment = SpecificationsStepComponent.availablePayments[0];
+                    item.loadings.payments = false;
+                });
+            }
         });
+    }
+
+    getPaymentTerms2() {
+        let paymentTermIds = '';
+
+        this.manager.salesArea.map((area: any) => {
+            if (area) {
+                if (area.paymentTerm) {
+                    paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
+                }
+            }
+        });
+
+        this.preProducts.forEach((item: PreProduct) => {
+            item.loadings.payments = true;
+        });
+
+        this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
+            const terms = result.json().paymentTerms;
+
+            const hasCash = this.hasPayment("CASH", terms);
+            const hasCredir = this.hasPayment("CASH", terms);
+
+            SpecificationsStepComponent.availablePayments = terms;
+
+            // If already has cash do not seach for it on api
+            if (hasCash) {
+                this.preProducts.forEach((item: PreProduct) => {
+                    item.availablePayments = SpecificationsStepComponent.availablePayments;
+                    item.loadings.payments = false;
+                })
+            }
+            // Else add cash manually from api
+            else {
+                let customerId = this.customerService.currentCustomer().legalEntityId;
+                this.paymentTermsApi.getCashTerm(customerId).subscribe((result) => {
+                    let paymentTerms = result.json().paymentTerms;
+                    if (paymentTerms.length) {
+
+                        // Push cash to available payments
+                        SpecificationsStepComponent.availablePayments.push(paymentTerms[0]);
+
+                        // Push cash to each available payments
+                        this.preProducts.forEach((item) => {
+                            if (paymentTerms.length) { item.availablePayments = item.availablePayments.push(paymentTerms[0]); }
+                            item.loadings.payments = false;
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    hasPayment(code, terms) {
+        for (let p of terms) {
+            if (p.paymentTermType.paymentTermTypeCode == code) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     getProjectProfiles() {
