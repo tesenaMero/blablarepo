@@ -636,13 +636,12 @@ class PreProduct {
     }
 
     getMaximumCapacity() {
-        if (!this.contract) { return undefined; }
-
+        if (!this.contract && !this.manager.jobsite) { return undefined; }
         const jobsite = this.manager.jobsite;
         const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
         const isPickup = shippingConditionId === this.MODE.Pickup;
         const salesArea = this.manager.salesArea.find((sa) => jobsite && jobsite.shipmentLocationId === jobsite.shipmentLocationId);
-        const maxJobsiteQty = salesArea && salesArea.maximumLot.amount; //doesn´t exist the path salesArea.maximumLot
+        const maxJobsiteQty = salesArea && salesArea.maximumLot.amount; 
         const unlimited = undefined;
 
         if (this.contract) {
