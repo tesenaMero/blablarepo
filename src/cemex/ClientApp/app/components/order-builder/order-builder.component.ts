@@ -129,15 +129,15 @@ export class OrderBuilderComponent {
         if (this.isMexico() && this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix) {
             this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId, 0);
 
-            if (this.hasCashPayment() || true) {
+            if (this.hasCashPayment()) {
                 this.flowMidCash();
             }
-            // else if ((!this.isReadyMix) && (this.isMexico())) {
-            //     this.flowCementMX();
-            // }
-            // else {
-            //     this.basicFlow();
-            // }
+            else if ((!this.isReadyMix) && (this.isMexico())) {
+                this.flowCementMX();
+            }
+            else {
+                this.basicFlow();
+            }
         }
         else {
             this.basicFlow();
@@ -185,7 +185,7 @@ export class OrderBuilderComponent {
         }
 
         let encoded = this.jsonObjService.encodeJson(cartItems);
-        this.document.location.href = 'https://https://dcm-qa.mybluemix.net/invoices-payments/open/' + encoded;
+        this.document.location.href = 'https://dcm-qa.mybluemix.net/invoices-payments/open/' + encoded;
     }
 
     flowCementMX() {
