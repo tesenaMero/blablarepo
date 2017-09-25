@@ -185,7 +185,7 @@ export class OrderBuilderComponent {
         }
 
         let encoded = this.jsonObjService.encodeJson(cartItems);
-        this.document.location.href = 'https://invoices-payments-dev2.mybluemix.net/invoices-payments/open/' + encoded;
+        this.document.location.href = 'https://dcm-qa.mybluemix.net/invoices-payments/open/' + encoded;
     }
 
     flowCementMX() {

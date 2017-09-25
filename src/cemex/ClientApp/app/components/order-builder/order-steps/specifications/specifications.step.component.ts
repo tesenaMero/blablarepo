@@ -33,8 +33,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
     private SALES_DOCUMENT_TYPE = '1';
 
     private loadings = {
-        products: true,
-        contracts: true,
         projectProfiles: true,
         catalog: true
     }
@@ -121,6 +119,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         // Add a pre product by default
         if (this.preProducts.length <= 0) { this.add(); }
 
+        console.log(this.manager);
+
         const customer = this.customerService.currentCustomer();
         const productLineId = this.manager.productLine.productLineId;
 
@@ -134,7 +134,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         // Fetch products
         if (this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix) {
             this.fetchProductsReadyMix(this.manager.getSalesDocumentType());
-            
+
         }
         else {
             this.fetchProducts(this.manager.getSalesDocumentType());
@@ -222,7 +222,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     getPlants() {
-        console.log("manager", this.manager);
         if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == this.MODE.Pickup) {
             let countryCode = this.manager.jobsite.address.countryCode || this.customerService.currentCustomer().countryCode;
             this.plantApi.byCountryCodeAndRegionCode(
@@ -269,23 +268,92 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
             this.preProducts.forEach((item: PreProduct) => {
                 item.availablePayments = SpecificationsStepComponent.availablePayments;
-                item.loadings.payments = false;
             })
 
-            let customerId = this.customerService.currentCustomer().legalEntityId;
-            this.paymentTermsApi.getCashTerm(customerId).subscribe((result) => {
-                let paymentTerms = result.json().paymentTerms;
-                if (paymentTerms.length) {
-                    SpecificationsStepComponent.availablePayments.push(paymentTerms[0]);
-                }
+            if (!cashPayment) {
+                let customerId = this.customerService.currentCustomer().legalEntityId;
+                this.paymentTermsApi.getCashTerm(customerId).subscribe((result) => {
+                    let paymentTerms = result.json().paymentTerms;
+                    if (paymentTerms.length) {
+                        SpecificationsStepComponent.availablePayments.push(paymentTerms[0]);
+                    }
 
-                if (SpecificationsStepComponent.availablePayments.length) {
-                    this.preProducts.forEach((item) => {
-                        item.payment = SpecificationsStepComponent.availablePayments[0];
-                    });
-                }
-            });
+                    if (SpecificationsStepComponent.availablePayments.length) {
+                        this.preProducts.forEach((item) => {
+                            item.payment = SpecificationsStepComponent.availablePayments[0];
+                            item.loadings.payments = false;
+                        });
+                    }
+                });
+            }
+            else {
+                this.preProducts.forEach((item) => {
+                    item.payment = SpecificationsStepComponent.availablePayments[0];
+                    item.loadings.payments = false;
+                });
+            }
         });
+    }
+
+    getPaymentTerms2() {
+        let paymentTermIds = '';
+
+        this.manager.salesArea.map((area: any) => {
+            if (area) {
+                if (area.paymentTerm) {
+                    paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
+                }
+            }
+        });
+
+        this.preProducts.forEach((item: PreProduct) => {
+            item.loadings.payments = true;
+        });
+
+        this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
+            const terms = result.json().paymentTerms;
+
+            const hasCash = this.hasPayment("CASH", terms);
+            const hasCredir = this.hasPayment("CASH", terms);
+
+            SpecificationsStepComponent.availablePayments = terms;
+
+            // If already has cash do not seach for it on api
+            if (hasCash) {
+                this.preProducts.forEach((item: PreProduct) => {
+                    item.availablePayments = SpecificationsStepComponent.availablePayments;
+                    item.loadings.payments = false;
+                })
+            }
+            // Else add cash manually from api
+            else {
+                let customerId = this.customerService.currentCustomer().legalEntityId;
+                this.paymentTermsApi.getCashTerm(customerId).subscribe((result) => {
+                    let paymentTerms = result.json().paymentTerms;
+                    if (paymentTerms.length) {
+
+                        // Push cash to available payments
+                        SpecificationsStepComponent.availablePayments.push(paymentTerms[0]);
+
+                        // Push cash to each available payments
+                        this.preProducts.forEach((item) => {
+                            if (paymentTerms.length) { item.availablePayments = item.availablePayments.push(paymentTerms[0]); }
+                            item.loadings.payments = false;
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    hasPayment(code, terms) {
+        for (let p of terms) {
+            if (p.paymentTermType.paymentTermTypeCode == code) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     getProjectProfiles() {
@@ -640,9 +708,12 @@ class PreProduct {
         const jobsite = this.manager.jobsite;
         const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
         const isPickup = shippingConditionId === this.MODE.Pickup;
-        const salesArea = this.manager.salesArea.find((sa) => jobsite && jobsite.shipmentLocationId === jobsite.shipmentLocationId);
-        const maxJobsiteQty = salesArea && salesArea.maximumLot.amount; 
+        //const salesArea = this.manager.salesArea.find((sa) => jobsite && jobsite.shipmentLocationId === jobsite.shipmentLocationId);
+
+        const salesArea = _.get(this.manager, 'salesArea[0]');
+        let maxJobsiteQty = undefined;
         const unlimited = undefined;
+        if (salesArea) { maxJobsiteQty = salesArea.maximumLot.amount }
 
         if (this.contract) {
             const volume = _.get(this.contract, 'salesDocument.volume');

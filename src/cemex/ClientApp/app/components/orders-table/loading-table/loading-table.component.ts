@@ -9,9 +9,7 @@ import { TranslationService } from '../../../shared/services/translation.service
 })
 export class LoadingTableComponent {
     @Input() rows: number = 2;
-    
-    range = [];
-    columns = [
+    @Input() columns = [
         { inner: '<i class="star cmx-icon-favourite-active" aria-hidden="true"></i>', width: 5 },
         { inner: "Order No", width: 10 },
         { inner: "Submitted", width: 15},
@@ -23,7 +21,9 @@ export class LoadingTableComponent {
         { inner: "Status", width: 13},
         { inner: "otal amount", width: 13},
         { inner: "", width: 5},
-    ]
+    ];
+    
+    range = [];
 
     constructor(
         private t: TranslationService
