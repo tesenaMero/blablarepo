@@ -102,7 +102,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         // What the f is this
         this.searchProductService.searchedProduct.subscribe(product => {
             if (product) {
-                let filteredProducts =  SpecificationsStepComponent.availableProducts.filter((x) => {return x.commercialCode === product.commercialCode;});                                       
+                let filteredProducts =  SpecificationsStepComponent.availableProducts.filter((availableProducts) => {return availableProducts.commercialCode === product.commercialCode;});                                       
                 if (filteredProducts.length) { preProduct.product = filteredProducts[0]; }
                 else {
                     SpecificationsStepComponent.availableProducts.push(product);
