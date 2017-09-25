@@ -805,7 +805,7 @@ class PreProduct {
         const salesArea = _.get(this.manager, 'salesArea[0]');
         let maxJobsiteQty = undefined;
         const unlimited = undefined;
-        if (salesArea) { maxJobsiteQty = salesArea.maximumLot.amount }
+        maxJobsiteQty = _.get(salesArea, 'maximumLot.amount');
 
         if (this.contract) {
             const volume = _.get(this.contract, 'salesDocument.volume');
