@@ -596,17 +596,9 @@ class PreProduct {
     }
 
     contractChanged() {
-        if (this.contract) { this.validations.contract.valid = true; }
-        else {
-            this.validations.contract.valid = false;
-            this.fetchUnits();
-        }
-
-        // TODO:
-        // Set minimum quantity
-        this.quantity = 1;
-
         if (this.contract) {
+            this.validations.contract.valid = true;
+            
             this.fetchUnitsFromContract();
 
             // If should get payment terms from contract
@@ -615,9 +607,21 @@ class PreProduct {
             }
         }
         else {
+            this.validations.contract.valid = false;
             this.fetchUnits();
+            
+            // Reset available payments
             this.availablePayments = SpecificationsStepComponent.availablePayments;
         }
+
+        // TODO:
+        // Set minimum quantity
+        this.quantity = 1;
+
+        // Plants from contract
+        // this.productsApi.salesAreaFromContract(this.contract).subscribe((response) => {
+        //     console.log(response.json());
+        // });
     }
 
     plantChanged() {
