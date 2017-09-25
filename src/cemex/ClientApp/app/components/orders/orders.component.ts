@@ -31,9 +31,11 @@ export class OrdersComponent implements OnInit {
         //this.orderRequestConfiguration = OrdersService.ORDER_REQUEST_MAPPING;
         //this.totalPages = ordersService.getTotalPages();
 
+        this.isLoading = true;
         this.ordersApi.all().subscribe((response) => {
             this.orders = response.json().orders;//.slice(0, 10);
             this.initOrders();
+            this.isLoading = false;
         });
     }
 

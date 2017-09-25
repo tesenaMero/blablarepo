@@ -52,6 +52,8 @@ export class ProductSelectionStepComponent {
 
             this.productLines = productLines;
             this.loading = false;
+        }, error => {
+            this.loading = false;
         });
     }
 
