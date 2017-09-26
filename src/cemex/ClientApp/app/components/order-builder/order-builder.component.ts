@@ -9,6 +9,7 @@ import { CustomerService } from '../../shared/services/customer.service';
 import { CreateOrderService } from '../../shared/services/create-order.service';
 import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
 import { ModalService } from '../../shared/components/modal'
+import { Validations } from '../../utils/validations'
 
 @Component({
     selector: 'order-builder',
@@ -47,6 +48,7 @@ export class OrderBuilderComponent {
         @Inject(DOCUMENT) private document: any) {
         this.rebuildOrder = false;
         this.customerService.customerSubject.subscribe((customer) => {
+            Validations.init(this.manager, this.customerService);
             if (customer && customer != this.currentCustomer) {
                 this.currentCustomer = customer;
                 this.rebuild();

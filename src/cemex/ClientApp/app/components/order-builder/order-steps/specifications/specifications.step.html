@@ -205,7 +205,9 @@
                                 <span style="line-height: 24px;">
                                         {{ product.unit?.alternativeUnit?.unitDesc }}
                                         <select [(ngModel)]="product.unit" class="input behind">
-                                            <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit?.alternativeUnit?.unitDesc }}</option>
+                                            <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">
+                                                {{ unit.alternativeUnit?.unitDesc }}
+                                            </option>
                                         </select>
                                     </span>
                                 <span class="arrow cmx-icon-straight-arrow-down"></span>

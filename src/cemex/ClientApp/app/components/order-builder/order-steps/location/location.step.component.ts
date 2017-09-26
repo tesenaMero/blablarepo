@@ -7,6 +7,7 @@ import { ShipmentLocationApi, PurchaseOrderApi } from '../../../../shared/servic
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
+import { Validations } from '../../../../utils/validations';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -46,12 +47,10 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         purchaseOrder: true
     }
 
-    // Contacts mandatory for delivery only
-    // MX POD mandatory
-
     private validations = {
         purchaseOrder: { valid: false, mandatory: false, showError: false },
         contactPerson: { valid: false, mandatory: false, showError: false },
+        pod: { valid: false, mandatory: false, showError: false },
         jobsite: { valid: false, mandatory: true, showError: false }
     }
 
@@ -130,7 +129,10 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     private customer: any;
 
+    private UTILS: any;
+
     constructor( @Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private customerService: CustomerService, private purchaseOrderApi: PurchaseOrderApi, private dashboard: DashboardService) {
+
         // Interfaces
         this.step.canAdvance = () => this.canAdvance();
         this.step.onBeforeBack = () => this.onBeforeBack();
@@ -202,6 +204,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
         // Reset validations
         this.resetValidations();
+        this.defineValidations();
 
         this.onCompleted.emit(false);
         this.loadings.locations = true;
@@ -373,6 +376,15 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     podChanged(pod: any) {
+        if (!pod) {
+            this.validations.pod.valid = false;
+            return;
+        }
+        else {
+            this.validations.pod.valid = true;
+            this.validations.pod.showError = false;
+        }
+
         this.pod = pod;
         this.orderManager.selectPointOfDelivery(pod);
 
@@ -451,6 +463,21 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     resetValidations() {
         for (let key in this.validations) {
             this.validations[key].valid = false;
+            this.validations[key].mandatory = false;
+        }
+
+        // Jobsite selection mandatory by default
+        this.validations.jobsite.mandatory = true;
+    }
+
+    // Contacts mandatory for delivery only
+    // MX POD mandatory
+    defineValidations() {
+        if (Validations.isDelivery()) {
+            this.validations.contactPerson.mandatory = true;
+        }
+        if (Validations.isMexicoCustomer() && Validations.isDelivery()) {
+            this.validations.pod.mandatory = true;
         }
     }
 
