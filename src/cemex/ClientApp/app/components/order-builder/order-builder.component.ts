@@ -4,7 +4,7 @@ import { Router } from '@angular/router'
 import { StepperComponent } from '../../shared/components/stepper/';
 import { DeliveryMode } from '../../models/delivery.model';
 import { DashboardService } from '../../shared/services/dashboard.service';
-import { DraftsService } from '../../shared/services/api/drafts.service';
+import { DraftsService } from '../../shared/services/api';
 import { CustomerService } from '../../shared/services/customer.service';
 import { CreateOrderService } from '../../shared/services/create-order.service';
 import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
@@ -34,6 +34,7 @@ export class OrderBuilderComponent {
     }
 
     constructor(
+        @Inject(DOCUMENT) private document: any,
         private _changeDetector: ChangeDetectorRef,
         private router: Router,
         private dashboard: DashboardService,
@@ -42,8 +43,7 @@ export class OrderBuilderComponent {
         private manager: CreateOrderService,
         private zone: NgZone,
         private jsonObjService: EncodeDecodeJsonObjService,
-        private modal: ModalService,
-        @Inject(DOCUMENT) private document: any) {
+        private modal: ModalService) {
 
         this.rebuildOrder = false;
         this.customerService.customerSubject.subscribe((customer) => {
@@ -67,7 +67,9 @@ export class OrderBuilderComponent {
     // Steps events
     // ------------------------------------------------------------
     modeStepCompleted(mode: DeliveryMode) {
-        if (mode) { this.stepper.complete(); }
+        if (mode) {
+            this.stepper.complete();
+        }
         else { this.stepper.uncomplete(); }
     }
 

@@ -8,6 +8,7 @@ import { CustomerService } from '../../../../shared/services/customer.service';
 import { SearchProductService } from '../../../../shared/services/product-search.service';
 import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service'
+import { Validations } from '../../../../utils/validations';
 import { Observable } from 'rxjs/Observable';
 
 import * as _ from 'lodash';
@@ -510,13 +511,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
 }
 
 class PreProduct {
-    // Consts
-    private MODE = DeliveryMode;
-    private PRODUCT_LINES = {
-        Readymix: 6,
-        CementBulk: 1
-    }
-
     // Props
     maneuvering: boolean = false;
     quantity: number = 1;
@@ -617,7 +611,7 @@ class PreProduct {
         this.fetchManeuvering();
 
         // Call plants only on pickup
-        if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == this.MODE.Pickup) {
+        if (Validations.isPickup()) {
             this.getPlants();
         }
     }
@@ -825,8 +819,6 @@ class PreProduct {
         if (!this.contract) { return undefined; }
         const jobsite = this.manager.jobsite;
         const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
-        const isPickup = shippingConditionId === this.MODE.Pickup;
-        //const salesArea = this.manager.salesArea.find((sa) => jobsite && jobsite.shipmentLocationId === jobsite.shipmentLocationId);
 
         const salesArea = _.get(this.manager, 'salesArea[0]');
         let maxJobsiteQty = undefined;
@@ -839,14 +831,14 @@ class PreProduct {
                 const maxContractVolume = _.get(volume, 'total.quantity.amount');
                 return maxContractVolume;
             } else {
-                if (isPickup) {
+                if (Validations.isPickup()) {
                     return unlimited;
                 } else {
                     return maxJobsiteQty;
                 }
             }
         } else {
-            if (isPickup) {
+            if (Validations.isPickup()) {
                 return unlimited;
             } else {
                 return maxJobsiteQty;
@@ -856,21 +848,20 @@ class PreProduct {
 
     defineValidations() {
         // Readymix
-        if (this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix) {
+        if (Validations.isReadyMix()) {
             this.validations.contract.mandatory = true;
             this.validations.plant.mandatory = false;
             return;
         }
 
         // Cement
-        if (this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix) {
+        if (Validations.isCement()) {
             this.validations.plant.mandatory = false;
             this.validations.contract.mandatory = false;
         }
 
         // Pickup && Mexico
-        if (this.manager.shippingCondition.shippingConditionId == this.MODE.Pickup &&
-            this.customerService.currentCustomer().countryCode.trim() == "MX") {
+        if (Validations.isPickup() && Validations.isMexicoCustomer()) {
             this.validations.plant.mandatory = true;
             this.validations.contract.mandatory = false;
         }
@@ -883,7 +874,7 @@ class PreProduct {
     }
 
     shouldHidePayment() {
-        return this.customerService.currentCustomer().countryCode.trim() == "US" || this.manager.productLine.productId == this.PRODUCT_LINES.Readymix
+        return Validations.isUSACustomer() || Validations.isReadyMix();
     }
 
     isValid(): boolean {
