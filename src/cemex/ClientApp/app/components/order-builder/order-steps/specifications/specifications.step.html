@@ -10,7 +10,7 @@
                         <label [ngClass]="{ loading: product.loadings.products }">
                             Product description
                         </label>
-                        <div class="input product-selection dropdown" [ngClass]="{ disabled: product.loadings.products }">
+                        <div class="input product-selection dropdown" [ngClass]="{ disabled: product.disableds.products }">
                             <span class="selection">
                                 {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">

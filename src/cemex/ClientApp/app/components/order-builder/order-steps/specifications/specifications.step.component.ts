@@ -544,6 +544,16 @@ class PreProduct {
         plants: true
     }
 
+    disableds = {
+        products: false,
+        contracts: false,
+        projectProfiles: false,
+        catalogs: false,
+        units: false,
+        payments: false,
+        plants: false
+    }
+
     validations = {
         plant: { valid: false, mandatory: true, text: "Verify plant section" },
         contract: { valid: false, mandatory: true, text: "Verify contract section" },
@@ -602,7 +612,7 @@ class PreProduct {
 
     productChanged() {
         if (!this.product) {
-            this.loadings.products = true; // Disable
+            this.disableds.products = true; // Disable
             return;
         }
 
@@ -638,11 +648,6 @@ class PreProduct {
         // TODO:
         // Set minimum quantity
         this.quantity = 1;
-
-        // Plants from contract
-        // this.productsApi.salesAreaFromContract(this.contract).subscribe((response) => {
-        //     console.log(response.json());
-        // });
     }
 
     plantChanged() {
