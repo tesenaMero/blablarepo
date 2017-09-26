@@ -36,19 +36,30 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         total: 0
     }
 
+    // Sub
+    lockRequests: boolean = false;
+
     constructor( @Inject(Step) private step: Step,
         private manager: CreateOrderService,
         private dashboard: DashboardService,
         private drafts: DraftsService,
         private customerService: CustomerService) {
+
+        this.step.onBeforeBack = () => this.onBeforeBack();
         this.step.setEventsListener(this);
     }
 
-    // Interfaces
-    // ======================
     ngOnInit() { }
 
+    // Step Interfaces
+    // ------------------------------------------------------
+    onBeforeBack() {
+        // Cancel needed requests and lock
+        this.lockRequests = true;
+    }
+
     onShowed() {
+        this.lockRequests = false;
         if (this.isReadyMix()) {
             this.calculatePrices();
         }
@@ -98,6 +109,10 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
 
     handlePrices(response) {
         this.draftOrder = response.json();
+        
+        // If locked (stepper is moving most likely) then dont do the call 
+        if (this.lockRequests) { return; }
+
         this.onCompleted.emit(this.draftOrder);
         this.dashboard.alertSuccess("Prices recovered successfully");
     }

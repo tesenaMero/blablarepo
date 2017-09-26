@@ -5,43 +5,51 @@ import { DeliveryMode } from '../models/delivery.model';
 
 @Injectable()
 export class Validations {
-    private MODE = DeliveryMode;
-    private PRODUCT_LINES = {
+    static MODE = DeliveryMode;
+    static PRODUCT_LINES = {
         Readymix: 6,
         CementBulk: 1
     }
 
-    constructor(private manager: any, private customer: any) {}
+    static manager: any;
+    static customer: any;
 
-    isMexicoCustomer() {
+    constructor() {}
+
+    static init(manager: any, customer: any) {
+        Validations.manager = manager;
+        Validations.customer = customer;
+    }
+
+    static isMexicoCustomer() {
         return this.customer.currentCustomer().countryCode.trim() == "MX"
     }
 
-    isUSACustomer() {
-        return this.customer.currentCustomer().countryCode.trim() == "USA"
+    static isUSACustomer() {
+        return this.customer.currentCustomer().countryCode.trim() == "US"
     }
 
-    isReadyMix() {
+    static isReadyMix() {
         return this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix
     }
 
-    isCement() {
+    static isCement() {
         return this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix
     }
 
-    isBulkCement() {
+    static isBulkCement() {
         return this.manager.productLine.productLineId == this.PRODUCT_LINES.CementBulk
     }
 
-    isPickup() {
+    static isPickup() {
         return this.manager.shippingCondition.shippingConditionId == this.MODE.Pickup
     }
 
-    isDelivery() {
+    static isDelivery() {
         return this.manager.shippingCondition.shippingConditionId == this.MODE.Delivery
     }
 
-    shouldHidePayment() {
+    static shouldHidePayment() {
         return this.customer.currentCustomer().countryCode.trim() == "US" || this.manager.productLine.productId == this.PRODUCT_LINES.Readymix;
     }
 }

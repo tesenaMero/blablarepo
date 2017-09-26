@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
-                        <label>
+                        <label [ngClass]="{ loading: product.loadings.products }">
                             Product description
                         </label>
                         <div class="input product-selection dropdown" [ngClass]="{ disabled: product.loadings.products }">
@@ -168,7 +168,7 @@
             <div class="row">
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
-                        <label>
+                        <label [ngClass]="{ loading: product.loadings.products }">
                             Product description
                         </label>
                         <div class="input product-selection dropdown" [ngClass]="{ disabled: product.loadings.products }">
@@ -205,7 +205,9 @@
                                 <span style="line-height: 24px;">
                                         {{ product.unit?.alternativeUnit?.unitDesc }}
                                         <select [(ngModel)]="product.unit" class="input behind">
-                                            <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit?.alternativeUnit?.unitDesc }}</option>
+                                            <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">
+                                                {{ unit.alternativeUnit?.unitDesc }}
+                                            </option>
                                         </select>
                                     </span>
                                 <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -344,7 +346,7 @@
             <div class="row">
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
-                        <label>
+                        <label [ngClass]="{ loading: product.loadings.products }">
                             Product description
                         </label>
                         <div class="input product-selection dropdown">
