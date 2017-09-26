@@ -52,6 +52,7 @@ export class ReviewStepComponent implements StepEventsListener {
     }
 
     onShowed() {
+        this.lockRequests = false;
         this.onCompleted.emit(false);
         this.saveDraft();
 
@@ -67,7 +68,6 @@ export class ReviewStepComponent implements StepEventsListener {
             google.maps.event.trigger(this.map, "resize");
         }
 
-        console.log("manager", this.manager);
         this.cleanJobsiteMarker();
         this.jobsiteMarker = this.makeJobsiteMarker(this.manager.jobsite.geo);
         this.addMarkerToMap(this.jobsiteMarker);

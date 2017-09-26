@@ -138,7 +138,7 @@
                     <div class="title">
                         Contract
                     </div>
-                    <div class="value">
+                    <div class="value" *ngIf="item?.contract?.salesDocument">
                         Contract {{ item?.contract?.salesDocument?.salesDocumentCode }} Remaining volume: {{ item?.contract?.salesDocument?.volume?.total.quantity.amount }}
                     </div>
                 </div>

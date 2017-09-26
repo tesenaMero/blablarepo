@@ -59,6 +59,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     }
 
     onShowed() {
+        this.lockRequests = false;
         if (this.isReadyMix()) {
             this.calculatePrices();
         }
