@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <label for="ps-product-type" class="">{{ t.pt('views.search.product_type') }}</label>
-                <select [(ngModel)]="productColorSelected" (change)="productColorChanged($event.target.value)" name="ps-product-type" id="ps-product-type" class="form-control" [ngClass]="{ required-pt: message }">
+                <select [(ngModel)]="productColorSelected" (change)="productColorChanged($event.target.value)" name="ps-product-type" id="ps-product-type" class="form-control" [ngClass]="{ 'required-pt': message }">
                     <option [value]="productColorSelected" disabled selected hidden>{{ t.pt('views.search.select_product') }}</option>
                     <option *ngFor="let productColor of productColors" [ngValue]="productColor.productColorId">{{productColor.productColorDesc}}</option>
                 </select>
