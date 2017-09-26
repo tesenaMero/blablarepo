@@ -573,14 +573,13 @@ class PreProduct {
         this.availablePayments = SSC.availablePayments;
         if (this.availablePayments.length > 0) {
             this.payment = this.availablePayments[0];
+            this.paymentChanged();
             this.loadings.payments = false;
         }
         else {
             this.payment = undefined;
             this.loadings.payments = true;
         }
-
-        this.payment = SSC.availablePayments[0];
 
         // Available project profiles init
         if (SSC.projectProfiles.length) { this.loadings.projectProfiles = false; }
