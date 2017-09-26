@@ -33,7 +33,7 @@ export class OrdersComponent implements OnInit {
 
         this.isLoading = true;
         this.ordersApi.all().subscribe((response) => {
-            if (response.status != 200) {
+            if (response.status == 200) {
                 this.orders = response.json().orders;//.slice(0, 10);
                 this.initOrders();
             }

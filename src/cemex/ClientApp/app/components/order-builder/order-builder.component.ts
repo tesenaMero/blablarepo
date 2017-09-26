@@ -18,8 +18,6 @@ import { Validations } from '../../utils/validations'
 })
 export class OrderBuilderComponent {
     @ViewChild(StepperComponent) stepper;
-    private READYMIX_ID = 6;
-    private BULKCEMENT_ID = 1;
     private isReadyMix: boolean = false;
     private isBulkCementUSA: boolean = false;
     private rebuildOrder = false;
@@ -46,6 +44,7 @@ export class OrderBuilderComponent {
         private jsonObjService: EncodeDecodeJsonObjService,
         private modal: ModalService,
         @Inject(DOCUMENT) private document: any) {
+
         this.rebuildOrder = false;
         this.customerService.customerSubject.subscribe((customer) => {
             Validations.init(this.manager, this.customerService);
@@ -56,27 +55,32 @@ export class OrderBuilderComponent {
         });
     }
 
+    // Rebuilds the component
     rebuild() {
-        // Add instruction to event queue
         this.manager.resetOrder();
+
+        // Go into js event loop
         setTimeout(() => { this.rebuildOrder = false; }, 0);
         setTimeout(() => { this.rebuildOrder = true; }, 0);
     }
 
+    // Steps events
+    // ------------------------------------------------------------
     modeStepCompleted(mode: DeliveryMode) {
-        if (mode) {
-            this.stepper.complete();
-        }
-        else {
-            this.stepper.uncomplete();
-        }
+        if (mode) { this.stepper.complete(); }
+        else { this.stepper.uncomplete(); }
+    }
+
+    productStepCompleted(product: any) {
+        this.isReadyMix = Validations.isReadyMix();
+        this.isBulkCementUSA = (Validations.isBulkCement()) && (Validations.isUSACustomer());
+        this._changeDetector.detectChanges();
+        this.stepper.complete();
     }
 
     locationStepCompleted(event: any) {
-        if (event)
-            this.stepper.complete();
-        else
-            this.stepper.uncomplete();
+        if (event) { this.stepper.complete(); }
+        else { this.stepper.uncomplete(); }
     }
 
     locationStepRequestedNext(event: any) {
@@ -84,11 +88,13 @@ export class OrderBuilderComponent {
         this.stepper.next(true);
     }
 
-    productStepCompleted(product: any) {
-        this.isReadyMix = product.productLineId == this.READYMIX_ID;
-        this.isBulkCementUSA = (product.productLineId == this.BULKCEMENT_ID) && (this.currentCustomer.countryCode.trim() == "US");
-        this._changeDetector.detectChanges();
-        this.stepper.complete();
+    specificationsStepCompleted(event: any) {
+        if (event) {
+            this.stepper.complete();
+        }
+        else {
+            this.stepper.uncomplete();
+        }
     }
 
     reviewStepCompleted(draftId) {
@@ -107,24 +113,11 @@ export class OrderBuilderComponent {
             this.stepper.complete();
         }
         else {
-            if (this.isUSA()) { this.stepper.complete(); }
-            else if (this.isMexico() && this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix) {
+            if (Validations.isUSACustomer()) { this.stepper.complete(); }
+            else if (Validations.isMexicoCustomer() && Validations.isReadyMix()) {
                 this.stepper.complete();
             }
             else { this.stepper.uncomplete(); }
-        }
-    }
-
-    specificationsStepShowed() {
-        this.stepper.complete();
-    }
-
-    specificationsStepCompleted(event: any) {
-        if (event) {
-            this.stepper.complete();
-        }
-        else {
-            this.stepper.uncomplete();
         }
     }
 
@@ -132,14 +125,15 @@ export class OrderBuilderComponent {
         this.placeOrder();
     }
 
+    // Payment flow
+    // --------------------------------------------------------------------
     placeOrder() {
-        if (this.isMexico() && this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix) {
+        if ((Validations.isMexicoCustomer()) && (!this.isReadyMix)) {
             this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId, 0);
-
             if (this.hasCashPayment()) {
                 this.flowMidCash();
             }
-            else if ((!this.isReadyMix) && (this.isMexico())) {
+            else if ((!this.isReadyMix) && (Validations.isMexicoCustomer())) {
                 this.flowCementMX();
             }
             else {
@@ -151,18 +145,7 @@ export class OrderBuilderComponent {
         }
     }
 
-    hasCashPayment() {
-        for (let item of this.manager.products) {
-            if (item.payment)
-                if (item.payment.paymentTermType)
-                    if (item.payment.paymentTermType.paymentTermTypeCode)
-                        if (item.payment.paymentTermType.paymentTermTypeCode == "CASH")
-                            return true;
-        }
-
-        return false;
-    }
-
+    // If 
     flowMidCash() {
         const customer = this.customerService.currentCustomer();
         let data = [];
@@ -176,9 +159,8 @@ export class OrderBuilderComponent {
                 payerCode: customer.legalEntityTypeCode,
                 orderAmount: item.totalPrice,
                 documents: []
-            }
-            )
-        })
+            })
+        });
 
         const cartItems = {
             sourceApp: "order-taking",
@@ -225,22 +207,18 @@ export class OrderBuilderComponent {
         });
     }
 
-    showSuccessModal(orderCode) {
-        this.orderCode = orderCode;
-        this.modal.open('success-placement');
-    }
+    // In-class utils
+    // ---------------------------------------------------------------
+    hasCashPayment() {
+        for (let item of this.manager.products) {
+            if (item.payment)
+                if (item.payment.paymentTermType)
+                    if (item.payment.paymentTermType.paymentTermTypeCode)
+                        if (item.payment.paymentTermType.paymentTermTypeCode == "CASH")
+                            return true;
+        }
 
-    closeModal() {
-        this.router.navigate(['/app/orders']);
-        this.modal.close('success-placement');
-    }
-
-    isMexico() {
-        return this.customerService.currentCustomer().countryCode.trim() == "MX";
-    }
-
-    isUSA() {
-        return this.customerService.currentCustomer().countryCode.trim() == "US";
+        return false;
     }
 
     shouldShowDeliveryMode() {
@@ -253,5 +231,15 @@ export class OrderBuilderComponent {
         else {
             return true;
         }
+    }
+
+    showSuccessModal(orderCode) {
+        this.orderCode = orderCode;
+        this.modal.open('success-placement');
+    }
+
+    closeModal() {
+        this.router.navigate(['/app/orders']);
+        this.modal.close('success-placement');
     }
 }

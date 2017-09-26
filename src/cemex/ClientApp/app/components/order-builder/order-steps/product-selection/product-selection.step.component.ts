@@ -3,6 +3,7 @@ import { ProductLineApi } from '../../../../shared/services/api'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { DeliveryMode } from '../../../../models/delivery.model'
 import { CustomerService } from '../../../../shared/services/customer.service'
+import { Validations } from '../../../../utils/validations';
 
 @Component({
     selector: 'product-selection-step',
@@ -30,7 +31,7 @@ export class ProductSelectionStepComponent {
             let bagCement = this.getBagCement(productLines);
             let multiproduct = this.getMultiproduct(productLines)
 
-            if (!this.isMexico()) {
+            if (!Validations.isMexicoCustomer()) {
                 multiproduct && productLines.splice(productLines.indexOf(multiproduct), 1);
             }
             else {
@@ -78,7 +79,7 @@ export class ProductSelectionStepComponent {
         this.orderManager.selectProductLine(product);
 
         // Readymix case and Bulk Cement
-        if (this.productLine.productLineId == this.PRODUCT_LINES.Readymix || this.isBulkCementUSA()) {
+        if (Validations.isReadyMix() || this.isBulkCementUSA()) {
             this.orderManager.shippingCondition = { shippingConditionId: this.MODE.Delivery };
         }
 
@@ -86,12 +87,7 @@ export class ProductSelectionStepComponent {
     }
 
     isBulkCementUSA(): boolean {
-        return this.productLine.productLineId == this.PRODUCT_LINES.CementBulk
-            && this.customerService.currentCustomer().countryCode.trim() == "US"
-    }
-
-    isMexico(): boolean {
-        return this.customerService.currentCustomer().countryCode.trim() == "MX";
+        return Validations.isBulkCement() && Validations.isUSACustomer();
     }
 
     isSelected(product: any) {
