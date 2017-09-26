@@ -36,4 +36,25 @@
         window.CLIENT_ID = '@ViewData["CLIENT_ID"]';
     </script>
     <script src="~/ordersnproduct/dist/main-client.js" asp-append-version="true"></script>
+    <script type='text/javascript'>
+        var Countly = Countly || {};
+        Countly.q = Countly.q || [
+            ['track_pageview'],
+            ['track_clicks'],
+            ['track_errors'],
+            ['track_links'],
+            ['track_forms'],
+            ['collect_from_forms'],
+            ['track_sessions']
+        ];
+        Countly.app_key = ""; // TODO
+        Countly.url = 'https://cemex.count.ly';
+        (function() {
+            var cly = document.createElement('script'); cly.type = 'text/javascript';
+            cly.async = true;
+            cly.src = 'https://cdn.jsdelivr.net/countly-sdk-web/latest/countly.min.js';
+            cly.onload = function(){Countly.init()};
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(cly, s);
+        })();
+    </script>
 }
