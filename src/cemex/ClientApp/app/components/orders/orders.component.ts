@@ -34,7 +34,14 @@ export class OrdersComponent implements OnInit {
         this.isLoading = true;
         this.ordersApi.all().subscribe((response) => {
             if (response.status == 200) {
-                this.orders = response.json().orders;//.slice(0, 10);
+                let orders: any[] = response.json().orders;
+
+                // Filter drafts
+                this.orders = orders.filter((item) => {
+                    return item.status.statusCode != "DRFT";
+                });
+
+                //this.orders = this.orders.slice(0, 10);
                 this.initOrders();
             }
             this.isLoading = false;
