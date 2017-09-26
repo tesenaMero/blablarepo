@@ -27,6 +27,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     private preProducts = [];
 
     // Consts
+    private UTILS = Validations;
     private MODE = DeliveryMode;
     private PRODUCT_LINES = {
         Readymix: 6,
@@ -546,12 +547,12 @@ class PreProduct {
 
     disableds = {
         products: false,
-        contracts: false,
-        projectProfiles: false,
-        catalogs: false,
-        units: false,
-        payments: false,
-        plants: false
+        contracts: true,
+        projectProfiles: true,
+        catalogs: true,
+        units: true,
+        payments: true,
+        plants: true
     }
 
     validations = {
@@ -674,11 +675,10 @@ class PreProduct {
             let contracts = result.json().products;
             this.availableContracts = contracts;
 
-            if (contracts.length > 0) {
-                this.availableContracts.unshift(undefined);
-                this.loadings.contracts = false;
-            }
-            else { this.loadings.contracts = true; } // Disable it if no contracts
+            if (contracts.length > 0) { this.availableContracts.unshift(undefined); }
+            else { this.disableds.contracts = true; } // Disable it if no contracts
+
+            this.loadings.contracts = false;
         });
     }
 
