@@ -37,6 +37,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         catalog: true
     }
 
+    // Subs
+    productsSub: any;
+    lockRequests: boolean = false;
+
     // Statics
     private shouldHidePayment = false;
 
@@ -92,6 +96,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     ) {
         this.step.setEventsListener(this);
         this.step.canAdvance = () => this.canAdvance();
+        this.step.onBeforeBack = () => this.onBeforeBack();
     }
 
     openProductSearch(preProduct: PreProduct) {
@@ -112,6 +117,16 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
     }
 
+    // Step Interfaces
+    // ------------------------------------------------------
+    onBeforeBack() {
+        // Cancel needed requests and lock
+        this.lockRequests = true;
+        if (this.productsSub) {
+            this.productsSub.unsubscribe();
+        }
+    }
+
     canAdvance(): boolean {
         this.manager.setProducts(this.preProducts);
 
@@ -129,6 +144,14 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     onShowed() {
+        // Unlock
+        this.lockRequests = false;
+
+        // Define validations for each preproduct already added
+        this.preProducts.forEach((item: PreProduct) => {
+            item.defineValidations();
+        });
+
         // Add a pre product by default
         if (this.preProducts.length <= 0) { this.add(); }
 
@@ -162,7 +185,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
             item.loadings.contracts = true;
         });
 
-        this.productsApi.top(
+        // If locked (stepper is moving most likely) then dont do the call 
+        if (this.lockRequests) { return; }
+
+        this.productsSub = this.productsApi.top(
             this.manager.jobsite,
             salesDocumentType,
             this.manager.productLine,
@@ -191,7 +217,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
             item.loadings.contracts = true;
         });
 
-        this.productsApi.top(
+        // If locked (stepper is moving most likely) then dont do the call 
+        if (this.lockRequests) { return; }
+
+        this.productsSub = this.productsApi.top(
             this.manager.jobsite,
             salesDocumentType,
             this.manager.productLine,

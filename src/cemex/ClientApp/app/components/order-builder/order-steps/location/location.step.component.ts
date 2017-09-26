@@ -46,6 +46,9 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         purchaseOrder: true
     }
 
+    // Contacts mandatory for delivery only
+    // MX POD mandatory
+
     private validations = {
         purchaseOrder: { valid: false, mandatory: false, showError: false },
         contactPerson: { valid: false, mandatory: false, showError: false },
