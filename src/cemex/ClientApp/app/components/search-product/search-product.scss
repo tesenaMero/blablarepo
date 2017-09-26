@@ -12,7 +12,7 @@
     }
 }
 
-.requiredPt {
+.required-pt {
     border-color: #EE3D42 !important;
 }
 
@@ -34,7 +34,6 @@
     color: #000000;
     font-size: 30px;
     line-height: 40px;
-    
     &.sub {
         font-size: 20px;
         line-height: 30px;
@@ -49,20 +48,23 @@
 
 .modal-scrolling-content::-webkit-scrollbar {
     width: 8px;
-    background-color: none; 
+    background-color: none;
 }
+
 .modal-scrolling-content::-webkit-scrollbar-track {
     background-color: none;
-    border-radius: 8px; 
+    border-radius: 8px;
 }
+
 .modal-scrolling-content::-webkit-scrollbar-thumb {
     border-radius: 8px;
-    background: #3FA9F5; 
+    background: #3FA9F5;
 }
+
 .modal-scrolling-content::-webkit-scrollbar-thumb:hover {
     border-radius: 8px;
     background: #003876;
-    transition: all 0.4s; 
+    transition: all 0.4s;
 }
 
 .separator {
@@ -73,7 +75,6 @@
     list-style: none;
     padding: 0;
     margin-top: 20px;
-    
     li {
         padding: 10px;
         &:hover {
@@ -180,9 +181,8 @@ div.select-label {
 
 select {
     border: 1px solid transparent;
-    &.ng-pristine{
+    &.ng-pristine {
         color: darken($white, 50%);
     }
     padding: 5px;
 }
-

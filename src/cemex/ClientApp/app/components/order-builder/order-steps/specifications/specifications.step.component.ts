@@ -100,7 +100,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
         // What the f is this
         this.searchProductService.searchedProduct.subscribe(product => {
             if (product) {
-                let filteredProducts =  SpecificationsStepComponent.availableProducts.filter((availableProducts) => {return availableProducts.commercialCode === product.commercialCode;});                                       
+                let filteredProducts = SpecificationsStepComponent.availableProducts.filter((availableProducts) => {
+                    return availableProducts.commercialCode === product.commercialCode;
+                });
                 if (filteredProducts.length) { preProduct.product = filteredProducts[0]; }
                 else {
                     SpecificationsStepComponent.availableProducts.push(product);
@@ -792,7 +794,7 @@ class PreProduct {
     }
 
     getMaximumCapacity() {
-        if (!this.contract && !this.manager.jobsite) { return undefined; }
+        if (!this.contract) { return undefined; }
         const jobsite = this.manager.jobsite;
         const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
         const isPickup = shippingConditionId === this.MODE.Pickup;
