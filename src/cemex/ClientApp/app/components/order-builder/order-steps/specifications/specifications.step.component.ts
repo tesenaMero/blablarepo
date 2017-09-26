@@ -8,6 +8,8 @@ import { CustomerService } from '../../../../shared/services/customer.service';
 import { SearchProductService } from '../../../../shared/services/product-search.service';
 import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service'
+import { Observable } from 'rxjs/Observable';
+
 import * as _ from 'lodash';
 
 @Component({
@@ -29,8 +31,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         Readymix: 6,
         CementBulk: 1
     }
-
-    private SALES_DOCUMENT_TYPE = '1';
 
     private loadings = {
         projectProfiles: true,
@@ -112,14 +112,23 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     canAdvance(): boolean {
         this.manager.setProducts(this.preProducts);
+
+        let advance = true;
+        for (let preProduct of this.preProducts) {
+            if (!preProduct.isValid()) {
+                advance = false;
+                return;
+            }
+        }
+
+        if (!advance) { return; }
+
         return true;
     }
 
     onShowed() {
         // Add a pre product by default
         if (this.preProducts.length <= 0) { this.add(); }
-
-        console.log(this.manager);
 
         const customer = this.customerService.currentCustomer();
         const productLineId = this.manager.productLine.productLineId;
@@ -143,9 +152,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.getAdditionalServices();
         this.getPaymentTerms();
         this.getProjectProfiles();
-
-        // Only in pickup
-        this.getPlants();
     }
 
     fetchProducts(salesDocumentType) {
@@ -221,18 +227,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
     }
 
-    getPlants() {
-        if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == this.MODE.Pickup) {
-            let countryCode = this.manager.jobsite.address.countryCode || this.customerService.currentCustomer().countryCode;
-            this.plantApi.byCountryCodeAndRegionCode(
-                countryCode.trim(),
-                this.manager.jobsite.address.regionCode
-            ).subscribe((response) => {
-                SpecificationsStepComponent.plants = response.json().plants;
-            });
-        }
-    }
-
     getPaymentTerms() {
         let paymentTermIds = '';
 
@@ -268,6 +262,12 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
             this.preProducts.forEach((item: PreProduct) => {
                 item.availablePayments = SpecificationsStepComponent.availablePayments;
+
+                // Pre select payemnt
+                if (item.availablePayments) {
+                    item.payment = item.availablePayments[0];
+                    item.paymentChanged();
+                }
             })
 
             if (!cashPayment) {
@@ -280,7 +280,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
                     if (SpecificationsStepComponent.availablePayments.length) {
                         this.preProducts.forEach((item) => {
-                            item.payment = SpecificationsStepComponent.availablePayments[0];
                             item.loadings.payments = false;
                         });
                     }
@@ -288,61 +287,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
             }
             else {
                 this.preProducts.forEach((item) => {
-                    item.payment = SpecificationsStepComponent.availablePayments[0];
                     item.loadings.payments = false;
                 });
             }
-        });
-    }
 
-    getPaymentTerms2() {
-        let paymentTermIds = '';
-
-        this.manager.salesArea.map((area: any) => {
-            if (area) {
-                if (area.paymentTerm) {
-                    paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
-                }
-            }
-        });
-
-        this.preProducts.forEach((item: PreProduct) => {
-            item.loadings.payments = true;
-        });
-
-        this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
-            const terms = result.json().paymentTerms;
-
-            const hasCash = this.hasPayment("CASH", terms);
-            const hasCredir = this.hasPayment("CASH", terms);
-
-            SpecificationsStepComponent.availablePayments = terms;
-
-            // If already has cash do not seach for it on api
-            if (hasCash) {
-                this.preProducts.forEach((item: PreProduct) => {
-                    item.availablePayments = SpecificationsStepComponent.availablePayments;
-                    item.loadings.payments = false;
-                })
-            }
-            // Else add cash manually from api
-            else {
-                let customerId = this.customerService.currentCustomer().legalEntityId;
-                this.paymentTermsApi.getCashTerm(customerId).subscribe((result) => {
-                    let paymentTerms = result.json().paymentTerms;
-                    if (paymentTerms.length) {
-
-                        // Push cash to available payments
-                        SpecificationsStepComponent.availablePayments.push(paymentTerms[0]);
-
-                        // Push cash to each available payments
-                        this.preProducts.forEach((item) => {
-                            if (paymentTerms.length) { item.availablePayments = item.availablePayments.push(paymentTerms[0]); }
-                            item.loadings.payments = false;
-                        });
-                    }
-                });
-            }
         });
     }
 
@@ -474,14 +422,27 @@ export class SpecificationsStepComponent implements StepEventsListener {
         preProduct.productChanged();
     }
 
-    // TODO
-    contractChanged(contract: any, preProduct: PreProduct) {
+    contractChanged(preProduct: PreProduct) {
         preProduct.contractChanged();
-        preProduct.quantity = 1;
+    }
+
+    plantChanged(preProduct: PreProduct) {
+        preProduct.plantChanged();
+    }
+
+    paymentChanged(preProduct: PreProduct) {
+        preProduct.paymentChanged();
     }
 
     add() {
-        this.preProducts.push(new PreProduct(this.productsApi, this.manager, this.paymentTermsApi));
+        this.preProducts.push(new PreProduct(
+            this.productsApi,
+            this.manager,
+            this.paymentTermsApi,
+            this.plantApi,
+            this.customerService,
+            this.dashboard
+        ));
     }
 
     remove(index: any) {
@@ -520,6 +481,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
 class PreProduct {
     // Consts
     private MODE = DeliveryMode;
+    private PRODUCT_LINES = {
+        Readymix: 6,
+        CementBulk: 1
+    }
 
     // Props
     maneuvering: boolean = false;
@@ -530,6 +495,7 @@ class PreProduct {
     payment: any;
     contract: any;
     product: any;
+    productBaseUnit: any;
     plant: any;
     projectProfile: any = {};
     templateProfile: any = {};
@@ -540,6 +506,7 @@ class PreProduct {
     availableUnits = [];
     availableContracts = [];
     availablePayments = [];
+    availablePlants = [];
     maneuveringAvailable: boolean = false;
 
     loadings = {
@@ -548,12 +515,30 @@ class PreProduct {
         projectProfiles: true,
         catalogs: true,
         units: true,
-        payments: true
+        payments: true,
+        plants: true
     }
 
-    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi) {
+    validations = {
+        plant: { valid: false, mandatory: true, text: "Verify plant section" },
+        contract: { valid: false, mandatory: true, text: "Verify contract section" },
+        payment: { valid: false, mandatory: true, text: "Verify payment section" }
+    }
+
+    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService) {
+        // Conts
         const SSC = SpecificationsStepComponent;
 
+        // Available products init
+        if (SSC.availableProducts.length) {
+            this.setProduct(SSC.availableProducts[0]);
+            this.loadings.products = false;
+        }
+        else {
+            this.loadings.products = true;
+        }
+
+        // Available payments init
         this.availablePayments = SSC.availablePayments;
         if (this.availablePayments.length > 0) {
             this.payment = this.availablePayments[0];
@@ -565,21 +550,17 @@ class PreProduct {
         }
 
         this.payment = SSC.availablePayments[0];
-        this.plant = SSC.availablePlants[0];
 
-        if (SSC.availableProducts.length) {
-            this.setProduct(SSC.availableProducts[0]);
-            this.loadings.products = false;
-        }
-        else {
-            this.loadings.products = true;
-        }
-
+        // Available project profiles init
         if (SSC.projectProfiles.length) { this.loadings.projectProfiles = false; }
         else { this.loadings.projectProfiles = true; }
 
+        // Available catalogs init
         if (SSC.catalogs) { this.loadings.catalogs = false; }
         else { this.loadings.catalogs = true; }
+
+        // Define mandatories
+        this.defineValidations();
 
         // Base project profile
         this.projectProfile = {
@@ -604,6 +585,50 @@ class PreProduct {
         this.fetchContracts();
         this.fetchUnits();
         this.fetchManeuvering();
+
+        // Call plants only on pickup
+        if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == this.MODE.Pickup) {
+            this.getPlants();
+        }
+    }
+
+    contractChanged() {
+        if (this.contract) {
+            this.validations.contract.valid = true;
+            
+            this.fetchUnitsFromContract();
+
+            // If should get payment terms from contract
+            if (this.contract.salesDocument.paymentTerm) {
+                this.getContractPaymentTerm(this.contract.salesDocument.paymentTerm.paymentTermId);
+            }
+        }
+        else {
+            this.validations.contract.valid = false;
+            this.fetchUnits();
+            
+            // Reset available payments
+            this.availablePayments = SpecificationsStepComponent.availablePayments;
+        }
+
+        // TODO:
+        // Set minimum quantity
+        this.quantity = 1;
+
+        // Plants from contract
+        // this.productsApi.salesAreaFromContract(this.contract).subscribe((response) => {
+        //     console.log(response.json());
+        // });
+    }
+
+    plantChanged() {
+        if (this.plant) { this.validations.plant.valid = true; }
+        else { this.validations.plant.valid = false; }
+    }
+
+    paymentChanged() {
+        if (this.payment) { this.validations.payment.valid = true; }
+        else { this.validations.payment.valid = false; }
     }
 
     fetchContracts() {
@@ -630,30 +655,33 @@ class PreProduct {
 
     fetchUnits() {
         this.loadings.units = true;
-        this.productsApi.units(this.product.product.productId).subscribe((result) => {
-            let units = result.json().productUnitConversions;
-            this.availableUnits = units;
 
-            this.loadings.units = false;
+        // Fetch product base unit + alt units parallel
+        Observable.forkJoin(
+            this.productsApi.unit(this.product).map((result) => {
+                this.product.unitOfMeasure = result.json();
+            }),
+            this.productsApi.units(this.product.product.productId).map((result) => {
+                let units = result.json().productUnitConversions;
+                this.availableUnits = units;
 
-            if (units.length > 0)
-                this.unit = units[0];
-        });
-    }
+                this.loadings.units = false;
 
-    contractChanged() {
-        if (this.contract) {
-            this.fetchUnitsFromContract();
+                if (units.length > 0)
+                    this.unit = units[0];
+            })
+        ).subscribe((response) => {
+            // Map product base unit with available units and map it
+            let matchingUnit = this.availableUnits.find((unit) => {
+                return unit.alternativeUnit.unitCode == this.product.unitOfMeasure.unitCode;
+            });
 
-            // If should get payment terms from contract
-            if (this.contract.salesDocument.paymentTerm) {
-                this.getContractPaymentTerm(this.contract.salesDocument.paymentTerm.paymentTermId);
+            // Preselect it
+            if (matchingUnit) { this.unit = matchingUnit; }
+            else {
+                if (this.availableUnits.length) { this.unit = this.availableUnits[0]; }
             }
-        }
-        else {
-            this.fetchUnits();
-            this.availablePayments = SpecificationsStepComponent.availablePayments;
-        }
+        });
     }
 
     getContractPaymentTerm(termId: any) {
@@ -663,7 +691,6 @@ class PreProduct {
             this.availablePayments = contractPaymentTerm;
 
             if (this.availablePayments.length > 0) {
-                this.payment = this.availablePayments[0];
                 this.loadings.payments = false;
             }
             else {
@@ -674,15 +701,58 @@ class PreProduct {
     }
 
     fetchUnitsFromContract() {
+        if (this.contract.unitOfMeasure) {
+            this.forkUnitsFromContracts();
+        }
+        else {
+            this.productsApi.units(this.contract.salesDocument.salesDocumentId).subscribe((result) => {
+                let units = result.json().productUnitConversions;
+                this.availableUnits = units;
+                if (units.length) {
+                    this.unit = units[0];
+                }
+                else {
+                    this.unit = undefined;
+                }
+            });
+        }
+    }
+
+    private forkUnitsFromContracts() {
         this.loadings.units = true;
-        this.productsApi.units(this.contract.salesDocument.salesDocumentId).subscribe((result) => {
-            let units = result.json().productUnitConversions;
-            this.availableUnits = units;
 
-            this.loadings.units = false;
+        // Fetch parallel units from contract + contract base unit
+        Observable.forkJoin(
+            this.productsApi.units(this.contract.salesDocument.salesDocumentId).map((result) => {
+                let units = result.json().productUnitConversions;
+                this.availableUnits = units;
+            }),
+            this.productsApi.unitByUnitOfMeasure(this.contract.unitOfMeasure).map((result) => {
+                this.contract.unitOfMeasure = result.json();
+                return result.json();
+            })
+        ).subscribe((response) => {
+            // Match unit of measure and preselect it
+            let matchingUnit = this.availableUnits.find((unit) => {
+                return unit.alternativeUnit.unitCode == this.product.unitOfMeasure.unitCode;
+            });
 
-            if (units.length > 0)
-                this.unit = units[0];
+            // Preselect it and dont let the user change it
+            if (matchingUnit) {
+                this.unit = matchingUnit;
+                this.loadings.units = true;
+            }
+            else {
+                // Preselect first one and let the user change it
+                if (this.availableUnits.length) {
+                    this.unit = this.availableUnits[0];
+                    this.loadings.units = false;
+                }
+                // No units available so disable it
+                else {
+                    this.loadings.units = true;
+                }
+            }
         });
     }
 
@@ -703,6 +773,24 @@ class PreProduct {
         }
     }
 
+    getPlants() {
+        let countryCode = this.manager.jobsite.address.countryCode || this.customerService.currentCustomer().countryCode;
+        this.plantApi.byCountryCodeAndRegionCode(
+            countryCode.trim(),
+            this.manager.jobsite.address.regionCode,
+            this.product.productId
+        ).subscribe((response) => {
+            this.availablePlants = response.json().plants;
+            this.loadings.plants = false;
+            this.plant = undefined;
+            this.validations.plant.valid = false;
+        }, error => {
+            this.loadings.plants = false;
+            this.plant = undefined;
+            this.validations.plant.valid = false;
+        });
+    }
+
     getMaximumCapacity() {
         if (!this.contract && !this.manager.jobsite) { return undefined; }
         const jobsite = this.manager.jobsite;
@@ -713,7 +801,7 @@ class PreProduct {
         const salesArea = _.get(this.manager, 'salesArea[0]');
         let maxJobsiteQty = undefined;
         const unlimited = undefined;
-        if (salesArea) { maxJobsiteQty = salesArea.maximumLot.amount }
+        maxJobsiteQty = _.get(salesArea, 'maximumLot.amount');
 
         if (this.contract) {
             const volume = _.get(this.contract, 'salesDocument.volume');
@@ -734,5 +822,58 @@ class PreProduct {
                 return maxJobsiteQty;
             }
         }
+    }
+
+    defineValidations() {
+        // Readymix
+        if (this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix) {
+            this.validations.contract.mandatory = true;
+            this.validations.plant.mandatory = false;
+            return;
+        }
+
+        // Cement
+        if (this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix) {
+            this.validations.plant.mandatory = false;
+            this.validations.contract.mandatory = false;
+        }
+
+        // Pickup && Mexico
+        if (this.manager.shippingCondition.shippingConditionId == this.MODE.Pickup &&
+            this.customerService.currentCustomer().countryCode.trim() == "MX") {
+            this.validations.plant.mandatory = true;
+            this.validations.contract.mandatory = false;
+        }
+
+        // Payment case
+        if (this.shouldHidePayment()) {
+            this.validations.payment.mandatory = false;
+        }
+
+    }
+
+    shouldHidePayment() {
+        return this.customerService.currentCustomer().countryCode.trim() == "US" || this.manager.productLine.productId == this.PRODUCT_LINES.Readymix
+    }
+
+    isValid(): boolean {
+        let valid = true;
+        for (let key in this.validations) {
+            if (this.validations[key].mandatory) {
+                if (!this.validations[key].valid) {
+                    this.validations[key].showError = true;
+                    this.dashboard.alertError(this.validations[key].text);
+                    return false;
+                }
+            }
+        }
+
+        // Validate unit
+        if (!this.unit) {
+            this.dashboard.alertError("Verify unit section");
+            return false;
+        }
+
+        return valid
     }
 }

@@ -288,6 +288,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row" *ngIf="item?.plant">
+                        <div class="col-sm-6">
+                            <div class="group">
+                                <div class="title">
+                                    Plant
+                                </div>
+                                <div class="value bold">
+                                    <span>{{ item.plant?.plantDesc }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-2 right-side">
                     <div class="price-group">
