@@ -33,8 +33,20 @@ export class OrdersComponent implements OnInit {
 
         this.isLoading = true;
         this.ordersApi.all().subscribe((response) => {
-            if (response.status != 200) {
-                this.orders = response.json().orders.filter((item) => item.orderType.orderTypeCode != "DFT");//.slice(0, 10);
+            if (response.status == 200) {
+                let orders: any[] = response.json().orders;
+
+                // Filter drafts
+                this.orders = orders.filter((item) => {
+                    if (item.status) {
+                        if (item.status.statusDesc)
+                            return item.status.statusCode != "DRFT";
+                    
+                    return true;
+                    }
+                });
+
+                //this.orders = this.orders.slice(0, 10);
                 this.initOrders();
             }
             this.isLoading = false;
