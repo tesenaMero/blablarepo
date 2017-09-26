@@ -90,7 +90,6 @@ export class OrdersComponent implements OnInit {
     goToDetail(order) {
         this.router.navigate(['/app/order-detail'], {
             queryParams: {
-                orderRequestId: order.orderRequestId ? order.orderRequestId : null,
                 orderId: order.orderId ? order.orderId : null,
                 typeCode: order.orderType ? order.orderType.orderTypeCode : null,
                 orderCode: order.orderCode ? order.orderCode : null,
