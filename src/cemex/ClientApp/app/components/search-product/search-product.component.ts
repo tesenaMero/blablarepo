@@ -30,6 +30,8 @@ export class SearchProductComponent {
     private productColorSelected = null;
     private plantSelected = null;
 
+    private message: boolean = false;
+
     constructor(
         private orderManager: CreateOrderService, 
         private plantApi: PlantApi, 
@@ -52,17 +54,24 @@ export class SearchProductComponent {
     }
 
     productColorChanged(productColor: any) {
+        this.message = false;
         this.setProducts([]);
-        this.productsApi.byProductColorAndSalesDocumentAndPlant(3, productColor.productColorId).subscribe((response) => {
+        this.productsApi.byProductColorAndSalesDocumentAndPlant(3, this.productColorSelected).subscribe((response) => {
             this.setProducts(response.json().products);
         });
     }
 
     plantChanged(plant: any) {
         this.setProducts([]);
-        this.productsApi.byProductColorAndSalesDocumentAndPlant(3, this.productColorSelected, plant).subscribe((response) => {
-            this.setProducts(response.json().products);
-        });
+        if (this.productColorSelected !== null) {
+            this.productsApi.byProductColorAndSalesDocumentAndPlant(3, this.productColorSelected, plant).subscribe((response) => {
+                this.setProducts(response.json().products);
+            });
+        }
+        else {
+            this.message = true;
+        }
+
     }
 
     filterProductByProductDescription(event: any) {
@@ -86,6 +95,7 @@ export class SearchProductComponent {
         this.plantSelected = null;
         this.setProducts([]);
         this.plants = [];
+        this.message = false;
     }
 
     setProducts(products: any) {
