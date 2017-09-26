@@ -44,7 +44,7 @@
                                 <span style="line-height: 24px;">
                                     {{ product.unit?.alternativeUnit?.unitDesc }}
                                     <select [(ngModel)]="product.unit" class="input behind">
-                                        <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit.alternativeUnit.unitDesc }}</option>
+                                        <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit?.alternativeUnit?.unitDesc }}</option>
                                     </select>
                                 </span>
                                 <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -102,7 +102,7 @@
                                 <strong *ngIf="product.contract?.salesDocument?.hasOwnProperty('volume')">{{ product.contract?.salesDocument?.volume?.total.quantity.amount }}</strong>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
-                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event, product)" class="input behind">
+                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged(product)" class="input behind">
                                 <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract?.salesDocument?.volume?.total.quantity.amount }} </option>
                             </select>
                         </div>
@@ -114,7 +114,7 @@
                         <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.payments }">
                             <span>
                                 {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
-                                <select [(ngModel)]="product.payment" class="input behind">
+                                <select [(ngModel)]="product.payment" (ngModelChange)="paymentChanged(product)" class="input behind">
                                     <option selected *ngFor="let payment of product.availablePayments" [ngValue]="payment">{{ payment.paymentTermType.paymentTermTypeDesc }}</option>
                                 </select>
                                 </span>
@@ -205,7 +205,7 @@
                                 <span style="line-height: 24px;">
                                         {{ product.unit?.alternativeUnit?.unitDesc }}
                                         <select [(ngModel)]="product.unit" class="input behind">
-                                            <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit.alternativeUnit.unitDesc }}</option>
+                                            <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit?.alternativeUnit?.unitDesc }}</option>
                                         </select>
                                     </span>
                                 <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -263,7 +263,7 @@
                                 <strong *ngIf="product.contract?.salesDocument?.hasOwnProperty('volume')">{{ product.contract?.salesDocument?.volume?.total.quantity.amount }}</strong>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
-                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event, product)" class="input behind">
+                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged(product)" class="input behind">
                             <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract?.salesDocument?.volume?.total.quantity.amount }}
                             </option>
                         </select>
@@ -276,7 +276,7 @@
                         <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.payments }">
                             <span>
                                 {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
-                                <select [(ngModel)]="product.payment" class="input behind">
+                                <select [(ngModel)]="product.payment" (ngModelChange)="paymentChanged(product)" class="input behind">
                                     <option selected *ngFor="let payment of product.availablePayments" [ngValue]="payment">{{ payment.paymentTermType.paymentTermTypeDesc }}</option>
                                 </select>
                             </span>
@@ -318,11 +318,11 @@
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label>Plant</label>
-                        <div class="input contract dropdown flex-space-between">
+                        <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.loadings.plants }">
                             <span class="">
                                 {{ product?.plant?.plantDesc }}
-                                <select [(ngModel)]="product.plant" class="input behind">
-                                    <option *ngFor="let plant of plants" [ngValue]="plant">{{ plant.plantDesc }}</option>
+                                <select [(ngModel)]="product.plant" (ngModelChange)="plantChanged(product)" class="input behind">
+                                    <option *ngFor="let plant of product.availablePlants" [ngValue]="plant">{{ plant.plantDesc }}</option>
                                 </select>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -381,7 +381,7 @@
                                 <span style="line-height: 24px;">
                                     {{ product.unit?.alternativeUnit?.unitDesc }}
                                     <select [(ngModel)]="product.unit" class="input behind">
-                                        <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit.alternativeUnit.unitDesc }}</option>
+                                        <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit?.alternativeUnit?.unitDesc }}</option>
                                     </select>
                                 </span>
                                 <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -435,7 +435,7 @@
                         <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.loadings.contracts }">
                             <span class=""><strong>Contract {{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
-                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event, product)" class="input behind">
+                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged(product)" class="input behind">
                                 <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract: {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;</option>
                             </select>
                         </div>

@@ -41,4 +41,16 @@ export class ProductsApi {
     units(productId: any): Observable<Response> {
         return this.api.get(`/v2/mm/productunitconversions?productId=${productId}`);
     }
+
+    unit(product: any): Observable<Response> {
+        return this.api.get(product.unitOfMeasure.links.self);
+    }
+
+    unitByUnitOfMeasure(unitOfMeasure: any): Observable<Response> {
+        return this.api.get(unitOfMeasure.links.self);
+    }
+
+    salesAreaFromContract(contract: any): Observable<Response> {
+        return this.api.get(contract.links.salesDocument);
+    }
 }
