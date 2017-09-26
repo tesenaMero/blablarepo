@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import * as types from '../../shared/types/CreateOrder';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ShipmentLocationApi } from './api/shipment-locations.service.api';
-import { ProductColorApi } from './api/product-colors.service';
 
 /**
  * Create an order for API V2
@@ -18,7 +17,6 @@ export class CreateOrderService {
     // Move this to service later
     // --------------------------------------------------
     public _shipmentLocationType: BehaviorSubject<any>;
-    public _productColors: BehaviorSubject<any>;
     // --------------------------------------------------
 
     public orderId: number;
@@ -47,18 +45,13 @@ export class CreateOrderService {
     public products: Array<any>;
     public product: any;
 
-    constructor(private shipmentLocationApi: ShipmentLocationApi, private productColorApi: ProductColorApi) {
+    constructor(private shipmentLocationApi: ShipmentLocationApi) {
         this.initializeOrder();
         
         // Move this to service later
         // --------------------------------------------------
         this._shipmentLocationType = <BehaviorSubject<any>>new BehaviorSubject(undefined);
-        this._productColors = <BehaviorSubject<any>>new BehaviorSubject(undefined);
         // --------------------------------------------------
-    }
-
-    public fetchProductColors(productLineId: number) {
-        this.productColorApi.productColors(productLineId).subscribe((response) => this._productColors.next(response.json().productColors));
     }
 
     public fetchShipmentLocation() {

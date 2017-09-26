@@ -30,3 +30,39 @@
     opacity: .53;
     pointer-events: none;
 }
+
+// Colors
+$color-primary: #149bc3;
+$color-secondary: #008a6e;
+/////////////////
+/// Spinner 1 ///
+/////////////////
+.loading {
+    position: relative;
+    &:after {
+        position: absolute;
+        top: 50%;
+        left: 100%;
+        margin-left: 11px;
+        width: 12px;
+        height: 12px;
+        transform: translate3d(-50%, -50%, 0);
+        transform-origin: left top;
+        border-top: 2px solid rgba(38, 132, 199, 0.9);
+        border-right: 2px solid rgba(38, 132, 199, 0.3);
+        border-bottom: 2px solid rgba(38, 132, 199, 0.325);
+        border-left: 2px solid rgba(38, 132, 199, 0.35);
+        border-radius: 50%;
+        content: '';
+        animation: rotate-spinner1 .8s infinite linear;
+    }
+}
+
+@keyframes rotate-spinner1 {
+    from {
+        transform: rotate(0deg) translate3d(-50%, -50%, 0);
+    }
+    to {
+        transform: rotate(359deg) translate3d(-50%, -50%, 0);
+    }
+}

@@ -83,6 +83,10 @@ export class StepperComponent implements AfterContentInit {
     prev() {
         let currentIndex = this.getActiveStepIndex();
 
+        // Callback
+        this.currentStep.onBeforeBack();
+        this.uncomplete();
+
         // If last step or index not found
         if (currentIndex <= 0) { return; }
         this.animatePrev(currentIndex - 1);

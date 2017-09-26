@@ -62,7 +62,12 @@ export class OrderBuilderComponent {
     }
 
     modeStepCompleted(mode: DeliveryMode) {
-        this.stepper.complete();
+        if (mode) {
+            this.stepper.complete();
+        }
+        else {
+            this.stepper.uncomplete();
+        }
     }
 
     locationStepCompleted(event: any) {

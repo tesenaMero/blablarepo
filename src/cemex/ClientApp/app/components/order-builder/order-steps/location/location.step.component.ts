@@ -56,6 +56,10 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         pods: true,
     }
 
+    // Subs
+    addressSub: any;
+    lockRequests: boolean = false;
+
     // Mapped data
     locations = [];
     contacts = [];
@@ -124,13 +128,23 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     private customer: any;
 
     constructor( @Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private customerService: CustomerService, private purchaseOrderApi: PurchaseOrderApi, private dashboard: DashboardService) {
+        // Interfaces
         this.step.canAdvance = () => this.canAdvance();
+        this.step.onBeforeBack = () => this.onBeforeBack();
         this.step.setEventsListener(this);
     }
 
-    // Interfaces
-    // ======================
     ngOnInit() { }
+
+    // Step Interfaces
+    // ------------------------------------------------------
+    onBeforeBack() {
+        // Cancel needed requests and lock
+        this.lockRequests = true;
+        if (this.addressSub) {
+            this.addressSub.unsubscribe();
+        }
+    }
 
     canAdvance() {
         // Validate purchase order
@@ -180,6 +194,9 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     onShowed() {
+        // Unlock
+        this.lockRequests = false;
+
         // Reset validations
         this.resetValidations();
 
@@ -297,8 +314,14 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.loadings.purchaseOrder = false;
         });
 
+        // If locked stop
+        if (this.lockRequests) {
+            this.onCompleted.emit(false);
+            return;
+        }
+
         // Fetch geolocation
-        this.shipmentApi.address(this.location)
+        this.addressSub = this.shipmentApi.address(this.location)
             .flatMap((address) => {
                 this.location.address = address.json();
                 

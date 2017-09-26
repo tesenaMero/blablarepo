@@ -5,6 +5,7 @@ import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../
 import { Plant, ProductColor, ProductWrapper } from '../../shared/types';
 import { TranslationService } from '../../shared/services/translation.service';
 import { SearchProductService } from '../../shared/services/product-search.service';
+import { CustomerService } from '../../shared/services/customer.service';
 
 @Component({
     selector: 'search-product',
@@ -32,23 +33,31 @@ export class SearchProductComponent {
 
     private message: boolean = false;
 
+    private PRODUCT_LINES = {
+        Readymix: 6,
+        CementBulk: 1
+    }
+
     constructor(
+        private t: TranslationService,
         private orderManager: CreateOrderService, 
         private plantApi: PlantApi, 
-        private t: TranslationService,
         private productColorApi: ProductColorApi, 
         private productsApi: ProductsApi, 
         private shipmentLocationApi: ShipmentLocationApi, 
-        private searchProductService: SearchProductService) {
-        this.orderManager._productColors.subscribe(response => {
-            if (!response) {
-                return;
-            }
+        private searchProductService: SearchProductService,
+        private customerService: CustomerService) {
+        this.searchProductService.productColors.subscribe(response => {
+            if (!response) { return; }
             
             this.productColors = response;
             this.modalInitialize();
-            if (this.orderManager.jobsite && this.orderManager.shippingCondition && this.orderManager.shippingCondition.shippingConditionId == 2) {
-                this.plantApi.byCountryCodeAndRegionCode(this.orderManager.jobsite.address.countryCode, this.orderManager.jobsite.address.regionCode).subscribe((response) => { this.plants = response.json().plants; });
+            if (this.orderManager.jobsite && this.orderManager.shippingCondition && this.orderManager.shippingCondition.shippingConditionId == 2 && this.customerService.currentCustomer().countryCode.trim() == "MX" && this.orderManager.productLine.productLineId == this.PRODUCT_LINES.CementBulk) {
+                this.plantApi.forSearch(
+                    this.orderManager.jobsite.address.countryCode,
+                    this.orderManager.jobsite.address.regionCode,
+                    this.orderManager.productLine.productLineId
+                ).subscribe((response) => { this.plants = response.json().plants; });
             }
         })
     }

@@ -95,7 +95,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     openProductSearch(preProduct: PreProduct) {
-        this.manager.fetchProductColors(this.manager.productLine.productLineId);
+        this.searchProductService.fetchProductColors(this.manager.productLine.productLineId);
 
         // What the f is this
         this.searchProductService.searchedProduct.subscribe(product => {
