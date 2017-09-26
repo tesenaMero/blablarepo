@@ -53,7 +53,7 @@ module.exports = (env) => {
     };
 
     const clientBundleConfig = merge(sharedConfig, {
-        output: { path: path.join(__dirname, 'wwwroot','ordersnproduct' ,'dist') },
+        output: { path: path.join(__dirname, 'wwwroot', 'ordersnproduct', 'dist') },
         module: {
             rules: [
                 { test: /\.css(\?|$)/, use: extractCSS.extract({ use: isDevBuild ? 'css-loader' : 'css-loader?minimize' }) }
@@ -62,7 +62,7 @@ module.exports = (env) => {
         plugins: [
             extractCSS,
             new webpack.DllPlugin({
-                path: path.join(__dirname, 'wwwroot','ordersnproduct', 'dist', '[name]-manifest.json'),
+                path: path.join(__dirname, 'wwwroot', 'ordersnproduct', 'dist', '[name]-manifest.json'),
                 name: '[name]_[hash]'
             })
         ].concat(isDevBuild ? [] : [
@@ -74,7 +74,7 @@ module.exports = (env) => {
         target: 'node',
         resolve: { mainFields: ['main'] },
         output: {
-            path: path.join(__dirname, 'ClientApp', 'ordersnproduct','dist'),
+            path: path.join(__dirname, 'ClientApp', 'ordersnproduct', 'dist'),
             libraryTarget: 'commonjs2',
         },
         module: {
@@ -83,7 +83,7 @@ module.exports = (env) => {
         entry: { vendor: ['aspnet-prerendering'] },
         plugins: [
             new webpack.DllPlugin({
-                path: path.join(__dirname, 'ClientApp','ordersnproduct', 'dist', '[name]-manifest.json'),
+                path: path.join(__dirname, 'ClientApp', 'ordersnproduct', 'dist', '[name]-manifest.json'),
                 name: '[name]_[hash]'
             })
         ]

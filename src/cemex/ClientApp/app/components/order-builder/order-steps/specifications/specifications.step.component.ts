@@ -8,6 +8,7 @@ import { CustomerService } from '../../../../shared/services/customer.service';
 import { SearchProductService } from '../../../../shared/services/product-search.service';
 import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service'
+import { Validations } from '../../../../utils/validations';
 import { Observable } from 'rxjs/Observable';
 
 import * as _ from 'lodash';
@@ -26,6 +27,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     private preProducts = [];
 
     // Consts
+    private UTILS = Validations;
     private MODE = DeliveryMode;
     private PRODUCT_LINES = {
         Readymix: 6,
@@ -489,7 +491,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             if (product.quantity <= 1 && toAdd < 0) { return; }
             const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
             const isDelivery = shippingConditionId === this.MODE.Delivery;            
-            let conversion = product.convertToTons(product.quantity + toAdd);              
+            let conversion = product.convertToTons(product.quantity + toAdd);
             
             let newQty = product.quantity + toAdd;
             // console.log("conversion", conversion); 
@@ -546,13 +548,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
 }
 
 class PreProduct {
-    // Consts
-    private MODE = DeliveryMode;
-    private PRODUCT_LINES = {
-        Readymix: 6,
-        CementBulk: 1
-    }
-
     // Props
     maneuvering: boolean = false;
     quantity: number = 1;
@@ -577,6 +572,16 @@ class PreProduct {
     maneuveringAvailable: boolean = false;
 
     loadings = {
+        products: false,
+        contracts: true,
+        projectProfiles: true,
+        catalogs: true,
+        units: true,
+        payments: true,
+        plants: true
+    }
+
+    disableds = {
         products: false,
         contracts: true,
         projectProfiles: true,
@@ -644,7 +649,7 @@ class PreProduct {
 
     productChanged() {
         if (!this.product) {
-            this.loadings.products = true; // Disable
+            this.disableds.products = true; // Disable
             return;
         }
 
@@ -653,7 +658,7 @@ class PreProduct {
         this.fetchManeuvering();
 
         // Call plants only on pickup
-        if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == this.MODE.Pickup) {
+        if (Validations.isPickup()) {
             this.getPlants();
         }
     }
@@ -680,11 +685,6 @@ class PreProduct {
         // TODO:
         // Set minimum quantity
         this.quantity = 1;
-
-        // Plants from contract
-        // this.productsApi.salesAreaFromContract(this.contract).subscribe((response) => {
-        //     console.log(response.json());
-        // });
     }
 
     plantChanged() {
@@ -711,11 +711,10 @@ class PreProduct {
             let contracts = result.json().products;
             this.availableContracts = contracts;
 
-            if (contracts.length > 0) {
-                this.availableContracts.unshift(undefined);
-                this.loadings.contracts = false;
-            }
-            else { this.loadings.contracts = true; } // Disable it if no contracts
+            if (contracts.length > 0) { this.availableContracts.unshift(undefined); }
+            else { this.disableds.contracts = true; } // Disable it if no contracts
+
+            this.loadings.contracts = false;
         });
     }
 
@@ -868,6 +867,8 @@ class PreProduct {
         }
     }
 
+
+
     //Maximum capacity salesArea
     getMaximumCapacity() {
         const salesArea = _.get(this.manager, 'salesArea[0]');
@@ -894,21 +895,20 @@ class PreProduct {
 
     defineValidations() {
         // Readymix
-        if (this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix) {
+        if (Validations.isReadyMix()) {
             this.validations.contract.mandatory = true;
             this.validations.plant.mandatory = false;
             return;
         }
 
         // Cement
-        if (this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix) {
+        if (Validations.isCement()) {
             this.validations.plant.mandatory = false;
             this.validations.contract.mandatory = false;
         }
 
         // Pickup && Mexico
-        if (this.manager.shippingCondition.shippingConditionId == this.MODE.Pickup &&
-            this.customerService.currentCustomer().countryCode.trim() == "MX") {
+        if (Validations.isPickup() && Validations.isMexicoCustomer()) {
             this.validations.plant.mandatory = true;
             this.validations.contract.mandatory = false;
         }
@@ -921,7 +921,7 @@ class PreProduct {
     }
 
     shouldHidePayment() {
-        return this.customerService.currentCustomer().countryCode.trim() == "US" || this.manager.productLine.productId == this.PRODUCT_LINES.Readymix
+        return Validations.isUSACustomer() || Validations.isReadyMix();
     }
 
     isValid(): boolean {

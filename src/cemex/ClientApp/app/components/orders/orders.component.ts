@@ -45,8 +45,7 @@ export class OrdersComponent implements OnInit {
                     return true;
                     }
                 });
-
-                //this.orders = this.orders.slice(0, 10);
+                
                 this.initOrders();
             }
             this.isLoading = false;

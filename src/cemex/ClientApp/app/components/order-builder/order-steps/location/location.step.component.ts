@@ -3,7 +3,7 @@ import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
 import { Step, StepEventsListener, _Step } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
-import { ShipmentLocationApi, PurchaseOrderApi } from '../../../../shared/services/api';
+import { ShipmentLocationApi, PurchaseOrderApi, ShippingConditionApi } from '../../../../shared/services/api';
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
@@ -131,7 +131,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     private UTILS: any;
 
-    constructor( @Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private customerService: CustomerService, private purchaseOrderApi: PurchaseOrderApi, private dashboard: DashboardService) {
+    constructor( @Inject(Step) private step: Step, private orderManager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private customerService: CustomerService, private purchaseOrderApi: PurchaseOrderApi, private dashboard: DashboardService, private shippingConditionApi: ShippingConditionApi) {
 
         // Interfaces
         this.step.canAdvance = () => this.canAdvance();
@@ -198,7 +198,22 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         return advance;
     }
 
+    // Replacing the object shippingConditionId with the api one
+    mapShippingCondition() {
+        const mode = this.orderManager.shippingCondition.shippingConditionId;
+        const customer = this.customerService.currentCustomer().legalEntityId;
+        this.shippingConditionApi.byCode(customer, mode).subscribe((response) => {
+            let shipppingConditions = response.json()
+            if (shipppingConditions.length) {
+                this.orderManager.selectDeliveryType(shipppingConditions[0]);
+            }
+        });
+    }
+
     onShowed() {
+        // Map shippingcondition
+        this.mapShippingCondition();
+
         // Unlock
         this.lockRequests = false;
 
