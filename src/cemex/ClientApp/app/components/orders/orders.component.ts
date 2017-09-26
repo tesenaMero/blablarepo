@@ -38,7 +38,12 @@ export class OrdersComponent implements OnInit {
 
                 // Filter drafts
                 this.orders = orders.filter((item) => {
-                    return item.status.statusCode != "DRFT";
+                    if (item.status) {
+                        if (item.status.statusDesc)
+                            return item.status.statusCode != "DRFT";
+                    
+                    return true;
+                    }
                 });
 
                 //this.orders = this.orders.slice(0, 10);
