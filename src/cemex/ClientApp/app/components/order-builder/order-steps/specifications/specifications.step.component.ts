@@ -494,7 +494,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
             let conversion = product.convertToTons(product.quantity + toAdd);
             
             let newQty = product.quantity + toAdd;
-            // console.log("conversion", conversion); 
             let contractBalance = product.getContractBalance(); //remaining of contract
             let maxCapacitySalesArea = product.getMaximumCapacity(); 
             if (contractBalance === undefined){
@@ -867,9 +866,7 @@ class PreProduct {
         }
     }
 
-
-
-    //Maximum capacity salesArea
+    // Maximum capacity salesArea
     getMaximumCapacity() {
         const salesAreaArray = _.get(this.manager, 'salesArea');
         let salesArea;
@@ -885,7 +882,7 @@ class PreProduct {
         }
         let maxJobsiteQty = undefined;
         const unlimited = undefined;
-        if (salesArea && salesArea.maximumLot) { return salesArea.maximumLot.amount; }
+        if (salesArea) { return _.get(salesArea, 'maximumLot.amount'); }
         else { return unlimited; }
     }
 
@@ -919,6 +916,15 @@ class PreProduct {
             }
         }
         return maxCapacitySalesArea;
+    }
+    
+    // Minimum capacity salesArea
+    getMinimumCapacity() {
+        const salesArea = _.get(this.manager, 'salesArea[0]');
+        let maxJobsiteQty = undefined;
+        const unlimited = undefined;
+        if (salesArea) { return _.get(salesArea, 'minimumLot.amount'); }
+        else { return unlimited; }
     }
 
     defineValidations() {
