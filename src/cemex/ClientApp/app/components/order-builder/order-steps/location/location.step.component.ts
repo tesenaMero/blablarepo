@@ -264,7 +264,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 location.name = location.shipmentLocationDesc;
             })
             this.loadings.locations = false;
-            if (this.locations.length > 0) {
+            if (this.locations.length === 1) {
                 this.jobsiteChanged(this.locations[0]);
                 this.locationIndex = 0;
             }
@@ -354,8 +354,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             });
 
             if (this.pods.length > 0) {
-                this.podsIndex = undefined;
-                this.manager.selectPointOfDelivery(undefined);
+                this.podsIndex = this.pods.length === 1 ? 0 : undefined;
+                this.manager.selectPointOfDelivery(this.pods.length === 1 ? this.pods[0] : undefined);
             }
 
             this.loadings.pods = false;
