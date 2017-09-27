@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CreateOrderService } from '../shared/services/create-order.service'
 import { CustomerService } from '../shared/services/customer.service'
 import { DeliveryMode } from '../models/delivery.model';
+import * as _ from 'lodash';
 
 @Injectable()
 export class Validations {
@@ -30,26 +31,33 @@ export class Validations {
     }
 
     static isReadyMix() {
-        return this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix
+        return _.get(this.manager, 'productLine.productLineId') == this.PRODUCT_LINES.Readymix
     }
 
     static isCement() {
-        return this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix
+        return _.get(this.manager, 'productLine.productLineId') != this.PRODUCT_LINES.Readymix
     }
 
     static isBulkCement() {
-        return this.manager.productLine.productLineId == this.PRODUCT_LINES.CementBulk
+        return _.get(this.manager, 'productLine.productLineId') == this.PRODUCT_LINES.CementBulk
     }
 
     static isPickup() {
-        return this.manager.shippingCondition.shippingConditionId == this.MODE.Pickup
+        return _.get(this.manager, 'shippingCondition.shippingConditionId') == this.MODE.Pickup
     }
 
     static isDelivery() {
-        return this.manager.shippingCondition.shippingConditionId == this.MODE.Delivery
+        return _.get(this.manager, 'shippingCondition.shippingConditionId') == this.MODE.Delivery
     }
 
     static shouldHidePayment() {
-        return this.customer.currentCustomer().countryCode.trim() == "US" || this.manager.productLine.productId == this.PRODUCT_LINES.Readymix;
+        return this.customer.currentCustomer().countryCode.trim() == "US" 
+                || _.get(this.manager, 'productLine.productId') == this.PRODUCT_LINES.Readymix;
+    }
+
+    static shouldHidePOD(): boolean {
+        if (Validations.isUSACustomer()) { return true; }
+        else if (Validations.isPickup()) { return true; }
+        else { return false; }
     }
 }

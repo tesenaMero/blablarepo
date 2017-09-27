@@ -12,9 +12,6 @@ let $ = require("jquery");
 })
 export class AppComponent implements OnInit {
     constructor(private router: Router) { }
-    closeModal() {
-        $("#app-content").removeClass("blur");
-    }
 
     @Autobind
     backToOrders() {
