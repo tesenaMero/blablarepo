@@ -117,6 +117,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 else {
                     SpecificationsStepComponent.availableProducts.push(product);
                     preProduct.product = product;
+                    preProduct.productChanged();
                 }
             }
         });

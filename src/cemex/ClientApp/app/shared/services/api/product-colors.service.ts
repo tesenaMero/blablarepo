@@ -10,7 +10,7 @@ export class ProductColorApi {
     constructor(private api: Api, private customerService: CustomerService) {}
     
     productColors(productLineId: number): Observable<Response> {
-        const customerId = 122;//this.customerService.currentCustomer().legalEntityId;
+        const customerId = this.customerService.currentCustomer().legalEntityId;
         return this.api.get(`/v2/mm/productcolors?productLineId=${productLineId}&legalEntityId=${customerId}.1`);
     }
 }

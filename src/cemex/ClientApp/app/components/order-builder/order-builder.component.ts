@@ -132,14 +132,23 @@ export class OrderBuilderComponent {
     placeOrder() {
         if ((Validations.isMexicoCustomer()) && (!this.isReadyMix)) {
             this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId, 0);
-            if (this.hasCashPayment()) {
-                this.flowMidCash();
+
+            let cashOrders = this.getCashOrders();
+            let creditOrders = this.getCreditOrders();
+
+            // Pay credit orders
+            if (creditOrders.length) {
+                if ((!this.isReadyMix) && (Validations.isMexicoCustomer())) {
+                    this.flowCementMX();
+                }
+                else {
+                    this.basicFlow();
+                }
             }
-            else if ((!this.isReadyMix) && (Validations.isMexicoCustomer())) {
-                this.flowCementMX();
-            }
-            else {
-                this.basicFlow();
+
+            // Pay cash orders only
+            else if (cashOrders.length) {
+                this.flowMidCash(cashOrders);
             }
         }
         else {
@@ -147,12 +156,11 @@ export class OrderBuilderComponent {
         }
     }
 
-    // If 
-    flowMidCash() {
+    flowMidCash(cashOrders: any[]) {
         const customer = this.customerService.currentCustomer();
         let data = [];
 
-        this.draftOrder.items.forEach(item => {
+        cashOrders.forEach(item => {
             data.push({
                 orderID: this.draftOrder.orderId,
                 companyCode: this.draftOrder.salesArea.salesOrganizationCode,
@@ -182,11 +190,11 @@ export class OrderBuilderComponent {
     flowCementMX() {
         this.drafts.createOrder(this.draftId, '')
             .flatMap((response) => {
-                this.dashboard.alertSuccess("Order placed successfully, requesting order code...", 0);
+                this.dashboard.alertSuccess("[Credit] Order placed successfully, requesting order code...", 0);
                 return this.drafts.validateRequestId(response.json().id);
             })
             .subscribe((response) => {
-                this.dashboard.alertSuccess("Order code: #" + response.json().orderCode + " placed successfully", 30000);
+                this.dashboard.alertSuccess("[Credit] Order code: #" + response.json().orderCode + " placed successfully", 30000);
                 this.showSuccessModal(response.json().orderCode);
             }, error => {
                 this.dashboard.alertError("Error placing order", 10000);
@@ -211,16 +219,16 @@ export class OrderBuilderComponent {
 
     // In-class utils
     // ---------------------------------------------------------------
-    hasCashPayment() {
-        for (let item of this.manager.products) {
-            if (item.payment)
-                if (item.payment.paymentTermType)
-                    if (item.payment.paymentTermType.paymentTermTypeCode)
-                        if (item.payment.paymentTermType.paymentTermTypeCode == "CASH")
-                            return true;
-        }
+    getCashOrders(): any[] {
+        return this.draftOrder.items.filter((item) => {
+            return item.paymentTerm && item.paymentTerm.paymentTermCode == "ZCON";
+        });
+    }
 
-        return false;
+    getCreditOrders(): any[] {
+        return this.draftOrder.items.filter((item) => {
+            return item.paymentTerm && item.paymentTerm.paymentTermCode == "Z015";
+        });
     }
 
     shouldShowDeliveryMode() {

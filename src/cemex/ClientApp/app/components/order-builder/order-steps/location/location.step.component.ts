@@ -29,7 +29,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     private purchaseOrder: string = "";
     private specialInstructions: string = "";
-    shipmentLocationTypes;
 
     // Loading state
     private isMapLoaded: boolean = false;
@@ -232,13 +231,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.hiddens.pods = false;
         }
 
-        this.shipmentApi.shipmentLocationTypes.subscribe(data => {
-            if (data) {
-                this.shipmentLocationTypes = data.shipmentLocationTypes;
-                this.fetchJobsites(this.shipmentLocationTypes);
-            }
-        });
-
         if (!this.isMapLoaded) {
             GoogleMapsHelper.lazyLoadMap("jobsite-selection-map", (map) => {
                 this.isMapLoaded = true;
@@ -250,6 +242,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         else {
             google.maps.event.trigger(this.map, "resize");
         }
+
+        // Guard to fetch jobsites when I got shipment locations
+        this.shipmentApi.shipmentLocationTypes.subscribe(data => {
+            if (data) { this.fetchJobsites(); }
+        });
     }
 
     shouldShowPOD(): boolean {
@@ -258,8 +255,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         else { return true; }
     }
 
-    fetchJobsites(shipmentLocationTypes) {
-        this.shipmentApi.all(shipmentLocationTypes, this.manager.productLine).subscribe((response) => {
+    fetchJobsites() {
+        this.shipmentApi.all(this.manager.productLine).subscribe((response) => {
             this.locations = response.json().shipmentLocations;
             this.locations.forEach((location, index) => {
                 location.id = index;
@@ -348,7 +345,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         });
 
         // Fetch pods
-        this.shipmentApi.pods(this.location, this.shipmentLocationTypes, null, this.manager.productLine).subscribe((response) => {
+        this.shipmentApi.pods(this.location, this.manager.productLine).subscribe((response) => {
             this.pods = response.json().shipmentLocations;
             this.pods.forEach((pod, index) => {
                 pod.id = index;
