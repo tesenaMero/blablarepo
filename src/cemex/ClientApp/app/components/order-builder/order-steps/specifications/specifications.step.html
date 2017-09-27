@@ -194,7 +194,7 @@
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info" *ngIf="UTILS.isMexicoCustomer() && product.getMaximumCapacity()">
-                                Maximum Capacity {{ product.getMaximumCapacity() }} tons
+                                Maximum Capacity {{ product.getMaximumCapacity() }} {{ product.unit?.alternativeUnit.unitDesc }}
                             </div>
                         </div>
                         <div class="group w40">
