@@ -496,7 +496,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             let newQty = product.quantity + toAdd;
             // console.log("conversion", conversion); 
             let contractBalance = product.getContractBalance(); //remaining of contract
-            let maxCapacitySalesArea = product.getMaximumCapacity() || Number.MAX_SAFE_INTEGER; 
+            let maxCapacitySalesArea = product.getMaximumCapacity(); 
             if (contractBalance === undefined){
                 if (isDelivery) {
                     if (((this.manager.productLine.productId == 2) || (this.manager.productLine.productId == 1)) && (conversion <= maxCapacitySalesArea)) {
@@ -891,6 +891,23 @@ class PreProduct {
             }
         }
         return balance;
+    }
+
+    //return the minor maximum capacity contract or jobsite
+    getMaximumCapacityContractAndJobsite(){
+        let contractBalance = this.getContractBalance();
+        let maxCapacitySalesArea = this.getMaximumCapacity(); 
+        if (contractBalance !== undefined){
+            if (maxCapacitySalesArea !== undefined) {
+                if (contractBalance < maxCapacitySalesArea) {
+                    return contractBalance;
+                }
+                else {
+                    return maxCapacitySalesArea;
+                }
+            }
+        }
+        return maxCapacitySalesArea;
     }
 
     defineValidations() {
