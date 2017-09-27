@@ -494,10 +494,12 @@ export class SpecificationsStepComponent implements StepEventsListener {
             let conversion = product.convertToTons(product.quantity + toAdd);
             
             let newQty = product.quantity + toAdd;
-            // console.log("conversion", conversion); 
             let contractBalance = product.getContractBalance(); //remaining of contract
-            let maxCapacitySalesArea = product.getMaximumCapacity() || Number.MAX_SAFE_INTEGER; 
-            if (contractBalance === undefined){
+            let maxCapacitySalesArea = product.getMaximumCapacity();
+
+            
+
+            if (contractBalance === undefined) {
                 if (isDelivery) {
                     if (((this.manager.productLine.productId == 2) || (this.manager.productLine.productId == 1)) && (conversion <= maxCapacitySalesArea)) {
                         return product.quantity = newQty;
@@ -867,14 +869,12 @@ class PreProduct {
         }
     }
 
-
-
-    //Maximum capacity salesArea
+    // Maximum capacity salesArea
     getMaximumCapacity() {
         const salesArea = _.get(this.manager, 'salesArea[0]');
         let maxJobsiteQty = undefined;
         const unlimited = undefined;
-        if (salesArea) { maxJobsiteQty = salesArea.maximumLot.amount; return maxJobsiteQty; }
+        if (salesArea) { return _.get(salesArea, 'maximumLot.amount'); }
         else { return unlimited; }
     }
 
@@ -891,6 +891,15 @@ class PreProduct {
             }
         }
         return balance;
+    }
+
+    // Minimum capacity salesArea
+    getMinimumCapacity() {
+        const salesArea = _.get(this.manager, 'salesArea[0]');
+        let maxJobsiteQty = undefined;
+        const unlimited = undefined;
+        if (salesArea) { return _.get(salesArea, 'minimumLot.amount'); }
+        else { return unlimited; }
     }
 
     defineValidations() {
