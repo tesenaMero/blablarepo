@@ -204,7 +204,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     onShowed() {
-
         this.isCement = Validations.isCement();
 
         // Map shippingcondition
@@ -267,11 +266,14 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 location.id = index;
                 location.name = location.shipmentLocationDesc;
             })
-            this.loadings.locations = false;
-            if (this.locations.length === 1) {
+            if (this.location) {
+                this.jobsiteChanged(this.location);
+            }
+            else if (this.locations.length === 1) {
                 this.jobsiteChanged(this.locations[0]);
                 this.locationIndex = 0;
             }
+            this.loadings.locations = false;
         });
     }
 
@@ -359,7 +361,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
             if (this.pods.length > 0) {
                 this.podsIndex = this.pods.length === 1 ? 0 : undefined;
-                this.manager.selectPointOfDelivery(this.pods.length === 1 ? this.pods[0] : undefined);
+                this.pods.length === 1 ? this.podChanged(this.pods[0]) : this.podChanged(undefined)
             }
 
             this.loadings.pods = false;

@@ -28,10 +28,8 @@ export class OrderBuilderComponent {
 
     private orderCode: any;
 
-    private PRODUCT_LINES = {
-        Readymix: 6,
-        CementBulk: 1
-    }
+    private cashOrders: any[] = [];
+    private creditOrders: any[] = [];
 
     constructor(
         @Inject(DOCUMENT) private document: any,
@@ -133,11 +131,11 @@ export class OrderBuilderComponent {
         if ((Validations.isMexicoCustomer()) && (!this.isReadyMix)) {
             this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId, 0);
 
-            let cashOrders = this.getCashOrders();
-            let creditOrders = this.getCreditOrders();
+            this.cashOrders = this.getCashOrders();
+            this.creditOrders = this.getCreditOrders();
 
             // Pay credit orders
-            if (creditOrders.length) {
+            if (this.creditOrders.length) {
                 if ((!this.isReadyMix) && (Validations.isMexicoCustomer())) {
                     this.flowCementMX();
                 }
@@ -147,8 +145,8 @@ export class OrderBuilderComponent {
             }
 
             // Pay cash orders only
-            else if (cashOrders.length) {
-                this.flowMidCash(cashOrders);
+            else if (this.cashOrders.length) {
+                this.flowMidCash(this.cashOrders);
             }
         }
         else {
@@ -251,5 +249,10 @@ export class OrderBuilderComponent {
     closeModal() {
         this.router.navigate(['/app/orders']);
         this.modal.close('success-placement');
+    }
+
+    payCashOrders() {
+        this.modal.close('success-credit');
+        this.flowMidCash(this.cashOrders);
     }
 }

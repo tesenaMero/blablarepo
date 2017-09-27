@@ -29,7 +29,8 @@
                 <div class="success-text">
                     Your order #{{ orderCode }} was successfully submited
                 </div>
-                <button class="button back-to-orders" (click)="closeModal()">Back to orders history</button>
+                <button *ngIf="!cashOrders.length" class="button back-to-orders" (click)="closeModal()">Back to orders history</button>
+                <button *ngIf="cashOrders.length" class="button back-to-orders" (click)="payCashOrders()">Proceed with to cash orders payment</button>
             </div>
         </div>
     </div>
