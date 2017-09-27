@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as types from '../../shared/types/CreateOrder';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ShipmentLocationApi } from './api/shipment-locations.service.api';
 
 /**
@@ -14,11 +14,6 @@ export interface POD {
 
 @Injectable()
 export class CreateOrderService {
-    // Move this to service later
-    // --------------------------------------------------
-    public _shipmentLocationType: BehaviorSubject<any>;
-    // --------------------------------------------------
-
     public orderId: number;
     public orderCode: string;
     public orderName: string;
@@ -45,21 +40,8 @@ export class CreateOrderService {
     public products: Array<any>;
     public product: any;
 
-    constructor(private shipmentLocationApi: ShipmentLocationApi) {
+    constructor() {
         this.initializeOrder();
-        
-        // Move this to service later
-        // --------------------------------------------------
-        this._shipmentLocationType = <BehaviorSubject<any>>new BehaviorSubject(undefined);
-        // --------------------------------------------------
-    }
-
-    public fetchShipmentLocation() {
-        this.shipmentLocationApi.getShipmentLocationType()
-            .map(response => response.json())
-            .subscribe(response => {
-                this._shipmentLocationType.next(response);
-            })
     }
 
     initializeOrder(

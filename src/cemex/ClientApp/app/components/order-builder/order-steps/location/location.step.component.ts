@@ -232,9 +232,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.hiddens.pods = false;
         }
 
-        this.manager._shipmentLocationType.subscribe(data => {
-            this.shipmentLocationTypes = data.shipmentLocationTypes;
-            this.fetchJobsites(this.shipmentLocationTypes);
+        this.shipmentApi.shipmentLocationTypes.subscribe(data => {
+            if (data) {
+                this.shipmentLocationTypes = data.shipmentLocationTypes;
+                this.fetchJobsites(this.shipmentLocationTypes);
+            }
         });
 
         if (!this.isMapLoaded) {
@@ -301,44 +303,44 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
         // Make salesarea call, dont fetch yet
         let salesAreaSub = this.shipmentApi.salesAreas(this.location, this.manager.productLine)
-        .map((salesAreas) => {
-            if (salesAreas.json().jobsiteSalesAreas.length > 0) {
-                let salesArea = salesAreas.json().jobsiteSalesAreas;
-                this.manager.salesArea = salesArea;
+            .map((salesAreas) => {
+                if (salesAreas.json().jobsiteSalesAreas.length > 0) {
+                    let salesArea = salesAreas.json().jobsiteSalesAreas;
+                    this.manager.salesArea = salesArea;
 
-                // If its not pickup then all we need to be fetched is sales areas.
-                // If its pickup we need to wait for address object to be fetched
-                if (!Validations.isPickup()) {
-                    this.onCompleted.emit(true);
-                }
-
-                let shouldValidatePurchaseOrder = false;
-                salesArea.forEach((item) => {
-                    if (item.purchaseOrderValidation) {
-                        shouldValidatePurchaseOrder = true;
-                        return;
+                    // If its not pickup then all we need to be fetched is sales areas.
+                    // If its pickup we need to wait for address object to be fetched
+                    if (!Validations.isPickup()) {
+                        this.onCompleted.emit(true);
                     }
-                });
 
-                this.location.purchaseOrderValidation = shouldValidatePurchaseOrder;
-                this.validations.purchaseOrder.mandatory = shouldValidatePurchaseOrder;
-            }
-            this.loadings.purchaseOrder = false;
-        });
+                    let shouldValidatePurchaseOrder = false;
+                    salesArea.forEach((item) => {
+                        if (item.purchaseOrderValidation) {
+                            shouldValidatePurchaseOrder = true;
+                            return;
+                        }
+                    });
+
+                    this.location.purchaseOrderValidation = shouldValidatePurchaseOrder;
+                    this.validations.purchaseOrder.mandatory = shouldValidatePurchaseOrder;
+                }
+                this.loadings.purchaseOrder = false;
+            });
 
         // Make address -> geolocation call, dont fetch yet
         let addressSub = this.shipmentApi.address(this.location)
-        .flatMap((address) => {
-            this.location.address = address.json();
-            return this.shipmentApi.geo(address.json());
-        })
-        .map((geo) => {
-            this.location.geo = geo.json();
-            this.cleanJobsiteMarker();
-            this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
-            this.addMarkerToMap(this.jobsiteMarker);
-            this.loadings.map = false;
-        });
+            .flatMap((address) => {
+                this.location.address = address.json();
+                return this.shipmentApi.geo(address.json());
+            })
+            .map((geo) => {
+                this.location.geo = geo.json();
+                this.cleanJobsiteMarker();
+                this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
+                this.addMarkerToMap(this.jobsiteMarker);
+                this.loadings.map = false;
+            });
 
         // Fork join address + sales areas (fetch)
         this.salesAdressSub = Observable.forkJoin(salesAreaSub, addressSub).subscribe((response) => {
