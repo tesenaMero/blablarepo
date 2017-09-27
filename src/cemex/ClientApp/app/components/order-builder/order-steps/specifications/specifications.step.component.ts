@@ -491,44 +491,43 @@ export class SpecificationsStepComponent implements StepEventsListener {
             if (product.quantity <= 1 && toAdd < 0) { return; }
             const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
             const isDelivery = shippingConditionId === this.MODE.Delivery;            
-            let conversion = product.convertToTons(product.quantity + toAdd);
-            
+            // let conversion = product.convertToTons(product.quantity + toAdd);
             let newQty = product.quantity + toAdd;
             let contractBalance = product.getContractBalance(); //remaining of contract
             let maxCapacitySalesArea = product.getMaximumCapacity(); 
             if (contractBalance === undefined){
                 if (isDelivery) {
-                    if (((this.manager.productLine.productId == 2) || (this.manager.productLine.productId == 1)) && (conversion <= maxCapacitySalesArea)) {
+                    if (((this.manager.productLine.productId == 2) || (this.manager.productLine.productId == 1)) && (newQty <= maxCapacitySalesArea)) {
                         return product.quantity = newQty;
                     }
                     else {
-                        if (conversion <= maxCapacitySalesArea){
+                        if (newQty <= maxCapacitySalesArea){
                             return product.quantity = newQty;
                         }
                     }
                 } 
                 else {
-                    if (conversion <= maxCapacitySalesArea) {
+                    if (newQty <= maxCapacitySalesArea) {
                         return product.quantity = newQty;
                     }
                 }
             }
             else {            
-                if (conversion > contractBalance) {
+                if (newQty > contractBalance) {
                     return this.dashboard.alertError("Maxiumum capacity limit reached", 10000);
                 }
                 if (!isDelivery) {
-                    if (conversion <= maxCapacitySalesArea) {
+                    if (newQty <= maxCapacitySalesArea) {
                         return product.quantity = newQty;
                     }
                 } 
                 else {
-                    if ((conversion <= maxCapacitySalesArea)) {
+                    if ((newQty <= maxCapacitySalesArea)) {
                         return product.quantity = newQty;
                     }
                 }
             }
-            if (conversion <= maxCapacitySalesArea) {
+            if (newQty <= maxCapacitySalesArea) {
                 return product.quantity = newQty;
             }
 
@@ -857,12 +856,15 @@ class PreProduct {
 
     //convert to tons quantity selected
     convertToTons(qty): any{
+        if(this.unit === undefined){
+            return qty;
+        }
         let factor = this.unit.numerator/this.unit.denominator;
         let convertion = qty*factor;
         if (this.unit) {            
             return convertion;
         } else {
-            return;
+            return undefined;
         }
     }
 
@@ -871,14 +873,14 @@ class PreProduct {
         const salesAreaArray = _.get(this.manager, 'salesArea');
         let salesArea;
         if (salesAreaArray.length > 1) {
-            const salesArea = salesAreaArray.forEach((sa, index) => {
+            salesArea = salesAreaArray.forEach((sa, index) => {
                 if (_.has(sa, 'divisionCode.02')){
                     return sa;
                 }                    
             });
         }
         else {
-            const salesArea = _.get(this.manager, 'salesArea[0]');
+            salesArea = _.get(this.manager, 'salesArea[0]');
         }
         let maxJobsiteQty = undefined;
         const unlimited = undefined;
