@@ -871,10 +871,21 @@ class PreProduct {
 
     //Maximum capacity salesArea
     getMaximumCapacity() {
-        const salesArea = _.get(this.manager, 'salesArea[0]');
+        const salesAreaArray = _.get(this.manager, 'salesArea');
+        let salesArea;
+        if (salesAreaArray.length > 1) {
+            const salesArea = salesAreaArray.forEach((sa, index) => {
+                if (_.has(sa, 'divisionCode.02')){
+                    return sa;
+                }                    
+            });
+        }
+        else {
+            const salesArea = _.get(this.manager, 'salesArea[0]');
+        }
         let maxJobsiteQty = undefined;
         const unlimited = undefined;
-        if (salesArea) { maxJobsiteQty = salesArea.maximumLot.amount; return maxJobsiteQty; }
+        if (salesArea && salesArea.maximumLot) { return salesArea.maximumLot.amount; }
         else { return unlimited; }
     }
 
