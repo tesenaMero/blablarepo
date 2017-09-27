@@ -72,7 +72,7 @@ export class CrossProductComponent implements OnInit {
         }
 
         this.dashboard.alertInfo("Placing order...", 0);
-        this.drafts.createOrder(jObj.data[0].orderID, '')
+        this.drafts.createOrder(jObj.data[0].orderID, data)
             .flatMap((response) => {
                 this.dashboard.alertSuccess("Order placed successfully, requesting order code...", 0);
                 return this.drafts.validateRequestId(response.json().id);
