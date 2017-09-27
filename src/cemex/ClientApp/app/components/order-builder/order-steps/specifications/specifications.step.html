@@ -56,9 +56,9 @@
                             <label>Request date</label>
                             <label for="date{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    {{ product?.date | date: 'shortDate' }}
-                                    <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" [min-date]="today" />
-                                    <!-- <input type="date" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event"/> -->
+                                    <!-- {{ product?.date | date: 'shortDate' }} -->
+                                    <!-- <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" [min-date]="today" /> -->
+                                    <input type="date" min="{{ todayStr() }}" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event"/>
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-calendar"></span></span>
@@ -142,7 +142,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-3 flex-end" [ngClass]="{ 'col-md-6': product.maneuveringAvailable, 'col-md-9': !product.maneuveringAvailable }">
+            </div>
+            <div class="row">
+                <div class="mt-3 flex-end w-100">
                     <button (click)="remove(index)" class="noborder">Remove product</button>
                 </div>
             </div>
@@ -210,9 +212,9 @@
                             <label>Request date</label>
                             <label for="date{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    {{ product?.date | date: 'shortDate' }}
-                                    <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" [min-date]="today" />
-                                    <!-- <input type="date" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event"/> -->
+                                    <!-- {{ product?.date | date: 'shortDate' }} -->
+                                    <!-- <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" [min-date]="today" /> -->
+                                    <input type="date" min="{{ todayStr() }}" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event"/>
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-calendar"></span></span>
@@ -313,7 +315,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mt-3 flex-end">
+            </div>
+            <div class="row">
+                <div class="mt-3 flex-end w-100">
                     <button (click)="remove(index)" class="noborder">Remove product</button>
                 </div>
             </div>
@@ -381,7 +385,7 @@
                                 <span class="mb-0 value">
                                     <!--  -->
                                     <!-- <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" /> -->
-                                    <input type="date" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event" />
+                                    <input type="date" min="{{ todayStr() }}" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event" />
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-calendar"></span></span>
