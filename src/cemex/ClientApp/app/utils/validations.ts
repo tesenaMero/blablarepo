@@ -23,36 +23,36 @@ export class Validations {
     }
 
     static isMexicoCustomer() {
-        return this.customer.currentCustomer().countryCode.trim() == "MX"
+        return this.customer.currentCustomer() && this.customer.currentCustomer().countryCode.trim() === "MX"
     }
 
     static isUSACustomer() {
-        return this.customer.currentCustomer().countryCode.trim() == "US"
+        return this.customer.currentCustomer() && this.customer.currentCustomer().countryCode.trim() === "US"
     }
 
     static isReadyMix() {
-        return _.get(this.manager, 'productLine.productLineId') == this.PRODUCT_LINES.Readymix
+        return _.get(this.manager, 'productLine.productLineId') === this.PRODUCT_LINES.Readymix
     }
 
     static isCement() {
-        return _.get(this.manager, 'productLine.productLineId') != this.PRODUCT_LINES.Readymix
+        return _.get(this.manager, 'productLine.productLineId') !== this.PRODUCT_LINES.Readymix
     }
 
     static isBulkCement() {
-        return _.get(this.manager, 'productLine.productLineId') == this.PRODUCT_LINES.CementBulk
+        return _.get(this.manager, 'productLine.productLineId') === this.PRODUCT_LINES.CementBulk
     }
 
     static isPickup() {
-        return _.get(this.manager, 'shippingCondition.shippingConditionId') == this.MODE.Pickup
+        return _.get(this.manager, 'shippingCondition.shippingConditionId') === this.MODE.Pickup
     }
 
     static isDelivery() {
-        return _.get(this.manager, 'shippingCondition.shippingConditionId') == this.MODE.Delivery
+        return _.get(this.manager, 'shippingCondition.shippingConditionId') === this.MODE.Delivery
     }
 
     static shouldHidePayment() {
-        return this.customer.currentCustomer().countryCode.trim() == "US" 
-                || _.get(this.manager, 'productLine.productId') == this.PRODUCT_LINES.Readymix;
+        return this.customer.currentCustomer().countryCode.trim() === "US" 
+                || _.get(this.manager, 'productLine.productId') === this.PRODUCT_LINES.Readymix;
     }
 
     static shouldHidePOD(): boolean {

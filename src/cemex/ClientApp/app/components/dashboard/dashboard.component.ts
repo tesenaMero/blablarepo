@@ -42,7 +42,9 @@ export class DashboardComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.createOrderService.fetchShipmentLocation();
+        // Fetch locations types:
+        // 'J': Jobsite, ...
+        this.shipmentLocationApi.fetchShipmentLocationTypes();
         this.dashboard.alertSubject.subscribe((alert) => this.handleAlert(alert));
 
         this.legalEnitityApi.all().subscribe((response) => {

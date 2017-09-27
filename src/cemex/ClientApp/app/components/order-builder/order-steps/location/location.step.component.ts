@@ -29,7 +29,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     private purchaseOrder: string = "";
     private specialInstructions: string = "";
-    shipmentLocationTypes;
 
     // Loading state
     private isMapLoaded: boolean = false;
@@ -53,7 +52,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     // Subs
-    addressSub: any;
+    salesAdressSub: any;
     lockRequests: boolean = false;
 
     // Mapped data
@@ -65,6 +64,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     locationIndex: any;
     contactsIndex: any;
     podsIndex: any;
+
+    isCement: boolean;
 
     // Settings configuration
     dropDownSettings: IMultiSelectSettings = {
@@ -140,9 +141,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     onBeforeBack() {
         // Cancel needed requests and lock
         this.lockRequests = true;
-        if (this.addressSub) {
-            this.addressSub.unsubscribe();
-        }
+        this.salesAdressSub && this.salesAdressSub.unsubscribe();
     }
 
     canAdvance() {
@@ -205,6 +204,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     onShowed() {
+        this.isCement = Validations.isCement();
+
         // Map shippingcondition
         this.mapShippingCondition();
 
@@ -234,11 +235,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.hiddens.pods = false;
         }
 
-        this.manager._shipmentLocationType.subscribe(data => {
-            this.shipmentLocationTypes = data.shipmentLocationTypes;
-            this.fetchJobsites(this.shipmentLocationTypes);
-        });
-
         if (!this.isMapLoaded) {
             GoogleMapsHelper.lazyLoadMap("jobsite-selection-map", (map) => {
                 this.isMapLoaded = true;
@@ -250,6 +246,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         else {
             google.maps.event.trigger(this.map, "resize");
         }
+
+        // Guard to fetch jobsites when I got shipment locations
+        this.shipmentApi.shipmentLocationTypes.subscribe(data => {
+            if (data) { this.fetchJobsites(); }
+        });
     }
 
     shouldShowPOD(): boolean {
@@ -258,18 +259,21 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         else { return true; }
     }
 
-    fetchJobsites(shipmentLocationTypes) {
-        this.shipmentApi.all(shipmentLocationTypes, this.manager.productLine).subscribe((response) => {
+    fetchJobsites() {
+        this.shipmentApi.all(this.manager.productLine).subscribe((response) => {
             this.locations = response.json().shipmentLocations;
             this.locations.forEach((location, index) => {
                 location.id = index;
                 location.name = location.shipmentLocationDesc;
             })
-            this.loadings.locations = false;
-            if (this.locations.length > 0) {
+            if (this.location) {
+                this.jobsiteChanged(this.location);
+            }
+            else if (this.locations.length === 1) {
                 this.jobsiteChanged(this.locations[0]);
                 this.locationIndex = 0;
             }
+            this.loadings.locations = false;
         });
     }
 
@@ -295,43 +299,46 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.location = location;
         this.manager.selectJobsite(this.location);
 
-        // Fetch salesarea
-        this.shipmentApi.salesAreas(this.location, this.manager.productLine).subscribe((salesAreas) => {
-            if (salesAreas.json().jobsiteSalesAreas.length > 0) {
-                let salesArea = salesAreas.json().jobsiteSalesAreas;
-                this.manager.salesArea = salesArea;
-
-                let shouldValidatePurchaseOrder = false;
-                salesArea.forEach((item) => {
-                    if (item.purchaseOrderValidation) {
-                        shouldValidatePurchaseOrder = true;
-                        return;
-                    }
-                });
-
-                this.location.purchaseOrderValidation = shouldValidatePurchaseOrder;
-                this.validations.purchaseOrder.mandatory = shouldValidatePurchaseOrder;
-            }
-            this.loadings.purchaseOrder = false;
-        });
-
         // If locked stop
         if (this.lockRequests) {
             this.onCompleted.emit(false);
             return;
         }
 
-        // Fetch geolocation
-        this.addressSub = this.shipmentApi.address(this.location)
+        // Make salesarea call, dont fetch yet
+        let salesAreaSub = this.shipmentApi.salesAreas(this.location, this.manager.productLine)
+            .map((salesAreas) => {
+                if (salesAreas.json().jobsiteSalesAreas.length > 0) {
+                    let salesArea = salesAreas.json().jobsiteSalesAreas;
+                    this.manager.salesArea = salesArea;
+
+                    // If its not pickup then all we need to be fetched is sales areas.
+                    // If its pickup we need to wait for address object to be fetched
+                    if (!Validations.isPickup()) {
+                        this.onCompleted.emit(true);
+                    }
+
+                    let shouldValidatePurchaseOrder = false;
+                    salesArea.forEach((item) => {
+                        if (item.purchaseOrderValidation) {
+                            shouldValidatePurchaseOrder = true;
+                            return;
+                        }
+                    });
+
+                    this.location.purchaseOrderValidation = shouldValidatePurchaseOrder;
+                    this.validations.purchaseOrder.mandatory = shouldValidatePurchaseOrder;
+                }
+                this.loadings.purchaseOrder = false;
+            });
+
+        // Make address -> geolocation call, dont fetch yet
+        let addressSub = this.shipmentApi.address(this.location)
             .flatMap((address) => {
                 this.location.address = address.json();
-                
-                // Complete step after fetching address 
-                // since the next step will use the object stored in manager
-                this.onCompleted.emit(true);
                 return this.shipmentApi.geo(address.json());
             })
-            .subscribe((geo) => {
+            .map((geo) => {
                 this.location.geo = geo.json();
                 this.cleanJobsiteMarker();
                 this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
@@ -339,8 +346,13 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 this.loadings.map = false;
             });
 
+        // Fork join address + sales areas (fetch)
+        this.salesAdressSub = Observable.forkJoin(salesAreaSub, addressSub).subscribe((response) => {
+            this.onCompleted.emit(true);
+        });
+
         // Fetch pods
-        this.shipmentApi.pods(this.location, this.shipmentLocationTypes, null, this.manager.productLine).subscribe((response) => {
+        this.shipmentApi.pods(this.location, this.manager.productLine).subscribe((response) => {
             this.pods = response.json().shipmentLocations;
             this.pods.forEach((pod, index) => {
                 pod.id = index;
@@ -348,26 +360,28 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             });
 
             if (this.pods.length > 0) {
-                this.podsIndex = undefined;
-                this.manager.selectPointOfDelivery(undefined);
+                this.podsIndex = this.pods.length === 1 ? 0 : undefined;
+                this.pods.length === 1 ? this.podChanged(this.pods[0]) : this.podChanged(undefined)
             }
 
             this.loadings.pods = false;
         });
 
-        // Fetch contacts
-        this.shipmentApi.contacts(this.location).subscribe((response => {
-            this.contacts = response.json().contacts;
-            this.contacts.forEach((contact, index) => {
-                contact.id = index;
-                contact.name = contact.name;
-            });
-            if (this.contacts.length > 0) {
-                this.contactsIndex = undefined;
-                this.contactChanged(undefined);
-            }
-            this.loadings.contacts = false;
-        }));
+        if (!this.isCement) {
+            // Fetch contacts
+            this.shipmentApi.contacts(this.location).subscribe((response => {
+                this.contacts = response.json().contacts;
+                this.contacts.forEach((contact, index) => {
+                    contact.id = index;
+                    contact.name = contact.name;
+                });
+                if (this.contacts.length > 0) {
+                    this.contactsIndex = undefined;
+                    this.contactChanged(undefined);
+                }
+                this.loadings.contacts = false;
+            }));
+        }
     }
 
     podChanged(pod: any) {
@@ -436,7 +450,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             }
             else {
                 this.validations.contactPerson.valid = false;
-                return;    
+                return;
             }
         }
         else {
@@ -467,7 +481,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     defineValidations() {
         // Contacts mandatory for delivery only
-        if (Validations.isDelivery()) {
+        if (Validations.isDelivery() && !this.isCement) {
             this.validations.contactPerson.mandatory = true;
         }
         // MX POD mandatory
