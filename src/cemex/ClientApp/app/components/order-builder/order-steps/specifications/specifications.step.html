@@ -40,7 +40,7 @@
                             <label [ngClass]="{ loading: product.loadings.units }">
                                 Unit
                             </label>
-                            <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.units }">
+                            <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.units }">
                                 <span style="line-height: 24px;">
                                     {{ product.unit?.alternativeUnit?.unitDesc }}
                                     <select [(ngModel)]="product.unit" class="input behind">
@@ -201,7 +201,7 @@
                             <label [ngClass]="{ loading: product.loadings.units }">
                                 Unit
                             </label>
-                            <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.units }">
+                            <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.units }">
                                 <span style="line-height: 24px;">
                                         {{ product.unit?.alternativeUnit?.unitDesc }}
                                         <select [(ngModel)]="product.unit" class="input behind">
@@ -379,7 +379,7 @@
                             <label [ngClass]="{ loading: product.loadings.units }">
                                 Unit
                             </label>
-                            <div class="input flex-space-between dropdown">
+                            <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.units }">
                                 <span style="line-height: 24px;">
                                     {{ product.unit?.alternativeUnit?.unitDesc }}
                                     <select [(ngModel)]="product.unit" class="input behind">

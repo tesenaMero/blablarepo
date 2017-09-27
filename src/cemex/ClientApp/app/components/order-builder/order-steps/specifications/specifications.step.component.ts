@@ -150,8 +150,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.lockRequests = false;
 
         // Define validations for each preproduct already added
+        // Set loadings state
         this.preProducts.forEach((item: PreProduct) => {
             item.defineValidations();
+            item.loadings.products = true;
+            item.disableds.products = true;
         });
 
         // Add a pre product by default
@@ -161,11 +164,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         const productLineId = this.manager.productLine.productLineId;
 
         this.shouldHidePayment = customer.countryCode.trim() == "US" || this.manager.productLine.productId == this.PRODUCT_LINES.Readymix;
-
-        // Set loading state
-        this.preProducts.forEach((item) => {
-            item.loadings.products = true;
-        });
 
         // Fetch products
         if (this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix) {
@@ -184,7 +182,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     fetchProducts(salesDocumentType) {
         // Disable contracts while fetching products
         this.preProducts.forEach((item: PreProduct) => {
-            item.loadings.contracts = true;
+            item.disableds.contracts = true;
         });
 
         // If locked (stepper is moving most likely) then dont do the call 
@@ -202,11 +200,15 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 this.preProducts.forEach((item: PreProduct) => {
                     item.loadings.products = false;
                     if (topProducts.length > 0) {
+                        item.disableds.products = false;
                         item.setProduct(topProducts[0])
+                        item.productChanged();
                         this.onCompleted.emit(true);
                     }
                     else {
+                        item.disableds.products = true;
                         item.setProduct(undefined);
+                        item.productChanged();
                         this.onCompleted.emit(false);
                     }
                 });
@@ -216,7 +218,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     fetchProductsReadyMix(salesDocumentType) {
         // Disable contracts while fetching products
         this.preProducts.forEach((item: PreProduct) => {
-            item.loadings.contracts = true;
+            item.disableds.contracts = true;
         });
 
         // If locked (stepper is moving most likely) then dont do the call 
@@ -236,11 +238,15 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     this.preProducts.forEach((item: PreProduct) => {
                         item.loadings.products = false;
                         if (topProducts.length > 0) {
+                            item.disableds.products = false;
                             item.setProduct(topProducts[0])
+                            item.productChanged();
                             this.onCompleted.emit(true);
                         }
                         else {
+                            item.disableds.products = true;
                             item.setProduct(undefined);
+                            item.productChanged();
                             this.onCompleted.emit(false);
                         }
                     });
@@ -497,7 +503,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             let contractBalance = product.getContractBalance(); //remaining of contract
             let maxCapacitySalesArea = product.getMaximumCapacity();
 
-            
+
 
             if (contractBalance === undefined) {
                 if (isDelivery) {
@@ -651,7 +657,14 @@ class PreProduct {
 
     productChanged() {
         if (!this.product) {
-            this.disableds.products = true; // Disable
+            // Disable stuff and remove loadings
+            this.disableds.products = true;
+            this.disableds.contracts = true;
+            this.disableds.units = true;
+
+            this.loadings.products = false;
+            this.loadings.contracts = false;
+            this.loadings.units = false;
             return;
         }
 
@@ -713,7 +726,10 @@ class PreProduct {
             let contracts = result.json().products;
             this.availableContracts = contracts;
 
-            if (contracts.length > 0) { this.availableContracts.unshift(undefined); }
+            if (contracts.length > 0) {
+                this.disableds.contracts = false;
+                this.availableContracts.unshift(undefined);
+            }
             else { this.disableds.contracts = true; } // Disable it if no contracts
 
             this.loadings.contracts = false;
@@ -732,10 +748,14 @@ class PreProduct {
                 let units = result.json().productUnitConversions;
                 this.availableUnits = units;
 
-                this.loadings.units = false;
-
-                if (units.length > 0)
+                if (units.length > 0) {
+                    this.disableds.units = false;
                     this.unit = units[0];
+                }
+                else { this.disableds.units = true; }
+
+                this.loadings.units = false;
+                
             })
         ).subscribe((response) => {
             // Map product base unit with available units and map it
@@ -842,6 +862,7 @@ class PreProduct {
 
     getPlants() {
         let countryCode = this.manager.jobsite.address.countryCode || this.customerService.currentCustomer().countryCode;
+        this.loadings.plants = true;
         this.plantApi.byCountryCodeAndRegionCode(
             countryCode.trim(),
             this.manager.jobsite.address.regionCode,
