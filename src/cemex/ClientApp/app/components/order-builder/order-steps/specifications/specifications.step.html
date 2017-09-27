@@ -30,8 +30,8 @@
                                 <span class="value">{{ product.quantity | number:'1.3-3' }}</span>
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacityContractAndJobsite()">
-                                Maximum Capacity {{ product.getMaximumCapacityContractAndJobsite() }} Ton(s)
+                            <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacity()">
+                                Maximum Capacity {{ product.getMaximumCapacity() }} Ton(s)
                             </div>
                         </div>
                         <div class="group w40">
@@ -191,8 +191,8 @@
                                 <span class="value">{{ product.quantity | number:'1.3-3' }}</span>
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="UTILS.isMexicoCustomer() && product.getMaximumCapacityContractAndJobsite()">
-                                Maximum Capacity {{ product.getMaximumCapacityContractAndJobsite() }} Ton(s)
+                            <div class="info" *ngIf="UTILS.isMexicoCustomer() && product.getMaximumCapacity()">
+                                Maximum Capacity {{ product.getMaximumCapacity() }} Ton(s)
                             </div>
                         </div>
                         <div class="group w40">
@@ -369,8 +369,8 @@
                                 <span class="value">{{ product.quantity | number:'1.3-3' }}</span>
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacityContractAndJobsite()">
-                                Maximum Capacity {{ product.getMaximumCapacityContractAndJobsite() }} Ton(s)
+                            <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacity()">
+                                Maximum Capacity {{ product.getMaximumCapacity() }} Ton(s)
                             </div>
                         </div>
                         <div class="group w40">

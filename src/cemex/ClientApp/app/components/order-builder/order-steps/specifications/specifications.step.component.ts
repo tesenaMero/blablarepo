@@ -505,43 +505,45 @@ export class SpecificationsStepComponent implements StepEventsListener {
             if (product.quantity <= 1 && toAdd < 0) { return; }
             const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
             const isDelivery = shippingConditionId === this.MODE.Delivery;            
-            // let conversion = product.convertToTons(product.quantity + toAdd);
+            let conversion = product.convertToTons(product.quantity + toAdd);
+            
             let newQty = product.quantity + toAdd;
             let contractBalance = product.getContractBalance(); //remaining of contract
-            let maxCapacitySalesArea = product.getMaximumCapacity(); 
-            if (contractBalance === undefined){
+            let maxCapacitySalesArea = product.getMaximumCapacity();
+
+            if (contractBalance === undefined) {
                 if (isDelivery) {
-                    if (((this.manager.productLine.productId == 2) || (this.manager.productLine.productId == 1)) && (newQty <= maxCapacitySalesArea)) {
+                    if (((this.manager.productLine.productId == 2) || (this.manager.productLine.productId == 1)) && (conversion <= maxCapacitySalesArea)) {
                         return product.quantity = newQty;
                     }
                     else {
-                        if (newQty <= maxCapacitySalesArea){
+                        if (conversion <= maxCapacitySalesArea){
                             return product.quantity = newQty;
                         }
                     }
                 } 
                 else {
-                    if (newQty <= maxCapacitySalesArea) {
+                    if (conversion <= maxCapacitySalesArea) {
                         return product.quantity = newQty;
                     }
                 }
             }
             else {            
-                if (newQty > contractBalance) {
+                if (conversion > contractBalance) {
                     return this.dashboard.alertError("Maxiumum capacity limit reached", 10000);
                 }
                 if (!isDelivery) {
-                    if (newQty <= maxCapacitySalesArea) {
+                    if (conversion <= maxCapacitySalesArea) {
                         return product.quantity = newQty;
                     }
                 } 
                 else {
-                    if ((newQty <= maxCapacitySalesArea)) {
+                    if ((conversion <= maxCapacitySalesArea)) {
                         return product.quantity = newQty;
                     }
                 }
             }
-            if (newQty <= maxCapacitySalesArea) {
+            if (conversion <= maxCapacitySalesArea) {
                 return product.quantity = newQty;
             }
 
