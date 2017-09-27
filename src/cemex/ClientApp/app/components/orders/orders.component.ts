@@ -5,8 +5,9 @@ import { OrderRequestTableComponentConfiguration } from '../../utils/order-reque
 import { DashboardService } from '../../shared/services/dashboard.service';
 import { TranslationService } from '../../shared/services/translation.service';
 import { Router } from '@angular/router';
-import { CustomerService } from '../../shared/services/customer.service'
-import { OrdersApi } from '../../shared/services/api/orders.service'
+import { CustomerService } from '../../shared/services/customer.service';
+import { OrdersApi } from '../../shared/services/api/orders.service';
+import * as moment from 'moment'
 
 @Component({
     selector: 'page-orders',
@@ -73,12 +74,12 @@ export class OrdersComponent implements OnInit {
         this.orders.forEach((order) => {
             this.rows.push([
                 { inner: this.getOrderCode(order), class: "order-id", title: true, click: () => this.goToDetail(order) },
-                { inner: order.updatedDateTime, hideMobile: true },
+                { inner: moment(order.updatedDateTime).format('DD/MM/YYYY'), hideMobile: true },
                 { inner: order.jobsite.jobsiteCode + " " + order.jobsite.jobsiteDesc, subtitle: true },
                 { inner: order.purchaseOrder, hideMobile: true },
                 { inner: "<i class='cmx-icon-track'></i>", hideMobile: true },
                 { inner: order.totalQuantity + " tons" },
-                { inner: order.requestedDateTime },
+                { inner: moment(order.requestedDateTime).format('DD/MM/YYYY') },
                 { inner: "<span class='status " + order.status.statusDesc.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
                 { inner: "$" + order.totalAmount, class: "roboto-bold" },
                 // { inner: "<span class='status " + order.status.statusDesc.toLowerCase() + "'></span>" + order.status.statusDesc, hideDesktop: true },
