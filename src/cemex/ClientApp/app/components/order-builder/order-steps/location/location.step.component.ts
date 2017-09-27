@@ -360,9 +360,18 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             });
 
             if (this.pods.length > 0) {
-                this.podsIndex = this.pods.length === 1 ? 0 : undefined;
-                this.pods.length === 1 ? this.podChanged(this.pods[0]) : this.podChanged(undefined)
-            }
+                if (this.pod === undefined) {
+                    this.podsIndex = this.pods.length === 1 ? 0 : undefined;
+                    this.pods.length === 1 ? this.podChanged(this.pods[0]) : this.podChanged(undefined);
+                }
+                else {
+                    this.pods.forEach((pod, index) => {
+                        if (this.pod.shipmentLocationId === pod.shipmentLocationId){
+                            this.podsIndex = index;
+                        }
+                    });
+                }
+            }         
 
             this.loadings.pods = false;
         });
