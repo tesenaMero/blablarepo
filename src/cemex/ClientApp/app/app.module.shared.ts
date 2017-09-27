@@ -56,7 +56,7 @@ import { ModalComponent, ModalService } from './shared/components/modal';
 import { WindowRef } from './shared/services/window-ref.service';
 import { NguiDatetimePickerModule } from './shared/components/datetimepicker';
 import { OrderRequestHelper } from './utils/order-request.helper';
-import { Validations } from './utils/validations'
+import { Validations } from './utils/validations';
 import { OrdersModel } from './shared/schema';
 import { SessionService, AuthGuard } from './shared/services/session.service';
 import { DashboardService } from './shared/services/dashboard.service';
