@@ -53,7 +53,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     // Subs
-    addressSub: any;
+    salesAdressSub: any;
     lockRequests: boolean = false;
 
     // Mapped data
@@ -140,9 +140,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     onBeforeBack() {
         // Cancel needed requests and lock
         this.lockRequests = true;
-        if (this.addressSub) {
-            this.addressSub.unsubscribe();
-        }
+        this.salesAdressSub && this.salesAdressSub.unsubscribe();
     }
 
     canAdvance() {
@@ -295,11 +293,24 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.location = location;
         this.manager.selectJobsite(this.location);
 
-        // Fetch salesarea
-        this.shipmentApi.salesAreas(this.location, this.manager.productLine).subscribe((salesAreas) => {
+        // If locked stop
+        if (this.lockRequests) {
+            this.onCompleted.emit(false);
+            return;
+        }
+
+        // Make salesarea call, dont fetch yet
+        let salesAreaSub = this.shipmentApi.salesAreas(this.location, this.manager.productLine)
+        .map((salesAreas) => {
             if (salesAreas.json().jobsiteSalesAreas.length > 0) {
                 let salesArea = salesAreas.json().jobsiteSalesAreas;
                 this.manager.salesArea = salesArea;
+
+                // If its not pickup then all we need to be fetched is sales areas.
+                // If its pickup we need to wait for address object to be fetched
+                if (!Validations.isPickup()) {
+                    this.onCompleted.emit(true);
+                }
 
                 let shouldValidatePurchaseOrder = false;
                 salesArea.forEach((item) => {
@@ -315,29 +326,24 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.loadings.purchaseOrder = false;
         });
 
-        // If locked stop
-        if (this.lockRequests) {
-            this.onCompleted.emit(false);
-            return;
-        }
+        // Make address -> geolocation call, dont fetch yet
+        let addressSub = this.shipmentApi.address(this.location)
+        .flatMap((address) => {
+            this.location.address = address.json();
+            return this.shipmentApi.geo(address.json());
+        })
+        .map((geo) => {
+            this.location.geo = geo.json();
+            this.cleanJobsiteMarker();
+            this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
+            this.addMarkerToMap(this.jobsiteMarker);
+            this.loadings.map = false;
+        });
 
-        // Fetch geolocation
-        this.addressSub = this.shipmentApi.address(this.location)
-            .flatMap((address) => {
-                this.location.address = address.json();
-                
-                // Complete step after fetching address 
-                // since the next step will use the object stored in manager
-                this.onCompleted.emit(true);
-                return this.shipmentApi.geo(address.json());
-            })
-            .subscribe((geo) => {
-                this.location.geo = geo.json();
-                this.cleanJobsiteMarker();
-                this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
-                this.addMarkerToMap(this.jobsiteMarker);
-                this.loadings.map = false;
-            });
+        // Fork join address + sales areas (fetch)
+        this.salesAdressSub = Observable.forkJoin(salesAreaSub, addressSub).subscribe((response) => {
+            this.onCompleted.emit(true);
+        });
 
         // Fetch pods
         this.shipmentApi.pods(this.location, this.shipmentLocationTypes, null, this.manager.productLine).subscribe((response) => {
@@ -436,7 +442,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             }
             else {
                 this.validations.contactPerson.valid = false;
-                return;    
+                return;
             }
         }
         else {
