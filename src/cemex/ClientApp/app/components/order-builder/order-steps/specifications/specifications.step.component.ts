@@ -23,6 +23,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
     @Output() initializeProductColorsEmitter = new EventEmitter<any>();
     @Output() onCompleted = new EventEmitter<any>();
 
+    today: Date;
+
     // One box one preProduct
     private preProducts = [];
 
@@ -96,6 +98,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private searchProductService: SearchProductService,
         private dashboard: DashboardService
     ) {
+        this.today = new Date();
         this.step.setEventsListener(this);
         this.step.canAdvance = () => this.canAdvance();
         this.step.onBeforeBack = () => this.onBeforeBack();
