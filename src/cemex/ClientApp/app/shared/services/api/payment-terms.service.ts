@@ -11,9 +11,11 @@ export class PaymentTermsApi {
     getJobsiteById(termId: any) {
         return this.api.get(`/v1/im/paymentterms?paymentTermId=${termId}`);
     }
+    
     getJobsitePaymentTerms(termId: any) {
         return this.api.get(`/v1/im/paymentterms?paymentTermId=${termId}`);
     }
+    
     getCashTerm(customerId: number) {
         return this.api.get(`/v1/im/paymentterms?customerId=${customerId}&paymentTermCode=ZCON`);
     }

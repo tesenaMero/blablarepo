@@ -276,8 +276,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     getPaymentTerms() {
-        let paymentTermIds = '';
+        // Set payment loading state
+        this.preProducts.forEach((item: PreProduct) => {
+            item.loadings.payments = true;
+            item.disableds.payments = true;
+        });
 
+        let paymentTermIds = '';
         this.manager.salesArea.map((area: any) => {
             if (area) {
                 if (area.paymentTerm) {
@@ -286,70 +291,70 @@ export class SpecificationsStepComponent implements StepEventsListener {
             }
         });
 
-        this.preProducts.forEach((item: PreProduct) => {
-            item.loadings.payments = true;
-        });
-
         this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
-            const terms = result.json().paymentTerms;
-            let uniqueTerms = [];
-            // Find type Cash
-            const cashPayment = terms.find((term: any) => {
-                return term.paymentTermType.paymentTermTypeDesc === 'Cash';
+            let paymentTerms = result.json().paymentTerms;
+
+            const cash = paymentTerms.find((term: any) => {
+                return term.paymentTermType.paymentTermTypeCode === 'CASH';
             });
 
-            // Find type Credit
-            const creditPayment = terms.find((term: any) => {
-                return term.paymentTermType.paymentTermTypeDesc === 'Credit';
+            const credit = paymentTerms.find((term: any) => {
+                return term.paymentTermType.paymentTermTypeCode === 'CREDIT';
             });
 
-            // Push to terms array
-            cashPayment && uniqueTerms.push(cashPayment);
-            creditPayment && uniqueTerms.push(creditPayment);
-            SpecificationsStepComponent.availablePayments = uniqueTerms;
-
-            this.preProducts.forEach((item: PreProduct) => {
-                item.availablePayments = SpecificationsStepComponent.availablePayments;
-
-                // Pre select payemnt
-                if (item.availablePayments) {
-                    item.payment = item.availablePayments[0];
-                    item.paymentChanged();
+            // If usa set only credit and return
+            if (Validations.isUSACustomer()) {
+                if (credit) {
+                    this.preProducts.forEach((item: PreProduct) => {
+                        item.payment = credit;
+                        item.paymentChanged();
+                    })
                 }
-            })
+                return;
+            }
 
-            if (!cashPayment) {
+            // If theres no cash, fetch it manually
+            if (!cash) {
                 let customerId = this.customerService.currentCustomer().legalEntityId;
                 this.paymentTermsApi.getCashTerm(customerId).subscribe((result) => {
-                    let paymentTerms = result.json().paymentTerms;
-                    if (paymentTerms.length) {
-                        SpecificationsStepComponent.availablePayments.push(paymentTerms[0]);
-                    }
+                    paymentTerms = result.json().paymentTerms;
+                    if (paymentTerms.length) { paymentTerms.push(paymentTerms[0]); }
 
-                    if (SpecificationsStepComponent.availablePayments.length) {
-                        this.preProducts.forEach((item) => {
-                            item.loadings.payments = false;
-                        });
-                    }
+                    // Set default payment terms for preproducts
+                    SpecificationsStepComponent.availablePayments = paymentTerms;
+
+                    // Set available payments and loading state
+                    this.preProducts.forEach((item: PreProduct) => {
+                        item.loadings.payments = false;
+                        item.disableds.payments = false;
+                        item.availablePayments = paymentTerms;
+
+                        // Select credit by default
+                        if (credit) {
+                            item.payment = credit;
+                            item.paymentChanged();
+                        }
+                    });
                 });
             }
             else {
-                this.preProducts.forEach((item) => {
+                // Set default payment terms for preproducts
+                SpecificationsStepComponent.availablePayments = paymentTerms;
+
+                // Set available payments and loading state
+                this.preProducts.forEach((item: PreProduct) => {
                     item.loadings.payments = false;
+                    item.disableds.payments = false;
+                    item.availablePayments = paymentTerms;
+
+                    // Select credit by default
+                    if (credit) {
+                        item.payment = credit;
+                        item.paymentChanged();
+                    }
                 });
             }
-
         });
-    }
-
-    hasPayment(code, terms) {
-        for (let p of terms) {
-            if (p.paymentTermType.paymentTermTypeCode == code) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     getProjectProfiles() {
@@ -505,9 +510,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
         if (this.isMXCustomer()) {
             if (product.quantity <= 1 && toAdd < 0) { return; }
             const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
-            const isDelivery = shippingConditionId === this.MODE.Delivery;            
+            const isDelivery = shippingConditionId === this.MODE.Delivery;
             let conversion = product.convertToTons(product.quantity + toAdd);
-            
+
             let newQty = product.quantity + toAdd;
             let contractBalance = product.getContractBalance(); //remaining of contract
             let maxCapacitySalesArea = product.getMaximumCapacity();
@@ -518,18 +523,18 @@ export class SpecificationsStepComponent implements StepEventsListener {
                         return product.quantity = newQty;
                     }
                     else {
-                        if (conversion <= maxCapacitySalesArea){
+                        if (conversion <= maxCapacitySalesArea) {
                             return product.quantity = newQty;
                         }
                     }
-                } 
+                }
                 else {
                     if (conversion <= maxCapacitySalesArea) {
                         return product.quantity = newQty;
                     }
                 }
             }
-            else {            
+            else {
                 if (conversion > contractBalance) {
                     return this.dashboard.alertError("Maxiumum capacity limit reached", 10000);
                 }
@@ -537,7 +542,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     if (conversion <= maxCapacitySalesArea) {
                         return product.quantity = newQty;
                     }
-                } 
+                }
                 else {
                     if ((conversion <= maxCapacitySalesArea)) {
                         return product.quantity = newQty;
@@ -555,6 +560,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
             if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
             product.quantity += toAdd;
         }
+    }
+
+    todayStr() {
+        return new Date().toJSON().split('T')[0];
     }
 
     isMXCustomer() {
