@@ -32,15 +32,6 @@ export class PreProduct {
     availablePlants = [];
     maneuveringAvailable: boolean = false;
 
-    // Statics
-    // static availablePayments = [];
-    // static availableProducts = [];
-    // static additionalServices = [];
-    // static availablePlants = [];
-    // static projectProfiles = [];
-    // static catalogs = [];
-    // static plants = [];
-
     loadings = {
         products: false,
         contracts: true,
@@ -200,6 +191,7 @@ export class PreProduct {
 
     fetchUnits() {
         this.loadings.units = true;
+        this.disableds.units = true;
 
         // Fetch product base unit + alt units parallel
         Observable.forkJoin(
@@ -214,7 +206,9 @@ export class PreProduct {
                     this.disableds.units = false;
                     this.unit = units[0];
                 }
-                else { this.disableds.units = true; }
+                else {
+                    this.disableds.units = true;
+                }
 
                 this.loadings.units = false;
                 
@@ -254,21 +248,27 @@ export class PreProduct {
             this.forkUnitsFromContracts();
         }
         else {
+            this.disableds.units = true;
+            this.loadings.units = true;
             this.productsApi.units(this.contract.salesDocument.salesDocumentId).subscribe((result) => {
                 let units = result.json().productUnitConversions;
                 this.availableUnits = units;
                 if (units.length) {
                     this.unit = units[0];
+                    this.disableds.units = false;
                 }
                 else {
                     this.unit = undefined;
                 }
+
+                this.loadings.units = false;
             });
         }
     }
 
     private forkUnitsFromContracts() {
         this.loadings.units = true;
+        this.disableds.units = true;
 
         // Fetch parallel units from contract + contract base unit
         Observable.forkJoin(
@@ -286,20 +286,21 @@ export class PreProduct {
                 return unit.alternativeUnit.unitCode == this.product.unitOfMeasure.unitCode;
             });
 
+            this.loadings.units = false;
+
             // Preselect it and dont let the user change it
             if (matchingUnit) {
                 this.unit = matchingUnit;
-                this.loadings.units = true;
+                this.disableds.units = true;
             }
             else {
                 // Preselect first one and let the user change it
                 if (this.availableUnits.length) {
                     this.unit = this.availableUnits[0];
-                    this.loadings.units = false;
                 }
                 // No units available so disable it
                 else {
-                    this.loadings.units = true;
+                    this.disableds.units = true;
                 }
             }
         });

@@ -122,8 +122,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 mt-3" *ngIf="product.maneuveringAvailable">
-                    <div class="group">
+                <div class="col-md-3 mt-3">
+                    <div class="group" *ngIf="product.maneuveringAvailable">
                         <label>Additional services</label>
                         <div class="service">
                             <input [(ngModel)]="product.maneuvering" checked type="checkbox" id="maneuvering{{ index }}">
@@ -139,15 +139,6 @@
                                 </svg>
                                 <span>Maneuvering</span>
                             </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mt-3">
-                    <div class="group">
-                        <label>Delivery Mode</label>
-                        <div class="service">
-                            <span *ngIf="UTILS.isDelivery()">Delivery</span>
-                            <span *ngIf="UTILS.isPickup()">Pickup</span>
                         </div>
                     </div>
                 </div>
@@ -304,13 +295,6 @@
                                     </svg>
                                     <span>Maneuvering</span>
                                 </label>
-                            </div>
-                        </div>
-                        <div class="group">
-                            <label>Delivery Mode</label>
-                            <div class="service spaced-top">
-                                <span *ngIf="UTILS.isDelivery()">Delivery</span>
-                                <span *ngIf="UTILS.isPickup()">Pickup</span>
                             </div>
                         </div>
                     </div>
