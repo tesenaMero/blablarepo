@@ -66,6 +66,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     contactsIndex: any;
     podsIndex: any;
 
+    isCement: boolean;
+
     // Settings configuration
     dropDownSettings: IMultiSelectSettings = {
         enableSearch: true,
@@ -205,6 +207,9 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     onShowed() {
+
+        this.isCement = Validations.isCement();
+
         // Map shippingcondition
         this.mapShippingCondition();
 
@@ -355,19 +360,21 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.loadings.pods = false;
         });
 
-        // Fetch contacts
-        this.shipmentApi.contacts(this.location).subscribe((response => {
-            this.contacts = response.json().contacts;
-            this.contacts.forEach((contact, index) => {
-                contact.id = index;
-                contact.name = contact.name;
-            });
-            if (this.contacts.length > 0) {
-                this.contactsIndex = undefined;
-                this.contactChanged(undefined);
-            }
-            this.loadings.contacts = false;
-        }));
+        if (!this.isCement) {
+            // Fetch contacts
+            this.shipmentApi.contacts(this.location).subscribe((response => {
+                this.contacts = response.json().contacts;
+                this.contacts.forEach((contact, index) => {
+                    contact.id = index;
+                    contact.name = contact.name;
+                });
+                if (this.contacts.length > 0) {
+                    this.contactsIndex = undefined;
+                    this.contactChanged(undefined);
+                }
+                this.loadings.contacts = false;
+            }));
+        }
     }
 
     podChanged(pod: any) {
@@ -467,7 +474,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     defineValidations() {
         // Contacts mandatory for delivery only
-        if (Validations.isDelivery()) {
+        if (Validations.isDelivery() && !this.isCement) {
             this.validations.contactPerson.mandatory = true;
         }
         // MX POD mandatory
