@@ -489,11 +489,47 @@ export class SpecificationsStepComponent implements StepEventsListener {
     qty(product: PreProduct, toAdd: number) {
         if (this.isMXCustomer()) {
             if (product.quantity <= 1 && toAdd < 0) { return; }
-
+            const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
+            const isDelivery = shippingConditionId === this.MODE.Delivery;            
+            let conversion = product.convertToTons(product.quantity + toAdd);
+            
             let newQty = product.quantity + toAdd;
-            let maxCapacity = product.getMaximumCapacity() || Number.MAX_SAFE_INTEGER;
-
-            if (newQty <= maxCapacity) {
+            // console.log("conversion", conversion); 
+            let contractBalance = product.getContractBalance(); //remaining of contract
+            let maxCapacitySalesArea = product.getMaximumCapacity() || Number.MAX_SAFE_INTEGER; 
+            if (contractBalance === undefined){
+                if (isDelivery) {
+                    if (((this.manager.productLine.productId == 2) || (this.manager.productLine.productId == 1)) && (conversion <= maxCapacitySalesArea)) {
+                        return product.quantity = newQty;
+                    }
+                    else {
+                        if (conversion <= maxCapacitySalesArea){
+                            return product.quantity = newQty;
+                        }
+                    }
+                } 
+                else {
+                    if (conversion <= maxCapacitySalesArea) {
+                        return product.quantity = newQty;
+                    }
+                }
+            }
+            else {            
+                if (conversion > contractBalance) {
+                    return this.dashboard.alertError("Maxiumum capacity limit reached", 10000);
+                }
+                if (!isDelivery) {
+                    if (conversion <= maxCapacitySalesArea) {
+                        return product.quantity = newQty;
+                    }
+                } 
+                else {
+                    if ((conversion <= maxCapacitySalesArea)) {
+                        return product.quantity = newQty;
+                    }
+                }
+            }
+            if (conversion <= maxCapacitySalesArea) {
                 return product.quantity = newQty;
             }
 
@@ -820,35 +856,41 @@ class PreProduct {
         });
     }
 
-    getMaximumCapacity() {
-        if (!this.contract) { return undefined; }
-        const jobsite = this.manager.jobsite;
-        const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
+    //convert to tons quantity selected
+    convertToTons(qty): any{
+        let factor = this.unit.numerator/this.unit.denominator;
+        let convertion = qty*factor;
+        if (this.unit) {            
+            return convertion;
+        } else {
+            return;
+        }
+    }
 
+
+
+    //Maximum capacity salesArea
+    getMaximumCapacity() {
         const salesArea = _.get(this.manager, 'salesArea[0]');
         let maxJobsiteQty = undefined;
         const unlimited = undefined;
-        maxJobsiteQty = _.get(salesArea, 'maximumLot.amount');
+        if (salesArea) { maxJobsiteQty = salesArea.maximumLot.amount; return maxJobsiteQty; }
+        else { return unlimited; }
+    }
 
+    //Maximum capacity contract
+    getContractBalance(){
+        let balance = undefined;
         if (this.contract) {
             const volume = _.get(this.contract, 'salesDocument.volume');
             if (volume) {
-                const maxContractVolume = _.get(volume, 'total.quantity.amount');
-                return maxContractVolume;
-            } else {
-                if (Validations.isPickup()) {
-                    return unlimited;
-                } else {
-                    return maxJobsiteQty;
-                }
+                return _.get(volume, 'total.quantity.amount');
             }
-        } else {
-            if (Validations.isPickup()) {
-                return unlimited;
-            } else {
-                return maxJobsiteQty;
+            else {
+                return balance;
             }
         }
+        return balance;
     }
 
     defineValidations() {
