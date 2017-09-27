@@ -562,6 +562,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
     }
 
+    todayStr() {
+        return new Date().toJSON().split('T')[0];
+    }
+
     isMXCustomer() {
         return this.customerService.currentCustomer().countryCode.trim() == "MX";
     }
