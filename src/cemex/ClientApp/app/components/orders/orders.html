@@ -49,5 +49,9 @@
      <ul>
         <li *ngFor="let item of orders | async">{{item | json}} {{item.isCanceled()}}</li>
     </ul>  -->
-    <orders-table [orders]="orders | async" [isLoading]="isLoading | async" [totalPages]="totalPages | async" [configuration]="orderRequestConfiguration"></orders-table>
+
+    <loading-table *ngIf="isLoading" [columns]="columns" [rows]="20"></loading-table>
+    <dls-table *ngIf="!isLoading" [rows]="rows" [columns]="columns"></dls-table>
+
+    <!-- <orders-table [orders]="orders | async" [isLoading]="isLoading | async" [totalPages]="totalPages | async" [configuration]="orderRequestConfiguration"></orders-table> -->
 </div>

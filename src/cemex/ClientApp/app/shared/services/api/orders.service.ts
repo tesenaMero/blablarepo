@@ -9,7 +9,7 @@ export class OrdersApi {
 
     constructor(private api: Api) {}
     
-    all(customerId: string, take: number = 100): Observable<Response> {
+    all(customerId?: string, take: number = 100): Observable<Response> {
         return this.api.get(`/v4/sm/orders?include=orderitem`);
     }
 

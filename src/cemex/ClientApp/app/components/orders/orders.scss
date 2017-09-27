@@ -74,3 +74,46 @@ $link-blue: #3FA9F5;
 .button-ghost {
     color: #3fa9f5 !important;
 }
+
+// Table
+/deep/.action-button {
+    color: #51A4F4;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+// Orders temp
+/deep/.order-id {
+    color: #37A7F8;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/deep/.status {
+    border-radius: 2px;
+    background-color: #333;
+    padding: 0px 8px;
+    margin-right: 7px;
+    font-size: 13px;
+    &.confirmed {
+        background: #77cb38;
+    }
+    &.canceled {
+        background: #D6D6D6;
+    }
+    &.draft {
+        background: #D6D6D6;
+    }
+    &.pending {
+        background: #FBB03B;
+    }
+    &.blocked {
+        background: #EE3D42;
+    }
+    &.completed,
+    &.processed {
+        background: #3FA9F5;
+    }
+}

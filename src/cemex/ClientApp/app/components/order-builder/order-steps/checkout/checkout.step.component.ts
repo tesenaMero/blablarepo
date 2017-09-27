@@ -29,19 +29,41 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
 
     draftOrder: any;
 
+    // Readymix
+    prices = {
+        subtotal: 0,
+        taxes: 0,
+        total: 0
+    }
+
+    // Sub
+    lockRequests: boolean = false;
+
     constructor( @Inject(Step) private step: Step,
         private manager: CreateOrderService,
         private dashboard: DashboardService,
         private drafts: DraftsService,
         private customerService: CustomerService) {
+
+        this.step.onBeforeBack = () => this.onBeforeBack();
         this.step.setEventsListener(this);
     }
 
-    // Interfaces
-    // ======================
     ngOnInit() { }
 
+    // Step Interfaces
+    // ------------------------------------------------------
+    onBeforeBack() {
+        // Cancel needed requests and lock
+        this.lockRequests = true;
+    }
+
     onShowed() {
+        this.lockRequests = false;
+        if (this.isReadyMix()) {
+            this.calculatePrices();
+        }
+
         // Patch optimal sources then recovers prices
         this.onCompleted.emit(false);
         if (this.shouldCallOptimalSource()) {
@@ -73,11 +95,24 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
 
     shouldCallPrices() {
         return this.customerService.currentCustomer().countryCode.trim() == "MX"
-                && this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix
+            && this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix
+    }
+
+    // Readymix only
+    calculatePrices() {
+        this.manager.products.forEach(item => {
+            this.prices.subtotal += (item.contract.unitaryPrice.net * item.quantity);
+            this.prices.taxes += (item.contract.unitaryPrice.tax * item.quantity);
+            this.prices.total += (item.contract.unitaryPrice.gross * item.quantity);
+        });
     }
 
     handlePrices(response) {
         this.draftOrder = response.json();
+        
+        // If locked (stepper is moving most likely) then dont do the call 
+        if (this.lockRequests) { return; }
+
         this.onCompleted.emit(this.draftOrder);
         this.dashboard.alertSuccess("Prices recovered successfully");
     }
@@ -90,6 +125,10 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         return this.customerService.currentCustomer().countryCode.trim() == "US";
     }
 
+    isReadyMix() {
+        return this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix
+    }
+
     // Logic
     // ======================
     getSubtotal() {
@@ -97,6 +136,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         this.draftOrder.items.forEach(item => {
             summ += item.grossPrice;
         });
+
         return summ;
     }
 
@@ -113,6 +153,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         this.draftOrder.items.forEach(item => {
             total += item.totalPrice;
         });
+
         return total;
     }
 

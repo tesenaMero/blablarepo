@@ -11,7 +11,8 @@ import {
     EventEmitter,
     Output,
     ViewChild,
-    Input
+    Input,
+    NgZone
 } from '@angular/core';
 import { Step } from './step/step.component'
 
@@ -35,7 +36,7 @@ export class StepperComponent implements AfterContentInit {
     @Output() onFinish = new EventEmitter<any>();
 
     currentStep: any;
-    constructor() {
+    constructor(private zone: NgZone) {
         this.overlay = false;
     }
 
@@ -82,6 +83,11 @@ export class StepperComponent implements AfterContentInit {
 
     prev() {
         let currentIndex = this.getActiveStepIndex();
+
+        // Callback
+        this.currentStep.onBeforeBack();
+
+        this.uncomplete();
 
         // If last step or index not found
         if (currentIndex <= 0) { return; }

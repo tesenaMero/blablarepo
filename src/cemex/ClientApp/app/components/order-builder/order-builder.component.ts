@@ -4,10 +4,12 @@ import { Router } from '@angular/router'
 import { StepperComponent } from '../../shared/components/stepper/';
 import { DeliveryMode } from '../../models/delivery.model';
 import { DashboardService } from '../../shared/services/dashboard.service';
-import { DraftsService } from '../../shared/services/api/drafts.service';
+import { DraftsService } from '../../shared/services/api';
 import { CustomerService } from '../../shared/services/customer.service';
 import { CreateOrderService } from '../../shared/services/create-order.service';
 import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
+import { ModalService } from '../../shared/components/modal'
+import { Validations } from '../../utils/validations'
 
 @Component({
     selector: 'order-builder',
@@ -16,8 +18,6 @@ import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJs
 })
 export class OrderBuilderComponent {
     @ViewChild(StepperComponent) stepper;
-    private READYMIX_ID = 6;
-    private BULKCEMENT_ID = 1;
     private isReadyMix: boolean = false;
     private isBulkCementUSA: boolean = false;
     private rebuildOrder = false;
@@ -26,12 +26,13 @@ export class OrderBuilderComponent {
     private draftId: any;
     private draftOrder: any;
 
-    private PRODUCT_LINES = {
-        Readymix: 6,
-        CementBulk: 1
-    }
+    private orderCode: any;
+
+    private cashOrders: any[] = [];
+    private creditOrders: any[] = [];
 
     constructor(
+        @Inject(DOCUMENT) private document: any,
         private _changeDetector: ChangeDetectorRef,
         private router: Router,
         private dashboard: DashboardService,
@@ -40,9 +41,11 @@ export class OrderBuilderComponent {
         private manager: CreateOrderService,
         private zone: NgZone,
         private jsonObjService: EncodeDecodeJsonObjService,
-        @Inject(DOCUMENT) private document: any) {
+        private modal: ModalService) {
+
         this.rebuildOrder = false;
         this.customerService.customerSubject.subscribe((customer) => {
+            Validations.init(this.manager, this.customerService);
             if (customer && customer != this.currentCustomer) {
                 this.currentCustomer = customer;
                 this.rebuild();
@@ -50,22 +53,34 @@ export class OrderBuilderComponent {
         });
     }
 
+    // Rebuilds the component
     rebuild() {
-        // Add instruction to event queue
         this.manager.resetOrder();
+
+        // Go into js event loop
         setTimeout(() => { this.rebuildOrder = false; }, 0);
         setTimeout(() => { this.rebuildOrder = true; }, 0);
     }
 
+    // Steps events
+    // ------------------------------------------------------------
     modeStepCompleted(mode: DeliveryMode) {
+        if (mode) {
+            this.stepper.complete();
+        }
+        else { this.stepper.uncomplete(); }
+    }
+
+    productStepCompleted(product: any) {
+        this.isReadyMix = Validations.isReadyMix();
+        this.isBulkCementUSA = (Validations.isBulkCement()) && (Validations.isUSACustomer());
+        this._changeDetector.detectChanges();
         this.stepper.complete();
     }
 
     locationStepCompleted(event: any) {
-        if (event)
-            this.stepper.complete();
-        else
-            this.stepper.uncomplete();
+        if (event) { this.stepper.complete(); }
+        else { this.stepper.uncomplete(); }
     }
 
     locationStepRequestedNext(event: any) {
@@ -73,11 +88,13 @@ export class OrderBuilderComponent {
         this.stepper.next(true);
     }
 
-    productStepCompleted(product: any) {
-        this.isReadyMix = product.productLineId == this.READYMIX_ID;
-        this.isBulkCementUSA = (product.productLineId == this.BULKCEMENT_ID) && (this.currentCustomer.countryCode.trim() == "US");
-        this._changeDetector.detectChanges();
-        this.stepper.complete();
+    specificationsStepCompleted(event: any) {
+        if (event) {
+            this.stepper.complete();
+        }
+        else {
+            this.stepper.uncomplete();
+        }
     }
 
     reviewStepCompleted(draftId) {
@@ -92,46 +109,44 @@ export class OrderBuilderComponent {
 
     checkoutCompleted(draftOrder?: any) {
         if (draftOrder) {
-            console.log("order", draftOrder);
             this.draftOrder = draftOrder;
             this.stepper.complete();
         }
         else {
-            if (this.isUSA()) { this.stepper.complete(); }
+            if (Validations.isUSACustomer()) { this.stepper.complete(); }
+            else if (Validations.isMexicoCustomer() && Validations.isReadyMix()) {
+                this.stepper.complete();
+            }
             else { this.stepper.uncomplete(); }
         }
     }
 
-    specificationsStepShowed() {
-        this.stepper.complete();
-    }
-
-    specificationsStepCompleted(event: any) {
-        if (event) {
-            this.stepper.complete();
-        }
-        else {
-            this.stepper.uncomplete();
-        }
-    }
-
     finishSteps() {
-        console.log("finish", this.draftOrder);
         this.placeOrder();
     }
 
+    // Payment flow
+    // --------------------------------------------------------------------
     placeOrder() {
-        if (this.isMexico() && this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix) {
+        if ((Validations.isMexicoCustomer()) && (!this.isReadyMix)) {
             this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId, 0);
 
-            if (this.hasCashPayment()) {
-                this.flowMidCash();
+            this.cashOrders = this.getCashOrders();
+            this.creditOrders = this.getCreditOrders();
+
+            // Pay credit orders
+            if (this.creditOrders.length) {
+                if ((!this.isReadyMix) && (Validations.isMexicoCustomer())) {
+                    this.flowCementMX();
+                }
+                else {
+                    this.basicFlow();
+                }
             }
-            else if ((!this.isReadyMix) && (this.isMexico())) {
-                this.flowCementMX();
-            }
-            else {
-                this.basicFlow();
+
+            // Pay cash orders only
+            else if (this.cashOrders.length) {
+                this.flowMidCash(this.cashOrders);
             }
         }
         else {
@@ -139,23 +154,11 @@ export class OrderBuilderComponent {
         }
     }
 
-    hasCashPayment() {
-        for (let item of this.manager.products) {
-            if (item.payment)
-                if (item.payment.paymentTermType)
-                    if (item.payment.paymentTermType.paymentTermTypeCode)
-                        if (item.payment.paymentTermType.paymentTermTypeCode == "CASH")
-                            return true;
-        }
-
-        return false;
-    }
-
-    flowMidCash() {
+    flowMidCash(cashOrders: any[]) {
         const customer = this.customerService.currentCustomer();
         let data = [];
 
-        this.draftOrder.items.forEach(item => {
+        cashOrders.forEach(item => {
             data.push({
                 orderID: this.draftOrder.orderId,
                 companyCode: this.draftOrder.salesArea.salesOrganizationCode,
@@ -164,9 +167,8 @@ export class OrderBuilderComponent {
                 payerCode: customer.legalEntityTypeCode,
                 orderAmount: item.totalPrice,
                 documents: []
-            }
-            )
-        })
+            })
+        });
 
         const cartItems = {
             sourceApp: "order-taking",
@@ -180,18 +182,18 @@ export class OrderBuilderComponent {
         }
 
         let encoded = this.jsonObjService.encodeJson(cartItems);
-        this.document.location.href = 'https://invoices-payments-dev2.mybluemix.net/invoices-payments/open/' + encoded;
+        this.document.location.href = 'https://dcm-qa.mybluemix.net/invoices-payments/open/' + encoded;
     }
 
     flowCementMX() {
         this.drafts.createOrder(this.draftId, '')
             .flatMap((response) => {
-                console.log("order created", response.json());
-                this.dashboard.alertSuccess("Order placed successfully, requesting order code...", 0);
+                this.dashboard.alertSuccess("[Credit] Order placed successfully, requesting order code...", 0);
                 return this.drafts.validateRequestId(response.json().id);
             })
             .subscribe((response) => {
-                this.dashboard.alertSuccess("Order code: #" + response.json().orderCode + " placed successfully", 30000);
+                this.dashboard.alertSuccess("[Credit] Order code: #" + response.json().orderCode + " placed successfully", 30000);
+                this.showSuccessModal(response.json().orderCode);
             }, error => {
                 this.dashboard.alertError("Error placing order", 10000);
             })
@@ -199,26 +201,32 @@ export class OrderBuilderComponent {
 
     basicFlow() {
         this.drafts.createOrder(this.draftId, '').subscribe((response) => {
-            console.log("order created", response.json());
             if (this.draftOrder) {
                 this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId);
                 this.dashboard.alertSuccess("Order #" + this.draftOrder.orderId + " placed successfully", 30000);
+                this.showSuccessModal(this.draftOrder.orderId);
             }
             else {
                 this.dashboard.alertSuccess("Draft #" + this.draftId + " placed successfully", 30000);
+                this.showSuccessModal(this.draftId);
             }
         }, error => {
-            console.error(error)
             this.dashboard.alertError("Error placing order", 10000);
         });
     }
 
-    isMexico() {
-        return this.customerService.currentCustomer().countryCode.trim() == "MX";
+    // In-class utils
+    // ---------------------------------------------------------------
+    getCashOrders(): any[] {
+        return this.draftOrder.items.filter((item) => {
+            return item.paymentTerm && item.paymentTerm.paymentTermCode == "ZCON";
+        });
     }
 
-    isUSA() {
-        return this.customerService.currentCustomer().countryCode.trim() == "US";
+    getCreditOrders(): any[] {
+        return this.draftOrder.items.filter((item) => {
+            return item.paymentTerm && item.paymentTerm.paymentTermCode == "Z015";
+        });
     }
 
     shouldShowDeliveryMode() {
@@ -231,5 +239,20 @@ export class OrderBuilderComponent {
         else {
             return true;
         }
+    }
+
+    showSuccessModal(orderCode) {
+        this.orderCode = orderCode;
+        this.modal.open('success-placement');
+    }
+
+    closeModal() {
+        this.router.navigate(['/app/orders']);
+        this.modal.close('success-placement');
+    }
+
+    payCashOrders() {
+        this.modal.close('success-credit');
+        this.flowMidCash(this.cashOrders);
     }
 }

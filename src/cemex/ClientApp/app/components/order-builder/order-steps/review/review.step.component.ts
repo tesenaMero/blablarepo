@@ -32,11 +32,27 @@ export class ReviewStepComponent implements StepEventsListener {
     private infoWindow: any;
     private jobsiteMarker: any;
 
+    // Subs
+    draftSub: any;
+    lockRequests: boolean = false;
+
     constructor( @Inject(Step) private step: Step, private manager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private dashboard: DashboardService, private drafts: DraftsService, private customerService: CustomerService) {
         this.step.setEventsListener(this);
+        this.step.onBeforeBack = () => this.onBeforeBack();
+    }
+
+    // Step Interfaces
+    // ------------------------------------------------------
+    onBeforeBack() {
+        // Cancel needed requests and lock
+        this.lockRequests = true;
+        if (this.draftSub) {
+            this.draftSub.unsubscribe();
+        }
     }
 
     onShowed() {
+        this.lockRequests = false;
         this.onCompleted.emit(false);
         this.saveDraft();
 
@@ -52,15 +68,17 @@ export class ReviewStepComponent implements StepEventsListener {
             google.maps.event.trigger(this.map, "resize");
         }
 
-        console.log("manager", this.manager);
         this.cleanJobsiteMarker();
         this.jobsiteMarker = this.makeJobsiteMarker(this.manager.jobsite.geo);
         this.addMarkerToMap(this.jobsiteMarker);
     }
 
     saveDraft() {
+        // If locked (stepper is moving most likely) then dont do the call 
+        if (this.lockRequests) { return; }
+        
         this.dashboard.alertInfo("Saving draft...", 0);
-        this.drafts.add(this.generateOrderObj()).subscribe((response) => {
+        let draftSub = this.drafts.add(this.generateOrderObj()).subscribe((response) => {
             this.dashboard.alertSuccess("Draft saved!");
             this.onCompleted.emit(response.json().id)
         }, (error) => {
@@ -167,11 +185,18 @@ export class ReviewStepComponent implements StepEventsListener {
     }
 
     private makeAdditionalServices(preProduct): any[] {
-        let additionalServices = []
+        let additionalServices = [];
 
         // Maneuvering
         if (preProduct.maneuvering) {
             additionalServices.push({ "additionalServiceCode": "MANEUVERING" });
+        }
+
+        // Others additional services
+        if (preProduct.additionalServices) {
+            preProduct.additionalServices.forEach((item) => {
+                additionalServices.push({ "additionalServiceCode": item.entryCode });
+            });
         }
 
         return additionalServices;

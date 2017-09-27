@@ -23,6 +23,8 @@ export class Step {
     @Output() showed = new EventEmitter<any>();
 
     canAdvance = () => { return true; }
+    onBeforeBack = () => { }
+
     private stepEventsListener: StepEventsListener = null;
     completed: boolean = false;
 

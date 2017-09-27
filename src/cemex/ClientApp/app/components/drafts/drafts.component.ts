@@ -14,17 +14,16 @@ export class DraftsComponent implements OnInit {
     orders: any;
 
     constructor(private ordersApi: OrdersApi, private t: TranslationService) {
-        this.ordersApi.all('4169', 100).subscribe((response) => {
-            this.orders = response.json().orders.slice(0, 10);
-            // console.log(this.orders);
-            //this.initOrders();
-        });
+        // this.ordersApi.all('4169', 100).subscribe((response) => {
+        //     this.orders = response.json().orders.slice(0, 10);
+        //     console.log(this.orders);
+        //     this.initOrders();
+        // });
         
         this.initData();
     }
 
     ngOnInit() {
-        
     }
 
     initOrders() {

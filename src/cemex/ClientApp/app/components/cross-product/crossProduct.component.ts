@@ -11,20 +11,20 @@ import { ModalService } from '../../shared/components/modal'
 
 @Component({
     selector: 'crossProduct',
+    styleUrls: ['./crossProduct.scss'],
     template: `
     <div style="padding: 80px;text-align:center;">Processing...</div>
     <modal id="success-order">
-        <div class="success-icon">
-            <svg id="icon-accepted-ok" viewBox="0 0 48 48.28" width="100%" height="100%">
-                <path class="icon-accepted-ok" d="M19.86,27.56l-5.48-5.48a2,2,0,0,0-2.82,0l-3,3a2,2,0,0,0,0,2.82l9.89,9.89a2,2,0,0,0,2.85,0L39.63,19.45a2,2,0,0,0,0-2.83l-3-3a2,2,0,0,0-2.83,0ZM24,.08A24.14,24.14,0,1,1,0,24.22,24.07,24.07,0,0,1,24,.08Z" transform="translate(0 -0.08)"></path>
-            </svg>
-        </div>
-        <div class="success-text">
-            Your order {{ orderCode }} was successfully submited
-        </div>
-        <div>
-            <cemex-action-button title="Back to My Orders History" (click)="closeModal('success-order')">
-            </cemex-action-button>
+        <div class="container-fluid">
+            <div class="container-layout center-text center-content">
+                <div class="success-group">
+                    <span class="cmx-icon-accepted-ok"></span>
+                    <div class="success-text">
+                        Your order #{{ orderCode }} was successfully submited
+                    </div>
+                    <button class="button back-to-orders" (click)="closeModal()">Back to orders history</button>
+                </div>
+            </div>
         </div>
     </modal>
     `

@@ -7,7 +7,12 @@ import { ProjectProfileApi, CatalogApi, PlantApi, ContractsApi } from '../../../
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { SearchProductService } from '../../../../shared/services/product-search.service';
 import { DeliveryMode } from '../../../../models/delivery.model';
-import { DashboardService } from '../../../../shared/services/dashboard.service'
+import { DashboardService } from '../../../../shared/services/dashboard.service';
+import { Validations } from '../../../../utils/validations';
+import { ModalService } from '../../../../shared/components/modal'
+import { Observable } from 'rxjs/Observable';
+import { PreProduct } from './preproduct'
+
 import * as _ from 'lodash';
 
 @Component({
@@ -20,28 +25,27 @@ export class SpecificationsStepComponent implements StepEventsListener {
     @Output() initializeProductColorsEmitter = new EventEmitter<any>();
     @Output() onCompleted = new EventEmitter<any>();
 
+    today: Date;
+
     // One box one preProduct
     private preProducts = [];
 
     // Consts
+    private UTILS = Validations;
     private MODE = DeliveryMode;
-    private PRODUCT_LINES = {
-        Readymix: 6,
-        CementBulk: 1
-    }
-
-    private SALES_DOCUMENT_TYPE = '1';
 
     private loadings = {
-        products: true,
-        contracts: true,
         projectProfiles: true,
         catalog: true
     }
 
-    // Statics
+    // Subs
+    productsSub: any;
+    lockRequests: boolean = false;
+
     private shouldHidePayment = false;
 
+    // Statics
     static availablePayments = [];
     get availablePayments() {
         return SpecificationsStepComponent.availablePayments;
@@ -90,77 +94,108 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private paymentTermsApi: PaymentTermsApi,
         private plantApi: PlantApi,
         private searchProductService: SearchProductService,
-        private dashboard: DashboardService
+        private dashboard: DashboardService,
+        private modal: ModalService
     ) {
+        this.today = new Date();
         this.step.setEventsListener(this);
         this.step.canAdvance = () => this.canAdvance();
+        this.step.onBeforeBack = () => this.onBeforeBack();
     }
 
     openProductSearch(preProduct: PreProduct) {
-        this.manager.fetchProductColors(this.manager.productLine.productLineId);
+        this.searchProductService.fetchProductColors(this.manager.productLine.productLineId);
+        this.modal.open('search-product');
 
         // What the f is this
         this.searchProductService.searchedProduct.subscribe(product => {
             if (product) {
-                let filteredProducts = SpecificationsStepComponent.availableProducts.filter((availableProduct: any) => availableProduct.commercialCode === product.commercialCode);
-
+                let filteredProducts = SpecificationsStepComponent.availableProducts.filter((availableProducts) => {
+                    return availableProducts.commercialCode === product.commercialCode;
+                });
                 if (filteredProducts.length) { preProduct.product = filteredProducts[0]; }
-
-                // Ask reio wtf is this
-                // else {
-                //     SpecificationsStepComponent.availableProducts.push(product);
-                //     preProduct.product = product;
-                // }
+                else {
+                    SpecificationsStepComponent.availableProducts.push(product);
+                    preProduct.product = product;
+                    preProduct.productChanged();
+                }
             }
         });
     }
 
+    closeProductSearch() {
+        this.modal.close('search-product');
+    }
+
+    // Step Interfaces
+    // ------------------------------------------------------
+    onBeforeBack() {
+        // Cancel needed requests and lock
+        this.lockRequests = true;
+        if (this.productsSub) {
+            this.productsSub.unsubscribe();
+        }
+    }
+
     canAdvance(): boolean {
         this.manager.setProducts(this.preProducts);
+
+        let advance = true;
+        for (let preProduct of this.preProducts) {
+            if (!preProduct.isValid()) {
+                advance = false;
+                return;
+            }
+        }
+
+        if (!advance) { return; }
+
         return true;
     }
 
     onShowed() {
+        // Unlock
+        this.lockRequests = false;
+
+        // Define validations for each preproduct already added
+        // Set loadings state
+        this.preProducts.forEach((item: PreProduct) => {
+            item.defineValidations();
+            item.loadings.products = true;
+            item.disableds.products = true;
+        });
+
         // Add a pre product by default
         if (this.preProducts.length <= 0) { this.add(); }
 
         const customer = this.customerService.currentCustomer();
         const productLineId = this.manager.productLine.productLineId;
 
-        this.shouldHidePayment = customer.countryCode.trim() == "US" || this.manager.productLine.productId == this.PRODUCT_LINES.Readymix;
-
-        this.catalogApi.byProductLine(customer.legalEntityId, productLineId).map((response) => response.json()).subscribe((response) => {
-            response.catalogs.forEach((catalog) => {
-                this.catalogs[catalog.catalogCode] = catalog.entries;
-            });
-            this.readyMixAdditionalServices = this.catalogs['ASC'];
-        });
-
-        // Set loading state
-        this.preProducts.forEach((item) => {
-            item.loadings.products = true;
-        });
+        this.shouldHidePayment = Validations.shouldHidePayment();
 
         // Fetch products
-        if (this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix) {
+        if (Validations.isReadyMix()) {
             this.fetchProductsReadyMix(this.manager.getSalesDocumentType());
         }
         else {
             this.fetchProducts(this.manager.getSalesDocumentType());
         }
 
+        this.getAdditionalServices();
         this.getPaymentTerms();
         this.getProjectProfiles();
-        this.getPlants();
     }
 
     fetchProducts(salesDocumentType) {
         // Disable contracts while fetching products
         this.preProducts.forEach((item: PreProduct) => {
-            item.loadings.contracts = true;
+            item.disableds.contracts = true;
         });
 
-        this.productsApi.top(
+        // If locked (stepper is moving most likely) then dont do the call 
+        if (this.lockRequests) { return; }
+
+        this.productsSub = this.productsApi.top(
             this.manager.jobsite,
             salesDocumentType,
             this.manager.productLine,
@@ -173,12 +208,17 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     item.loadings.products = false;
                     if (topProducts.length > 0) {
                         item.setProduct(topProducts[0])
+                        item.productChanged();
                         this.onCompleted.emit(true);
                     }
                     else {
                         item.setProduct(undefined);
+                        item.productChanged();
                         this.onCompleted.emit(false);
                     }
+
+                    // Enable product selection anyways
+                    item.disableds.products = false;
                 });
             });
     }
@@ -186,10 +226,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
     fetchProductsReadyMix(salesDocumentType) {
         // Disable contracts while fetching products
         this.preProducts.forEach((item: PreProduct) => {
-            item.loadings.contracts = true;
+            item.disableds.contracts = true;
         });
 
-        this.productsApi.top(
+        // If locked (stepper is moving most likely) then dont do the call 
+        if (this.lockRequests) { return; }
+
+        this.productsSub = this.productsApi.top(
             this.manager.jobsite,
             salesDocumentType,
             this.manager.productLine,
@@ -204,12 +247,17 @@ export class SpecificationsStepComponent implements StepEventsListener {
                         item.loadings.products = false;
                         if (topProducts.length > 0) {
                             item.setProduct(topProducts[0])
+                            item.productChanged();
                             this.onCompleted.emit(true);
                         }
                         else {
                             item.setProduct(undefined);
+                            item.productChanged();
                             this.onCompleted.emit(false);
                         }
+
+                        // Enable product selection anyways
+                        item.disableds.products = false;
                     });
                 }
                 else {
@@ -218,16 +266,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
             });
     }
 
-
-    getPlants() {
-        if (this.manager.jobsite && this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionId == 2) {
-            this.plantApi.byCountryCodeAndRegionCode(
-                this.manager.jobsite.address.countryCode.trim(),
-                this.manager.jobsite.address.regionCode
-            ).subscribe((response) => {
-                SpecificationsStepComponent.plants = response.json().plants;
+    getAdditionalServices() {
+        this.catalogApi.byProductLine(this.customerService.currentCustomer().legalEntityId, this.manager.productLine.productLineId).map((response) => response.json()).subscribe((response) => {
+            response.catalogs.forEach((catalog) => {
+                this.catalogs[catalog.catalogCode] = catalog.entries;
             });
-        }
+            this.readyMixAdditionalServices = this.catalogs['ASC'];
+        });
     }
 
     getPaymentTerms() {
@@ -265,136 +310,187 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
             this.preProducts.forEach((item: PreProduct) => {
                 item.availablePayments = SpecificationsStepComponent.availablePayments;
-                item.loadings.payments = false;
+
+                // Pre select payemnt
+                if (item.availablePayments) {
+                    item.payment = item.availablePayments[0];
+                    item.paymentChanged();
+                }
             })
 
-            let customerId = this.customerService.currentCustomer().legalEntityId;
-            this.paymentTermsApi.getCashTerm(customerId).subscribe((result) => {
-                let paymentTerms = result.json().paymentTerms;
-                if (paymentTerms.length) {
-                    SpecificationsStepComponent.availablePayments.push(paymentTerms[0]);
-                }
+            if (!cashPayment) {
+                let customerId = this.customerService.currentCustomer().legalEntityId;
+                this.paymentTermsApi.getCashTerm(customerId).subscribe((result) => {
+                    let paymentTerms = result.json().paymentTerms;
+                    if (paymentTerms.length) {
+                        SpecificationsStepComponent.availablePayments.push(paymentTerms[0]);
+                    }
 
-                if (SpecificationsStepComponent.availablePayments.length) {
-                    this.preProducts.forEach((item) => {
-                        item.payment = SpecificationsStepComponent.availablePayments[0];
-                    });
-                }
-            });
+                    if (SpecificationsStepComponent.availablePayments.length) {
+                        this.preProducts.forEach((item) => {
+                            item.loadings.payments = false;
+                        });
+                    }
+                });
+            }
+            else {
+                this.preProducts.forEach((item) => {
+                    item.loadings.payments = false;
+                });
+            }
+
         });
+    }
+
+    hasPayment(code, terms) {
+        for (let p of terms) {
+            if (p.paymentTermType.paymentTermTypeCode == code) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     getProjectProfiles() {
         const customerId = this.customerService.currentCustomer().legalEntityId;
 
-        this.loadings.projectProfiles = true;
+        this.preProducts.forEach((item: PreProduct) => {
+            item.loadings.projectProfiles = true;
+        });
+
         this.ProjectProfileApi.all(customerId).subscribe((response) => {
-            this.loadings.projectProfiles = false;
             const profiles = response.json().profiles;
             if (profiles) {
                 SpecificationsStepComponent.projectProfiles = profiles;
             }
+
+            this.preProducts.forEach((item: PreProduct) => {
+                item.loadings.projectProfiles = false;
+            });
         });
 
-        this.loadings.catalog = true;
+        this.preProducts.forEach((item: PreProduct) => {
+            item.loadings.catalogs = true;
+        });
+
         this.catalogApi.byProductLine(customerId, this.manager.productLine.productLineId).subscribe((res: any) => {
             this.loadings.catalog = false;
             res.json().catalogs && res.json().catalogs.forEach((catalog) => {
                 this.catalogs[catalog.catalogCode] = catalog.entries;
             });
+            this.preProducts.forEach((item: PreProduct) => {
+                item.loadings.catalogs = false;
+            });
         });
     }
 
-    projectProfileChange(projectProfile) {
-        // TODO use index &&  _.pick
-        this.preProducts[0].projectProfile = projectProfile.project.projectProperties;
+    projectProfileChanged(preProduct: PreProduct, projectProfile) {
+        // Prefill
+        preProduct.projectProfile.profileId = projectProfile.profileId;
+        preProduct.projectProfile.profileName = projectProfile.profileName;
+
+        // Clone project object
+        preProduct.projectProfile.project.projectProperties = JSON.parse(JSON.stringify(projectProfile.project.projectProperties));
     }
 
-    onChangeDischargeTime(index) {
+    onChangeDischargeTime(preProduct, index) {
         const entry = this.catalogs['DCT'][index];
 
-        this.preProducts[0].projectProfile.dischargeTime = {
+        preProduct.projectProfile.project.projectProperties.dischargeTime = {
             dischargeTimeId: entry.entryId,
             timePerDischargeDesc: entry.entryDesc
         };
     }
 
-    onChangeTransportMethod(index) {
+    onChangeTransportMethod(preProduct, index) {
         const entry = this.catalogs['TPM'][index];
 
-        this.preProducts[0].projectProfile.transportMethod = {
+        preProduct.projectProfile.project.projectProperties.transportMethod = {
             transportMethodId: entry.entryId,
             transportMethodDesc: entry.entryDesc
         };
     }
 
-    onChangeUnloadType(index) {
+    onChangeUnloadType(preProduct, index) {
         const entry = this.catalogs['ULT'][index];
 
-        this.preProducts[0].projectProfile.unloadType = {
+        preProduct.projectProfile.project.projectProperties.unloadType = {
             unloadTypeId: entry.entryId,
             unloadTypeDesc: entry.entryDesc
         };
     }
 
-    onChangePumpCapacity(index) {
+    onChangePumpCapacity(preProduct, index) {
         const entry = this.catalogs['PCC'][index];
 
-        this.preProducts[0].projectProfile.pumpCapacity = {
+        preProduct.projectProfile.project.projectProperties.pumpCapacity = {
             pumpCapacityId: entry.entryId,
             pumpCapacityDesc: entry.entryDesc
         };
     }
 
-    onChangeApplication(index) {
+    onChangeApplication(preProduct, index) {
         const entry = this.catalogs['ELM'][index];
 
-        this.preProducts[0].projectProfile.element = {
+        preProduct.projectProfile.project.projectProperties.element = {
             elementId: entry.entryId,
             elementDesc: entry.entryDesc
         };
     }
 
-    onChangeLoadSize(index) {
+    onChangeLoadSize(preProduct, index) {
         const entry = this.catalogs['LSC'][index];
 
-        this.preProducts[0].projectProfile.loadSize = {
+        preProduct.projectProfile.project.projectProperties.loadSize = {
             loadSizeId: entry.entryId,
             loadSizeDesc: entry.entryDesc
         };
     }
 
-    changeAditionalService(target, index) {
-        if (target.checked) {
-            this.additionalServices.push(this.readyMixAdditionalServices[index]);
-        } else {
-            const idx = this.additionalServices.indexOf(this.readyMixAdditionalServices[index]);
-            this.additionalServices.splice(idx, 1);
-        }
-        this.manager.selectAdditionalServices(this.additionalServices);
-    }
-
-    onChangeTimePerLoad(index) {
+    onChangeTimePerLoad(preProduct, index) {
         const entry = this.catalogs['TPL'][index];
 
-        this.preProducts[0].projectProfile.timePerLoad = {
+        preProduct.projectProfile.project.projectProperties.timePerLoad = {
             timePerLoadId: entry.entryId,
             timePerLoadDesc: entry.entryDesc
         };
+    }
+
+    changeAditionalService(preProduct: PreProduct, target, index) {
+        if (target.checked) {
+            preProduct.additionalServices.push(this.readyMixAdditionalServices[index]);
+        } else {
+            const idx = this.additionalServices.indexOf(this.readyMixAdditionalServices[index]);
+            preProduct.additionalServices.splice(idx, 1);
+        }
     }
 
     productChanged(preProduct: PreProduct) {
         preProduct.productChanged();
     }
 
-    // TODO
-    contractChanged(contract: any, preProduct: PreProduct) {
+    contractChanged(preProduct: PreProduct) {
         preProduct.contractChanged();
-        preProduct.quantity = 1;
+    }
+
+    plantChanged(preProduct: PreProduct) {
+        preProduct.plantChanged();
+    }
+
+    paymentChanged(preProduct: PreProduct) {
+        preProduct.paymentChanged();
     }
 
     add() {
-        this.preProducts.push(new PreProduct(this.productsApi, this.manager, this.paymentTermsApi));
+        this.preProducts.push(new PreProduct(
+            this.productsApi,
+            this.manager,
+            this.paymentTermsApi,
+            this.plantApi,
+            this.customerService,
+            this.dashboard
+        ));
     }
 
     remove(index: any) {
@@ -405,14 +501,50 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }, 400);
     }
 
-    qty(product: any, toAdd: number) {
+    qty(product: PreProduct, toAdd: number) {
         if (this.isMXCustomer()) {
             if (product.quantity <= 1 && toAdd < 0) { return; }
+            const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
+            const isDelivery = shippingConditionId === this.MODE.Delivery;            
+            let conversion = product.convertToTons(product.quantity + toAdd);
+            
+            let newQty = product.quantity + toAdd;
+            let contractBalance = product.getContractBalance(); //remaining of contract
+            let maxCapacitySalesArea = product.getMaximumCapacity();
 
-            const newQty = product.quantity + toAdd;
-            const maxCapacity = this.getMaximumCapacity(product.contract);
-
-            if (newQty <= maxCapacity) {
+            if (contractBalance === undefined) {
+                if (isDelivery) {
+                    if (((this.manager.productLine.productId == 2) || (this.manager.productLine.productId == 1)) && (conversion <= maxCapacitySalesArea)) {
+                        return product.quantity = newQty;
+                    }
+                    else {
+                        if (conversion <= maxCapacitySalesArea){
+                            return product.quantity = newQty;
+                        }
+                    }
+                } 
+                else {
+                    if (conversion <= maxCapacitySalesArea) {
+                        return product.quantity = newQty;
+                    }
+                }
+            }
+            else {            
+                if (conversion > contractBalance) {
+                    return this.dashboard.alertError("Maxiumum capacity limit reached", 10000);
+                }
+                if (!isDelivery) {
+                    if (conversion <= maxCapacitySalesArea) {
+                        return product.quantity = newQty;
+                    }
+                } 
+                else {
+                    if ((conversion <= maxCapacitySalesArea)) {
+                        return product.quantity = newQty;
+                    }
+                }
+            }
+            if (conversion <= maxCapacitySalesArea) {
                 return product.quantity = newQty;
             }
 
@@ -420,213 +552,12 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
         else {
             if (product.quantity <= 1 && toAdd < 0) { return; }
-            if (product.quantity >= 99999 && toAdd > 0) { return; }
+            if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
             product.quantity += toAdd;
-        }
-    }
-
-    getMaximumCapacity(contract?) {
-        const jobsite = this.manager.jobsite;
-        const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
-        const isPickup = shippingConditionId === this.MODE.Pickup;
-        const salesArea = this.manager.salesArea.find((sa) => jobsite && jobsite.shipmentLocationId === jobsite.shipmentLocationId);
-        const maxJobsiteQty = salesArea && salesArea.maximumLot.amount; //doesn´t exist the path salesArea.maximumLot
-        const unlimited = 99999;
-
-        if (contract) {
-            const volume = _.get(contract, 'salesDocument.volume');
-            if (volume) {
-                const maxContractVolume = _.get(volume, 'total.quantity.amount');
-                return maxContractVolume;
-            } else {
-                if (isPickup) {
-                    return unlimited;
-                } else {
-                    return maxJobsiteQty;
-                }
-            }
-        } else {
-            if (isPickup) {
-                return unlimited;
-            } else {
-                return maxJobsiteQty;
-            }
         }
     }
 
     isMXCustomer() {
         return this.customerService.currentCustomer().countryCode.trim() == "MX";
-    }
-}
-
-class PreProduct {
-    // Consts
-    private MODE = DeliveryMode;
-
-    // Props
-    maneuvering: boolean = false;
-    quantity: number = 1;
-    date: any = new Date();
-    time = "13:00";
-    unit: any;
-    payment: any;
-    contract: any;
-    product: any;
-    plant: any;
-    projectProfile: any = {};
-
-    // Availables
-    availableProducts = [];
-    availableUnits = [];
-    availableContracts = [];
-    availablePayments = [];
-    availableAditionalServices = [];
-    maneuveringAvailable: boolean = false;
-
-    loadings = {
-        products: false,
-        contracts: true,
-        projectProfiles: true,
-        catalog: true,
-        units: true,
-        payments: true
-    }
-
-    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi) {
-        const SSC = SpecificationsStepComponent;
-
-        this.availablePayments = SSC.availablePayments;
-        if (this.availablePayments.length > 0) {
-            this.payment = this.availablePayments[0];
-            this.loadings.payments = false;
-        }
-        else {
-            this.payment = undefined;
-            this.loadings.payments = true;
-        }
-
-        this.payment = SSC.availablePayments[0];
-        this.plant = SSC.availablePlants[0];
-
-        if (SSC.availableProducts.length) {
-            this.setProduct(SSC.availableProducts[0]);
-            this.loadings.products = false;
-        }
-        else {
-            this.loadings.products = true;
-        }
-    }
-
-    setProduct(product: any) {
-        this.product = product;
-        this.productChanged();
-    }
-
-    productChanged() {
-        if (!this.product) {
-            this.loadings.products = true; // Disable
-            return;
-        }
-
-        this.fetchContracts();
-        this.fetchUnits();
-        this.fetchManeuvering();
-    }
-
-    fetchContracts() {
-        let SALES_DOCUMENT_TYPE = '1';
-        this.loadings.contracts = true;
-
-        this.productsApi.fetchContracts(
-            this.manager.jobsite,
-            SALES_DOCUMENT_TYPE,
-            this.manager.productLine,
-            this.manager.shippingCondition,
-            this.product.product.productId
-        ).subscribe((result) => {
-            let contracts = result.json().products;
-            this.availableContracts = contracts;
-
-            if (contracts.length > 0) {
-                this.availableContracts.unshift(undefined);
-                this.loadings.contracts = false;
-            }
-            else { this.loadings.contracts = true; } // Disable it if no contracts
-        });
-    }
-
-    fetchUnits() {
-        this.loadings.units = true;
-        this.productsApi.units(this.product.product.productId).subscribe((result) => {
-            let units = result.json().productUnitConversions;
-            this.availableUnits = units;
-
-            this.loadings.units = false;
-
-            if (units.length > 0)
-                this.unit = units[0];
-        });
-    }
-
-    contractChanged() {
-        if (this.contract) {
-            this.fetchUnitsFromContract();
-
-            // If should get payment terms from contract
-            if (this.contract.salesDocument.paymentTerm) {
-                this.getContractPaymentTerm(this.contract.salesDocument.paymentTerm.paymentTermId);
-            }
-        }
-        else {
-            this.fetchUnits();
-            this.availablePayments = SpecificationsStepComponent.availablePayments;
-        }
-    }
-
-    getContractPaymentTerm(termId: any) {
-        this.loadings.payments = true;
-        this.paymentTermsApi.getJobsiteById(termId).subscribe((result) => {
-            const contractPaymentTerm = result.json().paymentTerms;
-            this.availablePayments = contractPaymentTerm;
-
-            if (this.availablePayments.length > 0) {
-                this.payment = this.availablePayments[0];
-                this.loadings.payments = false;
-            }
-            else {
-                this.payment = undefined;
-                this.loadings.payments = true;
-            }
-        })
-    }
-
-    fetchUnitsFromContract() {
-        this.loadings.units = true;
-        this.productsApi.units(this.contract.salesDocument.salesDocumentId).subscribe((result) => {
-            let units = result.json().productUnitConversions;
-            this.availableUnits = units;
-
-            this.loadings.units = false;
-
-            if (units.length > 0)
-                this.unit = units[0];
-        });
-    }
-
-    fetchManeuvering() {
-        // Maneouvering additional service
-        if (this.manager.shippingCondition.shippingConditionId === 1
-            && (this.product.product.productLine.productLineId === 2 || this.product.product.productLine.productLineId === 3)
-        ) {
-            let area = this.manager.salesArea.find((a) => {
-                let id = this.product.product.productLine.productLineId;
-                return id === 2 ? a.salesArea.salesAreaId === 2 : a.salesArea.salesAreaId === 219;
-            });
-
-            // check if salesarea has maneouvering enabled
-            if (area && area.maneuverable) {
-                this.maneuveringAvailable = true;
-            }
-        }
     }
 }

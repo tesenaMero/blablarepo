@@ -1,15 +1,29 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Api } from './api.service';
 import { CustomerService } from '../customer.service'
 
 @Injectable()
 export class ShipmentLocationApi {
+    shipmentLocationTypes = new BehaviorSubject<any>(undefined);
+
     constructor(private api: Api, private customerService: CustomerService) {
     }
 
-    getShipmentLocationType() {
+    // Subjects
+    // --------------------------------------------------------
+    fetchShipmentLocationTypes() {
+        this.getShipmentLocationTypes()
+            .map(response => response.json().shipmentLocationTypes)
+            .subscribe(response => {
+                this.shipmentLocationTypes.next(response);
+            })
+    }
+
+    // Observables
+    // --------------------------------------------------------
+    getShipmentLocationTypes() {
         return this.api.get('/v1/im/shipmentlocationtypes');
     }
 
@@ -17,30 +31,30 @@ export class ShipmentLocationApi {
         return this.api.get('/v1/im/shipmentlocationtypes');
     }
 
-    all(shipmentLocationTypes, productLine): Observable<Response> {
-        const customerId = this.customerService.currentCustomer().legalEntityId;
-        const locationType = shipmentLocationTypes.find(item => item.shipmentLocationTypeCode === 'J');
-        return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`);
-    }
+    all(productLine): Observable<Response> {
+        let customerId = this.customerService.currentCustomer().legalEntityId;
+        let locationType = this.shipmentLocationTypes.getValue() && this.shipmentLocationTypes.getValue().find(item => item.shipmentLocationTypeCode === 'J');
 
-    jobsites(productLine) {
-        return this.locationTypes()
-            .map(types => types.json().shipmentLocationTypes)
+        // If locations type already defined
+        if (locationType) {
+            return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`);
+        }
+
+        // Fetch location types then jobsites
+        else {
+            return this.getShipmentLocationTypes()
+            .map(response => response.json().shipmentLocationTypes)
             .flatMap((types) => {
-                let type = types.find(item => item.shipmentLocationTypeCode === 'J');
-                let customerId = this.customerService.currentCustomer().legalEntityId;
-                return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${type.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`)
+                locationType = types && types.find(item => item.shipmentLocationTypeCode === 'J');
+
+                return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`);
             })
-            .map(jobsites => jobsites);
+        }
     }
 
-    pods(shipmentLocation: any, shipmentLocationTypes, legalEntityId?, productLine?): Observable<Response> {
-        // 'myshipmentlocations?legalEntityId=122.1&shipmentLocationTypeId=3&productLineId=2'
-        // "/v4/sm/myshipmentlocations?shipmentlocationId=" +   
-        // shipmentLocation.shipmentLocationId + "." + 
-        // shipmentLocation.shipmentLocationType.shipmentLocationTypeId + "&" +
-        // "shipmentLocationTypeId=6"
-        const locationType = shipmentLocationTypes.find(item => item.shipmentLocationTypeCode === 'P');
+    pods(shipmentLocation: any, productLine?): Observable<Response> {
+        const locationType = this.shipmentLocationTypes.getValue() && this.shipmentLocationTypes.getValue().find(item => item.shipmentLocationTypeCode === 'P');
+
         return this.api.get(
             `/v4/sm/myshipmentlocations?shipmentlocationId=${shipmentLocation.shipmentLocationId}.2&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`
         );

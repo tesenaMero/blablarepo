@@ -1,5 +1,5 @@
 <!-- <navigation [customers]="customers" [notifications]="[]" (logout)="logout($event)" (customerChange)="setCustomer($event)"></navigation> -->
-<cmx-nav-header (clickMenuButton)="clickMenuButton($event)"></cmx-nav-header>
+<cmx-nav-header (onLogout)="logout($event)" (clickMenuButton)="clickMenuButton($event)"></cmx-nav-header>
 <cmx-sidebar></cmx-sidebar>
 
 <div id="layout" class="content">

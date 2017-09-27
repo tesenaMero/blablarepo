@@ -20,3 +20,18 @@
         </step>
     </stepper>
 </div>
+
+<modal id="success-placement">
+    <div class="container-fluid">
+        <div class="container-layout center-text center-content">
+            <div class="success-group">
+                <span class="cmx-icon-accepted-ok"></span>
+                <div class="success-text">
+                    Your order #{{ orderCode }} was successfully submited
+                </div>
+                <button *ngIf="!cashOrders.length" class="button back-to-orders" (click)="closeModal()">Back to orders history</button>
+                <button *ngIf="cashOrders.length" class="button back-to-orders" (click)="payCashOrders()">Proceed with to cash orders payment</button>
+            </div>
+        </div>
+    </div>
+</modal>

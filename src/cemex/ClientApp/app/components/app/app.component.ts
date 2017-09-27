@@ -11,21 +11,31 @@ let $ = require("jquery");
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-    constructor(private router: Router) {}
-    closeModal() {
-        $("#app-content").removeClass("blur");
-    }
+    constructor(private router: Router) { }
 
     @Autobind
     backToOrders() {
         let that = this;
-        setTimeout(function() {
+        setTimeout(function () {
             that.router.navigate(['/orders']);
         }, 1000);
     }
 
     ngOnInit() {
+        let a = `
+                         ,#######,   ,#######,                                           
+                       .$#$$$$&*   #######&*                                            
+                      ¡#$$$$&&   $#######*                                              
+                    ¡#$$$$$&'  ¡#######*                                                
+                  ¡#$$$$$&'  ¡#######"                                                  
+                ¡$$$$$$&*  ¡#######&                                                    
+              ¡$#$$$$&*  ¡#######&¨ ¡##################$##########,$###########&    ¡###
+            ,$#$$$$&*  ,#######&'   ]#&¨     ]#&¨¡&&&&¡¡##¨|##¨¨##&##&,¡&&&¡,"*######&* 
+          .$#$$$$$*  ,#######&*     $#&,,,,, ]##¡|*****!## :##  ##&##&|******¡###&$###¡ 
+         ¡$$$$$$*   (######&*       *$######&&$#######&!#& :##  ##&$###########&    "$#&
+        `;
 
+        console.log(a);
     }
-    
+
 }

@@ -1,23 +1,21 @@
 <div class="products">
     <!-- Cement Mexico Delivery -->
-    <ng-container *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery && manager?.productLine?.productLineId != 6">
-        <div class="product" [ngClass]="{ 
-                'exit-animation': product.deleting, 
-                'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
+    <ng-container *ngIf="UTILS.isDelivery() && UTILS.isCement()">
+        <div class=" product " [ngClass]="{ 'exit-animation': product.deleting, 'enter-animation': index> 0 }" *ngFor="let product of preProducts; let index = index;">
             <div class="row">
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
-                        <label>
+                        <label [ngClass]="{ loading: product.loadings.products }">
                             Product description
                         </label>
-                        <div class="input product-selection dropdown" [ngClass]="{ disabled: product.loadings.products }">
+                        <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
                             <span class="selection">
                                 {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc  }}</option>
                                 </select>
                             </span>
-                            <span class="action" data-toggle="modal" data-target="#search-product" (click)="openProductSearch(product)">Change</span>
+                            <span class="action" (click)="openProductSearch(product)">Change</span>
                         </div>
                     </div>
                 </div>
@@ -29,22 +27,22 @@
                             </label>
                             <div class="noselect input number-stepper">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <span class="value">{{ product.quantity }}</span>
+                                <span class="value">{{ product.quantity | number:'1.3-3' }}</span>
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="isMXCustomer()">
-                                Maximum Capacity {{getMaximumCapacity(product.contract)}} tons
+                            <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacity()">
+                                Maximum Capacity {{ product.getMaximumCapacity() }} {{ product.unit?.alternativeUnit?.unitDesc }}
                             </div>
                         </div>
                         <div class="group w40">
-                            <label>
+                            <label [ngClass]="{ loading: product.loadings.units }">
                                 Unit
                             </label>
-                            <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.units }">
+                            <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.units }">
                                 <span style="line-height: 24px;">
                                     {{ product.unit?.alternativeUnit?.unitDesc }}
                                     <select [(ngModel)]="product.unit" class="input behind">
-                                        <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit.alternativeUnit.unitDesc }}</option>
+                                        <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit?.alternativeUnit?.unitDesc }}</option>
                                     </select>
                                 </span>
                                 <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -59,7 +57,7 @@
                             <label for="date{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
                                     {{ product?.date | date: 'shortDate' }}
-                                    <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" />
+                                    <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" [min-date]="today" />
                                     <!-- <input type="date" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event"/> -->
                                 </span>
                                 <span class="mb-0">
@@ -94,15 +92,15 @@
                 </div>
                 <div class="col-md-5 mt-3">
                     <div class="group">
-                        <label>Contract</label>
-                        <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.loadings.contracts }">
+                        <label [ngClass]="{ loading: product.loadings.contracts }">Contract</label>
+                        <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.disableds.contracts }">
                             <span class=""><strong>Contract {{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
-                            <span class="volume">
+                            <span class="volume" *ngIf="!UTILS.isUSACustomer()">
                                 Remaining volume:
                                 <strong *ngIf="product.contract?.salesDocument?.hasOwnProperty('volume')">{{ product.contract?.salesDocument?.volume?.total.quantity.amount }}</strong>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
-                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event, product)" class="input behind">
+                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged(product)" class="input behind">
                                 <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract?.salesDocument?.volume?.total.quantity.amount }} </option>
                             </select>
                         </div>
@@ -110,11 +108,11 @@
                 </div>
                 <div class="col-md-3 mt-3" [ngClass]="{ invisible: shouldHidePayment }">
                     <div class="group">
-                        <label>Payment</label>
+                        <label [ngClass]="{ loading: product.loadings.payments }">Payment</label>
                         <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.payments }">
                             <span>
                                 {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
-                                <select [(ngModel)]="product.payment" class="input behind">
+                                <select [(ngModel)]="product.payment" (ngModelChange)="paymentChanged(product)" class="input behind">
                                     <option selected *ngFor="let payment of product.availablePayments" [ngValue]="payment">{{ payment.paymentTermType.paymentTermTypeDesc }}</option>
                                 </select>
                                 </span>
@@ -124,8 +122,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 mt-3" *ngIf="product.maneuveringAvailable">
-                    <div class="group">
+                <div class="col-md-3 mt-3">
+                    <div class="group" *ngIf="product.maneuveringAvailable">
                         <label>Additional services</label>
                         <div class="service">
                             <input [(ngModel)]="product.maneuvering" checked type="checkbox" id="maneuvering{{ index }}">
@@ -144,15 +142,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mt-3">
-                    <div class="group">
-                        <label>Delivery Mode</label>
-                        <div class="service">
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">Delivery</span>
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">Pickup</span>
-                        </div>
-                    </div>
-                </div>
                 <div class="mt-3 flex-end" [ngClass]="{ 'col-md-6': product.maneuveringAvailable, 'col-md-9': !product.maneuveringAvailable }">
                     <button (click)="remove(index)" class="noborder">Remove product</button>
                 </div>
@@ -161,24 +150,24 @@
     </ng-container>
 
     <!-- Cement Mexico Pickup -->
-    <ng-container *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup && manager?.productLine?.productLineId != 6">
+    <ng-container *ngIf="UTILS.isPickup() && UTILS.isCement()">
         <div class="product" [ngClass]="{ 
             'exit-animation': product.deleting, 
             'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
             <div class="row">
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
-                        <label>
+                        <label [ngClass]="{ loading: product.loadings.products }">
                             Product description
                         </label>
-                        <div class="input product-selection dropdown" [ngClass]="{ disabled: product.loadings.products }">
+                        <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
                             <span class="selection">
                                 {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc  }}</option>
                                 </select>
                             </span>
-                            <span class="action" data-toggle="modal" data-target="#search-product" (click)="openProductSearch(product)">Change</span>
+                            <span class="action" (click)="openProductSearch(product)">Change</span>
                         </div>
                     </div>
                 </div>
@@ -190,22 +179,24 @@
                             </label>
                             <div class="noselect input number-stepper">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <span class="value">{{ product.quantity }}</span>
+                                <span class="value">{{ product.quantity | number:'1.3-3' }}</span>
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="isMXCustomer()">
-                                Maximum Capacity {{getMaximumCapacity(product.contract)}} tons
+                            <div class="info" *ngIf="UTILS.isMexicoCustomer() && product.getMaximumCapacity()">
+                                Maximum Capacity {{ product.getMaximumCapacity() }} {{ product.unit?.alternativeUnit?.unitDesc }}
                             </div>
                         </div>
                         <div class="group w40">
-                            <label>
+                            <label [ngClass]="{ loading: product.loadings.units }">
                                 Unit
                             </label>
-                            <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.units }">
+                            <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.units }">
                                 <span style="line-height: 24px;">
                                         {{ product.unit?.alternativeUnit?.unitDesc }}
                                         <select [(ngModel)]="product.unit" class="input behind">
-                                            <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit.alternativeUnit.unitDesc }}</option>
+                                            <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">
+                                                {{ unit.alternativeUnit?.unitDesc }}
+                                            </option>
                                         </select>
                                     </span>
                                 <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -220,7 +211,7 @@
                             <label for="date{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
                                     {{ product?.date | date: 'shortDate' }}
-                                    <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" />
+                                    <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" [min-date]="today" />
                                     <!-- <input type="date" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event"/> -->
                                 </span>
                                 <span class="mb-0">
@@ -255,15 +246,15 @@
                 </div>
                 <div class="col-md-5 mt-3">
                     <div class="group">
-                        <label>Contract</label>
-                        <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.loadings.contracts }">
+                        <label [ngClass]="{ loading: product.loadings.contracts }">Contract</label>
+                        <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.disableds.contracts }">
                             <span class=""><strong>Contract {{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
                             <span class="volume">
                                 Remaining volume:
                                 <strong *ngIf="product.contract?.salesDocument?.hasOwnProperty('volume')">{{ product.contract?.salesDocument?.volume?.total.quantity.amount }}</strong>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
-                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event, product)" class="input behind">
+                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged(product)" class="input behind">
                             <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract?.salesDocument?.volume?.total.quantity.amount }}
                             </option>
                         </select>
@@ -272,11 +263,11 @@
                 </div>
                 <div class="col-md-3 mt-3" [ngClass]="{ invisible: shouldHidePayment }">
                     <div class="group">
-                        <label>Payment</label>
+                        <label [ngClass]="{ loading: product.loadings.payments }">Payment</label>
                         <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.payments }">
                             <span>
                                 {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
-                                <select [(ngModel)]="product.payment" class="input behind">
+                                <select [(ngModel)]="product.payment" (ngModelChange)="paymentChanged(product)" class="input behind">
                                     <option selected *ngFor="let payment of product.availablePayments" [ngValue]="payment">{{ payment.paymentTermType.paymentTermTypeDesc }}</option>
                                 </select>
                             </span>
@@ -306,23 +297,16 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="group">
-                            <label>Delivery Mode</label>
-                            <div class="service spaced-top">
-                                <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">Delivery</span>
-                                <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">Pickup</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="col-md-5 mt-3">
-                    <div class="group">
+                    <div class="group" [ngClass]="{ invisible: UTILS.isUSACustomer() }">
                         <label>Plant</label>
-                        <div class="input contract dropdown flex-space-between">
+                        <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.loadings.plants }">
                             <span class="">
                                 {{ product?.plant?.plantDesc }}
-                                <select [(ngModel)]="product.plant" class="input behind">
-                                    <option *ngFor="let plant of plants" [ngValue]="plant">{{ plant.plantDesc }}</option>
+                                <select [(ngModel)]="product.plant" (ngModelChange)="plantChanged(product)" class="input behind">
+                                    <option *ngFor="let plant of product.availablePlants" [ngValue]="plant">{{ plant.plantDesc }}</option>
                                 </select>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -336,25 +320,25 @@
         </div>
     </ng-container>
 
-    <!-- Readymix Mexico Delivery -->
-    <ng-container *ngIf="manager?.productLine?.productLineId == 6">
+    <!-- Readymix -->
+    <ng-container *ngIf="UTILS.isReadyMix()">
         <div class="product" [ngClass]="{ 
                 'exit-animation': product.deleting, 
                 'enter-animation': index > 0 }" *ngFor="let product of preProducts; let index = index;">
             <div class="row">
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
-                        <label>
+                        <label [ngClass]="{ loading: product.loadings.products }">
                             Product description
                         </label>
-                        <div class="input product-selection dropdown">
+                        <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
                             <span class="selection">
                                 {{ product.product?.commercialDesc }}
-                                <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged($event)" class="input behind">
+                                <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
-                            <!-- <span class="action" data-toggle="modal" data-target="#search-product">Change</span> -->
+                            <!-- <span class="action">Change</span> -->
                         </div>
                     </div>
                 </div>
@@ -366,22 +350,22 @@
                             </label>
                             <div class="noselect input number-stepper">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <span class="value">{{ product.quantity }}</span>
+                                <span class="value">{{ product.quantity | number:'1.3-3' }}</span>
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="isMXCustomer()">
-                                Maximum Capacity {{getMaximumCapacity(product.contract)}} tons
+                            <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacity()">
+                                Maximum Capacity {{ product.getMaximumCapacity() }} {{ product.unit?.alternativeUnit?.unitDesc }}
                             </div>
                         </div>
                         <div class="group w40">
-                            <label>
+                            <label [ngClass]="{ loading: product.loadings.units }">
                                 Unit
                             </label>
-                            <div class="input flex-space-between dropdown">
+                            <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.units }">
                                 <span style="line-height: 24px;">
                                     {{ product.unit?.alternativeUnit?.unitDesc }}
                                     <select [(ngModel)]="product.unit" class="input behind">
-                                        <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit.alternativeUnit.unitDesc }}</option>
+                                        <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit?.alternativeUnit?.unitDesc }}</option>
                                     </select>
                                 </span>
                                 <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -397,7 +381,7 @@
                                 <span class="mb-0 value">
                                     <!--  -->
                                     <!-- <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" /> -->
-                                    <input type="date" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event"/>
+                                    <input type="date" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event" />
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-calendar"></span></span>
@@ -425,17 +409,17 @@
                     <div class="group">
                         <label>Product ID</label>
                         <div class="input">
-                            <span>20939302/10292/10102</span>
+                            <span>{{ product?.product?.commercialCode }}</span>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-5 mt-3">
                     <div class="group">
-                        <label>Contract</label>
-                        <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.loadings.contracts }">
+                        <label [ngClass]="{ loading: product.loadings.contracts }">Contract</label>
+                        <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.disableds.contracts }">
                             <span class=""><strong>Contract {{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
-                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged($event, product)" class="input behind">
+                            <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged(product)" class="input behind">
                                 <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract: {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;</option>
                             </select>
                         </div>
@@ -444,10 +428,11 @@
                 <div class="col-md-4 mt-3">
                     <div class="group">
                         <label>Project profile</label>
-                        <div class="input flex-space-between dropdown">
+                        <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.projectProfiles }">
                             <span>
-                                Select project profile to prefill specifications
-                                <select [(ngModel)]="product.projectProfile" (ngModelChange)="projectProfileChange($event)" class="input behind">
+                                <!-- Select project profile to prefill specifications -->
+                                {{ product?.projectProfile?.profileName }}
+                                <select [(ngModel)]="product.templateProfile" (ngModelChange)="projectProfileChanged(product, $event)" class="input behind">
                                     <option *ngFor="let project of projectProfiles" [ngValue]="project">{{ project?.profileName }}</option>
                                 </select>
                                 </span>
@@ -456,15 +441,15 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex flex-wrap rdymx-specs">
+            <div class="d-flex flex-wrap rdymx-specs" [ngClass]="{ disabled: product.loadings.catalogs }">
                 <div class="group">
-                    <label>
+                    <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         Discharge Time
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{ product.projectProfile.dischargeTime?.timePerDischargeDesc }}
-                            <select (change)="onChangeDischargeTime($event.target.value)" class="input behind">
+                            {{ product?.projectProfile?.project?.projectProperties?.dischargeTime?.timePerDischargeDesc }}
+                            <select (change)="onChangeDischargeTime(product, $event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.DCT; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
@@ -473,13 +458,13 @@
                     </div>
                 </div>
                 <div class="group">
-                    <label>
+                    <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         Transport Method
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{ product.projectProfile.transportMethod?.transportMethodDesc }}
-                            <select (change)="onChangeTransportMethod($event.target.value)" class="input behind">
+                            {{ product?.projectProfile?.project?.projectProperties?.transportMethod?.transportMethodDesc }}
+                            <select (change)="onChangeTransportMethod(product, $event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.TPM; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
@@ -488,13 +473,13 @@
                     </div>
                 </div>
                 <div class="group">
-                    <label>
+                    <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         Unload Type
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{ product.projectProfile.unloadType?.unloadTypeDesc }}
-                            <select (change)="onChangeUnloadType($event.target.value)" class="input behind">
+                            {{ product?.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeDesc }}
+                            <select (change)="onChangeUnloadType(product, $event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.ULT; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
@@ -503,13 +488,13 @@
                     </div>
                 </div>
                 <div class="group">
-                    <label>
+                    <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         Pump Capacity
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{product.projectProfile.pumpCapacity?.pumpCapacityDesc }}
-                            <select (change)="onChangePumpCapacity($event.target.value)" class="input behind">
+                            {{product.projectProfile?.project?.projectProperties?.pumpCapacity?.pumpCapacityDesc }}
+                            <select (change)="onChangePumpCapacity(product, $event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.PCC; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
@@ -517,40 +502,14 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <!-- <div class="group">
-                    <label>
-                        Pump Capacity Min
-                    </label>
-                    <div class="input flex-space-between dropdown">
-                        <span style="line-height: 24px;">
-                            <select [(ngModel)]="product.unit" class="input behind">
-                                <option *ngFor="let unit of availableUnits" [ngValue]="unit">{{ unit.name  }}</option>
-                            </select>
-                        </span>
-                        <span class="arrow cmx-icon-straight-arrow-down"></span>
-                    </div>
-                </div>
                 <div class="group">
-                    <label>
-                        Pump Capacity Max
-                    </label>
-                    <div class="input flex-space-between dropdown">
-                        <span style="line-height: 24px;">     
-                            <select [(ngModel)]="product.unit" class="input behind">
-                                <option *ngFor="let unit of availableUnits" [ngValue]="unit">{{ unit.name  }}</option>
-                            </select>
-                        </span>
-                        <span class="arrow cmx-icon-straight-arrow-down"></span>
-                    </div>
-                </div> -->
-                <div class="group">
-                    <label>
+                    <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         Aplication
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{ product.projectProfile.element?.elementDesc }}
-                            <select (change)="onChangeApplication($event.target.value)" class="input behind">
+                            {{ product?.projectProfile?.project?.projectProperties?.element?.elementDesc }}
+                            <select (change)="onChangeApplication(product, $event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.ELM; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
@@ -559,13 +518,13 @@
                     </div>
                 </div>
                 <div class="group">
-                    <label>
+                    <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         Load Size
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{product.projectProfile.loadSize?.loadSizeDesc}}
-                            <select (change)="onChangeLoadSize($event.target.value)"  class="input behind">
+                            {{product?.projectProfile?.project?.projectProperties?.loadSize?.loadSizeDesc}}
+                            <select (change)="onChangeLoadSize(product, $event.target.value)"  class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.LSC; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
@@ -574,13 +533,13 @@
                     </div>
                 </div>
                 <div class="group">
-                    <label>
+                    <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         Spacing
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
-                            {{ product?.projectProfile?.timePerLoad?.timePerLoadDesc }}
-                            <select (change)="onChangeTimePerLoad($event.target.value)" class="input behind">
+                            {{ product?.projectProfile?.project?.projectProperties?.timePerLoad?.timePerLoadDesc }}
+                            <select (change)="onChangeTimePerLoad(product, $event.target.value)" class="input behind">
                                 <option value="" selected disabled hidden></option>
                                 <option *ngFor="let entry of catalogs.TPL; let i = index" [value]="i">{{ entry.entryDesc }}</option>
                             </select>
@@ -595,13 +554,13 @@
                         <div class="col-md-12 mt-3">
                             <label class="additional-services">Additional services</label>
                         </div>
-                        <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let index = index;">
+                        <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let i = index;">
                             <div class="group">
                                 <!-- rmx services  -->
                                 <!-- (change)="changeAditionalService(readyMixAdditionalServices[0])" -->
                                 <div class="service">
-                                    <input (change)="changeAditionalService($event.target, index)" type="checkbox" id="{{rmxService.entryCode}}">
-                                    <label for="{{rmxService.entryCode}}">
+                                    <input (change)="changeAditionalService(product, $event.target, i)" type="checkbox" id="{{ rmxService.entryCode }}{{ index }}">
+                                    <label for="{{ rmxService.entryCode }}{{ index }}">
                                         <svg class="icon-checkbox-active">
                                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
                                         </svg>
@@ -622,8 +581,8 @@
                     <div class="group mt-3">
                         <label>Delivery Mode</label>
                         <div class="service">
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">Delivery</span>
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">Pickup</span>
+                            <span *ngIf="UTILS.isDelivery()">Delivery</span>
+                            <span *ngIf="UTILS.isPickup()">Pickup</span>
                         </div>
                     </div>
                 </div>
@@ -638,3 +597,8 @@
 <div class="flex-end mt-3 mb-100">
     <button (click)="add()" class="button" href="#" [ngClass]="{ disabled: availableProducts.length <= 0 }">+ Add Product</button>
 </div>
+
+<!-- Modals -->
+<modal id="search-product">
+    <search-product (confirmed)="closeProductSearch()" (canceled)="closeProductSearch()"></search-product>
+</modal>
