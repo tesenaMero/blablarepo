@@ -35,7 +35,7 @@ x86/
 /src/cemex/wwwroot/dist/
 /src/cemex/wwwroot/ordersnproduct/dist/
 /src/cemex/ClientApp/ordersnproduct/dist/
-
+*dist
 
 # dls files
 /src/cemex/submodules/dls
