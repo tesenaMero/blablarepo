@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule, RequestOptions, XHRBackend } from '@angular/http';
-import { TranslationService } from '../../services/translation.service';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { ApiService } from '../../services/http.api.service';
 
 import { ActionButtonComponent } from './action-button.component';

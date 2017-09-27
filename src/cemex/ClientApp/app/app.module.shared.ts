@@ -62,7 +62,7 @@ import { SessionService, AuthGuard } from './shared/services/session.service';
 import { DashboardService } from './shared/services/dashboard.service';
 import { CustomerService } from './shared/services/customer.service';
 import { Broadcaster } from './shared/types/Broadcaster';
-import { TranslationService } from './shared/services/translation.service';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { SearchProductService } from './shared/services/product-search.service';
 
 import {

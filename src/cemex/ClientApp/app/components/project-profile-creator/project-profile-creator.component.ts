@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { TranslationService } from '../../shared/services/translation.service';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { CatalogApi, ProjectProfileApi } from '../../shared/services/api';
 import { CustomerService } from '../../shared/services/customer.service';
 

@@ -6,7 +6,7 @@ import { DashboardService } from '../../shared/services/dashboard.service'
 import { CustomerService } from '../../shared/services/customer.service'
 import { LegalEntitiesApi, SalesDocumentApi, ShipmentLocationApi } from '../../shared/services/api';
 
-import { TranslationService } from '../../shared/services/translation.service';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 import { CmxSidebarComponent } from '@cemex/cmx-sidebar-v1/dist';
 

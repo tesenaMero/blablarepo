@@ -5,7 +5,7 @@ import { DraftsService } from '../../shared/services/api/drafts.service';
 import { DashboardService } from '../../shared/services/dashboard.service';
 import { CreateOrderService } from '../../shared/services/create-order.service';
 import { WindowRef } from '../../shared/services/window-ref.service';
-import { TranslationService } from '../../shared/services/translation.service';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { DOCUMENT } from '@angular/platform-browser';
 import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
 import localForage = require('localforage');
