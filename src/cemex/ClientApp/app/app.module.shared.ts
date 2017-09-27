@@ -160,8 +160,7 @@ export const sharedConfig: NgModule = {
                     { path: 'drafts', component: DraftsComponent },
                     { path: 'open/:id', component: CrossProductComponent },
                 ]
-            },
-            { path: '**', redirectTo: 'app' }
+            }
         ])
     ],
     providers: [
