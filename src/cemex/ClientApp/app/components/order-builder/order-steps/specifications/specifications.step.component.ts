@@ -111,7 +111,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.searchProductService.fetchProductColors(this.manager.productLine.productLineId);
         this.modal.open('search-product');
 
-        // What the f is this
         this.searchProductService.searchedProduct.subscribe(product => {
             if (product) {
                 let filteredProducts = SpecificationsStepComponent.availableProducts.filter((availableProducts) => {

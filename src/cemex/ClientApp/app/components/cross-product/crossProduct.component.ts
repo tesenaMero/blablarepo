@@ -14,7 +14,7 @@ import { TranslationService } from '@cemex-core/angular-services-v2/dist';
     selector: 'crossProduct',
     styleUrls: ['./crossProduct.scss'],
     template: `
-    <div style="padding: 80px;text-align:center;">t.pt('views.common.procesing')</div>
+    <div style="padding: 80px;text-align:center;">{{t.pt('views.common.procesing')}}</div>
     <modal id="success-order">
         <div class="container-fluid">
             <div class="container-layout center-text center-content">
