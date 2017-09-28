@@ -14,14 +14,14 @@ import { TranslationService } from '@cemex-core/angular-services-v2/dist';
     selector: 'crossProduct',
     styleUrls: ['./crossProduct.scss'],
     template: `
-    <div style="padding: 80px;text-align:center;">{{t.pt('views.common.procesing')}}</div>
+    <div style="padding: 80px;text-align:center;">{{ t.pt('views.common.procesing') }}</div>
     <modal id="success-order">
         <div class="container-fluid">
             <div class="container-layout center-text center-content">
                 <div class="success-group">
                     <span class="cmx-icon-accepted-ok"></span>
                     <div class="success-text">
-                    {{ t.pt('views.common.order_code') }} {{ orderCode }} {{ t.pt('views.common.was_submited') }}
+                    {{ t.pt('views.common.order_code') }}{{ orderCode }} {{ t.pt('views.common.was_submited') }}
                     </div>
                     <button class="button back-to-orders" (click)="closeModal()">{{ t.pt('views.cross.back_orders') }}</button>
                 </div>
