@@ -323,9 +323,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 }
                 return;
             }
-
-            console.log("payment terms:", paymentTerms)
-
+            
             // If theres no cash, fetch it manually
             if (!cash) {
                 let customerId = this.customerService.currentCustomer().legalEntityId;

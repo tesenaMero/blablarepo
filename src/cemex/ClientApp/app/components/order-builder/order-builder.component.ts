@@ -136,6 +136,9 @@ export class OrderBuilderComponent {
             this.cashOrders = this.getCashOrders();
             this.creditOrders = this.getCreditOrders();
 
+            // Save cash orders to show later
+            localStorage.setItem('tempCashOrders', JSON.stringify(this.cashOrders));
+
             // Pay credit orders
             if (this.creditOrders.length) {
                 if (Validations.isCement() && Validations.isMexicoCustomer()) {

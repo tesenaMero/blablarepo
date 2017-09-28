@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
+
 import { OrdersService } from '../../shared/services/orders.service';
 import { PingSalesOrderApi } from '../../shared/services/api/ping-sales-order.service';
 import { OrderRequestTableComponentConfiguration } from '../../utils/order-request.helper';
 import { DashboardService } from '../../shared/services/dashboard.service';
-import { TranslationService } from '@cemex-core/angular-services-v2/dist';
-import { Router } from '@angular/router';
 import { CustomerService } from '../../shared/services/customer.service';
 import { OrdersApi } from '../../shared/services/api/orders.service';
+import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
 import * as moment from 'moment'
 
 @Component({
@@ -26,7 +28,7 @@ export class OrdersComponent implements OnInit {
 
     public orderRequestConfiguration: OrderRequestTableComponentConfiguration;
 
-    constructor(private ordersService: OrdersService, private t: TranslationService, private ping: PingSalesOrderApi, private dash: DashboardService, private router: Router, private customerService: CustomerService, private ordersApi: OrdersApi) {
+    constructor(private ordersService: OrdersService, private t: TranslationService, private ping: PingSalesOrderApi, private dash: DashboardService, private router: Router, private customerService: CustomerService, private ordersApi: OrdersApi, private encDecJsonObjService: EncodeDecodeJsonObjService) {
         //this.orders = ordersService.getOrders();
         //this.isLoading = ordersService.isLoading();
         //this.orderRequestConfiguration = OrdersService.ORDER_REQUEST_MAPPING;
@@ -55,7 +57,8 @@ export class OrdersComponent implements OnInit {
         });
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+    }
 
     initOrders() {
         this.columns = [
