@@ -107,7 +107,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 mt-4">
+                <div class="col-md-3 mt-4" *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">
                     <div class="group">
                         <div class="title">
                             Point of Delivery
@@ -255,7 +255,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3 mt-4">
+                        <div class="col-md-3 mt-4" *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">
                             <div class="group">
                                 <div class="title">
                                     Point of Delivery
@@ -435,7 +435,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3 mt-4">
+                        <div class="col-md-3 mt-4" *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">
                             <div class="group">
                                 <div class="title">
                                     Point of Delivery
