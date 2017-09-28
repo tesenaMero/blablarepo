@@ -324,24 +324,46 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 return;
             }
 
+            console.log("payment terms:", paymentTerms)
+
             // If theres no cash, fetch it manually
             if (!cash) {
                 let customerId = this.customerService.currentCustomer().legalEntityId;
                 this.paymentTermsApi.getCashTerm(customerId).subscribe((result) => {
                     let cashTerm = result.json().paymentTerms;
-                    if (cashTerm.length) { paymentTerms.push(cashTerm[0]); }
+                    
+                    const singleCash = cashTerm.find((term: any) => {
+                        return term.paymentTermType.paymentTermTypeCode === 'CASH';
+                    });
+
+                    // If cash founded, add it
+                    if (singleCash) { paymentTerms.push(singleCash); }
 
                     // Set default payment terms for preproducts
                     SpecificationsStepComponent.availablePayments = paymentTerms;
 
                     // Set available payments and loading state
                     this.preProducts.forEach((item: PreProduct) => {
+                        item.availablePayments = paymentTerms;
+                        // In the case where payment is not showed to the user select credit by default
+                        // If there is no credit try to select whatever lol
+                        if (Validations.shouldHidePayment()) {
+                            if (credit) {
+                                item.payment = credit;
+                                item.paymentChanged();
+                            }
+                            else if (paymentTerms.length) {
+                                item.payment = paymentTerms[0];
+                                item.paymentChanged();
+                            }
+                        }
+                        else {
+                            item.payment = undefined;
+                            item.paymentChanged();
+                        }
+
                         item.loadings.payments = false;
                         item.disableds.payments = false;
-                        item.availablePayments = paymentTerms;
-
-                        item.payment = undefined;
-                        item.paymentChanged();
                     });
                 });
             }
@@ -351,12 +373,27 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
                 // Set available payments and loading state
                 this.preProducts.forEach((item: PreProduct) => {
-                    item.loadings.payments = false;
-                    item.disableds.payments = false;
                     item.availablePayments = paymentTerms;
 
-                    item.payment = undefined;
-                    item.paymentChanged();
+                    // In the case where payment is not showed to the user select credit by default
+                    // If there is no credit try to select whatever lol
+                    if (Validations.shouldHidePayment()) {
+                        if (credit) {
+                            item.payment = credit;
+                            item.paymentChanged();
+                        }
+                        else if (paymentTerms.length) {
+                            item.payment = paymentTerms[0];
+                            item.paymentChanged();
+                        }
+                    }
+                    else {
+                        item.payment = undefined;
+                        item.paymentChanged();
+                    }
+
+                    item.loadings.payments = false;
+                    item.disableds.payments = false;
                 });
             }
         });
@@ -554,7 +591,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         product.deleting = true;
         setTimeout(() => {
             this.preProducts.splice(index, 1);
-            
+
             // Readymix case when all contracts should be the same.
             // Case when the first product is removed
             if (Validations.isReadyMix() && this.preProducts.length) {
