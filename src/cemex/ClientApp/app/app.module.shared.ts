@@ -37,7 +37,8 @@ import {
     NoSpacePipe,
     ZeroPadPipe,
     SumGroupProductPipe,
-    DatePipe
+    DatePipe,
+    UnitCodeMapperPipe
 } from './pipes'
 
 // Shared components
@@ -112,6 +113,7 @@ export const sharedConfig: NgModule = {
         NoSpacePipe,
         SumGroupProductPipe,
         DatePipe,
+        UnitCodeMapperPipe,
 
         // Regular components
         OrdersTableComponent,
