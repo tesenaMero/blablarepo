@@ -33,7 +33,7 @@
                 </div>
                 <div class="row align-items-center mb-21px" *ngIf="!isCement" [ngClass]="{ error: validations.contactPerson.showError }">
                     <div class="col-md-4 col-sm-12 select-label">
-                        <label for="conctact-select" [ngClass]="{ required: validations.contactPerson.mandatory }" class="select-label">C{{ t.pt('views.location.contact_person') }}</label>
+                        <label for="conctact-select" [ngClass]="{ required: validations.contactPerson.mandatory }" class="select-label">{{ t.pt('views.location.contact_person') }}</label>
                     </div>
                     <div class="col-md-8 col-sm-12 " [ngClass]="{ disabled: loadings.contacts }">
                         <ss-multiselect-dropdown [options]="contacts" [texts]="contactsTexts" [settings]="contactsSettings" [(ngModel)]="contactsIndex" (onManualInput)="manualContact($event)" (ngModelChange)="contactChanged($event)"></ss-multiselect-dropdown>
