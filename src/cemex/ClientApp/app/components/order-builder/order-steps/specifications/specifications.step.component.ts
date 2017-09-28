@@ -479,7 +479,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     productChanged(preProduct: PreProduct) {
         const readymixCase = Validations.isReadyMix() && this.globalContract;
         if (readymixCase) {
-            // Verify every other product has this contract
+            // Do not fetch contracts, just add product
             preProduct.productChanged(false);
         }
         else {
@@ -566,58 +566,62 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     qty(product: PreProduct, toAdd: number) {
-        if (this.isMXCustomer()) {
-            if (product.quantity <= 1 && toAdd < 0) { return; }
-            const isDelivery = Validations.isDelivery();
-            let conversion = product.convertToTons(product.quantity + toAdd);
+        if (product.quantity <= 1 && toAdd < 0) { return; }
+        if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
+        product.quantity += toAdd;
+        return;
+        // if (this.isMXCustomer()) {
+        //     if (product.quantity <= 1 && toAdd < 0) { return; }
+        //     const isDelivery = Validations.isDelivery();
+        //     let conversion = product.convertToTons(product.quantity + toAdd);
 
-            let newQty = product.quantity + toAdd;
-            let contractBalance = product.getContractBalance(); //remaining of contract
-            let maxCapacitySalesArea = product.getMaximumCapacity();
+        //     let newQty = product.quantity + toAdd;
+        //     let contractBalance = product.getContractBalance(); //remaining of contract
+        //     let maxCapacitySalesArea = product.getMaximumCapacity();
 
-            if (contractBalance === undefined) {
-                if (isDelivery) {
-                    if (((this.manager.productLine.productId == 2) || (this.manager.productLine.productId == 1)) && (conversion <= maxCapacitySalesArea)) {
-                        return product.quantity = newQty;
-                    }
-                    else {
-                        if (conversion <= maxCapacitySalesArea) {
-                            return product.quantity = newQty;
-                        }
-                    }
-                }
-                else {
-                    if (conversion <= maxCapacitySalesArea) {
-                        return product.quantity = newQty;
-                    }
-                }
-            }
-            else {
-                if (conversion > contractBalance) {
-                    return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
-                }
-                if (!isDelivery) {
-                    if (conversion <= maxCapacitySalesArea) {
-                        return product.quantity = newQty;
-                    }
-                }
-                else {
-                    if ((conversion <= maxCapacitySalesArea)) {
-                        return product.quantity = newQty;
-                    }
-                }
-            }
-            if (conversion <= maxCapacitySalesArea) {
-                return product.quantity = newQty;
-            }
+        //     if (contractBalance === undefined) {
+        //         if (isDelivery) {
+        //             if (((this.manager.productLine.productLineId == 2) || (this.manager.productLine.productLineId == 1)) && (conversion <= maxCapacitySalesArea)) {
+        //                 return product.quantity = newQty;
+        //             }
+        //             else {
+        //                 if (conversion <= maxCapacitySalesArea) {
+        //                     return product.quantity = newQty;
+        //                 }
+        //             }
+        //         }
+        //         else {
+        //             if (conversion <= maxCapacitySalesArea) {
+        //                 return product.quantity = newQty;
+        //             }
+        //         }
+        //     }
+        //     else {
+        //         if (conversion > contractBalance) {
+        //             return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
+        //         }
+        //         if (!isDelivery) {
+        //             if (conversion <= maxCapacitySalesArea) {
+        //                 return product.quantity = newQty;
+        //             }
+        //         }
+        //         else {
+        //             if ((conversion <= maxCapacitySalesArea)) {
+        //                 return product.quantity = newQty;
+        //             }
+        //         }
+        //     }
+        //     if (conversion <= maxCapacitySalesArea) {
+        //         return product.quantity = newQty;
+        //     }
 
-            return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
-        }
-        else {
-            if (product.quantity <= 1 && toAdd < 0) { return; }
-            if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
-            product.quantity += toAdd;
-        }
+        //     return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
+        // }
+        // else {
+        //     if (product.quantity <= 1 && toAdd < 0) { return; }
+        //     if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
+        //     product.quantity += toAdd;
+        // }
     }
 
     todayStr() {

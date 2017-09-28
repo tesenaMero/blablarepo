@@ -130,7 +130,7 @@ export class OrderBuilderComponent {
     // Payment flow
     // --------------------------------------------------------------------
     placeOrder() {
-        if ((Validations.isMexicoCustomer()) && (!this.isReadyMix)) {
+        if (Validations.isMexicoCustomer() && Validations.isCement()) {
             this.dashboard.alertInfo(this.t.pt('views.common.placing') + " " + this.draftOrder.orderId, 0);
 
             this.cashOrders = this.getCashOrders();
@@ -138,7 +138,7 @@ export class OrderBuilderComponent {
 
             // Pay credit orders
             if (this.creditOrders.length) {
-                if ((!this.isReadyMix) && (Validations.isMexicoCustomer())) {
+                if (Validations.isCement() && Validations.isMexicoCustomer()) {
                     this.flowCementMX();
                 }
                 else {
@@ -189,16 +189,16 @@ export class OrderBuilderComponent {
 
     flowCementMX() {
         this.drafts.createOrder(this.draftId, '')
-            .flatMap((response) => {
-                this.dashboard.alertSuccess(this.t.pt('views.common.credit') + " " + this.t.pt('views.common.requesting_code'), 0);
-                return this.drafts.validateRequestId(response.json().id);
-            })
-            .subscribe((response) => {
-                this.dashboard.alertSuccess(this.t.pt('views.common.credit') + " " +  this.t.pt('views.common.order_code') + response.json().orderCode + " " + this.t.pt('views.common.placed_success'), 30000);
-                this.showSuccessModal(response.json().orderCode);
-            }, error => {
-                this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
-            })
+        .flatMap((response) => {
+            this.dashboard.alertSuccess(this.t.pt('views.common.credit') + " " + this.t.pt('views.common.requesting_code'), 0);
+            return this.drafts.validateRequestId(response.json().id);
+        })
+        .subscribe((response) => {
+            this.dashboard.alertSuccess(this.t.pt('views.common.credit') + " " +  this.t.pt('views.common.order_code') + response.json().orderCode + " " + this.t.pt('views.common.placed_success'), 30000);
+            this.showSuccessModal(response.json().orderCode);
+        }, error => {
+            this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
+        })
     }
 
     basicFlow() {
@@ -221,14 +221,19 @@ export class OrderBuilderComponent {
     // ---------------------------------------------------------------
     getCashOrders(): any[] {
         return this.draftOrder.items.filter((item) => {
-            return item.paymentTerm && item.paymentTerm.paymentTermCode == "ZCON";
+            return item.paymentTerm && item.paymentTerm.paymentTermCode && this.isCashCode(item.paymentTerm.paymentTermCode);
         });
     }
 
     getCreditOrders(): any[] {
         return this.draftOrder.items.filter((item) => {
-            return item.paymentTerm && item.paymentTerm.paymentTermCode == "Z015";
+            return item.paymentTerm && item.paymentTerm.paymentTermCode && (!this.isCashCode(item.paymentTerm.paymentTermCode));
         });
+    }
+
+    isCashCode(code: string): boolean {
+        if (code == "ZCON" || code == "ZCOD") { return true; }
+        else { return false; }
     }
 
     shouldShowDeliveryMode() {

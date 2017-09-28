@@ -113,7 +113,7 @@ export class PreProduct {
 
     setProduct(product: any, shouldFetchContracts?: boolean) {
         // Optionals
-        if (!shouldFetchContracts) { shouldFetchContracts = true }
+        if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
 
         this.product = product;
         this.productChanged(shouldFetchContracts);
@@ -121,7 +121,7 @@ export class PreProduct {
 
     productChanged(shouldFetchContracts?: boolean) {
         // Optionals
-        if (!shouldFetchContracts) { shouldFetchContracts = true }
+        if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
 
         if (!this.product) {
             // Disable stuff and remove loadings
@@ -137,6 +137,9 @@ export class PreProduct {
 
         if (shouldFetchContracts) {
             this.fetchContracts();
+        }
+        else {
+            this.loadings.contracts = false;
         }
 
         this.fetchUnits();
@@ -365,19 +368,16 @@ export class PreProduct {
         if(this.unit === undefined){
             return qty;
         }
-        let factor = this.unit.numerator/this.unit.denominator;
-        let convertion = qty*factor;
-        if (this.unit) {            
-            return convertion;
-        } else {
-            return undefined;
-        }
+        
+        let factor = this.unit.numerator / this.unit.denominator;
+        let convertion = qty * factor;
+        return convertion;
     }
 
     // Maximum capacity salesArea
     getMaximumCapacity() {
         const salesAreaArray = _.get(this.manager, 'salesArea');
-        let salesArea;
+        let salesArea = _.get(this.manager, 'salesArea[0]');
         if (salesAreaArray && salesAreaArray.length > 1) {
             salesArea = salesAreaArray.forEach((sa, index) => {
                 if (_.has(sa, 'divisionCode.02')){
@@ -385,28 +385,20 @@ export class PreProduct {
                 }                    
             });
         }
-        else {
-            salesArea = _.get(this.manager, 'salesArea[0]');
-        }
-        let maxJobsiteQty = undefined;
-        const unlimited = undefined;
+        
         if (salesArea) { return _.get(salesArea, 'maximumLot.amount'); }
-        else { return unlimited; }
+        else { return undefined; }
     }
 
     // Maximum capacity contract
     getContractBalance(){
-        let balance = undefined;
         if (this.contract) {
             const volume = _.get(this.contract, 'salesDocument.volume');
             if (volume) {
                 return _.get(volume, 'total.quantity.amount');
             }
-            else {
-                return balance;
-            }
         }
-        return balance;
+        return undefined;
     }
 
     // Returns the minor maximum capacity contract or jobsite
