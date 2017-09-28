@@ -334,23 +334,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.loadings.purchaseOrder = false;
         });
 
-        // Make address -> geolocation call, dont fetch yet
-        // let addressSub = this.shipmentApi
-        //     .address(this.location)
-        //     .flatMap((address) => {
-        //         this.location.address = address.json();
-        //         return this.shipmentApi.geo(address.json());
-        //     })
-        //     .map((geo) => {
-        //         if (geo.json) {
-        //             this.location.geo = geo.json();
-        //             this.cleanJobsiteMarker();
-        //             this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
-        //             this.addMarkerToMap(this.jobsiteMarker);
-        //             this.loadings.map = false;
-        //         }
-        //     });
-
         //  Make address, dont fetch yet
         let addressSub = this.shipmentApi.address(this.location).map((address) => {
             this.location.address = address.json();

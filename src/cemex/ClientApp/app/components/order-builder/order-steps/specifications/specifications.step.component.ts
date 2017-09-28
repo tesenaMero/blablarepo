@@ -168,8 +168,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         // Add a pre product by default
         if (this.preProducts.length <= 0) { this.add(); }
 
-        console.log(this.preProducts);
-
         const customer = this.customerService.currentCustomer();
         const productLineId = this.manager.productLine.productLineId;
 

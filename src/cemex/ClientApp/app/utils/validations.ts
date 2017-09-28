@@ -42,12 +42,16 @@ export class Validations {
         return _.get(this.manager, 'productLine.productLineId') === this.PRODUCT_LINES.CementBulk
     }
 
+    // TODO: Replace Id with code in enum
     static isPickup() {
-        return _.get(this.manager, 'shippingCondition.shippingConditionId') === this.MODE.Pickup
+        return _.get(this.manager, 'shippingCondition.shippingConditionId') === this.MODE.Pickup ||
+                _.get(this.manager, 'shippingCondition.shippingConditionCode') === "02";
     }
 
+    // TODO: Replace Id with code in enum
     static isDelivery() {
-        return _.get(this.manager, 'shippingCondition.shippingConditionId') === this.MODE.Delivery
+        return _.get(this.manager, 'shippingCondition.shippingConditionId') === this.MODE.Delivery || 
+                _.get(this.manager, 'shippingCondition.shippingConditionCode') === "01";
     }
 
     static shouldHidePayment() {
