@@ -45,13 +45,13 @@ export class Validations {
     // TODO: Replace Id with code in enum
     static isPickup() {
         return _.get(this.manager, 'shippingCondition.shippingConditionId') === this.MODE.Pickup ||
-                _.get(this.manager, 'shippingCondition.shippingConditionCode') === "02";
+                _.get(this.manager, 'shippingCondition.shippingConditionCode') === this.MODE.Pickup;
     }
 
     // TODO: Replace Id with code in enum
     static isDelivery() {
         return _.get(this.manager, 'shippingCondition.shippingConditionId') === this.MODE.Delivery || 
-                _.get(this.manager, 'shippingCondition.shippingConditionCode') === "01";
+                _.get(this.manager, 'shippingCondition.shippingConditionCode') === this.MODE.Delivery;
     }
 
     static shouldHidePayment() {
