@@ -1,5 +1,5 @@
 <!-- Cement USA -->
-<ng-container *ngIf="isUSACustomer() && manager?.productLine?.productLineId != PRODUCT_LINES.Readymix">
+<ng-container *ngIf="UTIL.isUSACustomer() && UTIL.isCement()">
     <ng-container *ngFor="let item of manager.products">
         <div class="product">
             <div class="row">
@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div class="col-md-1">
-                    <div class="group" [ngClass]="{ invisible: isUSACustomer() }">
+                    <div class="group" [ngClass]="{ invisible: UTIL.isUSACustomer() }">
                         <div class="title">
                             {{ t.pt('views.checkout.payment') }}
                         </div>
@@ -145,7 +145,7 @@
 </ng-container>
 
 <!-- Cement MX -->
-<ng-container *ngIf="!isUSACustomer() && manager?.productLine?.productLineId != PRODUCT_LINES.Readymix">
+<ng-container *ngIf="!UTIL.isUSACustomer() && UTIL.isCement()">
     <ng-container *ngFor="let item of manager.products, let index = index">
         <div class="product">
             <div class="row">
@@ -325,7 +325,7 @@
 </ng-container>
 
 <!-- Readymix MX -->
-<ng-container *ngIf="!isUSACustomer() && UTIL.isReadyMix()">
+<ng-container *ngIf="!UTIL.isUSACustomer() && UTIL.isReadyMix()">
     <ng-container *ngFor="let item of manager.products, let index = index">
         <div class="product">
             <div class="row">

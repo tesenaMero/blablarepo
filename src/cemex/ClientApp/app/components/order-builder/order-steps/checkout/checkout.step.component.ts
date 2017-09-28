@@ -117,14 +117,6 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         this.dashboard.alertSuccess(this.t.pt('views.checkout.prices_recovered'));
     }
 
-    isMXCustomer() {
-        return this.customerService.currentCustomer().countryCode.trim() == "MX";
-    }
-
-    isUSACustomer() {
-        return this.customerService.currentCustomer().countryCode.trim() == "US";
-    }
-
     isReadyMix() {
         return Validations.isReadyMix();
     }
@@ -158,6 +150,6 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     }
 
     shouldShowPrices(): boolean {
-        return !this.isUSACustomer();
+        return !Validations.isUSACustomer();
     }
 }

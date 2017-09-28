@@ -149,7 +149,7 @@
             <div class="col-sm-3">
                 <div class="group">
                     <div class="title">
-                        {{ t.pt('views.review.aditional_services') }} 
+                        {{ t.pt('views.review.aditional_services') }}
                     </div>
                     <div class="value">
                         <span *ngIf="item.maneuvering">{{ t.pt('views.review.maneuvering') }}</span>
@@ -163,13 +163,8 @@
                             {{ t.pt('views.review.delivery_mode') }}
                         </div>
                         <div class="value">
-<<<<<<< HEAD
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">{{ t.pt('views.review.delivery') }}</span>
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">{{ t.pt('views.review.pickup') }}</span>
-=======
-                            <span *ngIf="UTIL.isDelivery()">Delivery</span>
-                            <span *ngIf="UTIL.isPickup()">Pickup</span>
->>>>>>> development
+                            <span *ngIf="UTIL.isDelivery()">{{ t.pt('views.review.delivery') }}</span>
+                            <span *ngIf="UTIL.isPickup()">{{ t.pt('views.review.pickup') }}</span>
                         </div>
                     </div>
                 </div>

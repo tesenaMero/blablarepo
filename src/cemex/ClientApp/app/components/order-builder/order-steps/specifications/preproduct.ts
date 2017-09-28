@@ -10,6 +10,9 @@ import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import * as _ from 'lodash';
 
 export class PreProduct {
+    // View states
+    deleting: boolean = false;
+
     // Props
     maneuvering: boolean = false;
     quantity: number = 1;
@@ -59,13 +62,16 @@ export class PreProduct {
         payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') }
     }
 
-    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService) {
+    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean) {
+        // Optionals
+        if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
+
         // Conts
         const SSC = SpecificationsStepComponent;
 
         // Available products init
-        if (SSC.availableProducts.length) {
-            this.setProduct(SSC.availableProducts[0]);
+        if (SSC.availableProducts.length && !this.product) {
+            this.setProduct(SSC.availableProducts[0], shouldFetchContracts);
             this.loadings.products = false;
         }
         else {
@@ -105,12 +111,18 @@ export class PreProduct {
         }
     }
 
-    setProduct(product: any) {
+    setProduct(product: any, shouldFetchContracts?: boolean) {
+        // Optionals
+        if (!shouldFetchContracts) { shouldFetchContracts = true }
+
         this.product = product;
-        this.productChanged();
+        this.productChanged(shouldFetchContracts);
     }
 
-    productChanged() {
+    productChanged(shouldFetchContracts?: boolean) {
+        // Optionals
+        if (!shouldFetchContracts) { shouldFetchContracts = true }
+
         if (!this.product) {
             // Disable stuff and remove loadings
             this.disableds.products = true;
@@ -123,7 +135,10 @@ export class PreProduct {
             return;
         }
 
-        this.fetchContracts();
+        if (shouldFetchContracts) {
+            this.fetchContracts();
+        }
+
         this.fetchUnits();
         this.fetchManeuvering();
 
@@ -345,7 +360,7 @@ export class PreProduct {
         });
     }
 
-    //convert to tons quantity selected
+    // Convert to tons quantity selected
     convertToTons(qty): any{
         if(this.unit === undefined){
             return qty;
@@ -379,7 +394,7 @@ export class PreProduct {
         else { return unlimited; }
     }
 
-    //Maximum capacity contract
+    // Maximum capacity contract
     getContractBalance(){
         let balance = undefined;
         if (this.contract) {
@@ -394,7 +409,7 @@ export class PreProduct {
         return balance;
     }
 
-    //return the minor maximum capacity contract or jobsite
+    // Returns the minor maximum capacity contract or jobsite
     getMaximumCapacityContractAndJobsite(){
         let contractBalance = this.getContractBalance();
         let maxCapacitySalesArea = this.getMaximumCapacity(); 

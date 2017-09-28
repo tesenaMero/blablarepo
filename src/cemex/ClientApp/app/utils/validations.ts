@@ -23,11 +23,11 @@ export class Validations {
     }
 
     static isMexicoCustomer() {
-        return this.customer.currentCustomer() && this.customer.currentCustomer().countryCode.trim() === "MX"
+        return this.customer.currentCustomer() && this.customer.currentCustomer().countryCode && this.customer.currentCustomer().countryCode.trim() === "MX" || undefined
     }
 
     static isUSACustomer() {
-        return this.customer.currentCustomer() && this.customer.currentCustomer().countryCode.trim() === "US"
+        return this.customer.currentCustomer() && this.customer.currentCustomer().countryCode && this.customer.currentCustomer().countryCode.trim() === "US" || undefined
     }
 
     static isReadyMix() {

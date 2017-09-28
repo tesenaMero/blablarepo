@@ -28,7 +28,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     today: Date;
 
     // One box one preProduct
-    private preProducts = [];
+    private preProducts: Array<PreProduct> = [];
 
     // Consts
     private UTILS = Validations;
@@ -225,7 +225,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     item.disableds.products = false;
                 });
             }
-        );
+            );
     }
 
     fetchProductsReadyMix(salesDocumentType) {
@@ -477,11 +477,19 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     productChanged(preProduct: PreProduct) {
-        preProduct.productChanged();
+        const readymixCase = Validations.isReadyMix() && this.globalContract;
+        if (readymixCase) {
+            // Verify every other product has this contract
+            preProduct.productChanged(false);
+        }
+        else {
+            preProduct.productChanged();
+        }
     }
 
     contractChanged(preProduct: PreProduct) {
-        // If readymix all products should be using the same contract
+        // Readymix scenario
+        // All products should be using the same contract
         if (Validations.isReadyMix()) {
             this.globalContract = preProduct.contract;
             this.preProducts.forEach((item: PreProduct, index) => {
@@ -498,6 +506,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 }
             });
         }
+
+        // Normal scenario
         else {
             preProduct.contractChanged();
         }
@@ -512,6 +522,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     add() {
+        const shouldFetchContracts = !(Validations.isReadyMix() && this.globalContract);
         let preProduct = new PreProduct(
             this.productsApi,
             this.manager,
@@ -519,12 +530,20 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.plantApi,
             this.customerService,
             this.dashboard,
-            this.t
+            this.t,
+            shouldFetchContracts
         )
 
+        // Readymix case where everything has to be from the same contract
         if (Validations.isReadyMix() && this.globalContract) {
             preProduct.contract = this.globalContract;
             preProduct.disableds.contracts = true;
+
+            if (this.preProducts.length) {
+                // Set the same product as initial so ensure they belong to the same contract
+                preProduct.product = this.preProducts[0].product;
+                preProduct.availableContracts = this.preProducts[0].availableContracts;
+            }
         }
 
         this.preProducts.push(preProduct);
@@ -535,6 +554,14 @@ export class SpecificationsStepComponent implements StepEventsListener {
         product.deleting = true;
         setTimeout(() => {
             this.preProducts.splice(index, 1);
+            
+            // Readymix case when all contracts should be the same.
+            // Case when the first product is removed
+            if (Validations.isReadyMix() && this.preProducts.length) {
+                if (this.preProducts[0].disableds.contracts) {
+                    this.preProducts[0].disableds.contracts = false;
+                }
+            }
         }, 400);
     }
 
