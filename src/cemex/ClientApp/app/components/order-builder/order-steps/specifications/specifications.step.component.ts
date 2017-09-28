@@ -38,6 +38,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         catalog: true
     }
 
+    // Global
+    // Only usd for readymix
+    globalContract: any;
+
     // Subs
     productsSub: any;
     lockRequests: boolean = false;
@@ -477,7 +481,26 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     contractChanged(preProduct: PreProduct) {
-        preProduct.contractChanged();
+        // If readymix all products should be using the same contract
+        if (Validations.isReadyMix()) {
+            this.globalContract = preProduct.contract;
+            this.preProducts.forEach((item: PreProduct, index) => {
+                item.contract = this.globalContract;
+                item.contractChanged();
+
+                if (this.globalContract) {
+                    // Valid contract selected
+                    if (index > 0) { item.disableds.contracts = true; }
+                }
+                else {
+                    // Contract unselected
+                    item.disableds.contracts = false;
+                }
+            });
+        }
+        else {
+            preProduct.contractChanged();
+        }
     }
 
     plantChanged(preProduct: PreProduct) {
@@ -489,7 +512,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     add() {
-        this.preProducts.push(new PreProduct(
+        let preProduct = new PreProduct(
             this.productsApi,
             this.manager,
             this.paymentTermsApi,
@@ -497,7 +520,14 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.customerService,
             this.dashboard,
             this.t
-        ));
+        )
+
+        if (Validations.isReadyMix() && this.globalContract) {
+            preProduct.contract = this.globalContract;
+            preProduct.disableds.contracts = true;
+        }
+
+        this.preProducts.push(preProduct);
     }
 
     remove(index: any) {

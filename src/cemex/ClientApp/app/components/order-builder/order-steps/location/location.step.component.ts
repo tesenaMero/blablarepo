@@ -380,6 +380,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                     this.pods.forEach((pod, index) => {
                         if (this.pod.shipmentLocationId === pod.shipmentLocationId){
                             this.podsIndex = index;
+                            this.podChanged(this.pods[index]);
                         }
                     });
                 }
