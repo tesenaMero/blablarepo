@@ -42,7 +42,7 @@ export interface Customer {
 }
 
 export interface ShippingCondition {
-    shippingConditionId: number;
+    shippingConditionId?: number;
     shippingConditionCode?: string;
     shippingConditionDesc?: string;
 }

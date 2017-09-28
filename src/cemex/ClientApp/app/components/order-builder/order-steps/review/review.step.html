@@ -163,8 +163,8 @@
                             Delivery mode
                         </div>
                         <div class="value">
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">Delivery</span>
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">Pickup</span>
+                            <span *ngIf="UTIL.isDelivery()">Delivery</span>
+                            <span *ngIf="UTIL.isPickup()">Pickup</span>
                         </div>
                     </div>
                 </div>

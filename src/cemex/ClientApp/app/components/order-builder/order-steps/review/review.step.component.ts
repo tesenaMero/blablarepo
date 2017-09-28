@@ -3,10 +3,10 @@ import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { ShipmentLocationApi } from '../../../../shared/services/api/shipment-locations.service.api';
-import { DeliveryMode } from '../../../../models/delivery.model';
-import { DashboardService } from '../../../../shared/services/dashboard.service'
-import { CustomerService } from '../../../../shared/services/customer.service'
-import { DraftsService } from '../../../../shared/services/api/drafts.service'
+import { DashboardService } from '../../../../shared/services/dashboard.service';
+import { CustomerService } from '../../../../shared/services/customer.service';
+import { DraftsService } from '../../../../shared/services/api/drafts.service';
+import { Validations } from '../../../../utils/validations';
 
 import { } from '@types/googlemaps';
 
@@ -21,11 +21,7 @@ export class ReviewStepComponent implements StepEventsListener {
     private isMapLoaded: boolean = false;
 
     // Consts
-    private MODE = DeliveryMode;
-    private PRODUCT_LINES = {
-        Readymix: 6,
-        CementBulk: 1
-    }
+    private UTIL = Validations;
 
     // Google map
     private map: any; // Map instance
@@ -100,7 +96,7 @@ export class ReviewStepComponent implements StepEventsListener {
                 "customerId": this.customerService.currentCustomer().legalEntityId
             },
             "shippingCondition": {
-                "shippingConditionId": _.shippingCondition.shippingConditionId
+                "shippingConditionId": _.shippingCondition.shippingConditionId || Number(_.shippingCondition.shippingConditionCode)
             },
             "jobsite": {
                 "jobsiteId": _.jobsite.shipmentLocationId
