@@ -318,6 +318,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
                         item.paymentChanged();
                     })
                 }
+                else {
+                    this.dashboard.alertError("No payment type available for this jobsite");
+                }
                 return;
             }
 
@@ -337,11 +340,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
                         item.disableds.payments = false;
                         item.availablePayments = paymentTerms;
 
-                        // Select credit by default
-                        if (credit) {
-                            item.payment = credit;
-                            item.paymentChanged();
-                        }
+                        item.payment = undefined;
+                        item.paymentChanged();
                     });
                 });
             }
@@ -355,11 +355,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     item.disableds.payments = false;
                     item.availablePayments = paymentTerms;
 
-                    // Select credit by default
-                    if (credit) {
-                        item.payment = credit;
-                        item.paymentChanged();
-                    }
+                    item.payment = undefined;
+                    item.paymentChanged();
                 });
             }
         });

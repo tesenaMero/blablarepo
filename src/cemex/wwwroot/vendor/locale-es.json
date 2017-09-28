@@ -755,7 +755,7 @@
     "views.common.all_locations": "Todas las ubicaciones",
     "views.common.no_orders": "No se encontraron órdenes.",
     "views.common.history": "Historia",
-    "views.common.request_order": "Solicitud de orden /orden de solicitud",
+    "views.common.request_order": "Solicitud de orden / orden de solicitud",
     "views.common.project_profiles": "Perfiles de proyecto ",
     "views.common.select": "Seleccionar",
     "views.common.validating_connection": "Validando conexion",
