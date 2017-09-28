@@ -5,7 +5,6 @@ import { CreateOrderService } from '../../../../shared/services/create-order.ser
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
 import { ShipmentLocationApi, PurchaseOrderApi, ShippingConditionApi } from '../../../../shared/services/api';
 import { CustomerService } from '../../../../shared/services/customer.service';
-import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { Validations } from '../../../../utils/validations';
 import { Observable } from 'rxjs/Observable';
@@ -200,9 +199,9 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         return advance;
     }
 
-    // Replacing the object shippingConditionId with the api one
+    // Replacing the object shippingCondition with the api one
     mapShippingCondition() {
-        const mode = this.manager.shippingCondition.shippingConditionId;
+        const mode = this.manager.shippingCondition.shippingConditionCode;
         const customer = this.customerService.currentCustomer().legalEntityId;
         this.shippingConditionApi.byCode(customer, mode).subscribe((response) => {
             let shipppingConditions = response.json().shippingConditions
@@ -342,23 +341,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             }
             this.loadings.purchaseOrder = false;
         });
-
-        // Make address -> geolocation call, dont fetch yet
-        // let addressSub = this.shipmentApi
-        //     .address(this.location)
-        //     .flatMap((address) => {
-        //         this.location.address = address.json();
-        //         return this.shipmentApi.geo(address.json());
-        //     })
-        //     .map((geo) => {
-        //         if (geo.json) {
-        //             this.location.geo = geo.json();
-        //             this.cleanJobsiteMarker();
-        //             this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
-        //             this.addMarkerToMap(this.jobsiteMarker);
-        //             this.loadings.map = false;
-        //         }
-        //     });
 
         //  Make address, dont fetch yet
         let addressSub = this.shipmentApi.address(this.location).map((address) => {

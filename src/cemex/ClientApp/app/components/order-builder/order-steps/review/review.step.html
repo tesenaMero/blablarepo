@@ -163,8 +163,13 @@
                             {{ t.pt('views.review.delivery_mode') }}
                         </div>
                         <div class="value">
+<<<<<<< HEAD
                             <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">{{ t.pt('views.review.delivery') }}</span>
                             <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">{{ t.pt('views.review.pickup') }}</span>
+=======
+                            <span *ngIf="UTIL.isDelivery()">Delivery</span>
+                            <span *ngIf="UTIL.isPickup()">Pickup</span>
+>>>>>>> development
                         </div>
                     </div>
                 </div>

@@ -81,7 +81,7 @@ export class ProductSelectionStepComponent {
 
         // Readymix case and Bulk Cement
         if (Validations.isReadyMix() || this.isBulkCementUSA()) {
-            this.orderManager.shippingCondition = { shippingConditionId: this.MODE.Delivery };
+            this.orderManager.shippingCondition = { shippingConditionCode: this.MODE.Delivery };
         }
 
         this.onCompleted.emit(product);

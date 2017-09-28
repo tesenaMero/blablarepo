@@ -134,8 +134,8 @@
                             {{ t.pt('views.checkout.delivery_mode') }}
                         </div>
                         <div class="desc">
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">{{ t.pt('views.checkout.delivery') }}</span>
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">{{ t.pt('views.checkout.pickup') }}</span>
+                            <span *ngIf="UTIL.isDelivery()">{{ t.pt('views.checkout.delivery') }}</span>
+                            <span *ngIf="UTIL.isPickup()">{{ t.pt('views.checkout.pickup') }}</span>
                         </div>
                     </div>
                 </div>
@@ -282,8 +282,8 @@
                                     {{ t.pt('views.checkout.delivery_mode') }}
                                 </div>
                                 <div class="desc">
-                                    <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">{{ t.pt('views.checkout.delivery') }}</span>
-                                    <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">{{ t.pt('views.checkout.pickup') }}</span>
+                                    <span *ngIf="UTIL.isDelivery()">{{ t.pt('views.checkout.delivery') }}</span>
+                                    <span *ngIf="UTIL.isPickup()">{{ t.pt('views.checkout.pickup') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -325,7 +325,7 @@
 </ng-container>
 
 <!-- Readymix MX -->
-<ng-container *ngIf="!isUSACustomer() && manager?.productLine?.productLineId == PRODUCT_LINES.Readymix">
+<ng-container *ngIf="!isUSACustomer() && UTIL.isReadyMix()">
     <ng-container *ngFor="let item of manager.products, let index = index">
         <div class="product">
             <div class="row">
@@ -462,8 +462,8 @@
                                     {{ t.pt('views.checkout.delivery_mode') }}
                                 </div>
                                 <div class="desc">
-                                    <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">{{ t.pt('views.checkout.delivery') }}</span>
-                                    <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">{{ t.pt('views.checkout.pickup') }}</span>
+                                    <span *ngIf="UTIL.isDelivery()">{{ t.pt('views.checkout.delivery') }}</span>
+                                    <span *ngIf="UTIL.isPickup()">{{ t.pt('views.checkout.pickup') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -493,7 +493,7 @@
 </ng-container>
 
 <div class="price" *ngIf="shouldShowPrices()">
-    <div class="float-right text-right" *ngIf="manager?.productLine?.productLineId != PRODUCT_LINES.Readymix">
+    <div class="float-right text-right" *ngIf="UTIL.isCement()">
         <div class="subtotal">
             <div *ngIf="">
                 {{ t.pt('views.checkout.subtotal') }}
@@ -508,7 +508,7 @@
             {{ getGrandTotal() | currency : 'USD' : true }}
         </div>
     </div>
-    <div class="float-right text-right" *ngIf="manager?.productLine?.productLineId == PRODUCT_LINES.Readymix">
+    <div class="float-right text-right" *ngIf="UTIL.isReadyMix()">
         <div class="subtotal">
             <div *ngIf="">
                 {{ t.pt('views.checkout.subtotal') }}

@@ -6,6 +6,7 @@ import { Plant, ProductColor, ProductWrapper } from '../../shared/types';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { SearchProductService } from '../../shared/services/product-search.service';
 import { CustomerService } from '../../shared/services/customer.service';
+import { Validations } from '../../utils/validations';
 
 @Component({
     selector: 'search-product',
@@ -38,6 +39,8 @@ export class SearchProductComponent {
         CementBulk: 1
     }
 
+    private UTILS = Validations;
+
     constructor(
         private t: TranslationService,
         private orderManager: CreateOrderService, 
@@ -52,7 +55,7 @@ export class SearchProductComponent {
             
             this.productColors = response;
             this.modalInitialize();
-            if (this.orderManager.jobsite && this.orderManager.shippingCondition && this.orderManager.shippingCondition.shippingConditionId == 2 && this.customerService.currentCustomer().countryCode.trim() == "MX" && this.orderManager.productLine.productLineId == this.PRODUCT_LINES.CementBulk) {
+            if (Validations.isPickup() && Validations.isMexicoCustomer() && Validations.isBulkCement()) {
                 this.plantApi.forSearch(
                     this.orderManager.jobsite.address.countryCode,
                     this.orderManager.jobsite.address.regionCode,
