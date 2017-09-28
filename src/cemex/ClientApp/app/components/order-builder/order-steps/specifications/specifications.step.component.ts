@@ -117,11 +117,15 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 let filteredProducts = SpecificationsStepComponent.availableProducts.filter((availableProducts) => {
                     return availableProducts.commercialCode === product.commercialCode;
                 });
-                if (filteredProducts.length) { preProduct.product = filteredProducts[0]; }
+                if (filteredProducts.length) {
+                    preProduct.product = filteredProducts[0];
+                    this.onCompleted.emit(true);
+                }
                 else {
                     SpecificationsStepComponent.availableProducts.push(product);
                     preProduct.product = product;
                     preProduct.productChanged();
+                    this.onCompleted.emit(true);
                 }
             }
         });
