@@ -4,6 +4,7 @@ import { CreateOrderService } from '../../../../shared/services/create-order.ser
 import { DeliveryMode } from '../../../../models/delivery.model'
 import { CustomerService } from '../../../../shared/services/customer.service'
 import { Validations } from '../../../../utils/validations';
+import { TranslationService } from '../../../../shared/services/translation.service'
 
 @Component({
     selector: 'product-selection-step',
@@ -23,7 +24,7 @@ export class ProductSelectionStepComponent {
     productLines = [];
     productLine: any;
 
-    constructor(private api: ProductLineApi, private orderManager: CreateOrderService, private customerService: CustomerService) {
+    constructor(private api: ProductLineApi, private orderManager: CreateOrderService, private customerService: CustomerService, private t: TranslationService) {
         this.loading = true;
         this.api.all().subscribe((response) => {
             let productLines = response.json().productLines;
@@ -41,11 +42,11 @@ export class ProductSelectionStepComponent {
                     multiproduct && productLines.splice(productLines.indexOf(multiproduct), 1);
 
                     if (bagCement && multiproduct) {
-                        let cementPackageMultiproducts = this.joinProductLines(bagCement, multiproduct, "Cement Package Multiproducts");
+                        let cementPackageMultiproducts = this.joinProductLines(bagCement, multiproduct, this.t.pt('views.product.selection.cement_package_multi'));
                         productLines.push(cementPackageMultiproducts);
                     }
                     else {
-                        let cementPackageMultiproducts = this.joinProductLines({ productLineId: 2 }, { productLineId: 3 }, "Cement Package Multiproducts");
+                        let cementPackageMultiproducts = this.joinProductLines({ productLineId: 2 }, { productLineId: 3 }, this.t.pt('views.product.selection.cement_package_multi'));
                         productLines.push(cementPackageMultiproducts);
                     }
                 }

@@ -48,14 +48,14 @@
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <label for="pp-discharge" class="">Aplication</label>
+                    <label for="pp-discharge" class="">{{ t.pt('views.project.profile.application') }}</label>
                     <select (change)="onChangeApplicationType($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
                         <option *ngFor="let entry of catalogs.ELM; let i = index" [attr.data-index]="i" [value]="i">{{entry.entryDesc}}</option>
                     </select>
                 </div>
                 <div class="col-sm-6">
-                    <label for="pp-transport" class="">Spacing</label>
+                    <label for="pp-transport" class="">{{ t.pt('views.project.profile.spacing') }}</label>
                     <select (change)="onChangeSpacing($event.target.value)" name="pp-transport" id="pp-transport" class="form-control">
                         <option value="" selected disabled hidden></option>
                         <option *ngFor="let entry of catalogs.TPL" [value]="entry.entryId">{{entry.entryDesc}}</option>
@@ -64,7 +64,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <label for="pp-discharge" class="">Load Size</label>
+                    <label for="pp-discharge" class="">{{ t.pt('views.project.profile.load_size') }}</label>
                     <select (change)="onChangeLoadSize($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
                         <option *ngFor="let entry of catalogs.LSC; let i = index" [attr.data-index]="i" [value]="i">{{entry.entryDesc}}</option>
@@ -151,7 +151,7 @@
         <div class="row actions text-right">
             <div class="col">
                 <button (click)="cancel()" data-dismiss="modal" class="button-ghost mb-2">{{ t.pt('views.common.cancel') }}</button>
-                <button [disabled]="postingTheOrder" (click)="confirm()" data-dismiss="modal" class="button bright-green">{{ postingTheOrder ? 'Saving...': 'Confirm' }}</button>
+                <button [disabled]="postingTheOrder" (click)="confirm()" data-dismiss="modal" class="button bright-green">{{ postingTheOrder ? t.pt('views.common.saving'): t.pt('views.common.confirm') }}</button>
             </div>
         </div>
     </ng-container>
