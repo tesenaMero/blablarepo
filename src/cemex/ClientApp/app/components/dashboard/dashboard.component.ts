@@ -106,7 +106,7 @@ export class DashboardComponent implements OnInit {
 
     private logout() {
         this.session.logout();
-        this.router.navigate(['/login']);
+        this.router.navigate(['/ordersnproduct/app/login']);
     }
 
     private setCustomer(customer: any) {
