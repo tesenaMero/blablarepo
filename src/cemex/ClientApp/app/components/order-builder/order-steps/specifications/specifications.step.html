@@ -40,9 +40,9 @@
                             </label>
                             <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.units }">
                                 <span style="line-height: 24px;">
-                                    {{ product.unit?.alternativeUnit?.unitDesc }}
+                                    {{ product.unit?.alternativeUnit?.unitCode }}
                                     <select [(ngModel)]="product.unit" class="input behind">
-                                        <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit?.alternativeUnit?.unitDesc }}</option>
+                                        <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit?.alternativeUnit?.unitCode }}</option>
                                     </select>
                                 </span>
                                 <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -194,10 +194,10 @@
                             </label>
                             <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.units }">
                                 <span style="line-height: 24px;">
-                                        {{ product.unit?.alternativeUnit?.unitDesc }}
+                                        {{ product.unit?.alternativeUnit?.unitCode }}
                                         <select [(ngModel)]="product.unit" class="input behind">
                                             <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">
-                                                {{ unit.alternativeUnit?.unitDesc }}
+                                                {{ unit.alternativeUnit?.unitCode }}
                                             </option>
                                         </select>
                                     </span>
@@ -367,9 +367,9 @@
                             </label>
                             <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.units }">
                                 <span style="line-height: 24px;">
-                                    {{ product.unit?.alternativeUnit?.unitDesc }}
+                                    {{ product.unit?.alternativeUnit?.unitCode }}
                                     <select [(ngModel)]="product.unit" class="input behind">
-                                        <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit?.alternativeUnit?.unitDesc }}</option>
+                                        <option *ngFor="let unit of product.availableUnits" [selected]="" [ngValue]="unit">{{ unit?.alternativeUnit?.unitCode }}</option>
                                     </select>
                                 </span>
                                 <span class="arrow cmx-icon-straight-arrow-down"></span>
