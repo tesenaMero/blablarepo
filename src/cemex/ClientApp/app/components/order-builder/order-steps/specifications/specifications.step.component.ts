@@ -180,7 +180,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
 
         this.getAdditionalServices();
-        //this.getPaymentTerms();
+        this.getPaymentTerms();
         this.getProjectProfiles();
     }
 
