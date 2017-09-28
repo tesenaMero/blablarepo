@@ -5,7 +5,6 @@ import { CreateOrderService } from '../../../../shared/services/create-order.ser
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
 import { ShipmentLocationApi, PurchaseOrderApi, ShippingConditionApi } from '../../../../shared/services/api';
 import { CustomerService } from '../../../../shared/services/customer.service';
-import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { Validations } from '../../../../utils/validations';
 import { Observable } from 'rxjs/Observable';
@@ -191,9 +190,9 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         return advance;
     }
 
-    // Replacing the object shippingConditionId with the api one
+    // Replacing the object shippingCondition with the api one
     mapShippingCondition() {
-        const mode = this.manager.shippingCondition.shippingConditionId;
+        const mode = this.manager.shippingCondition.shippingConditionCode;
         const customer = this.customerService.currentCustomer().legalEntityId;
         this.shippingConditionApi.byCode(customer, mode).subscribe((response) => {
             let shipppingConditions = response.json().shippingConditions

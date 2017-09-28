@@ -307,11 +307,12 @@ export class PreProduct {
         });
     }
 
+    // TODO: define product lines 2 and 3
     fetchManeuvering() {
         // Maneouvering additional service
-        if (this.manager.shippingCondition.shippingConditionId === 1
-            && (this.product.product.productLine.productLineId === 2 || this.product.product.productLine.productLineId === 3)
-        ) {
+        if (Validations.isDelivery() && 
+            (this.product.product.productLine.productLineId === 2 || this.product.product.productLine.productLineId === 3)) {
+
             let area = this.manager.salesArea.find((a) => {
                 let id = this.product.product.productLine.productLineId;
                 return id === 2 ? a.salesArea.salesAreaId === 2 : a.salesArea.salesAreaId === 219;

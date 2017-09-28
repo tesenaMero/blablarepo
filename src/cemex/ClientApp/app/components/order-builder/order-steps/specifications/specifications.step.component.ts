@@ -6,7 +6,6 @@ import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.s
 import { ProjectProfileApi, CatalogApi, PlantApi, ContractsApi } from '../../../../shared/services/api';
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { SearchProductService } from '../../../../shared/services/product-search.service';
-import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { Validations } from '../../../../utils/validations';
 import { ModalService } from '../../../../shared/components/modal'
@@ -32,7 +31,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     // Consts
     private UTILS = Validations;
-    private MODE = DeliveryMode;
 
     private loadings = {
         projectProfiles: true,
@@ -182,7 +180,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
 
         this.getAdditionalServices();
-        //this.getPaymentTerms();
+        this.getPaymentTerms();
         this.getProjectProfiles();
     }
 
@@ -510,8 +508,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     qty(product: PreProduct, toAdd: number) {
         if (this.isMXCustomer()) {
             if (product.quantity <= 1 && toAdd < 0) { return; }
-            const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
-            const isDelivery = shippingConditionId === this.MODE.Delivery;
+            const isDelivery = Validations.isDelivery();
             let conversion = product.convertToTons(product.quantity + toAdd);
 
             let newQty = product.quantity + toAdd;

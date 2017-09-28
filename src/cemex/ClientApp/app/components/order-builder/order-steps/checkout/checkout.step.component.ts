@@ -6,7 +6,6 @@ import { CreateOrderService } from '../../../../shared/services/create-order.ser
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
 import { ShipmentLocationApi, PurchaseOrderApi } from '../../../../shared/services/api';
 import { CustomerService } from '../../../../shared/services/customer.service';
-import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { DraftsService } from '../../../../shared/services/api/drafts.service'
 import { EncodeDecodeJsonObjService } from '../../../../shared/services/encodeDecodeJsonObj.service';
