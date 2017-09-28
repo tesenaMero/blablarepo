@@ -5,7 +5,7 @@ import { DashboardService } from '../../../../shared/services/dashboard.service'
 import { SpecificationsStepComponent } from './specifications.step.component';
 import { Validations } from '../../../../utils/validations';
 import { Observable } from 'rxjs/Observable';
-import { TranslationService } from '../../../../shared/services/translation.service'
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 import * as _ from 'lodash';
 
@@ -59,7 +59,7 @@ export class PreProduct {
         payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') }
     }
 
-    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t:TranslationService) {
+    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService) {
         // Conts
         const SSC = SpecificationsStepComponent;
 

@@ -7,7 +7,7 @@ import { DashboardService } from '../../../../shared/services/dashboard.service'
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { DraftsService } from '../../../../shared/services/api/drafts.service';
 import { Validations } from '../../../../utils/validations';
-import { TranslationService } from '../../../../shared/services/translation.service'
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 import { } from '@types/googlemaps';
 

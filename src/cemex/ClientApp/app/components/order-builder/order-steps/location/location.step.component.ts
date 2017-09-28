@@ -8,7 +8,7 @@ import { CustomerService } from '../../../../shared/services/customer.service';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { Validations } from '../../../../utils/validations';
 import { Observable } from 'rxjs/Observable';
-import { TranslationService } from '../../../../shared/services/translation.service'
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 @Component({
     selector: 'location-step',

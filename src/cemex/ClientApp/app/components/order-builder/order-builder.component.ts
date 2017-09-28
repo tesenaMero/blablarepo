@@ -10,7 +10,7 @@ import { CreateOrderService } from '../../shared/services/create-order.service';
 import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
 import { ModalService } from '../../shared/components/modal'
 import { Validations } from '../../utils/validations'
-import { TranslationService } from '../../shared/services/translation.service'
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 @Component({
     selector: 'order-builder',

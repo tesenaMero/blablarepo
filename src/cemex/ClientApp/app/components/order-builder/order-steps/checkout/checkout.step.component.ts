@@ -9,7 +9,7 @@ import { CustomerService } from '../../../../shared/services/customer.service';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { DraftsService } from '../../../../shared/services/api/drafts.service'
 import { EncodeDecodeJsonObjService } from '../../../../shared/services/encodeDecodeJsonObj.service';
-import { TranslationService } from '../../../../shared/services/translation.service'
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { Validations } from '../../../../utils/validations';
 
 @Component({

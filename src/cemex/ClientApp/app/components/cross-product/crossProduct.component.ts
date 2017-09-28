@@ -8,7 +8,7 @@ import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJs
 import { DraftsService } from '../../shared/services/api/drafts.service';
 import { DashboardService } from '../../shared/services/dashboard.service';
 import { ModalService } from '../../shared/components/modal'
-import { TranslationService } from '../../shared/services/translation.service'
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 @Component({
     selector: 'crossProduct',

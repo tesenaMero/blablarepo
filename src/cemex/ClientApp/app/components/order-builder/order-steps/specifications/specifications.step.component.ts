@@ -11,7 +11,7 @@ import { Validations } from '../../../../utils/validations';
 import { ModalService } from '../../../../shared/components/modal'
 import { Observable } from 'rxjs/Observable';
 import { PreProduct } from './preproduct'
-import { TranslationService } from '../../../../shared/services/translation.service'
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 import * as _ from 'lodash';
 
@@ -318,8 +318,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
             if (!cash) {
                 let customerId = this.customerService.currentCustomer().legalEntityId;
                 this.paymentTermsApi.getCashTerm(customerId).subscribe((result) => {
-                    paymentTerms = result.json().paymentTerms;
-                    if (paymentTerms.length) { paymentTerms.push(paymentTerms[0]); }
+                    let cashTerm = result.json().paymentTerms;
+                    if (cashTerm.length) { paymentTerms.push(cashTerm[0]); }
 
                     // Set default payment terms for preproducts
                     SpecificationsStepComponent.availablePayments = paymentTerms;
