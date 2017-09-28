@@ -7,6 +7,7 @@ import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service'
 import { CustomerService } from '../../../../shared/services/customer.service'
 import { DraftsService } from '../../../../shared/services/api/drafts.service'
+import { TranslationService } from '../../../../shared/services/translation.service'
 
 import { } from '@types/googlemaps';
 
@@ -36,7 +37,7 @@ export class ReviewStepComponent implements StepEventsListener {
     draftSub: any;
     lockRequests: boolean = false;
 
-    constructor( @Inject(Step) private step: Step, private manager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private dashboard: DashboardService, private drafts: DraftsService, private customerService: CustomerService) {
+    constructor( @Inject(Step) private step: Step, private manager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private dashboard: DashboardService, private drafts: DraftsService, private customerService: CustomerService, private t: TranslationService) {
         this.step.setEventsListener(this);
         this.step.onBeforeBack = () => this.onBeforeBack();
     }
@@ -77,12 +78,12 @@ export class ReviewStepComponent implements StepEventsListener {
         // If locked (stepper is moving most likely) then dont do the call 
         if (this.lockRequests) { return; }
         
-        this.dashboard.alertInfo("Saving draft...", 0);
+        this.dashboard.alertInfo(this.t.pt('views.review.saving_draft'), 0);
         let draftSub = this.drafts.add(this.generateOrderObj()).subscribe((response) => {
-            this.dashboard.alertSuccess("Draft saved!");
+            this.dashboard.alertSuccess(this.t.pt('views.review.draft_saved'));
             this.onCompleted.emit(response.json().id)
         }, (error) => {
-            this.dashboard.alertError("Couldn't save the draft");
+            this.dashboard.alertError(this.t.pt('views.review.draft_no_saved'));
         });
     }
 

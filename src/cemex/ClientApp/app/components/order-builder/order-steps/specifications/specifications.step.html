@@ -6,7 +6,7 @@
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
                         <label [ngClass]="{ loading: product.loadings.products }">
-                            Product description
+                            {{ t.pt('views.specifications.product_description') }}
                         </label>
                         <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
                             <span class="selection">
@@ -23,7 +23,7 @@
                     <div class="flex-container">
                         <div class="group w60 mr-13">
                             <label>
-                                Quantity
+                                {{ t.pt('views.specifications.quantity') }}
                             </label>
                             <div class="noselect input number-stepper">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
@@ -31,12 +31,12 @@
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacity()">
-                                Maximum Capacity {{ product.getMaximumCapacity() }} Ton(s)
+                                {{ t.pt('views.specifications.maximum_capacity') }} {{ product.getMaximumCapacity() }} Ton(s)
                             </div>
                         </div>
                         <div class="group w40">
                             <label [ngClass]="{ loading: product.loadings.units }">
-                                Unit
+                                {{ t.pt('views.specifications.unit') }}
                             </label>
                             <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.units }">
                                 <span style="line-height: 24px;">
@@ -53,7 +53,7 @@
                 <div class="col-md-5 col-sm-12 mt-3-md-down">
                     <div class="flex-container">
                         <div class="group w50 mr-13">
-                            <label>Request date</label>
+                            <label>{{ t.pt('views.specifications.request_date') }}</label>
                             <label for="date{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
                                     {{ product?.date | date: 'shortDate' }}
@@ -66,7 +66,7 @@
                             </label>
                         </div>
                         <div class="group w50">
-                            <label>Requested time</label>
+                            <label>{{ t.pt('views.specifications.request_time') }}</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
                                     <!-- <div class="time{{ index }}">{{ product?.time | date: 'HH:mm' }}</div>
@@ -84,7 +84,7 @@
             <div class="row">
                 <div class="col-md 4 mt-3">
                     <div class="group">
-                        <label>Product ID</label>
+                        <label>{{ t.pt('views.specifications.product_id') }}</label>
                         <div class="input">
                             <span>{{ product?.product?.commercialCode }}</span>
                         </div>
@@ -94,21 +94,21 @@
                     <div class="group">
                         <label [ngClass]="{ loading: product.loadings.contracts }">Contract</label>
                         <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.disableds.contracts }">
-                            <span class=""><strong>Contract {{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
+                            <span class=""><strong>{{ t.pt('views.specifications.contract') }} {{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
                             <span class="volume" *ngIf="!UTILS.isUSACustomer()">
-                                Remaining volume:
+                                {{ t.pt('views.specifications.remaining_volume') }}
                                 <strong *ngIf="product.contract?.salesDocument?.hasOwnProperty('volume')">{{ product.contract?.salesDocument?.volume?.total.quantity.amount }}</strong>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
                             <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged(product)" class="input behind">
-                                <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract?.salesDocument?.volume?.total.quantity.amount }} </option>
+                                <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">{{ t.pt('views.specifications.contract') }} {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  {{ t.pt('views.specifications.remaining_volume') }}  {{ contract?.salesDocument?.volume?.total.quantity.amount }} </option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3 mt-3" [ngClass]="{ invisible: shouldHidePayment }">
                     <div class="group">
-                        <label [ngClass]="{ loading: product.loadings.payments }">Payment</label>
+                        <label [ngClass]="{ loading: product.loadings.payments }">{{ t.pt('views.specifications.payment') }}</label>
                         <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.payments }">
                             <span>
                                 {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
@@ -124,7 +124,7 @@
             <div class="row">
                 <div class="col-md-3 mt-3">
                     <div class="group" *ngIf="product.maneuveringAvailable">
-                        <label>Additional services</label>
+                        <label>{{ product.payment?.paymentTermType.aditional_services }}</label>
                         <div class="service">
                             <input [(ngModel)]="product.maneuvering" checked type="checkbox" id="maneuvering{{ index }}">
                             <label for="maneuvering{{ index }}">
@@ -137,13 +137,13 @@
                                 <svg class="icon-checkbox-hover">
                                     <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
                                 </svg>
-                                <span>Maneuvering</span>
+                                <span>{{ t.pt('views.specifications.maneuvering') }}</span>
                             </label>
                         </div>
                     </div>
                 </div>
                 <div class="mt-3 flex-end" [ngClass]="{ 'col-md-6': product.maneuveringAvailable, 'col-md-9': !product.maneuveringAvailable }">
-                    <button (click)="remove(index)" class="noborder">Remove product</button>
+                    <button (click)="remove(index)" class="noborder">{{ t.pt('views.specifications.remove_product') }}</button>
                 </div>
             </div>
         </div>
@@ -158,7 +158,7 @@
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
                         <label [ngClass]="{ loading: product.loadings.products }">
-                            Product description
+                            {{ t.pt('views.specifications.product_description') }}
                         </label>
                         <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
                             <span class="selection">
@@ -175,7 +175,7 @@
                     <div class="flex-container">
                         <div class="group w60 mr-13">
                             <label>
-                                Quantity
+                                {{ t.pt('views.specifications.quantity') }}
                             </label>
                             <div class="noselect input number-stepper">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
@@ -183,12 +183,12 @@
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info" *ngIf="UTILS.isMexicoCustomer() && product.getMaximumCapacity()">
-                                Maximum Capacity {{ product.getMaximumCapacity() }} Ton(s)
+                                {{ t.pt('views.specifications.maximum_capacity') }} {{ product.getMaximumCapacity() }} Ton(s)
                             </div>
                         </div>
                         <div class="group w40">
                             <label [ngClass]="{ loading: product.loadings.units }">
-                                Unit
+                                {{ t.pt('views.specifications.unit') }}
                             </label>
                             <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.units }">
                                 <span style="line-height: 24px;">
@@ -207,7 +207,7 @@
                 <div class="col-md-5 col-sm-12 mt-3-md-down">
                     <div class="flex-container">
                         <div class="group w50 mr-13">
-                            <label>Request date</label>
+                            <label>{{ t.pt('views.specifications.request_date') }}</label>
                             <label for="date{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
                                     {{ product?.date | date: 'shortDate' }}
@@ -220,7 +220,7 @@
                             </label>
                         </div>
                         <div class="group w50">
-                            <label>Requested time</label>
+                            <label>{{ t.pt('views.specifications.request_time') }}</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
                                     <!-- <div class="time{{ index }}">{{ product?.time | date: 'HH:mm' }}</div>
@@ -250,12 +250,12 @@
                         <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.disableds.contracts }">
                             <span class=""><strong>Contract {{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
                             <span class="volume">
-                                Remaining volume:
+                                {{ t.pt('views.specifications.remaining_volume') }}
                                 <strong *ngIf="product.contract?.salesDocument?.hasOwnProperty('volume')">{{ product.contract?.salesDocument?.volume?.total.quantity.amount }}</strong>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
                             <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged(product)" class="input behind">
-                            <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  Remaining volume: {{ contract?.salesDocument?.volume?.total.quantity.amount }}
+                            <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">{{ t.pt('views.specifications.contract') }} {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  {{ t.pt('views.specifications.remaining_volume') }} {{ contract?.salesDocument?.volume?.total.quantity.amount }}
                             </option>
                         </select>
                         </div>
@@ -263,7 +263,7 @@
                 </div>
                 <div class="col-md-3 mt-3" [ngClass]="{ invisible: shouldHidePayment }">
                     <div class="group">
-                        <label [ngClass]="{ loading: product.loadings.payments }">Payment</label>
+                        <label [ngClass]="{ loading: product.loadings.payments }">{{ t.pt('views.specifications.payment') }}</label>
                         <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.payments }">
                             <span>
                                 {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
@@ -280,7 +280,7 @@
                 <div class="col-md-4 mt-3">
                     <div class="flex-container justify-content-between">
                         <div class="group">
-                            <label>Additional services</label>
+                            <label>{{ t.pt('views.specifications.aditional_services') }}</label>
                             <div class="service spaced-top" [ngClass]="{ invisible: !product.maneuveringAvailable }">
                                 <input [(ngModel)]="product.maneuvering" checked type="checkbox" id="maneuvering{{ index }}">
                                 <label for="maneuvering{{ index }}">
@@ -293,7 +293,7 @@
                                     <svg class="icon-checkbox-hover">
                                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
                                     </svg>
-                                    <span>Maneuvering</span>
+                                    <span>{{ t.pt('views.specifications.maneuvering') }}</span>
                                 </label>
                             </div>
                         </div>
@@ -314,7 +314,7 @@
                     </div>
                 </div>
                 <div class="col-md-3 mt-3 flex-end">
-                    <button (click)="remove(index)" class="noborder">Remove product</button>
+                    <button (click)="remove(index)" class="noborder">{{ t.pt('views.specifications.remove_product') }}</button>
                 </div>
             </div>
         </div>
@@ -329,7 +329,7 @@
                 <div class="col-md-4 col-sm-12">
                     <div class="group">
                         <label [ngClass]="{ loading: product.loadings.products }">
-                            Product description
+                            {{ t.pt('views.specifications.product_description') }}
                         </label>
                         <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
                             <span class="selection">
@@ -346,7 +346,7 @@
                     <div class="flex-container">
                         <div class="group w60 mr-13">
                             <label>
-                                Quantity
+                                {{ t.pt('views.specifications.quantity') }}
                             </label>
                             <div class="noselect input number-stepper">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
@@ -354,12 +354,12 @@
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacity()">
-                                Maximum Capacity {{ product.getMaximumCapacity() }} Ton(s)
+                                {{ t.pt('views.specifications.maximum_capacity') }} {{ product.getMaximumCapacity() }} Ton(s)
                             </div>
                         </div>
                         <div class="group w40">
                             <label [ngClass]="{ loading: product.loadings.units }">
-                                Unit
+                                {{ t.pt('views.specifications.unit') }}
                             </label>
                             <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.units }">
                                 <span style="line-height: 24px;">
@@ -407,7 +407,7 @@
             <div class="row">
                 <div class="col-md-3 mt-3">
                     <div class="group">
-                        <label>Product ID</label>
+                        <label>{{ t.pt('views.specifications.product_id') }}</label>
                         <div class="input">
                             <span>{{ product?.product?.commercialCode }}</span>
                         </div>
@@ -415,19 +415,19 @@
                 </div>
                 <div class="col-md-5 mt-3">
                     <div class="group">
-                        <label [ngClass]="{ loading: product.loadings.contracts }">Contract</label>
+                        <label [ngClass]="{ loading: product.loadings.contracts }">{{ t.pt('views.specifications.contract') }}</label>
                         <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.disableds.contracts }">
-                            <span class=""><strong>Contract {{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
+                            <span class=""><strong>{{ t.pt('views.specifications.contract') }} {{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
                             <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged(product)" class="input behind">
-                                <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">Contract: {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;</option>
+                                <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">{{ t.pt('views.specifications.contract') }} {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 mt-3">
                     <div class="group">
-                        <label>Project profile</label>
+                        <label>{{ t.pt('views.specifications.project_profiles') }}</label>
                         <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.projectProfiles }">
                             <span>
                                 <!-- Select project profile to prefill specifications -->
@@ -444,7 +444,7 @@
             <div class="d-flex flex-wrap rdymx-specs" [ngClass]="{ disabled: product.loadings.catalogs }">
                 <div class="group">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
-                        Discharge Time
+                        {{ t.pt('views.specifications.discharge_time') }}
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
@@ -459,7 +459,7 @@
                 </div>
                 <div class="group">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
-                        Transport Method
+                        {{ t.pt('views.specifications.transport_method') }}
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
@@ -474,7 +474,7 @@
                 </div>
                 <div class="group">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
-                        Unload Type
+                        {{ t.pt('views.specifications.unload_type') }}
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
@@ -489,7 +489,7 @@
                 </div>
                 <div class="group">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
-                        Pump Capacity
+                        {{ t.pt('views.specifications.pump_capacity') }}
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
@@ -504,7 +504,7 @@
                 </div>
                 <div class="group">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
-                        Aplication
+                        {{ t.pt('views.specifications.application') }}
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
@@ -519,7 +519,7 @@
                 </div>
                 <div class="group">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
-                        Load Size
+                        {{ t.pt('views.specifications.load_size') }}
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
@@ -534,7 +534,7 @@
                 </div>
                 <div class="group">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
-                        Spacing
+                        {{ t.pt('views.specifications.spacing') }}
                     </label>
                     <div class="input flex-space-between dropdown">
                         <span style="line-height: 24px;">
@@ -552,7 +552,7 @@
                 <div class="col-md-9">
                     <div class="row">
                         <div class="col-md-12 mt-3">
-                            <label class="additional-services">Additional services</label>
+                            <label class="additional-services">{{ t.pt('views.specifications.aditional_services') }}</label>
                         </div>
                         <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let i = index;">
                             <div class="group">
@@ -579,15 +579,15 @@
                 </div>
                 <div class="col-md-3">
                     <div class="group mt-3">
-                        <label>Delivery Mode</label>
+                        <label>{{ t.pt('views.specifications.delivery_mode') }}</label>
                         <div class="service">
-                            <span *ngIf="UTILS.isDelivery()">Delivery</span>
-                            <span *ngIf="UTILS.isPickup()">Pickup</span>
+                            <span *ngIf="UTILS.isDelivery()">{{ t.pt('views.specifications.delivery') }}</span>
+                            <span *ngIf="UTILS.isPickup()">{{ t.pt('views.specifications.pickup') }}</span>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-12 mt-3 flex-end">
-                    <button (click)="remove(index)" class="noborder">Remove product</button>
+                    <button (click)="remove(index)" class="noborder">{{ t.pt('views.specifications.remove_product') }}</button>
                 </div>
             </div>
         </div>
@@ -595,7 +595,7 @@
 </div>
 
 <div class="flex-end mt-3 mb-100">
-    <button (click)="add()" class="button" href="#" [ngClass]="{ disabled: availableProducts.length <= 0 }">+ Add Product</button>
+    <button (click)="add()" class="button" href="#" [ngClass]="{ disabled: availableProducts.length <= 0 }">{{ t.pt('views.specifications.add_product') }}</button>
 </div>
 
 <!-- Modals -->

@@ -8,21 +8,22 @@ import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJs
 import { DraftsService } from '../../shared/services/api/drafts.service';
 import { DashboardService } from '../../shared/services/dashboard.service';
 import { ModalService } from '../../shared/components/modal'
+import { TranslationService } from '../../shared/services/translation.service'
 
 @Component({
     selector: 'crossProduct',
     styleUrls: ['./crossProduct.scss'],
     template: `
-    <div style="padding: 80px;text-align:center;">Processing...</div>
+    <div style="padding: 80px;text-align:center;">this.t.pt('views.common.procesing')</div>
     <modal id="success-order">
         <div class="container-fluid">
             <div class="container-layout center-text center-content">
                 <div class="success-group">
                     <span class="cmx-icon-accepted-ok"></span>
                     <div class="success-text">
-                        Your order #{{ orderCode }} was successfully submited
+                    {{ this.t.pt('views.common.order_code') }} {{ orderCode }} {{ this.t.pt('views.common.was_submited') }}
                     </div>
-                    <button class="button back-to-orders" (click)="closeModal()">Back to orders history</button>
+                    <button class="button back-to-orders" (click)="closeModal()">{{ this.t.pt('views.cross.back_orders') }}</button>
                 </div>
             </div>
         </div>
@@ -40,7 +41,9 @@ export class CrossProductComponent implements OnInit {
         private drafts: DraftsService,
         private dashboard: DashboardService,
         private encDecJsonObjService: EncodeDecodeJsonObjService,
-        private modalService: ModalService) {
+        private modalService: ModalService,
+        private t: TranslationService
+        ) {
     }
 
     ngOnInit(): void {
@@ -73,18 +76,18 @@ export class CrossProductComponent implements OnInit {
             documents: jObj.data[0].documents
         }
 
-        this.dashboard.alertInfo("Placing order...", 0);
+        this.dashboard.alertInfo(this.t.pt('views.common.placing'), 0);
         this.drafts.createOrder(jObj.data[0].orderID, data)
             .flatMap((response) => {
-                this.dashboard.alertSuccess("Order placed successfully, requesting order code...", 0);
+                this.dashboard.alertSuccess(this.t.pt('views.common.placed'), 0);
                 return this.drafts.validateRequestId(response.json().id);
             })
             .subscribe((response) => {
                 this.orderCode = response.json().orderCode;
-                this.dashboard.alertSuccess("Order code: #" + this.orderCode + " placed successfully", 30000);
+                this.dashboard.alertSuccess(this.t.pt('views.common.order_code') + this.orderCode + " " + this.t.pt('views.common.placed_success'), 30000);
                 this.modalService.open('success-order');
             }, error => {
-                this.dashboard.alertError("Error placing order", 10000);
+                this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
             })
     }
 

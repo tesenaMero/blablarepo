@@ -1,13 +1,13 @@
 <div class="circle-container">
     <div (click)="selectMode(MODE.Delivery)" class="circle">
         <span class="icon cmx-icon-control-center"></span>
-        <span>Delivery</span>
+        <span>{{ t.pt('views.mode.delivery') }}</span>
     </div>
     <div class="or-divider">
-        <span>or</span>
+        <span>{{ t.pt('views.mode.or') }}</span>
     </div>
     <div (click)="selectMode(MODE.Pickup)" class="circle">
         <span class="icon cmx-icon-track"></span>
-        <span>Pickup</span>
+        <span>{{ t.pt('views.mode.pickup') }}</span>
     </div>
 </div>

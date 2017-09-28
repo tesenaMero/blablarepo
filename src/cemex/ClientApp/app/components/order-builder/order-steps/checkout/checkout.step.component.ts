@@ -10,6 +10,7 @@ import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { DraftsService } from '../../../../shared/services/api/drafts.service'
 import { EncodeDecodeJsonObjService } from '../../../../shared/services/encodeDecodeJsonObj.service';
+import { TranslationService } from '../../../../shared/services/translation.service'
 
 @Component({
     selector: 'checkout-step',
@@ -43,7 +44,8 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         private manager: CreateOrderService,
         private dashboard: DashboardService,
         private drafts: DraftsService,
-        private customerService: CustomerService) {
+        private customerService: CustomerService,
+        private t: TranslationService) {
 
         this.step.onBeforeBack = () => this.onBeforeBack();
         this.step.setEventsListener(this);
@@ -67,14 +69,14 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         // Patch optimal sources then recovers prices
         this.onCompleted.emit(false);
         if (this.shouldCallOptimalSource()) {
-            this.dashboard.alertInfo("Recovering prices", 0);
+            this.dashboard.alertInfo(this.t.pt('views.checkout.recovering_prices'), 0);
             this.drafts.optimalSourcesPatch(this.draftId).flatMap((x) => {
                 return this.drafts.prices(this.draftId);
             }).subscribe((response) => {
                 this.handlePrices(response);
             }, (error) => {
-                this.dashboard.alertError("Something wrong happened");
-                console.error("Prices error", error);
+                this.dashboard.alertError(this.t.pt('views.common.something_was_wrong'));
+                console.error(this.t.pt('views.checkout.prices_error'), error);
             });
         }
         else if (this.shouldCallPrices()) {
@@ -114,7 +116,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         if (this.lockRequests) { return; }
 
         this.onCompleted.emit(this.draftOrder);
-        this.dashboard.alertSuccess("Prices recovered successfully");
+        this.dashboard.alertSuccess(this.t.pt('views.checkout.prices_recovered'));
     }
 
     isMXCustomer() {

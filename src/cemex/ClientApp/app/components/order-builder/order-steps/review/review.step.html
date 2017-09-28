@@ -3,7 +3,7 @@
         <div class="details-container">
             <div class="item">
                 <div class="title">
-                    Location:
+                    {{ t.pt('views.review.location') }}
                 </div>
                 <div class="description">
                     {{ manager.jobsite?.shipmentLocationDesc }}
@@ -14,7 +14,7 @@
             </div>
             <div class="item" [ngClass]="{ invisible: !manager.pointOfDelivery }">
                 <div class="title">
-                    Point of Delivery:
+                    {{ t.pt('views.review.pod') }}
                 </div>
                 <div class="description">
                     {{ manager.pointOfDelivery?.address?.streetName }} {{ manager.pointOfDelivery?.address?.settlementDesc }}, {{ manager.pointOfDelivery?.address?.regionDesc }}, {{ manager.pointOfDelivery?.address?.cityDesc }}, {{ manager.pointOfDelivery?.address?.postalCode
@@ -26,7 +26,7 @@
             </div>
             <div class="item">
                 <div class="title">
-                    Purchase Order
+                    {{ t.pt('views.review.purchase_order') }}
                 </div>
                 <div class="description">
                     {{ manager?.purchaseOrder }}
@@ -34,7 +34,7 @@
             </div>
             <div class="item">
                 <div class="title">
-                    Contact person
+                    {{ t.pt('views.review.purchase_order') }}
                 </div>
                 <div class="description">
                     {{ manager?.contact?.name }}
@@ -50,7 +50,7 @@
     </div>
 </div>
 <div class="title-spearator">
-    Products
+    {{ t.pt('views.review.products') }}
 </div>
 
 <div *ngFor="let item of manager.products" class="card-container row product">
@@ -64,7 +64,7 @@
             <div class="col-md-3 col-xs-6">
                 <div class="group">
                     <div class="title">
-                        Quantity
+                        {{ t.pt('views.review.quantity') }}
                     </div>
                     <div class="value">
                         {{ item.quantity }}
@@ -74,7 +74,7 @@
             <div class="col-md-2 col-xs-6">
                 <div class="group">
                     <div class="title">
-                        Unit
+                        {{ t.pt('views.review.unit') }}
                     </div>
                     <div class="value">
                         {{ item.unit?.alternativeUnit.unitDesc }}
@@ -84,7 +84,7 @@
             <div class="col-md-3 col-xs-6">
                 <div class="group">
                     <div class="title">
-                        Requested date
+                        {{ t.pt('views.review.request_date') }}
                     </div>
                     <div class="value">
                         {{ item.date | date:'dd.MM.yyyy' }}
@@ -94,7 +94,7 @@
             <div class="col-md-2 col-xs-6">
                 <div class="group">
                     <div class="title">
-                        Requested time
+                        {{ t.pt('views.review.request_time') }}
                     </div>
                     <div class="value">
                         {{ item.time }}
@@ -104,7 +104,7 @@
             <div class="col-md-2 col-sm-4 col-xs-6">
                 <div class="group">
                     <div class="title">
-                        Payment
+                        {{ t.pt('views.review.payment') }}
                     </div>
                     <div class="value">
                         {{ item.payment?.paymentTermType.paymentTermTypeDesc }}
@@ -116,7 +116,7 @@
             <div class="col-sm-3">
                 <div class="group">
                     <div class="title">
-                        Product ID
+                        {{ t.pt('views.review.product_id') }}
                     </div>
                     <div class="value">
                         {{ item.product.product.productId }}
@@ -126,7 +126,7 @@
             <div class="col-sm-2">
                 <div class="group">
                     <div class="title">
-                        Maximum capacity
+                        {{ t.pt('views.review.maximum_capacity') }}
                     </div>
                     <div class="value">
                         {{ item.getMaximumCapacity() }}
@@ -136,10 +136,10 @@
             <div class="col-sm-5">
                 <div class="group">
                     <div class="title">
-                        Contract
+                        {{ t.pt('views.review.review') }}
                     </div>
                     <div class="value" *ngIf="item?.contract?.salesDocument">
-                        Contract {{ item?.contract?.salesDocument?.salesDocumentCode }} Remaining volume: {{ item?.contract?.salesDocument?.volume?.total.quantity.amount }}
+                        {{ t.pt('views.review.review') }} {{ item?.contract?.salesDocument?.salesDocumentCode }} {{ t.pt('views.review.review') }} {{ item?.contract?.salesDocument?.volume?.total.quantity.amount }}
                     </div>
                 </div>
             </div>
@@ -149,10 +149,10 @@
             <div class="col-sm-3">
                 <div class="group">
                     <div class="title">
-                        Additional services
+                        {{ t.pt('views.review.aditional_services') }} 
                     </div>
                     <div class="value">
-                        <span *ngIf="item.maneuvering">Maneuvering</span>
+                        <span *ngIf="item.maneuvering">{{ t.pt('views.review.maneuvering') }}</span>
                     </div>
                 </div>
             </div>
@@ -160,11 +160,11 @@
                 <div class="d-flex flex-wrap">
                     <div class="group flex-6">
                         <div class="title">
-                            Delivery mode
+                            {{ t.pt('views.review.delivery_mode') }}
                         </div>
                         <div class="value">
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">Delivery</span>
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">Pickup</span>
+                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">{{ t.pt('views.review.delivery') }}</span>
+                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">{{ t.pt('views.review.pickup') }}</span>
                         </div>
                     </div>
                 </div>
@@ -174,7 +174,7 @@
             <div class="col-sm-6">
                 <div class="group">
                     <div class="title">
-                        Plant
+                        {{ t.pt('views.review.plant') }}
                     </div>
                     <div class="value">
                         <span>{{ item.plant?.plantDesc }}</span>
@@ -197,7 +197,7 @@
             <div class="col-md-3 col-xs-6">
                 <div class="group">
                     <div class="title">
-                        Quantity
+                        {{ t.pt('views.review.quantity') }}
                     </div>
                     <div class="value">
                         10
@@ -207,7 +207,7 @@
             <div class="col-md-3 col-xs-6">
                 <div class="group">
                     <div class="title">
-                        Unit
+                        {{ t.pt('views.review.unit') }}
                     </div>
                     <div class="value">
                         tons
@@ -217,7 +217,7 @@
             <div class="col-md-3 col-xs-6">
                 <div class="group">
                     <div class="title">
-                        Requested date
+                        {{ t.pt('views.review.request_date') }}
                     </div>
                     <div class="value">
                         13.07.2017
@@ -227,7 +227,7 @@
             <div class="col-md-3 col-xs-6">
                 <div class="group">
                     <div class="title">
-                        Requested time
+                        {{ t.pt('views.review.request_time') }}
                     </div>
                     <div class="value">
                         15.00 - 16.00
@@ -239,7 +239,7 @@
             <div class="col-sm-6">
                 <div class="group">
                     <div class="title">
-                        Product ID
+                        {{ t.pt('views.review.product_id') }}
                     </div>
                     <div class="value">
                         20939302/10292/20102
@@ -249,7 +249,7 @@
             <div class="col-sm-6">
                 <div class="group">
                     <div class="title">
-                        Contract
+                        {{ t.pt('views.review.contract') }}
                     </div>
                     <div class="value">
                         10-201702189034 Remaining volume: 180
@@ -261,7 +261,7 @@
             <div class="col-sm-6">
                 <div class="group">
                     <div class="title">
-                        Projet profile
+                        {{ t.pt('views.review.project_profiles') }}
                     </div>
                     <div class="value">
                         My Project Profile with quite long technical title, that it must be for more rows
@@ -346,7 +346,7 @@
                 <div class="d-flex flex-wrap">
                     <div class="group">
                         <div class="title">
-                            Discharge Time
+                            {{ t.pt('views.review.discharge_time') }}
                         </div>
                         <div class="value">
                             60min
@@ -354,7 +354,7 @@
                     </div>
                     <div class="group">
                         <div class="title">
-                            Transport Method
+                            {{ t.pt('views.review.transport_method') }}
                         </div>
                         <div class="value">
                             Truck
@@ -362,7 +362,7 @@
                     </div>
                     <div class="group">
                         <div class="title">
-                            Unload Type
+                            {{ t.pt('views.review.unload_type') }}
                         </div>
                         <div class="value">
                             Pump
@@ -370,7 +370,7 @@
                     </div>
                     <div class="group">
                         <div class="title">
-                            Pump Capacity Min
+                            {{ t.pt('views.review.pump_capacity_min') }}
                         </div>
                         <div class="value">
                             30 m3/s
@@ -378,7 +378,7 @@
                     </div>
                     <div class="group">
                         <div class="title">
-                            Pump Capacity Max
+                            {{ t.pt('views.review.pump_capacity_max') }}
                         </div>
                         <div class="value">
                             40 m<sup>3</sup>/s
@@ -386,7 +386,7 @@
                     </div>
                     <div class="group">
                         <div class="title">
-                            Application
+                            {{ t.pt('views.review.application') }}
                         </div>
                         <div class="value">
                             Roof
@@ -394,7 +394,7 @@
                     </div>
                     <div class="group">
                         <div class="title">
-                            Load Size
+                            {{ t.pt('views.review.load_size') }}
                         </div>
                         <div class="value">
                             10 tons
@@ -402,7 +402,7 @@
                     </div>
                     <div class="group">
                         <div class="title">
-                            Spacing
+                            {{ t.pt('views.review.spacing') }}
                         </div>
                         <div class="value">
                             10 min
@@ -415,7 +415,7 @@
             <div class="col-sm-6">
                 <div class="group">
                     <div class="title">
-                        Product ID
+                        {{ t.pt('views.review.product_id') }}
                     </div>
                     <div class="value">
                         20939302/10292/20102
@@ -426,7 +426,7 @@
                 <div class="d-flex flex-wrap">
                     <div class="group flex-6">
                         <div class="title">
-                            Delivery mode
+                            {{ t.pt('views.review.delivery_mode') }}
                         </div>
                         <div class="value">
                             Delivery
@@ -434,7 +434,7 @@
                     </div>
                     <div class="group">
                         <div class="title">
-                            Kicker
+                            {{ t.pt('views.review.kicker') }}
                         </div>
                         <div class="value">
                             Yes

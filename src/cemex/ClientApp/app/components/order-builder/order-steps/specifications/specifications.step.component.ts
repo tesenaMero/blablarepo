@@ -12,6 +12,7 @@ import { Validations } from '../../../../utils/validations';
 import { ModalService } from '../../../../shared/components/modal'
 import { Observable } from 'rxjs/Observable';
 import { PreProduct } from './preproduct'
+import { TranslationService } from '../../../../shared/services/translation.service'
 
 import * as _ from 'lodash';
 
@@ -95,7 +96,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private plantApi: PlantApi,
         private searchProductService: SearchProductService,
         private dashboard: DashboardService,
-        private modal: ModalService
+        private modal: ModalService,
+        private t: TranslationService
     ) {
         this.today = new Date();
         this.step.setEventsListener(this);
@@ -531,7 +533,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             }
             else {            
                 if (conversion > contractBalance) {
-                    return this.dashboard.alertError("Maxiumum capacity limit reached", 10000);
+                    return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
                 }
                 if (!isDelivery) {
                     if (conversion <= maxCapacitySalesArea) {
@@ -548,7 +550,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 return product.quantity = newQty;
             }
 
-            return this.dashboard.alertError("Maxiumum capacity limit reached", 10000);
+            return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
         }
         else {
             if (product.quantity <= 1 && toAdd < 0) { return; }

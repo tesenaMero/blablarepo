@@ -10,6 +10,7 @@ import { CreateOrderService } from '../../shared/services/create-order.service';
 import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
 import { ModalService } from '../../shared/components/modal'
 import { Validations } from '../../utils/validations'
+import { TranslationService } from '../../shared/services/translation.service'
 
 @Component({
     selector: 'order-builder',
@@ -41,7 +42,8 @@ export class OrderBuilderComponent {
         private manager: CreateOrderService,
         private zone: NgZone,
         private jsonObjService: EncodeDecodeJsonObjService,
-        private modal: ModalService) {
+        private modal: ModalService,
+        private t: TranslationService) {
 
         this.rebuildOrder = false;
         this.customerService.customerSubject.subscribe((customer) => {
@@ -129,7 +131,7 @@ export class OrderBuilderComponent {
     // --------------------------------------------------------------------
     placeOrder() {
         if ((Validations.isMexicoCustomer()) && (!this.isReadyMix)) {
-            this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId, 0);
+            this.dashboard.alertInfo(this.t.pt('views.common.placing') + " " + this.draftOrder.orderId, 0);
 
             this.cashOrders = this.getCashOrders();
             this.creditOrders = this.getCreditOrders();
@@ -188,30 +190,30 @@ export class OrderBuilderComponent {
     flowCementMX() {
         this.drafts.createOrder(this.draftId, '')
             .flatMap((response) => {
-                this.dashboard.alertSuccess("[Credit] Order placed successfully, requesting order code...", 0);
+                this.dashboard.alertSuccess(this.t.pt('views.common.credit') + " " + this.t.pt('views.common.requesting_code'), 0);
                 return this.drafts.validateRequestId(response.json().id);
             })
             .subscribe((response) => {
-                this.dashboard.alertSuccess("[Credit] Order code: #" + response.json().orderCode + " placed successfully", 30000);
+                this.dashboard.alertSuccess(this.t.pt('views.common.credit') + " " +  this.t.pt('views.common.order_code') + response.json().orderCode + " " + this.t.pt('views.common.placed_success'), 30000);
                 this.showSuccessModal(response.json().orderCode);
             }, error => {
-                this.dashboard.alertError("Error placing order", 10000);
+                this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
             })
     }
 
     basicFlow() {
         this.drafts.createOrder(this.draftId, '').subscribe((response) => {
             if (this.draftOrder) {
-                this.dashboard.alertInfo("Placing order " + this.draftOrder.orderId);
-                this.dashboard.alertSuccess("Order #" + this.draftOrder.orderId + " placed successfully", 30000);
+                this.dashboard.alertInfo(this.t.pt('views.common.placing') + " " + this.draftOrder.orderId);
+                this.dashboard.alertSuccess(this.t.pt('views.common.order') + this.draftOrder.orderId + " " + this.t.pt('views.common.placed_success'), 30000);
                 this.showSuccessModal(this.draftOrder.orderId);
             }
             else {
-                this.dashboard.alertSuccess("Draft #" + this.draftId + " placed successfully", 30000);
+                this.dashboard.alertSuccess(this.t.pt('views.common.draft') + this.draftId + " " + this.t.pt('views.common.placed_success'), 30000);
                 this.showSuccessModal(this.draftId);
             }
         }, error => {
-            this.dashboard.alertError("Error placing order", 10000);
+            this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
         });
     }
 

@@ -4,49 +4,49 @@
             <div class="first-container">
                 <div class="row align-items-center mb-21px" [ngClass]="{ error: validations.jobsite.showError }">
                     <div class="col-md-4 col-sm-12 select-label">
-                        <label for="jobsite-select" class="select-label required">Select from existing jobsite</label>
+                        <label for="jobsite-select" class="select-label required">{{ t.pt('views.location.select_existing_jobsite') }}</label>
                     </div>
                     <div class="col-md-8 col-sm-12" [ngClass]="{ disabled: loadings.locations }">
                         <ss-multiselect-dropdown [options]="locations" required [texts]="jobsiteTexts" [settings]="dropDownSettings" [(ngModel)]="locationIndex" (ngModelChange)="jobsiteChanged(locations[$event[0]])"></ss-multiselect-dropdown>
-                        <span class="error-message-select" *ngIf="validations.jobsite.showError">Please select location</span>
+                        <span class="error-message-select" *ngIf="validations.jobsite.showError">{{ t.pt('views.location.select_location') }}</span>
                     </div>
                 </div>
                 <div class="row align-items-center" *ngIf="!hiddens.pods" [ngClass]="{ disabled: loadings.pods, error: validations.pod.showError }">
                     <div class="col-md-4 col-sm-12 select-label">
-                        <label for="pod-select" class="select-label" [ngClass]="{ required: validations.pod.mandatory }">Select from existing point of delivery</label>
+                        <label for="pod-select" class="select-label" [ngClass]="{ required: validations.pod.mandatory }">{{ t.pt('views.location.select_existing_pod') }}</label>
                     </div>
                     <div class="col-md-8 col-sm-12" [ngClass]="{ disabled: loadings.pods }">
                         <ss-multiselect-dropdown [options]="pods" [texts]="podsTexts" [settings]="dropDownSettings " [(ngModel)]="podsIndex" (ngModelChange)="podChanged(pods[$event[0]])"></ss-multiselect-dropdown>
-                        <span class="error-message-select" *ngIf="validations.jobsite.showError">Please select a point of delivery</span>
+                        <span class="error-message-select" *ngIf="validations.jobsite.showError">{{ t.pt('views.location.select_pod') }}</span>
                     </div>
                 </div>
             </div>
             <div class="second-container ">
                 <div class="row align-items-center mb-21px" [ngClass]="{ error: validations.purchaseOrder.showError, disabled: loadings.purchaseOrder }">
                     <div class="col-md-4 col-sm-12 select-label">
-                        <label for="purchase-order" class="select-label" [ngClass]="{ required: validations.purchaseOrder.mandatory }">Purchase order</label>
+                        <label for="purchase-order" class="select-label" [ngClass]="{ required: validations.purchaseOrder.mandatory }">{{ t.pt('views.location.purchase_order') }}</label>
                     </div>
                     <div class="col-md-8 col-sm-12">
                         <input type="text " class="form-control dls" id="purchase-order" placeholder="Put your purchase order" name="purchase-order" [(ngModel)]="purchaseOrder" (keyup)="purchaseOrderChanged($event)" />
-                        <span class="error-message ">Please enter valid purchase order.</span>
+                        <span class="error-message ">{{ t.pt('views.location.purchase_order_error') }}</span>
                     </div>
                 </div>
                 <div class="row align-items-center mb-21px" *ngIf="!isCement" [ngClass]="{ error: validations.contactPerson.showError }">
                     <div class="col-md-4 col-sm-12 select-label">
-                        <label for="conctact-select" [ngClass]="{ required: validations.contactPerson.mandatory }" class="select-label">Contact person</label>
+                        <label for="conctact-select" [ngClass]="{ required: validations.contactPerson.mandatory }" class="select-label">C{{ t.pt('views.location.contact_person') }}</label>
                     </div>
                     <div class="col-md-8 col-sm-12 " [ngClass]="{ disabled: loadings.contacts }">
                         <ss-multiselect-dropdown [options]="contacts" [texts]="contactsTexts" [settings]="contactsSettings" [(ngModel)]="contactsIndex" (onManualInput)="manualContact($event)" (ngModelChange)="contactChanged($event)"></ss-multiselect-dropdown>
-                        <span class="error-message ">Please select a contact</span>
+                        <span class="error-message ">{{ t.pt('views.location.select_contact') }}</span>
                     </div>
                 </div>
                 <div class="row align-items-center">
                     <div class="col-md-4 col-sm-12 select-label">
-                        <label for="special-instructions-field" class="select-label">Special instructions</label>
+                        <label for="special-instructions-field" class="select-label">{{ t.pt('views.location.special_instr') }}</label>
                     </div>
                     <div class="col-md-8 col-sm-12">
                         <textarea id="special-instructions-field" [(ngModel)]="manager.instructions" class="instructions-area form-control" placeholder="Comments belong here"></textarea>
-                        <span class="error-message">Address cannot be that short.</span>
+                        <span class="error-message">{{ t.pt('views.location.address_short') }}</span>
                     </div>
                 </div>
                 <!-- <div class="row align-items-center">

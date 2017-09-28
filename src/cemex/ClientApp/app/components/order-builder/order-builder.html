@@ -27,10 +27,10 @@
             <div class="success-group">
                 <span class="cmx-icon-accepted-ok"></span>
                 <div class="success-text">
-                    Your order #{{ orderCode }} was successfully submited
+                    {{ t.pt('views.common.order_code') }} {{ orderCode }} {{ t.pt('views.common.was_submited') }}
                 </div>
-                <button *ngIf="!cashOrders.length" class="button back-to-orders" (click)="closeModal()">Back to orders history</button>
-                <button *ngIf="cashOrders.length" class="button back-to-orders" (click)="payCashOrders()">Proceed with to cash orders payment</button>
+                <button *ngIf="!cashOrders.length" class="button back-to-orders" (click)="closeModal()">{{ t.pt('views.common.was_submited') }}</button>
+                <button *ngIf="cashOrders.length" class="button back-to-orders" (click)="payCashOrders()">{{ t.pt('views.builder.proceed_cash') }}</button>
             </div>
         </div>
     </div>

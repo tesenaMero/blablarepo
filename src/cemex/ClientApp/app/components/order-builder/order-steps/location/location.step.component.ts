@@ -9,6 +9,7 @@ import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { Validations } from '../../../../utils/validations';
 import { Observable } from 'rxjs/Observable';
+import { TranslationService } from '../../../../shared/services/translation.service'
 
 @Component({
     selector: 'location-step',
@@ -95,21 +96,21 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     // Text configuration
     jobsiteTexts: IMultiSelectTexts = {
-        searchPlaceholder: 'Find jobsite',
-        searchEmptyResult: 'No jobsite found...',
-        defaultTitle: 'Select existing jobsite',
+        searchPlaceholder: this.t.pt('views.location.find_jobsite'),
+        searchEmptyResult: this.t.pt('views.location.no_jobsite'),
+        defaultTitle: this.t.pt('views.location.select_existing_jobsite'),
     };
 
     contactsTexts: IMultiSelectTexts = {
-        searchPlaceholder: 'Find contact',
-        searchEmptyResult: 'No contacts found...',
-        defaultTitle: 'Select contact',
+        searchPlaceholder: this.t.pt('views.location.find_contact'),
+        searchEmptyResult: this.t.pt('views.location.no_contact'),
+        defaultTitle: this.t.pt('views.location.select_contact'),
     };
 
     podsTexts: IMultiSelectTexts = {
-        searchPlaceholder: 'Find point of delivery',
-        searchEmptyResult: 'No points of deliveries found...',
-        defaultTitle: 'Select existing POD',
+        searchPlaceholder: this.t.pt('views.location.find_pod'),
+        searchEmptyResult: this.t.pt('views.location.no_pod'),
+        defaultTitle: this.t.pt('views.location.select_existing_pod'),
     };
 
     // H4x0R
@@ -126,7 +127,15 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     private UTILS: any;
 
-    constructor( @Inject(Step) private step: Step, private manager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private customerService: CustomerService, private purchaseOrderApi: PurchaseOrderApi, private dashboard: DashboardService, private shippingConditionApi: ShippingConditionApi) {
+    constructor( 
+        @Inject(Step) private step: Step, 
+        private manager: CreateOrderService, 
+        private shipmentApi: ShipmentLocationApi, 
+        private customerService: CustomerService, 
+        private purchaseOrderApi: PurchaseOrderApi, 
+        private dashboard: DashboardService, 
+        private shippingConditionApi: ShippingConditionApi,
+        private t: TranslationService) {
 
         // Interfaces
         this.step.canAdvance = () => this.canAdvance();
@@ -167,7 +176,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
         // Validate purchase order
         if (this.validations.purchaseOrder.mandatory) {
-            this.dashboard.alertInfo("Validating...", 0);
+            this.dashboard.alertInfo(this.t.pt('views.common.validating'), 0);
             this.purchaseOrderApi.validate(this.purchaseOrder, this.manager.productLine, this.location).subscribe((response) => {
                 let data = response.json();
                 if (data.messageType == "E") {

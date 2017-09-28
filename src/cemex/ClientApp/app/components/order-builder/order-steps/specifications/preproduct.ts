@@ -5,6 +5,7 @@ import { DashboardService } from '../../../../shared/services/dashboard.service'
 import { SpecificationsStepComponent } from './specifications.step.component';
 import { Validations } from '../../../../utils/validations';
 import { Observable } from 'rxjs/Observable';
+import { TranslationService } from '../../../../shared/services/translation.service'
 
 import * as _ from 'lodash';
 
@@ -53,12 +54,12 @@ export class PreProduct {
     }
 
     validations = {
-        plant: { valid: false, mandatory: true, text: "Verify plant section" },
-        contract: { valid: false, mandatory: true, text: "Verify contract section" },
-        payment: { valid: false, mandatory: true, text: "Verify payment section" }
+        plant: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_plant') },
+        contract: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_contract') },
+        payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') }
     }
 
-    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService) {
+    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t:TranslationService) {
         // Conts
         const SSC = SpecificationsStepComponent;
 
@@ -462,7 +463,7 @@ export class PreProduct {
 
         // Validate unit
         if (!this.unit) {
-            this.dashboard.alertError("Verify unit section");
+            this.dashboard.alertError(this.t.pt('views.specifications.verify_unit'));
             return false;
         }
 
