@@ -16,14 +16,14 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {
         if (this.session.isLoggedIn) {
-            this.router.navigate(['/app/']);
+            this.router.navigate(['/ordersnproduct/app/']);
         }
     }
 
     login() {
         this.loading = true;
         this.session.login(this.username, this.password).then(response => {
-            this.router.navigate(['/app/']);
+            this.router.navigate(['/ordersnproduct/app/']);
             this.loading = false;
         })
         .catch(error => {
