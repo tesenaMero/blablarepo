@@ -88,7 +88,7 @@ export class OrdersComponent implements OnInit {
     }
 
     goToDetail(order) {
-        this.router.navigate(['/app/order-detail'], {
+        this.router.navigate(['/ordersnproduct/app/order-detail'], {
             queryParams: {
                 orderId: order.orderId ? order.orderId : null,
                 typeCode: order.orderType ? order.orderType.orderTypeCode : null,
@@ -117,7 +117,7 @@ export class OrdersComponent implements OnInit {
             this.dash.alertInfo(this.t.pt('views.common.validating_connection'), 0);
             this.ping.validatePingSalesOrder().subscribe((response) => {
                 if (response.json().success === 'Y') {
-                    this.router.navigate(['/app/new']);
+                    this.router.navigate(['/ordersnproduct/app/new']);
                     this.dash.closeAlert();
                 }
                 else {
@@ -129,7 +129,7 @@ export class OrdersComponent implements OnInit {
                 });
         }
         else {
-            this.router.navigate(['/app/new']);
+            this.router.navigate(['/ordersnproduct/app/new']);
         }
     }
 }
