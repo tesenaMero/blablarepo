@@ -150,10 +150,10 @@ export const sharedConfig: NgModule = {
         CmxCoreCommonModule,
         CmxSharedModule,
         RouterModule.forRoot([
-            { path: '', redirectTo: 'app', pathMatch: 'full' },
+            { path: '', redirectTo: 'ordersnproduct/app', pathMatch: 'full' },
             { path: 'login', component: LoginComponent },
             {
-                path: 'app', component: DashboardComponent, canActivate: [AuthGuard], children: [
+                path: 'ordersnproduct/app', component: DashboardComponent, canActivate: [AuthGuard], children: [
                     { path: '', redirectTo: 'orders', pathMatch: 'full' },
                     { path: 'orders', component: OrdersComponent },
                     { path: 'new', component: NewOrderComponent },
