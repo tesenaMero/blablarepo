@@ -11,7 +11,7 @@ import { Validations } from '../../../../utils/validations';
 import { ModalService } from '../../../../shared/components/modal'
 import { Observable } from 'rxjs/Observable';
 import { PreProduct } from './preproduct'
-import { TranslationService } from '../../../../shared/services/translation.service'
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 import * as _ from 'lodash';
 

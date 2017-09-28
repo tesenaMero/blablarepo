@@ -4,7 +4,7 @@ import { CreateOrderService } from '../../../../shared/services/create-order.ser
 import { DeliveryMode } from '../../../../models/delivery.model'
 import { CustomerService } from '../../../../shared/services/customer.service'
 import { Validations } from '../../../../utils/validations';
-import { TranslationService } from '../../../../shared/services/translation.service'
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 @Component({
     selector: 'product-selection-step',
