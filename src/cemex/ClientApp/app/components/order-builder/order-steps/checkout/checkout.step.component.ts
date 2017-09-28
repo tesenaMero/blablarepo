@@ -10,6 +10,7 @@ import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { DraftsService } from '../../../../shared/services/api/drafts.service'
 import { EncodeDecodeJsonObjService } from '../../../../shared/services/encodeDecodeJsonObj.service';
+import { Validations } from '../../../../utils/validations';
 
 @Component({
     selector: 'checkout-step',
@@ -21,7 +22,8 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     @Output() onCompleted = new EventEmitter<any>();
     @Input() draftId: any;
 
-    MODE = DeliveryMode;
+    UTIL = Validations;
+
     private PRODUCT_LINES = {
         Readymix: 6,
         CementBulk: 1
@@ -88,14 +90,11 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     }
 
     shouldCallOptimalSource() {
-        return this.customerService.currentCustomer().countryCode.trim() == "MX"
-            && this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix
-            && this.manager.shippingCondition.shippingConditionId == this.MODE.Delivery
+        return Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery();
     }
 
     shouldCallPrices() {
-        return this.customerService.currentCustomer().countryCode.trim() == "MX"
-            && this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix
+        return Validations.isMexicoCustomer() && Validations.isCement();
     }
 
     // Readymix only
@@ -126,7 +125,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     }
 
     isReadyMix() {
-        return this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix
+        return Validations.isReadyMix();
     }
 
     // Logic
