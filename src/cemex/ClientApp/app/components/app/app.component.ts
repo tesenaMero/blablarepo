@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
     backToOrders() {
         let that = this;
         setTimeout(function () {
-            that.router.navigate(['/orders']);
+            that.router.navigate(['/ordersnproduct/app/orders']);
         }, 1000);
     }
 

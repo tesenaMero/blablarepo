@@ -65,7 +65,7 @@ export class CrossProductComponent implements OnInit {
     closeModal(id: string){
         this.modalService.close(id);
         setTimeout(function() {
-            this.router.navigate(['/orders']);
+            this.router.navigate(['/ordersnproduct/app/orders']);
         }, 1000);
     }
 

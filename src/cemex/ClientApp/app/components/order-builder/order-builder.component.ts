@@ -254,7 +254,7 @@ export class OrderBuilderComponent {
     }
 
     closeModal() {
-        this.router.navigate(['/app/orders']);
+        this.router.navigate(['/ordersnproduct/app/orders']);
         this.modal.close('success-placement');
     }
 
