@@ -378,7 +378,7 @@ export class PreProduct {
     getMaximumCapacity() {
         const salesAreaArray = _.get(this.manager, 'salesArea');
         let salesArea;
-        if (salesAreaArray.length > 1) {
+        if (salesAreaArray && salesAreaArray.length > 1) {
             salesArea = salesAreaArray.forEach((sa, index) => {
                 if (_.has(sa, 'divisionCode.02')){
                     return sa;
