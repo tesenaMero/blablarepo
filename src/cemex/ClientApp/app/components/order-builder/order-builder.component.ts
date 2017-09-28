@@ -48,6 +48,7 @@ export class OrderBuilderComponent implements OnDestroy {
 
         this.rebuildOrder = false;
         this.sub = this.customerService.customerSubject.subscribe((customer) => {
+            Validations.init(this.manager, this.customerService);
             if (customer && customer != this.currentCustomer) {
                 this.currentCustomer = customer;
                 this.rebuild();
