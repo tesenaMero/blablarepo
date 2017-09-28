@@ -15,10 +15,11 @@ if [ "$1" == "clean" ]; then
 fi
 
 export API_HOST=https://api.us2.apiconnect.ibmcloud.com/
-export API_ORG=cnx-gbl-org-development/
-export API_ENV=dev/
+export API_HOST_FULL=https://api.us2.apiconnect.ibmcloud.com/cnx-gbl-org-quality/quality/
+export API_ORG=cnx-gbl-org-quality/
+export API_ENV=quality/
 export APP_CODE=OrderProductCat_App
-export CLIENT_ID=dd2ee55f-c93c-4c1b-b852-58c18cc7c277
+export CLIENT_ID=721e5c7b-73b8-40e1-8cb2-31c7dbdbd1be
 
 printf "Cleaning ${CYAN}dls submodule${NC} dist\n"
 rm -rf submodules/dls/node_modules
