@@ -59,7 +59,7 @@ export class PreProduct {
         payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') }
     }
 
-    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t:TranslationService) {
+    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService) {
         // Conts
         const SSC = SpecificationsStepComponent;
 

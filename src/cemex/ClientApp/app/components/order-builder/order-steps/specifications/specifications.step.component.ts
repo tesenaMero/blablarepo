@@ -495,7 +495,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.paymentTermsApi,
             this.plantApi,
             this.customerService,
-            this.dashboard
+            this.dashboard,
+            this.t
         ));
     }
 
