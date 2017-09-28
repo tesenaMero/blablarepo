@@ -222,7 +222,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     // Enable product selection anyways
                     item.disableds.products = false;
                 });
-            });
+            }
+        );
     }
 
     fetchProductsReadyMix(salesDocumentType) {
