@@ -1,4 +1,4 @@
-import { Component, ViewChild, ChangeDetectorRef, NgZone, Inject } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef, NgZone, Inject, OnDestroy } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
 import { Router } from '@angular/router'
 import { StepperComponent } from '../../shared/components/stepper/';
@@ -10,13 +10,14 @@ import { CreateOrderService } from '../../shared/services/create-order.service';
 import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
 import { ModalService } from '../../shared/components/modal'
 import { Validations } from '../../utils/validations'
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'order-builder',
     templateUrl: './order-builder.html',
     styleUrls: ['./order-builder.scss']
 })
-export class OrderBuilderComponent {
+export class OrderBuilderComponent implements OnDestroy {
     @ViewChild(StepperComponent) stepper;
     private isReadyMix: boolean = false;
     private isBulkCementUSA: boolean = false;
@@ -31,6 +32,8 @@ export class OrderBuilderComponent {
     private cashOrders: any[] = [];
     private creditOrders: any[] = [];
 
+    private sub: Subscription;
+
     constructor(
         @Inject(DOCUMENT) private document: any,
         private _changeDetector: ChangeDetectorRef,
@@ -44,13 +47,16 @@ export class OrderBuilderComponent {
         private modal: ModalService) {
 
         this.rebuildOrder = false;
-        this.customerService.customerSubject.subscribe((customer) => {
-            Validations.init(this.manager, this.customerService);
+        this.sub = this.customerService.customerSubject.subscribe((customer) => {
             if (customer && customer != this.currentCustomer) {
                 this.currentCustomer = customer;
                 this.rebuild();
             }
         });
+    }
+
+    ngOnDestroy(): void {
+        this.sub.unsubscribe();
     }
 
     // Rebuilds the component
