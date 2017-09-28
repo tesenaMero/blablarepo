@@ -78,10 +78,11 @@ export class PreProduct {
             this.payment = this.availablePayments[0];
             this.paymentChanged();
             this.loadings.payments = false;
+            this.disableds.payments = false;
         }
         else {
             this.payment = undefined;
-            this.loadings.payments = true;
+            this.disableds.payments = true;
         }
 
         // Available project profiles init

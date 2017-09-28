@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { TranslationService } from '../../../shared/services/translation.service';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { OrderRequest } from '../../../shared/models/order-request';
 
 @Component({

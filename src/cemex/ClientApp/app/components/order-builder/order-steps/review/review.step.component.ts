@@ -154,16 +154,11 @@ export class ReviewStepComponent implements StepEventsListener {
             }
         }
 
-        const shouldHidePayment = this.customerService.currentCustomer().countryCode.trim() == "US"
-                                || this.manager.productLine.productId == this.PRODUCT_LINES.Readymix;
-
         // Add payment if needed and any
-        if (!shouldHidePayment) {
-            if (preProduct.payment) {
-                if (preProduct.payment.paymentTermId) {
-                    baseItem["paymentTerm"] = {
-                        "paymentTermId": preProduct.payment.paymentTermId
-                    }
+        if (preProduct.payment) {
+            if (preProduct.payment.paymentTermId) {
+                baseItem["paymentTerm"] = {
+                    "paymentTermId": preProduct.payment.paymentTermId
                 }
             }
         }

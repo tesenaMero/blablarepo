@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Api } from '../../../shared/services/api/api.service';
 import { Broadcaster } from '../../../shared/types/Broadcaster';
-import { TranslationService } from '../../../shared/services/translation.service';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 
 @Component({

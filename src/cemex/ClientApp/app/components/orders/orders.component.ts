@@ -3,7 +3,7 @@ import { OrdersService } from '../../shared/services/orders.service';
 import { PingSalesOrderApi } from '../../shared/services/api/ping-sales-order.service';
 import { OrderRequestTableComponentConfiguration } from '../../utils/order-request.helper';
 import { DashboardService } from '../../shared/services/dashboard.service';
-import { TranslationService } from '../../shared/services/translation.service';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { Router } from '@angular/router';
 import { CustomerService } from '../../shared/services/customer.service';
 import { OrdersApi } from '../../shared/services/api/orders.service';

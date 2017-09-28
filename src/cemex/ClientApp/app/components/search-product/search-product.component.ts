@@ -3,7 +3,7 @@ import { PlantApi, ProductColorApi, ProductsApi, ShipmentLocationApi } from '../
 import { CreateOrderService } from '../../shared/services/create-order.service';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../shared/components/selectwithsearch/";
 import { Plant, ProductColor, ProductWrapper } from '../../shared/types';
-import { TranslationService } from '../../shared/services/translation.service';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { SearchProductService } from '../../shared/services/product-search.service';
 import { CustomerService } from '../../shared/services/customer.service';
 

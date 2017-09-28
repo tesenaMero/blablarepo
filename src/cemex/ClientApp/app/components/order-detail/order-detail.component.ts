@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { OrderDetailApi } from '../../shared/services/api/order-detail.service';
 import { ActivatedRoute } from '@angular/router';
-import { TranslationService } from '../../shared/services/translation.service';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 @Component({
     selector: 'order-detail-page',

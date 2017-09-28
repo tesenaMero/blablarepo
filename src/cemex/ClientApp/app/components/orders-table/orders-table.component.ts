@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output } from '@angular/core';
 import { OrderRequest } from '../../shared/models/order-request';
 import { OrdersService } from '../../shared/services/orders.service';
 import { WindowRef } from '../../shared/services/window-ref.service';
-import { TranslationService } from '../../shared/services/translation.service';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import {
     OrderRequestHelper,
     OrderRequestTableComponentConfiguration,

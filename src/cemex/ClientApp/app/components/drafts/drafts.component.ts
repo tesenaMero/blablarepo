@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OrdersApi } from '../../shared/services/api';
 
-import { TranslationService } from '../../shared/services/translation.service';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 @Component({
     selector: 'page-drafts',

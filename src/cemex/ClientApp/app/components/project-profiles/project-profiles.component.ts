@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { TranslationService } from '../../shared/services/translation.service';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { ProjectProfileApi } from '../../shared/services/api'
 import { CustomerService } from '../../shared/services/customer.service';
 import { ModalService } from '../../shared/components/modal'
