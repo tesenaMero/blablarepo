@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { SessionService } from '../../shared/services/session.service';
 import { Router } from '@angular/router';
 import { CreateOrderService } from '../../shared/services/create-order.service';
@@ -21,6 +21,7 @@ export class DashboardComponent implements OnInit {
     private sidebar: CmxSidebarComponent;
 
     private showAlert = false;
+    private shouldResetAlert = false;
     private alert = {
         text: "",
         type: "info"
@@ -38,7 +39,8 @@ export class DashboardComponent implements OnInit {
         private dashboard: DashboardService,
         private legalEnitityApi: LegalEntitiesApi,
         private customerService: CustomerService,
-        private salesDocumentService: SalesDocumentApi
+        private salesDocumentService: SalesDocumentApi,
+        private __: ChangeDetectorRef
     ) { }
 
     ngOnInit() {
@@ -62,20 +64,21 @@ export class DashboardComponent implements OnInit {
     }
 
     private initLanguage() {
-        this.langSelected = localStorage.getItem('Language') || 'en';
-        this.t.lang(this.langSelected);
-        localStorage.setItem('Language', this.langSelected);
+        this.changeLanguage(localStorage.getItem('Language') || 'en');
     }
 
     private changeLanguage(lang: any) {
         this.t.lang(lang);
         this.langSelected = lang;
         localStorage.setItem('Language', lang);
-        //this.eventDispatcher.broadcast(this.CHANGE_LANGUAGE, lang);
     }
 
     private handleAlert(alert: any) {
         if (alert == null) { this.closeAlert(); return; }
+
+        const alertOpened = this.alert && this.showAlert
+        if (alertOpened) { this.shouldResetAlert = true }
+        else { this.shouldResetAlert = false; }
 
         this.showAlert = false;
         this.alert.text = alert.text;
@@ -84,7 +87,9 @@ export class DashboardComponent implements OnInit {
 
         if (alert.duration != 0) {
             setTimeout(() => {
-                this.showAlert = false;
+                if (!this.shouldResetAlert) {
+                    this.showAlert = false;
+                }
             }, alert.duration);
         }
         else {

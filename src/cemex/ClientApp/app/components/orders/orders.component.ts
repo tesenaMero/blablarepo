@@ -15,7 +15,7 @@ import * as moment from 'moment'
     styleUrls: ['./orders.scss']
 })
 export class OrdersComponent implements OnInit {
-    orders: any;
+    orders: any = [];
 
     isLoading: any;
     totalPages: any;
