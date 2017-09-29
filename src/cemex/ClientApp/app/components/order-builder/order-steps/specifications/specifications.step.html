@@ -109,7 +109,7 @@
                 <div class="col-md-3 mt-3" [ngClass]="{ invisible: shouldHidePayment }">
                     <div class="group">
                         <label [ngClass]="{ loading: product.loadings.payments }">{{ t.pt('views.specifications.payment') }}</label>
-                        <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.payments }">
+                        <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.payments }">
                             <span>
                                 {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
                                 <select [(ngModel)]="product.payment" (ngModelChange)="paymentChanged(product)" class="input behind">
@@ -266,7 +266,7 @@
                 <div class="col-md-3 mt-3" [ngClass]="{ invisible: shouldHidePayment }">
                     <div class="group">
                         <label [ngClass]="{ loading: product.loadings.payments }">{{ t.pt('views.specifications.payment') }}</label>
-                        <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.payments }">
+                        <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.payments }">
                             <span>
                                 {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
                                 <select [(ngModel)]="product.payment" (ngModelChange)="paymentChanged(product)" class="input behind">

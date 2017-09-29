@@ -323,13 +323,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 }
                 return;
             }
-            
+
             // If theres no cash, fetch it manually
             if (!cash) {
                 let customerId = this.customerService.currentCustomer().legalEntityId;
                 this.paymentTermsApi.getCashTerm(customerId).subscribe((result) => {
                     let cashTerm = result.json().paymentTerms;
-                    
+
                     const singleCash = cashTerm.find((term: any) => {
                         return term.paymentTermType.paymentTermTypeCode === 'CASH';
                     });
@@ -337,63 +337,57 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     // If cash founded, add it
                     if (singleCash) { paymentTerms.push(singleCash); }
 
-                    // Set default payment terms for preproducts
-                    SpecificationsStepComponent.availablePayments = paymentTerms;
-
-                    // Set available payments and loading state
-                    this.preProducts.forEach((item: PreProduct) => {
-                        item.availablePayments = paymentTerms;
-                        // In the case where payment is not showed to the user select credit by default
-                        // If there is no credit try to select whatever lol
-                        if (Validations.shouldHidePayment()) {
-                            if (credit) {
-                                item.payment = credit;
-                                item.paymentChanged();
-                            }
-                            else if (paymentTerms.length) {
-                                item.payment = paymentTerms[0];
-                                item.paymentChanged();
-                            }
-                        }
-                        else {
-                            item.payment = undefined;
-                            item.paymentChanged();
-                        }
-
-                        item.loadings.payments = false;
-                        item.disableds.payments = false;
-                    });
+                    // Set buisness logic with cash added into payemnt terms
+                    this.setPaymentsBuisnessLogic(paymentTerms, credit);
                 });
             }
             else {
-                // Set default payment terms for preproducts
-                SpecificationsStepComponent.availablePayments = paymentTerms;
-
-                // Set available payments and loading state
-                this.preProducts.forEach((item: PreProduct) => {
-                    item.availablePayments = paymentTerms;
-
-                    // In the case where payment is not showed to the user select credit by default
-                    // If there is no credit try to select whatever lol
-                    if (Validations.shouldHidePayment()) {
-                        if (credit) {
-                            item.payment = credit;
-                            item.paymentChanged();
-                        }
-                        else if (paymentTerms.length) {
-                            item.payment = paymentTerms[0];
-                            item.paymentChanged();
-                        }
-                    }
-                    else {
-                        item.payment = undefined;
-                        item.paymentChanged();
-                    }
-
-                    item.loadings.payments = false;
-                    item.disableds.payments = false;
-                });
+                // Set buisness logic with defualt payment terms
+                this.setPaymentsBuisnessLogic(paymentTerms, credit);
             }
+        });
+    }
+
+    setPaymentsBuisnessLogic(paymentTerms, credit) {
+        // Set default payment terms for preproducts
+        SpecificationsStepComponent.availablePayments = paymentTerms;
+
+        // Set available payments and loading state
+        this.preProducts.forEach((item: PreProduct) => {
+            item.availablePayments = paymentTerms;
+            // In the case where payment is not showed to the user select credit by default
+            // If there is no credit try to select whatever lol
+            if (Validations.shouldHidePayment()) {
+                if (credit) {
+                    item.payment = credit;
+                }
+                else if (paymentTerms.length) {
+                    item.payment = paymentTerms[0];
+                }
+                else {
+                    // No payments term
+                    this.dashboard.alertError("No payemnts terms available!", 0);
+                }
+            }
+            else {
+                if (paymentTerms.length === 1) {
+                    item.payment = paymentTerms[0];
+                    item.disableds.payments = false;
+                }
+                else if (paymentTerms.length > 0) {
+                    item.payment = undefined;
+                    item.disableds.payments = false;
+                }
+                else {
+                    // No payments
+                    item.payment = undefined;
+                    item.disableds.payments = true;
+                    this.dashboard.alertError("No payemnts terms available!", 0);
+                }
+            }
+
+            item.paymentChanged();
+            item.loadings.payments = false;
         });
     }
 

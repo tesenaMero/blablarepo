@@ -70,6 +70,7 @@ export class PreProduct {
         const SSC = SpecificationsStepComponent;
 
         // Available products init
+        // -------------------------------------------------------
         if (SSC.availableProducts.length && !this.product) {
             this.setProduct(SSC.availableProducts[0], shouldFetchContracts);
             this.loadings.products = false;
@@ -79,30 +80,41 @@ export class PreProduct {
         }
 
         // Available payments init
+        // -------------------------------------------------------
+        this.loadings.payments = true;
+        this.disableds.payments = true;
         this.availablePayments = SSC.availablePayments;
-        if (this.availablePayments.length > 0) {
+        if (this.availablePayments.length === 1) {
             this.payment = this.availablePayments[0];
-            this.paymentChanged();
-            this.loadings.payments = false;
+            this.disableds.payments = false;
+        }
+        else if (this.availablePayments.length > 0) {
+            this.payment = undefined;
             this.disableds.payments = false;
         }
         else {
             this.payment = undefined;
             this.disableds.payments = true;
         }
+        this.loadings.payments = false;
+        this.paymentChanged();
 
         // Available project profiles init
+        // -------------------------------------------------------
         if (SSC.projectProfiles.length) { this.loadings.projectProfiles = false; }
         else { this.loadings.projectProfiles = true; }
 
         // Available catalogs init
+        // -------------------------------------------------------
         if (SSC.catalogs) { this.loadings.catalogs = false; }
         else { this.loadings.catalogs = true; }
 
         // Define mandatories
+        // -------------------------------------------------------
         this.defineValidations();
 
         // Base project profile
+        // -------------------------------------------------------
         this.projectProfile = {
             project: {
                 projectProperties: {
@@ -249,17 +261,26 @@ export class PreProduct {
 
     getContractPaymentTerm(termId: any) {
         this.loadings.payments = true;
+        this.disableds.payments = true;
         this.paymentTermsApi.getJobsiteById(termId).subscribe((result) => {
             const contractPaymentTerm = result.json().paymentTerms;
             this.availablePayments = contractPaymentTerm;
 
-            if (this.availablePayments.length > 0) {
-                this.loadings.payments = false;
+            if (this.availablePayments.length === 1) {
+                this.payment = this.availablePayments[0];
+                this.disableds.payments = false;
+            }
+            else if (this.availablePayments.length > 1) {
+                this.payment = undefined;
+                this.disableds.payments = false;
             }
             else {
                 this.payment = undefined;
-                this.loadings.payments = true;
+                this.disableds.payments = true;
             }
+
+            this.loadings.payments = false;
+            this.paymentChanged();
         })
     }
 
