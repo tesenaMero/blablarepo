@@ -59,7 +59,8 @@ export class PreProduct {
     validations = {
         plant: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_plant') },
         contract: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_contract') },
-        payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') }
+        payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') },
+        product: { valid: false, mandatory: true, text: "Verify the product(s) selected" }
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean) {
@@ -132,6 +133,9 @@ export class PreProduct {
     }
 
     productChanged(shouldFetchContracts?: boolean) {
+        if (this.product) { this.validations.product.valid = true; }
+        else { this.validations.product.valid = false; }
+
         // Optionals
         if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
 

@@ -24,13 +24,14 @@ if [ "$1" == "quality" ]; then
 fi
 
 
-# Dev env by default
-unset API_HOST
-unset API_HOST_FULL
-unset API_ORG
-unset API_ENV
-unset APP_CODE
-unset CLIENT_ID
+if [ "$1" == "dev" ]; then
+    unset API_HOST
+    unset API_HOST_FULL
+    unset API_ORG
+    unset API_ENV
+    unset APP_CODE
+    unset CLIENT_ID
+fi
 
 printf "Cleaning ${CYAN}dls submodule${NC} dist\n"
 rm -rf submodules/dls/node_modules

@@ -162,6 +162,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     onShowed() {
         // Unlock
+        this.onCompleted.emit(false);
         this.lockRequests = false;
 
         // Define validations for each preproduct already added

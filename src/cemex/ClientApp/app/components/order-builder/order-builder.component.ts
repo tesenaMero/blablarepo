@@ -136,6 +136,9 @@ export class OrderBuilderComponent {
             this.cashOrders = this.getCashOrders();
             this.creditOrders = this.getCreditOrders();
 
+            console.log("cash:", this.cashOrders);
+            console.log("credit:", this.creditOrders);
+
             // Save cash orders to show later
             localStorage.setItem('tempCashOrders', JSON.stringify(this.cashOrders));
 
