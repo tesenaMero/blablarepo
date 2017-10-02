@@ -875,7 +875,9 @@
     "views.search.product_code": "Product Code",
     "views.search.product_description": "Product Description",
     "views.search.products": "Products",
-
+    "views.search.filter_code_ph": "Filter by Product Code",
+    "views.search.filter_desc_ph": "Filter by Product Description",
+    
     "views.cross.placed": "Order placed successfully, requesting order code...",
 
     "views.builder.proceed_cash": "Proceed with to cash orders payment",
@@ -912,6 +914,8 @@
     "views.location.no_contact": "No contact found",
     "views.location.find_pod": "Find point of delivery",
     "views.location.no_pod": "No points of deliveries found",
+    "views.location.put_pod": "Put your purchase order",
+    "views.location.comments_ph": "Comments belong here",
     "views.location.select_existing_pod": "Select from existing POD",
     "views.location.select_location": "Please select location",
     "views.location.select_pod": "Please select point of delivery",
@@ -1031,5 +1035,11 @@
     "locations.detail.page.termsConditions": "Terms + Conditions",
     "locations.detail.page.totalAmountExTax": "Total Amount Ex Tax",
     "locations.detail.page.totalTax": "Total Tax",
-    "locations.detail.page.totalAmountIncTax": "Total Amount inc Tax"
+    "locations.detail.page.totalAmountIncTax": "Total Amount inc Tax",
+
+    "views.stepper.exit": "Exit",
+    "views.stepper.next": "Next",
+    "views.stepper.back": "Back",
+    "views.stepper.finish": "Finish"
+    
 }

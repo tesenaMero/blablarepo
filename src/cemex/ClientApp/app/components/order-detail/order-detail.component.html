@@ -167,13 +167,13 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.dischargeTime">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile?.dischargeTime">
                                     <div class="group">
                                         <div class="title">
                                             {{ t.pt('views.details.discharge_time') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.orderItemProfile.dischargeTime.timePerDischargeDesc}}
+                                            {{itemData.orderItemProfile.dischargeTime?.timePerDischargeDesc}}
                                         </div>
                                     </div>
                                 </div>

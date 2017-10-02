@@ -755,7 +755,7 @@
     "views.common.all_locations": "Todas las ubicaciones",
     "views.common.no_orders": "No se encontraron órdenes.",
     "views.common.history": "Historia",
-    "views.common.request_order": "Solicitud de orden /orden de solicitud",
+    "views.common.request_order": "Solicitud de orden / orden de solicitud",
     "views.common.project_profiles": "Perfiles de proyecto ",
     "views.common.select": "Seleccionar",
     "views.common.validating_connection": "Validando conexion",
@@ -874,6 +874,8 @@
     "views.search.product_code": "Código de producto",
     "views.search.product_description": "Descripción del producto",
     "views.search.products": "Productos",
+    "views.search.filter_code_ph": "Filtrar por código de producto",
+    "views.search.filter_desc_ph": "Filtrar por descripción de producto",
     "views.cross.placed": "Orden realizada satisfactorimente, solicitando código...",
 
     "views.builder.proceed_cash": "Proceder con pago en efectivo",
@@ -910,6 +912,8 @@
     "views.location.no_contact": "Contacto no encontrado",
     "views.location.find_pod": "Buscar punto de entrega",
     "views.location.no_pod": "No se encontraron puntos de entrega",
+    "views.location.put_pod": "Escribe la orden de compra",
+    "views.location.comments_ph": "Escribe tus comentarios",
     "views.location.select_existing_pod": "Selecciona un punto de entrega",
     "views.location.select_location": "Por favor selecciona una ubicacion",
     "views.location.select_pod": "Por favor selecciona un punto de entrega",
@@ -1028,5 +1032,10 @@
     "locations.detail.page.termsConditions": "Términos + condiciones",
     "locations.detail.page.totalAmountExTax": "Monto total excluyendo impuesto",
     "locations.detail.page.totalTax": "Impuesto total ",
-    "locations.detail.page.totalAmountIncTax": "Monto total incluyendo impuesto"
+    "locations.detail.page.totalAmountIncTax": "Monto total incluyendo impuesto",
+
+    "views.stepper.exit": "Salir",
+    "views.stepper.next": "Siguiente",
+    "views.stepper.back": "Atras",
+    "views.stepper.finish": "Terminar"
 }
