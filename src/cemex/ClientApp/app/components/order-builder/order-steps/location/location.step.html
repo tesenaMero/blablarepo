@@ -27,7 +27,7 @@
                         <label for="purchase-order" class="select-label" [ngClass]="{ required: validations.purchaseOrder.mandatory }">{{ t.pt('views.location.purchase_order') }}</label>
                     </div>
                     <div class="col-md-8 col-sm-12">
-                        <input type="text " class="form-control dls" id="purchase-order" placeholder="Put your purchase order" name="purchase-order" [(ngModel)]="purchaseOrder" (keyup)="purchaseOrderChanged($event)" />
+                        <input type="text " class="form-control dls" id="purchase-order" placeholder="{{ t.pt('views.location.put_pod') }}" name="purchase-order" [(ngModel)]="purchaseOrder" (keyup)="purchaseOrderChanged($event)" />
                         <span class="error-message ">{{ t.pt('views.location.purchase_order_error') }}</span>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                         <label for="special-instructions-field" class="select-label">{{ t.pt('views.location.special_instr') }}</label>
                     </div>
                     <div class="col-md-8 col-sm-12">
-                        <textarea id="special-instructions-field" [(ngModel)]="manager.instructions" class="instructions-area form-control" placeholder="Comments belong here"></textarea>
+                        <textarea id="special-instructions-field" [(ngModel)]="manager.instructions" class="instructions-area form-control" placeholder="{{ t.pt('views.location.comments_ph') }}"></textarea>
                         <span class="error-message">{{ t.pt('views.location.address_short') }}</span>
                     </div>
                 </div>

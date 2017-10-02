@@ -367,7 +367,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 }
                 else {
                     // No payments term
-                    this.dashboard.alertError("No payemnts terms available!", 0);
+                    this.dashboard.alertError(this.t.pt('views.specifications.no_payment_terms'), 0);
                 }
             }
             else {
@@ -383,7 +383,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     // No payments
                     item.payment = undefined;
                     item.disableds.payments = true;
-                    this.dashboard.alertError("No payemnts terms available!", 0);
+                    this.dashboard.alertError(this.t.pt('views.specifications.no_payment_terms'), 0);
                 }
             }
 

@@ -27,11 +27,11 @@
         <div class="row">
             <div class="col-sm-6">
                 <label for="product-code" class="">{{ t.pt('views.search.product_code') }}</label>
-                <input type="text" [(ngModel)]="productCodeInput" class="form-control dls required " (keyup)="filterProductByProductCode($event)" id="product-code" placeholder="Filter by Product Code" name="product-code" />
+                <input type="text" [(ngModel)]="productCodeInput" class="form-control dls required " (keyup)="filterProductByProductCode($event)" id="product-code" placeholder="{{ t.pt('views.search.filter_code_ph') }}" name="product-code" />
             </div>
             <div class="col-sm-6">
                 <label for="product-description" class="">{{ t.pt('views.search.product_description') }}</label>
-                <input type="text" [(ngModel)]="productDescriptionInput" class="form-control dls required " (keyup)="filterProductByProductDescription($event)" id="product-description" placeholder="Filter by Product Description" name="product-description" />
+                <input type="text" [(ngModel)]="productDescriptionInput" class="form-control dls required " (keyup)="filterProductByProductDescription($event)" id="product-description" placeholder="{{ t.pt('views.search.filter_desc_ph') }}" name="product-description" />
             </div>
         </div>
         <hr class="separator" />
