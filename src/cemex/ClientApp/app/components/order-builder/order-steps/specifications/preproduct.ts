@@ -5,10 +5,14 @@ import { DashboardService } from '../../../../shared/services/dashboard.service'
 import { SpecificationsStepComponent } from './specifications.step.component';
 import { Validations } from '../../../../utils/validations';
 import { Observable } from 'rxjs/Observable';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 import * as _ from 'lodash';
 
 export class PreProduct {
+    // View states
+    deleting: boolean = false;
+
     // Props
     maneuvering: boolean = false;
     quantity: number = 1;
@@ -53,18 +57,23 @@ export class PreProduct {
     }
 
     validations = {
-        plant: { valid: false, mandatory: true, text: "Verify plant section" },
-        contract: { valid: false, mandatory: true, text: "Verify contract section" },
-        payment: { valid: false, mandatory: true, text: "Verify payment section" }
+        plant: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_plant') },
+        contract: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_contract') },
+        payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') },
+        product: { valid: false, mandatory: true, text: "Verify the product(s) selected" }
     }
 
-    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService) {
+    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean) {
+        // Optionals
+        if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
+
         // Conts
         const SSC = SpecificationsStepComponent;
 
         // Available products init
-        if (SSC.availableProducts.length) {
-            this.setProduct(SSC.availableProducts[0]);
+        // -------------------------------------------------------
+        if (SSC.availableProducts.length && !this.product) {
+            this.setProduct(SSC.availableProducts[0], shouldFetchContracts);
             this.loadings.products = false;
         }
         else {
@@ -72,30 +81,41 @@ export class PreProduct {
         }
 
         // Available payments init
+        // -------------------------------------------------------
+        this.loadings.payments = true;
+        this.disableds.payments = true;
         this.availablePayments = SSC.availablePayments;
-        if (this.availablePayments.length > 0) {
+        if (this.availablePayments.length === 1) {
             this.payment = this.availablePayments[0];
-            this.paymentChanged();
-            this.loadings.payments = false;
+            this.disableds.payments = false;
+        }
+        else if (this.availablePayments.length > 0) {
+            this.payment = undefined;
             this.disableds.payments = false;
         }
         else {
             this.payment = undefined;
             this.disableds.payments = true;
         }
+        this.loadings.payments = false;
+        this.paymentChanged();
 
         // Available project profiles init
+        // -------------------------------------------------------
         if (SSC.projectProfiles.length) { this.loadings.projectProfiles = false; }
         else { this.loadings.projectProfiles = true; }
 
         // Available catalogs init
+        // -------------------------------------------------------
         if (SSC.catalogs) { this.loadings.catalogs = false; }
         else { this.loadings.catalogs = true; }
 
         // Define mandatories
+        // -------------------------------------------------------
         this.defineValidations();
 
         // Base project profile
+        // -------------------------------------------------------
         this.projectProfile = {
             project: {
                 projectProperties: {
@@ -104,12 +124,21 @@ export class PreProduct {
         }
     }
 
-    setProduct(product: any) {
+    setProduct(product: any, shouldFetchContracts?: boolean) {
+        // Optionals
+        if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
+
         this.product = product;
-        this.productChanged();
+        this.productChanged(shouldFetchContracts);
     }
 
-    productChanged() {
+    productChanged(shouldFetchContracts?: boolean) {
+        if (this.product) { this.validations.product.valid = true; }
+        else { this.validations.product.valid = false; }
+
+        // Optionals
+        if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
+
         if (!this.product) {
             // Disable stuff and remove loadings
             this.disableds.products = true;
@@ -122,7 +151,13 @@ export class PreProduct {
             return;
         }
 
-        this.fetchContracts();
+        if (shouldFetchContracts) {
+            this.fetchContracts();
+        }
+        else {
+            this.loadings.contracts = false;
+        }
+
         this.fetchUnits();
         this.fetchManeuvering();
 
@@ -230,17 +265,26 @@ export class PreProduct {
 
     getContractPaymentTerm(termId: any) {
         this.loadings.payments = true;
+        this.disableds.payments = true;
         this.paymentTermsApi.getJobsiteById(termId).subscribe((result) => {
             const contractPaymentTerm = result.json().paymentTerms;
             this.availablePayments = contractPaymentTerm;
 
-            if (this.availablePayments.length > 0) {
-                this.loadings.payments = false;
+            if (this.availablePayments.length === 1) {
+                this.payment = this.availablePayments[0];
+                this.disableds.payments = false;
+            }
+            else if (this.availablePayments.length > 1) {
+                this.payment = undefined;
+                this.disableds.payments = false;
             }
             else {
                 this.payment = undefined;
-                this.loadings.payments = true;
+                this.disableds.payments = true;
             }
+
+            this.loadings.payments = false;
+            this.paymentChanged();
         })
     }
 
@@ -307,11 +351,12 @@ export class PreProduct {
         });
     }
 
+    // TODO: define product lines 2 and 3
     fetchManeuvering() {
         // Maneouvering additional service
-        if (this.manager.shippingCondition.shippingConditionId === 1
-            && (this.product.product.productLine.productLineId === 2 || this.product.product.productLine.productLineId === 3)
-        ) {
+        if (Validations.isDelivery() && 
+            (this.product.product.productLine.productLineId === 2 || this.product.product.productLine.productLineId === 3)) {
+
             let area = this.manager.salesArea.find((a) => {
                 let id = this.product.product.productLine.productLineId;
                 return id === 2 ? a.salesArea.salesAreaId === 2 : a.salesArea.salesAreaId === 219;
@@ -343,41 +388,61 @@ export class PreProduct {
         });
     }
 
-    //convert to tons quantity selected
+    // Convert to tons quantity selected
     convertToTons(qty): any{
-        let factor = this.unit.numerator/this.unit.denominator;
-        let convertion = qty*factor;
-        if (this.unit) {            
-            return convertion;
-        } else {
-            return;
+        if(this.unit === undefined){
+            return qty;
         }
+        
+        let factor = this.unit.numerator / this.unit.denominator;
+        let convertion = qty * factor;
+        return convertion;
     }
 
     // Maximum capacity salesArea
     getMaximumCapacity() {
-        const salesArea = _.get(this.manager, 'salesArea[0]');
-        let maxJobsiteQty = undefined;
-        const unlimited = undefined;
+        const salesAreaArray = _.get(this.manager, 'salesArea');
+        let salesArea = _.get(this.manager, 'salesArea[0]');
+        if (salesAreaArray && salesAreaArray.length > 1) {
+            salesArea = salesAreaArray.forEach((sa, index) => {
+                if (_.has(sa, 'divisionCode.02')){
+                    return sa;
+                }                    
+            });
+        }
+        
         if (salesArea) { return _.get(salesArea, 'maximumLot.amount'); }
-        else { return unlimited; }
+        else { return undefined; }
     }
 
-    //Maximum capacity contract
+    // Maximum capacity contract
     getContractBalance(){
-        let balance = undefined;
         if (this.contract) {
             const volume = _.get(this.contract, 'salesDocument.volume');
             if (volume) {
                 return _.get(volume, 'total.quantity.amount');
             }
-            else {
-                return balance;
-            }
         }
-        return balance;
+        return undefined;
     }
 
+    // Returns the minor maximum capacity contract or jobsite
+    getMaximumCapacityContractAndJobsite(){
+        let contractBalance = this.getContractBalance();
+        let maxCapacitySalesArea = this.getMaximumCapacity(); 
+        if (contractBalance !== undefined){
+            if (maxCapacitySalesArea !== undefined) {
+                if (contractBalance < maxCapacitySalesArea) {
+                    return contractBalance;
+                }
+                else {
+                    return maxCapacitySalesArea;
+                }
+            }
+        }
+        return maxCapacitySalesArea;
+    }
+    
     // Minimum capacity salesArea
     getMinimumCapacity() {
         const salesArea = _.get(this.manager, 'salesArea[0]');
@@ -432,7 +497,7 @@ export class PreProduct {
 
         // Validate unit
         if (!this.unit) {
-            this.dashboard.alertError("Verify unit section");
+            this.dashboard.alertError(this.t.pt('views.specifications.verify_unit'));
             return false;
         }
 

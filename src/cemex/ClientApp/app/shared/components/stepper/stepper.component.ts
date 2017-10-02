@@ -15,6 +15,7 @@ import {
     NgZone
 } from '@angular/core';
 import { Step } from './step/step.component'
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 @Component({
     selector: 'stepper',
@@ -22,7 +23,7 @@ import { Step } from './step/step.component'
     styleUrls: ['./stepper.scss']
 })
 export class StepperComponent implements AfterContentInit {
-    @Input() finishText?: string = "Finish";
+    @Input() finishText?: string = this.t.pt('views.stepper.finish');
 
     @ViewChild('controlNext') controlNext;
     @ViewChild('controlPrev') controlBack;
@@ -36,7 +37,7 @@ export class StepperComponent implements AfterContentInit {
     @Output() onFinish = new EventEmitter<any>();
 
     currentStep: any;
-    constructor(private zone: NgZone) {
+    constructor(private zone: NgZone, private t: TranslationService) {
         this.overlay = false;
     }
 

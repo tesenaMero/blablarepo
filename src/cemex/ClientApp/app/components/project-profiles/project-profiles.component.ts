@@ -47,6 +47,10 @@ export class ProjectProfilesComponent {
         this.modalService.open(id);
     }
 
+    projectProfileCreated() {
+        this.fetchProjectProfiles();
+    }
+
     fetchProjectProfiles(customer = this.CustomerService.currentCustomer()) {
         this.loading = true;
         this.rows = [];
@@ -59,7 +63,7 @@ export class ProjectProfilesComponent {
             }
         });
     }
-
+    
     initData(profiles: any) {
         this.rows = profiles.map((profile) => {
             return [
@@ -69,12 +73,12 @@ export class ProjectProfilesComponent {
                 { inner: profile.project.projectProperties.unloadType && profile.project.projectProperties.unloadType.unloadTypeDesc },
                 { inner: profile.project.projectProperties.kicker, class: "capitalize" },
                 { inner: "Extra hourts, Sundaly / Holiday" },
-                { inner: this.sanitizer.bypassSecurityTrustHtml("<span data-toggle='modal' data-target='#pp-creator'>EDIT</span>"), class: "action-button", click: (item) => {
-                    
-                }, profile},
+                { inner: "EDIT", class: "action-button", click: (item) => {
+                    this.openModal('pp-creator');
+                } },
                 { inner: "DELETE", class: "action-button", click: (item) => {
                     this.ppService.delete(item.profile.profileId).subscribe(res => res.ok && this.fetchProjectProfiles())
-                }, profile },
+                }},
             ]
         });
     }

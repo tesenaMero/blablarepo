@@ -6,10 +6,11 @@ import { CreateOrderService } from '../../../../shared/services/create-order.ser
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
 import { ShipmentLocationApi, PurchaseOrderApi } from '../../../../shared/services/api';
 import { CustomerService } from '../../../../shared/services/customer.service';
-import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { DraftsService } from '../../../../shared/services/api/drafts.service'
 import { EncodeDecodeJsonObjService } from '../../../../shared/services/encodeDecodeJsonObj.service';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
+import { Validations } from '../../../../utils/validations';
 
 @Component({
     selector: 'checkout-step',
@@ -21,7 +22,8 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     @Output() onCompleted = new EventEmitter<any>();
     @Input() draftId: any;
 
-    MODE = DeliveryMode;
+    UTIL = Validations;
+
     private PRODUCT_LINES = {
         Readymix: 6,
         CementBulk: 1
@@ -43,7 +45,8 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         private manager: CreateOrderService,
         private dashboard: DashboardService,
         private drafts: DraftsService,
-        private customerService: CustomerService) {
+        private customerService: CustomerService,
+        private t: TranslationService) {
 
         this.step.onBeforeBack = () => this.onBeforeBack();
         this.step.setEventsListener(this);
@@ -67,14 +70,14 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         // Patch optimal sources then recovers prices
         this.onCompleted.emit(false);
         if (this.shouldCallOptimalSource()) {
-            this.dashboard.alertInfo("Recovering prices", 0);
+            this.dashboard.alertInfo(this.t.pt('views.checkout.recovering_prices'), 0);
             this.drafts.optimalSourcesPatch(this.draftId).flatMap((x) => {
                 return this.drafts.prices(this.draftId);
             }).subscribe((response) => {
                 this.handlePrices(response);
             }, (error) => {
-                this.dashboard.alertError("Something wrong happened");
-                console.error("Prices error", error);
+                this.dashboard.alertError(this.t.pt('views.common.something_was_wrong'));
+                console.error(this.t.pt('views.checkout.prices_error'), error);
             });
         }
         else if (this.shouldCallPrices()) {
@@ -88,14 +91,11 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     }
 
     shouldCallOptimalSource() {
-        return this.customerService.currentCustomer().countryCode.trim() == "MX"
-            && this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix
-            && this.manager.shippingCondition.shippingConditionId == this.MODE.Delivery
+        return Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery();
     }
 
     shouldCallPrices() {
-        return this.customerService.currentCustomer().countryCode.trim() == "MX"
-            && this.manager.productLine.productLineId != this.PRODUCT_LINES.Readymix
+        return Validations.isMexicoCustomer() && Validations.isCement();
     }
 
     // Readymix only
@@ -114,19 +114,11 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         if (this.lockRequests) { return; }
 
         this.onCompleted.emit(this.draftOrder);
-        this.dashboard.alertSuccess("Prices recovered successfully");
-    }
-
-    isMXCustomer() {
-        return this.customerService.currentCustomer().countryCode.trim() == "MX";
-    }
-
-    isUSACustomer() {
-        return this.customerService.currentCustomer().countryCode.trim() == "US";
+        this.dashboard.alertSuccess(this.t.pt('views.checkout.prices_recovered'));
     }
 
     isReadyMix() {
-        return this.manager.productLine.productLineId == this.PRODUCT_LINES.Readymix
+        return Validations.isReadyMix();
     }
 
     // Logic
@@ -158,6 +150,6 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     }
 
     shouldShowPrices(): boolean {
-        return !this.isUSACustomer();
+        return !Validations.isUSACustomer();
     }
 }

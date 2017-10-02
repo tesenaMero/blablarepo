@@ -278,10 +278,10 @@
                 </div>
                 <div class="cart-item-container with-sepatator col-md-2">
                     <div class="amount-container">
-                        <div class="label-amount roboto">Unitary Price</div>
+                        <div class="label-amount roboto">{{ t.pt('views.cart.unitary_price') }}</div>
                         <p class="value-amount roboto-bold">{{productDto.unitaryPrice | currency : 'USD' : true}}</p>
                         <div class="spacer-16"></div>
-                        <div class="label-amount roboto">Material Value</div>
+                        <div class="label-amount roboto">{{ t.pt('views.cart.material_value') }}</div>
                         <div class="value-amount roboto-bold">{{productDto.unitaryPrice * productDto.quantity | currency : 'USD' : true}}</div>
                     </div>
                 </div>

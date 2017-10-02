@@ -1,5 +1,6 @@
 @import "~bootstrap/scss/bootstrap-grid.scss";
 @import "bourbon";
+@import "../../../../scss/utils.scss";
 // Step 2. 
 // Product selection
 // ============================================
@@ -152,12 +153,11 @@ $medium-color: #999999;
 }
 
 .loading {
+    @extend .cemex-loading;
     height: 100%;
     width: 100%;
-    background-color: white;
     opacity: .53;
     z-index: 1;
-    background: url(../cemex-loading.gif) no-repeat 0 0;
     min-height: 400px;
     background-position: center;
 }

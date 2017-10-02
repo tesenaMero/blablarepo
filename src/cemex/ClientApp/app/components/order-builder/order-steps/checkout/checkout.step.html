@@ -1,12 +1,12 @@
 <!-- Cement USA -->
-<ng-container *ngIf="isUSACustomer() && manager?.productLine?.productLineId != PRODUCT_LINES.Readymix">
+<ng-container *ngIf="UTIL.isUSACustomer() && UTIL.isCement()">
     <ng-container *ngFor="let item of manager.products">
         <div class="product">
             <div class="row">
                 <div class="col-md-3">
                     <div class="group">
                         <div class="title">
-                            Product description
+                            {{ t.pt('views.checkout.product_description') }}
                         </div>
                         <div class="desc bold">
                             {{ item?.product?.commercialDesc }}
@@ -16,7 +16,7 @@
                 <div class="col-md-3">
                     <div class="group">
                         <div class="title">
-                            Quantity
+                            {{ t.pt('views.checkout.quantity') }}
                         </div>
                         <div class="desc">
                             {{ item?.quantity }}
@@ -26,7 +26,7 @@
                 <div class="col-md-2">
                     <div class="group">
                         <div class="title">
-                            Units
+                            {{ t.pt('views.checkout.unit') }}
                         </div>
                         <div class="desc">
                             {{ item?.unit?.alternativeUnit.unitDesc }}
@@ -36,7 +36,7 @@
                 <div class="col-md-2">
                     <div class="group">
                         <div class="title">
-                            Requested date
+                            {{ t.pt('views.checkout.request_date') }}
                         </div>
                         <div class="desc">
                             {{ item?.date | date:'dd.MM.yyyy' }}
@@ -46,7 +46,7 @@
                 <div class="col-md-1">
                     <div class="group">
                         <div class="title">
-                            Requested time
+                            {{ t.pt('views.checkout.request_time') }}
                         </div>
                         <div class="desc">
                             {{ item?.time }}
@@ -54,9 +54,9 @@
                     </div>
                 </div>
                 <div class="col-md-1">
-                    <div class="group" [ngClass]="{ invisible: isUSACustomer() }">
+                    <div class="group" [ngClass]="{ invisible: UTIL.isUSACustomer() }">
                         <div class="title">
-                            Payment
+                            {{ t.pt('views.checkout.payment') }}
                         </div>
                         <div class="desc">
                             {{ item?.payment?.paymentTermType?.paymentTermTypeDesc }}
@@ -68,7 +68,7 @@
                 <div class="col-md-3 mt-4">
                     <div class="group">
                         <div class="title">
-                            Location
+                            {{ t.pt('views.checkout.location') }}
                         </div>
                         <div class="desc bold">
                             {{ manager.jobsite?.shipmentLocationDesc }}
@@ -78,17 +78,17 @@
                 <div class="col-md-3 mt-4">
                     <div class="group">
                         <div class="title">
-                            Product ID
+                            {{ t.pt('views.checkout.product_id') }}
                         </div>
                         <div class="desc">
-                            {{ item?.product.product.productId }}
+                            {{ item?.product?.product?.productId }}
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2 mt-4">
                     <div class="group">
                         <div class="title">
-                            Maximum Capacity
+                            {{ t.pt('views.checkout.maximum_capacity') }}
                         </div>
                         <div class="desc">
                             {{ item.getMaximumCapacity() }}
@@ -98,7 +98,7 @@
                 <div class="col-md-4 mt-4">
                     <div class="group">
                         <div class="title">
-                            Contract
+                            {{ t.pt('views.checkout.contract') }}
                         </div>
                         <div class="desc">
                             {{ item?.contract?.salesDocument?.salesDocumentCode }} Remaining volume: {{ item?.contract?.salesDocument?.volume?.total.quantity.amount }}
@@ -110,7 +110,7 @@
                 <div class="col-md-3 mt-4" *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">
                     <div class="group">
                         <div class="title">
-                            Point of Delivery
+                            {{ t.pt('views.checkout.pod') }}
                         </div>
                         <div class="desc bold">
                             {{ manager.pointOfDelivery?.address?.streetName }} {{ manager.pointOfDelivery?.address?.settlementDesc }}, {{ manager.pointOfDelivery?.address?.regionDesc }}, {{ manager.pointOfDelivery?.address?.cityDesc }}, {{ manager.pointOfDelivery?.address?.postalCode
@@ -121,7 +121,7 @@
                 <div class="col-md-3 mt-4">
                     <div class="group">
                         <div class="title">
-                            Additional services
+                            {{ t.pt('views.checkout.aditional_services') }}
                         </div>
                         <div class="desc">
                             <span *ngIf="item?.maneuvering">Maneuvering</span>
@@ -131,11 +131,11 @@
                 <div class="col-md-2 mt-4">
                     <div class="group">
                         <div class="title">
-                            Delivery Mode
+                            {{ t.pt('views.checkout.delivery_mode') }}
                         </div>
                         <div class="desc">
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">Delivery</span>
-                            <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">Pickup</span>
+                            <span *ngIf="UTIL.isDelivery()">{{ t.pt('views.checkout.delivery') }}</span>
+                            <span *ngIf="UTIL.isPickup()">{{ t.pt('views.checkout.pickup') }}</span>
                         </div>
                     </div>
                 </div>
@@ -145,7 +145,7 @@
 </ng-container>
 
 <!-- Cement MX -->
-<ng-container *ngIf="!isUSACustomer() && manager?.productLine?.productLineId != PRODUCT_LINES.Readymix">
+<ng-container *ngIf="!UTIL.isUSACustomer() && UTIL.isCement()">
     <ng-container *ngFor="let item of manager.products, let index = index">
         <div class="product">
             <div class="row">
@@ -154,7 +154,7 @@
                         <div class="col-md-3">
                             <div class="group">
                                 <div class="title">
-                                    Product description
+                                    {{ t.pt('views.checkout.product_description') }}
                                 </div>
                                 <div class="desc bold">
                                     {{ item?.product?.commercialDesc }}
@@ -164,7 +164,7 @@
                         <div class="col-md-3">
                             <div class="group">
                                 <div class="title">
-                                    Quantity
+                                    {{ t.pt('views.checkout.quantity') }}
                                 </div>
                                 <div class="desc">
                                     {{ item?.quantity }}
@@ -174,7 +174,7 @@
                         <div class="col-md-2">
                             <div class="group">
                                 <div class="title">
-                                    Units
+                                    {{ t.pt('views.checkout.unit') }}
                                 </div>
                                 <div class="desc">
                                     {{ item?.unit?.alternativeUnit.unitDesc }}
@@ -184,7 +184,7 @@
                         <div class="col-md-2">
                             <div class="group">
                                 <div class="title">
-                                    Requested date
+                                    {{ t.pt('views.checkout.request_date') }}
                                 </div>
                                 <div class="desc">
                                     {{ item?.date | date:'dd.MM.yyyy' }}
@@ -194,7 +194,7 @@
                         <div class="col-md-1">
                             <div class="group">
                                 <div class="title">
-                                    Requested time
+                                    {{ t.pt('views.checkout.request_time') }}
                                 </div>
                                 <div class="desc">
                                     {{ item?.time }}
@@ -204,7 +204,7 @@
                         <div class="col-md-1">
                             <div class="group">
                                 <div class="title">
-                                    Payment
+                                    {{ t.pt('views.checkout.payment') }}
                                 </div>
                                 <div class="desc">
                                     {{ item?.payment?.paymentTermType?.paymentTermTypeDesc }}
@@ -216,7 +216,7 @@
                         <div class="col-md-3 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    Location
+                                    {{ t.pt('views.checkout.location') }}
                                 </div>
                                 <div class="desc bold">
                                     {{ manager.jobsite?.shipmentLocationDesc }}
@@ -226,17 +226,17 @@
                         <div class="col-md-3 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    Product ID
+                                    {{ t.pt('views.checkout.product_id') }}
                                 </div>
                                 <div class="desc">
-                                    {{ item?.product.product.productId }}
+                                    {{ item?.product?.product?.productId }}
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-2 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    Maximum Capacity
+                                    {{ t.pt('views.checkout.maximum_capacity') }}
                                 </div>
                                 <div class="desc">
                                     {{ item.getMaximumCapacity() }}
@@ -246,7 +246,7 @@
                         <div class="col-md-4 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    Contract
+                                    {{ t.pt('views.checkout.contract') }}
                                 </div>
                                 <div class="desc">
                                     {{ item?.contract?.salesDocument?.salesDocumentCode }} Remaining volume: {{ item?.contract?.salesDocument?.volume?.total.quantity.amount }}
@@ -258,7 +258,7 @@
                         <div class="col-md-3 mt-4" *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">
                             <div class="group">
                                 <div class="title">
-                                    Point of Delivery
+                                    {{ t.pt('views.checkout.pod') }}
                                 </div>
                                 <div class="desc bold" [ngClass]="{ invisible: !manager.pointOfDelivery }">
                                     {{ manager.pointOfDelivery?.address?.streetName }} {{ manager.pointOfDelivery?.address?.settlementDesc }}, {{ manager.pointOfDelivery?.address?.regionDesc }}, {{ manager.pointOfDelivery?.address?.cityDesc }}, {{ manager.pointOfDelivery?.address?.postalCode
@@ -269,7 +269,7 @@
                         <div class="col-md-3 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    Additional services
+                                    {{ t.pt('views.checkout.aditional_services') }}
                                 </div>
                                 <div class="desc">
                                     <span *ngIf="item?.maneuvering">Maneuvering</span>
@@ -279,11 +279,11 @@
                         <div class="col-md-2 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    Delivery Mode
+                                    {{ t.pt('views.checkout.delivery_mode') }}
                                 </div>
                                 <div class="desc">
-                                    <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">Delivery</span>
-                                    <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">Pickup</span>
+                                    <span *ngIf="UTIL.isDelivery()">{{ t.pt('views.checkout.delivery') }}</span>
+                                    <span *ngIf="UTIL.isPickup()">{{ t.pt('views.checkout.pickup') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -292,7 +292,7 @@
                         <div class="col-sm-6 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    Plant
+                                    {{ t.pt('views.checkout.plant') }}
                                 </div>
                                 <div class="desc bold">
                                     <span>{{ item.plant?.plantDesc }}</span>
@@ -304,7 +304,7 @@
                 <div class="col-md-2 right-side">
                     <div class="price-group">
                         <div class="title">
-                            Price
+                            {{ t.pt('views.checkout.price') }}
                         </div>
                         <div class="desc">
                             {{ draftOrder?.items[index]?.totalPrice | currency : 'USD' : true }}
@@ -325,7 +325,7 @@
 </ng-container>
 
 <!-- Readymix MX -->
-<ng-container *ngIf="!isUSACustomer() && manager?.productLine?.productLineId == PRODUCT_LINES.Readymix">
+<ng-container *ngIf="!UTIL.isUSACustomer() && UTIL.isReadyMix()">
     <ng-container *ngFor="let item of manager.products, let index = index">
         <div class="product">
             <div class="row">
@@ -334,7 +334,7 @@
                         <div class="col-md-3">
                             <div class="group">
                                 <div class="title">
-                                    Product description
+                                    {{ t.pt('views.checkout.product_description') }}
                                 </div>
                                 <div class="desc bold">
                                     {{ item?.product?.commercialDesc }}
@@ -344,7 +344,7 @@
                         <div class="col-md-3">
                             <div class="group">
                                 <div class="title">
-                                    Quantity
+                                    {{ t.pt('views.checkout.quantity') }}
                                 </div>
                                 <div class="desc">
                                     {{ item?.quantity }}
@@ -354,7 +354,7 @@
                         <div class="col-md-2">
                             <div class="group">
                                 <div class="title">
-                                    Units
+                                    {{ t.pt('views.checkout.unit') }}
                                 </div>
                                 <div class="desc">
                                     {{ item?.unit?.alternativeUnit.unitDesc }}
@@ -364,7 +364,7 @@
                         <div class="col-md-2">
                             <div class="group">
                                 <div class="title">
-                                    Requested date
+                                    {{ t.pt('views.checkout.request_date') }}
                                 </div>
                                 <div class="desc">
                                     {{ item?.date | date:'dd.MM.yyyy' }}
@@ -374,7 +374,7 @@
                         <div class="col-md-1">
                             <div class="group">
                                 <div class="title">
-                                    Requested time
+                                    {{ t.pt('views.checkout.request_time') }}
                                 </div>
                                 <div class="desc">
                                     {{ item?.time }}
@@ -384,7 +384,7 @@
                         <div class="col-md-1">
                             <div class="group">
                                 <div class="title">
-                                    Payment
+                                    {{ t.pt('views.checkout.payment') }}
                                 </div>
                                 <div class="desc">
                                     {{ item?.payment?.paymentTermType?.paymentTermTypeDesc }}
@@ -396,7 +396,7 @@
                         <div class="col-md-3 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    Location
+                                    {{ t.pt('views.checkout.location') }}
                                 </div>
                                 <div class="desc bold">
                                     {{ manager.jobsite?.shipmentLocationDesc }}
@@ -406,17 +406,17 @@
                         <div class="col-md-3 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    Product ID
+                                    {{ t.pt('views.checkout.product_id') }}
                                 </div>
                                 <div class="desc">
-                                    {{ item?.product.product.productId }}
+                                    {{ item?.product?.product?.productId }}
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-2 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    Maximum Capacity
+                                    {{ t.pt('views.checkout.maximum_capacity') }}
                                 </div>
                                 <div class="desc">
                                     {{ item.getMaximumCapacity() }}
@@ -426,7 +426,7 @@
                         <div class="col-md-4 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    Contract
+                                    {{ t.pt('views.checkout.maximum_capacity') }}
                                 </div>
                                 <div class="desc">
                                     {{ item?.contract?.salesDocument?.salesDocumentCode }} Remaining volume: {{ item?.contract?.salesDocument?.volume?.total.quantity.amount }}
@@ -438,7 +438,7 @@
                         <div class="col-md-3 mt-4" *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">
                             <div class="group">
                                 <div class="title">
-                                    Point of Delivery
+                                    {{ t.pt('views.checkout.pod') }}
                                 </div>
                                 <div class="desc bold" [ngClass]="{ invisible: !manager.pointOfDelivery }">
                                     {{ manager.pointOfDelivery?.address?.streetName }} {{ manager.pointOfDelivery?.address?.settlementDesc }}, {{ manager.pointOfDelivery?.address?.regionDesc }}, {{ manager.pointOfDelivery?.address?.cityDesc }}, {{ manager.pointOfDelivery?.address?.postalCode
@@ -449,7 +449,7 @@
                         <div class="col-md-3 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    Additional services
+                                    {{ t.pt('views.checkout.aditional_services') }}
                                 </div>
                                 <div class="desc">
                                     <span *ngIf="item?.maneuvering">Maneuvering</span>
@@ -459,11 +459,11 @@
                         <div class="col-md-2 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    Delivery Mode
+                                    {{ t.pt('views.checkout.delivery_mode') }}
                                 </div>
                                 <div class="desc">
-                                    <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">Delivery</span>
-                                    <span *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Pickup">Pickup</span>
+                                    <span *ngIf="UTIL.isDelivery()">{{ t.pt('views.checkout.delivery') }}</span>
+                                    <span *ngIf="UTIL.isPickup()">{{ t.pt('views.checkout.pickup') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -472,7 +472,7 @@
                 <div class="col-md-2 right-side">
                     <div class="price-group">
                         <div class="title">
-                            Unitary Price
+                            {{ t.pt('views.checkout.unitary_price') }}
                         </div>
                         <div class="desc">
                             {{ item?.contract?.unitaryPrice.gross | currency : 'USD' : true }}
@@ -480,7 +480,7 @@
                     </div>
                     <div class="price-group mt-2">
                         <div class="title">
-                            Total Price
+                            {{ t.pt('views.checkout.total_price') }}
                         </div>
                         <div class="desc">
                             {{ item?.contract?.unitaryPrice.gross * item?.quantity | currency : 'USD' : true }}
@@ -493,14 +493,14 @@
 </ng-container>
 
 <div class="price" *ngIf="shouldShowPrices()">
-    <div class="float-right text-right" *ngIf="manager?.productLine?.productLineId != PRODUCT_LINES.Readymix">
+    <div class="float-right text-right" *ngIf="UTIL.isCement()">
         <div class="subtotal">
             <div *ngIf="">
-                Subtotal:
+                {{ t.pt('views.checkout.subtotal') }}
                 <span class="desc" *ngIf="draftOrder">{{ getSubtotal() | currency : 'USD' : true }}</span>
             </div>
             <div>
-                Taxes:
+                {{ t.pt('views.checkout.taxes') }}
                 <span class="desc" *ngIf="draftOrder">{{ getTaxes() | currency : 'USD' : true }}</span>
             </div>
         </div>
@@ -508,14 +508,14 @@
             {{ getGrandTotal() | currency : 'USD' : true }}
         </div>
     </div>
-    <div class="float-right text-right" *ngIf="manager?.productLine?.productLineId == PRODUCT_LINES.Readymix">
+    <div class="float-right text-right" *ngIf="UTIL.isReadyMix()">
         <div class="subtotal">
             <div *ngIf="">
-                Subtotal:
+                {{ t.pt('views.checkout.subtotal') }}
                 <span class="desc">{{ prices.subtotal | currency : 'USD' : true }}</span>
             </div>
             <div>
-                Taxes:
+                {{ t.pt('views.checkout.taxes') }}
                 <span class="desc">{{ prices.taxes | currency : 'USD' : true }}</span>
             </div>
         </div>

@@ -51,7 +51,7 @@ export class CartComponent implements OnInit {
             this.loadings.order = false;
         }, (error) => {
             this.loadings.order = false;
-            this.dashboard.alertError("Something wrong happened");
+            this.dashboard.alertError(this.t.pt('views.common.something_was_wrong'));
             throw new Error('prices Error -> ' + JSON.stringify(error));
         });
     }
@@ -81,9 +81,9 @@ export class CartComponent implements OnInit {
     }
 
     makeOrder() {
-        this.dashboard.alertInfo("Placing order...");
+        this.dashboard.alertInfo(this.t.pt('views.common.placing'));
         this.drafts.createOrder(this._draftId, '').subscribe((response) => {
-            this.dashboard.alertSuccess("Order placed successfully!");
+            this.dashboard.alertSuccess(this.t.pt('views.common.placed'));
         });
     }
 
@@ -190,7 +190,7 @@ export class CartComponent implements OnInit {
 
     placeOrder() {
         if (!Boolean(this._draftId)) {
-            alert('no draft order ID');
+            alert(this.t.pt('views.cart.no_draft_order'));
             return;
         }
         const customer = JSON.parse(sessionStorage.getItem('currentCustomer'));

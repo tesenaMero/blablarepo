@@ -31,12 +31,12 @@
     pointer-events: none;
 }
 
+.super-disabled {
+    opacity: .53;
+    pointer-events: none;
+}
+
 // Colors
-$color-primary: #149bc3;
-$color-secondary: #008a6e;
-/////////////////
-/// Spinner 1 ///
-/////////////////
 .loading {
     position: relative;
     &:after {
