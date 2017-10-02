@@ -1001,6 +1001,8 @@
     "views.specifications.delivery": "Entrega",
     "views.specifications.pickup": "Pickup",
     "views.specifications.add_product": "+ Añadir Producto",
+    "views.specifications.no_payment_terms": "No hay terminales de pago disponibles!",
+
     "formats.date.default.format": "MM/DD/AA",
     "formats.number.currency.template": "%u%n",
     "formats.number.currency.precision": 2,

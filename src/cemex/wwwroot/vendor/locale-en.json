@@ -1003,6 +1003,7 @@
     "views.specifications.delivery": "Delivery",
     "views.specifications.pickup": "Pickup",
     "views.specifications.add_product": "+ Add Product",
+    "views.specifications.no_payment_terms": "No payemnts terms available!",
 
     "formats.date.default.format": "MM/DD/YY",
     "formats.number.currency.template": "%u%n",
