@@ -8,7 +8,7 @@
                         <label [ngClass]="{ loading: product.loadings.products }">
                             {{ t.pt('views.specifications.product_description') }}
                         </label>
-                        <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
+                        <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && (!product.loadings.products) && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
                             <span class="selection">
                                 {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
@@ -109,7 +109,7 @@
                 <div class="col-md-3 mt-3" [ngClass]="{ invisible: shouldHidePayment }">
                     <div class="group">
                         <label [ngClass]="{ loading: product.loadings.payments }">{{ t.pt('views.specifications.payment') }}</label>
-                        <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.payments }">
+                        <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.payments }">
                             <span>
                                 {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
                                 <select [(ngModel)]="product.payment" (ngModelChange)="paymentChanged(product)" class="input behind">
@@ -162,7 +162,7 @@
                         <label [ngClass]="{ loading: product.loadings.products }">
                             {{ t.pt('views.specifications.product_description') }}
                         </label>
-                        <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
+                        <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && (!product.loadings.products) && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
                             <span class="selection">
                                 {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
@@ -266,7 +266,7 @@
                 <div class="col-md-3 mt-3" [ngClass]="{ invisible: shouldHidePayment }">
                     <div class="group">
                         <label [ngClass]="{ loading: product.loadings.payments }">{{ t.pt('views.specifications.payment') }}</label>
-                        <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.loadings.payments }">
+                        <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.payments }">
                             <span>
                                 {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
                                 <select [(ngModel)]="product.payment" (ngModelChange)="paymentChanged(product)" class="input behind">

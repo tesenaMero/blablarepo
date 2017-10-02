@@ -57,9 +57,8 @@ export class ProjectProfileCreatorComponent {
             .subscribe((response) => {
                 this.postingTheOrder = false;
                 this.finishedOrder = true;
-                // TODO refetch project prorfiles on table
-            }
-            );
+                this.confirmed.emit();
+            });
 
     }
 

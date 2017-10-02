@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
+
 import { OrdersService } from '../../shared/services/orders.service';
 import { PingSalesOrderApi } from '../../shared/services/api/ping-sales-order.service';
 import { OrderRequestTableComponentConfiguration } from '../../utils/order-request.helper';
 import { DashboardService } from '../../shared/services/dashboard.service';
-import { TranslationService } from '@cemex-core/angular-services-v2/dist';
-import { Router } from '@angular/router';
 import { CustomerService } from '../../shared/services/customer.service';
 import { OrdersApi } from '../../shared/services/api/orders.service';
+import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
 import * as moment from 'moment'
 
 @Component({
@@ -15,7 +17,7 @@ import * as moment from 'moment'
     styleUrls: ['./orders.scss']
 })
 export class OrdersComponent implements OnInit {
-    orders: any;
+    orders: any = [];
 
     isLoading: any;
     totalPages: any;
@@ -26,7 +28,7 @@ export class OrdersComponent implements OnInit {
 
     public orderRequestConfiguration: OrderRequestTableComponentConfiguration;
 
-    constructor(private ordersService: OrdersService, private t: TranslationService, private ping: PingSalesOrderApi, private dash: DashboardService, private router: Router, private customerService: CustomerService, private ordersApi: OrdersApi) {
+    constructor(private ordersService: OrdersService, private t: TranslationService, private ping: PingSalesOrderApi, private dash: DashboardService, private router: Router, private customerService: CustomerService, private ordersApi: OrdersApi, private encDecJsonObjService: EncodeDecodeJsonObjService) {
         //this.orders = ordersService.getOrders();
         //this.isLoading = ordersService.isLoading();
         //this.orderRequestConfiguration = OrdersService.ORDER_REQUEST_MAPPING;
@@ -55,7 +57,8 @@ export class OrdersComponent implements OnInit {
         });
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+    }
 
     initOrders() {
         this.columns = [
@@ -88,7 +91,7 @@ export class OrdersComponent implements OnInit {
     }
 
     goToDetail(order) {
-        this.router.navigate(['/app/order-detail'], {
+        this.router.navigate(['/ordersnproduct/app/order-detail'], {
             queryParams: {
                 orderId: order.orderId ? order.orderId : null,
                 typeCode: order.orderType ? order.orderType.orderTypeCode : null,
@@ -117,7 +120,7 @@ export class OrdersComponent implements OnInit {
             this.dash.alertInfo(this.t.pt('views.common.validating_connection'), 0);
             this.ping.validatePingSalesOrder().subscribe((response) => {
                 if (response.json().success === 'Y') {
-                    this.router.navigate(['/app/new']);
+                    this.router.navigate(['/ordersnproduct/app/new']);
                     this.dash.closeAlert();
                 }
                 else {
@@ -129,7 +132,7 @@ export class OrdersComponent implements OnInit {
                 });
         }
         else {
-            this.router.navigate(['/app/new']);
+            this.router.navigate(['/ordersnproduct/app/new']);
         }
     }
 }

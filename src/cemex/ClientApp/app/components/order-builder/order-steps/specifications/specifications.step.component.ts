@@ -111,7 +111,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.searchProductService.fetchProductColors(this.manager.productLine.productLineId);
         this.modal.open('search-product');
 
-        // What the f is this
         this.searchProductService.searchedProduct.subscribe(product => {
             if (product) {
                 let filteredProducts = SpecificationsStepComponent.availableProducts.filter((availableProducts) => {
@@ -163,6 +162,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     onShowed() {
         // Unlock
+        this.onCompleted.emit(false);
         this.lockRequests = false;
 
         // Define validations for each preproduct already added
@@ -319,6 +319,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
                         item.paymentChanged();
                     })
                 }
+                else {
+                    this.dashboard.alertError("No payment type available for this jobsite");
+                }
                 return;
             }
 
@@ -327,42 +330,65 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 let customerId = this.customerService.currentCustomer().legalEntityId;
                 this.paymentTermsApi.getCashTerm(customerId).subscribe((result) => {
                     let cashTerm = result.json().paymentTerms;
-                    if (cashTerm.length) { paymentTerms.push(cashTerm[0]); }
 
-                    // Set default payment terms for preproducts
-                    SpecificationsStepComponent.availablePayments = paymentTerms;
-
-                    // Set available payments and loading state
-                    this.preProducts.forEach((item: PreProduct) => {
-                        item.loadings.payments = false;
-                        item.disableds.payments = false;
-                        item.availablePayments = paymentTerms;
-
-                        // Select credit by default
-                        if (credit) {
-                            item.payment = credit;
-                            item.paymentChanged();
-                        }
+                    const singleCash = cashTerm.find((term: any) => {
+                        return term.paymentTermType.paymentTermTypeCode === 'CASH';
                     });
+
+                    // If cash founded, add it
+                    if (singleCash) { paymentTerms.push(singleCash); }
+
+                    // Set buisness logic with cash added into payemnt terms
+                    this.setPaymentsBuisnessLogic(paymentTerms, credit);
                 });
             }
             else {
-                // Set default payment terms for preproducts
-                SpecificationsStepComponent.availablePayments = paymentTerms;
-
-                // Set available payments and loading state
-                this.preProducts.forEach((item: PreProduct) => {
-                    item.loadings.payments = false;
-                    item.disableds.payments = false;
-                    item.availablePayments = paymentTerms;
-
-                    // Select credit by default
-                    if (credit) {
-                        item.payment = credit;
-                        item.paymentChanged();
-                    }
-                });
+                // Set buisness logic with defualt payment terms
+                this.setPaymentsBuisnessLogic(paymentTerms, credit);
             }
+        });
+    }
+
+    setPaymentsBuisnessLogic(paymentTerms, credit) {
+        // Set default payment terms for preproducts
+        SpecificationsStepComponent.availablePayments = paymentTerms;
+
+        // Set available payments and loading state
+        this.preProducts.forEach((item: PreProduct) => {
+            item.availablePayments = paymentTerms;
+            // In the case where payment is not showed to the user select credit by default
+            // If there is no credit try to select whatever lol
+            if (Validations.shouldHidePayment()) {
+                if (credit) {
+                    item.payment = credit;
+                }
+                else if (paymentTerms.length) {
+                    item.payment = paymentTerms[0];
+                }
+                else {
+                    // No payments term
+                    this.dashboard.alertError("No payemnts terms available!", 0);
+                }
+            }
+            else {
+                if (paymentTerms.length === 1) {
+                    item.payment = paymentTerms[0];
+                    item.disableds.payments = false;
+                }
+                else if (paymentTerms.length > 0) {
+                    item.payment = undefined;
+                    item.disableds.payments = false;
+                }
+                else {
+                    // No payments
+                    item.payment = undefined;
+                    item.disableds.payments = true;
+                    this.dashboard.alertError("No payemnts terms available!", 0);
+                }
+            }
+
+            item.paymentChanged();
+            item.loadings.payments = false;
         });
     }
 
@@ -558,7 +584,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         product.deleting = true;
         setTimeout(() => {
             this.preProducts.splice(index, 1);
-            
+
             // Readymix case when all contracts should be the same.
             // Case when the first product is removed
             if (Validations.isReadyMix() && this.preProducts.length) {

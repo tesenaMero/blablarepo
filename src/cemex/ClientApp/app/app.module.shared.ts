@@ -17,6 +17,7 @@ import { LoadingTableComponent } from './components/orders-table/loading-table/l
 import { NewOrderComponent } from './components/new-order/new-order.component';
 import { OrderDetailComponent } from './components/order-detail/order-detail.component';
 import { CartComponent } from './components/cart/cart.component';
+import { CashCheckoutComponent } from './components/cash-checkout/cash-checkout.component'
 import { OrderBuilderComponent } from './components/order-builder/order-builder.component';
 import {
     LocationStepComponent,
@@ -107,6 +108,7 @@ export const sharedConfig: NgModule = {
         CartComponent,
         OrderDetailComponent,
         LoginComponent,
+        CashCheckoutComponent,
 
         // Pipes
         ZeroPadPipe,
@@ -150,7 +152,9 @@ export const sharedConfig: NgModule = {
         CmxCoreCommonModule,
         CmxSharedModule,
         RouterModule.forRoot([
-            { path: '', redirectTo: 'app', pathMatch: 'full' },
+            { path: '', redirectTo: 'app', pathMatch: 'full'},
+            { path: 'ordersnproduct', redirectTo: 'app', pathMatch: 'prefix'},
+            { path: 'ordersnproduct/app', redirectTo: 'app', pathMatch: 'prefix'},
             { path: 'login', component: LoginComponent },
             {
                 path: 'app', component: DashboardComponent, canActivate: [AuthGuard], children: [
@@ -162,6 +166,7 @@ export const sharedConfig: NgModule = {
                     { path: 'project-profiles', component: ProjectProfilesComponent },
                     { path: 'drafts', component: DraftsComponent },
                     { path: 'open/:id', component: CrossProductComponent },
+                    { path: 'cash', component: CashCheckoutComponent },
                 ]
             }
         ])

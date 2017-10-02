@@ -17,7 +17,7 @@ export class Validations {
 
     constructor() {}
 
-    static init(manager: any, customer: any) {
+    static init(manager: CreateOrderService, customer: CustomerService) {
         Validations.manager = manager;
         Validations.customer = customer;
     }
@@ -44,19 +44,16 @@ export class Validations {
 
     // TODO: Replace Id with code in enum
     static isPickup() {
-        return _.get(this.manager, 'shippingCondition.shippingConditionId') === this.MODE.Pickup ||
-                _.get(this.manager, 'shippingCondition.shippingConditionCode') === this.MODE.Pickup;
+        return _.get(this.manager, 'shippingCondition.shippingConditionCode') === this.MODE.Pickup;
     }
 
     // TODO: Replace Id with code in enum
     static isDelivery() {
-        return _.get(this.manager, 'shippingCondition.shippingConditionId') === this.MODE.Delivery || 
-                _.get(this.manager, 'shippingCondition.shippingConditionCode') === this.MODE.Delivery;
+        return _.get(this.manager, 'shippingCondition.shippingConditionCode') === this.MODE.Delivery;
     }
 
     static shouldHidePayment() {
-        return this.customer.currentCustomer().countryCode.trim() === "US" 
-                || _.get(this.manager, 'productLine.productId') === this.PRODUCT_LINES.Readymix;
+        return Validations.isUSACustomer() || Validations.isReadyMix();
     }
 
     static shouldHidePOD(): boolean {

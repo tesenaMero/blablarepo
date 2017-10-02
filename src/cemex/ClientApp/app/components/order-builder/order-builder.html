@@ -27,9 +27,9 @@
             <div class="success-group">
                 <span class="cmx-icon-accepted-ok"></span>
                 <div class="success-text">
-                    {{ t.pt('views.common.order_code') }} {{ orderCode }} {{ t.pt('views.common.was_submited') }}
+                    {{ t.pt('views.common.order_code') }}{{ orderCode }} {{ t.pt('views.common.was_submited') }}
                 </div>
-                <button *ngIf="!cashOrders.length" class="button back-to-orders" (click)="closeModal()">{{ t.pt('views.common.was_submited') }}</button>
+                <button *ngIf="!cashOrders.length" class="button back-to-orders" (click)="closeModal()">{{ t.pt('views.common.back_orders') }}</button>
                 <button *ngIf="cashOrders.length" class="button back-to-orders" (click)="payCashOrders()">{{ t.pt('views.builder.proceed_cash') }}</button>
             </div>
         </div>
