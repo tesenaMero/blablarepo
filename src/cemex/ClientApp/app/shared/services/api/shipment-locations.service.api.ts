@@ -78,7 +78,9 @@ export class ShipmentLocationApi {
 
     geo(address: any): Observable<Response> {
         //return this.api.get(address.geoPlace.links.self);
-        return this.api.get(address.geoPlace.links.self);
+        const geoPlace = address && address.geoPlace && address.geoPlace.links && address.geoPlace.links.self || undefined
+        if (geoPlace) { return this.api.get(geoPlace); }
+        else { return Observable.empty<Response>(); }
     }
 
     // contacts(shipmentLocation: any): Observable<Response> {

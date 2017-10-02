@@ -5,10 +5,10 @@ import { CreateOrderService } from '../../../../shared/services/create-order.ser
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
 import { ShipmentLocationApi, PurchaseOrderApi, ShippingConditionApi } from '../../../../shared/services/api';
 import { CustomerService } from '../../../../shared/services/customer.service';
-import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { Validations } from '../../../../utils/validations';
 import { Observable } from 'rxjs/Observable';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 @Component({
     selector: 'location-step',
@@ -95,21 +95,21 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     // Text configuration
     jobsiteTexts: IMultiSelectTexts = {
-        searchPlaceholder: 'Find jobsite',
-        searchEmptyResult: 'No jobsite found...',
-        defaultTitle: 'Select existing jobsite',
+        searchPlaceholder: this.t.pt('views.location.find_jobsite'),
+        searchEmptyResult: this.t.pt('views.location.no_jobsite'),
+        defaultTitle: this.t.pt('views.location.select_existing_jobsite'),
     };
 
     contactsTexts: IMultiSelectTexts = {
-        searchPlaceholder: 'Find contact',
-        searchEmptyResult: 'No contacts found...',
-        defaultTitle: 'Select contact',
+        searchPlaceholder: this.t.pt('views.location.find_contact'),
+        searchEmptyResult: this.t.pt('views.location.no_contact'),
+        defaultTitle: this.t.pt('views.location.select_contact'),
     };
 
     podsTexts: IMultiSelectTexts = {
-        searchPlaceholder: 'Find point of delivery',
-        searchEmptyResult: 'No points of deliveries found...',
-        defaultTitle: 'Select existing POD',
+        searchPlaceholder: this.t.pt('views.location.find_pod'),
+        searchEmptyResult: this.t.pt('views.location.no_pod'),
+        defaultTitle: this.t.pt('views.location.select_existing_pod'),
     };
 
     // H4x0R
@@ -126,7 +126,15 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     private UTILS: any;
 
-    constructor( @Inject(Step) private step: Step, private manager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private customerService: CustomerService, private purchaseOrderApi: PurchaseOrderApi, private dashboard: DashboardService, private shippingConditionApi: ShippingConditionApi) {
+    constructor( 
+        @Inject(Step) private step: Step, 
+        private manager: CreateOrderService, 
+        private shipmentApi: ShipmentLocationApi, 
+        private customerService: CustomerService, 
+        private purchaseOrderApi: PurchaseOrderApi, 
+        private dashboard: DashboardService, 
+        private shippingConditionApi: ShippingConditionApi,
+        private t: TranslationService) {
 
         // Interfaces
         this.step.canAdvance = () => this.canAdvance();
@@ -167,7 +175,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
         // Validate purchase order
         if (this.validations.purchaseOrder.mandatory) {
-            this.dashboard.alertInfo("Validating...", 0);
+            this.dashboard.alertInfo(this.t.pt('views.common.validating'), 0);
             this.purchaseOrderApi.validate(this.purchaseOrder, this.manager.productLine, this.location).subscribe((response) => {
                 let data = response.json();
                 if (data.messageType == "E") {
@@ -191,12 +199,12 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         return advance;
     }
 
-    // Replacing the object shippingConditionId with the api one
+    // Replacing the object shippingCondition with the api one
     mapShippingCondition() {
-        const mode = this.manager.shippingCondition.shippingConditionId;
+        const mode = this.manager.shippingCondition.shippingConditionCode;
         const customer = this.customerService.currentCustomer().legalEntityId;
         this.shippingConditionApi.byCode(customer, mode).subscribe((response) => {
-            let shipppingConditions = response.json()
+            let shipppingConditions = response.json().shippingConditions
             if (shipppingConditions.length) {
                 this.manager.selectDeliveryType(shipppingConditions[0]);
             }
@@ -204,6 +212,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     onShowed() {
+        this.onCompleted.emit(true);
+
         this.isCement = Validations.isCement();
 
         // Map shippingcondition
@@ -307,48 +317,50 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
         // Make salesarea call, dont fetch yet
         let salesAreaSub = this.shipmentApi.salesAreas(this.location, this.manager.productLine)
-            .map((salesAreas) => {
-                if (salesAreas.json().jobsiteSalesAreas.length > 0) {
-                    let salesArea = salesAreas.json().jobsiteSalesAreas;
-                    this.manager.salesArea = salesArea;
+        .map((salesAreas) => {
+            if (salesAreas.json().jobsiteSalesAreas.length > 0) {
+                let salesArea = salesAreas.json().jobsiteSalesAreas;
+                this.manager.salesArea = salesArea;
 
-                    // If its not pickup then all we need to be fetched is sales areas.
-                    // If its pickup we need to wait for address object to be fetched
-                    if (!Validations.isPickup()) {
-                        this.onCompleted.emit(true);
-                    }
-
-                    let shouldValidatePurchaseOrder = false;
-                    salesArea.forEach((item) => {
-                        if (item.purchaseOrderValidation) {
-                            shouldValidatePurchaseOrder = true;
-                            return;
-                        }
-                    });
-
-                    this.location.purchaseOrderValidation = shouldValidatePurchaseOrder;
-                    this.validations.purchaseOrder.mandatory = shouldValidatePurchaseOrder;
+                // If its not pickup then all we need to be fetched is sales areas.
+                // If its pickup we need to wait for address object to be fetched
+                if (!Validations.isPickup()) {
+                    this.onCompleted.emit(true);
                 }
-                this.loadings.purchaseOrder = false;
-            });
 
-        // Make address -> geolocation call, dont fetch yet
-        let addressSub = this.shipmentApi.address(this.location)
-            .flatMap((address) => {
-                this.location.address = address.json();
-                return this.shipmentApi.geo(address.json());
-            })
-            .map((geo) => {
-                this.location.geo = geo.json();
-                this.cleanJobsiteMarker();
-                this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
-                this.addMarkerToMap(this.jobsiteMarker);
-                this.loadings.map = false;
-            });
+                let shouldValidatePurchaseOrder = false;
+                salesArea.forEach((item) => {
+                    if (item.purchaseOrderValidation) {
+                        shouldValidatePurchaseOrder = true;
+                        return;
+                    }
+                });
+
+                this.location.purchaseOrderValidation = shouldValidatePurchaseOrder;
+                this.validations.purchaseOrder.mandatory = shouldValidatePurchaseOrder;
+            }
+            this.loadings.purchaseOrder = false;
+        });
+
+        //  Make address, dont fetch yet
+        let addressSub = this.shipmentApi.address(this.location).map((address) => {
+            this.location.address = address.json();
+        })
 
         // Fork join address + sales areas (fetch)
         this.salesAdressSub = Observable.forkJoin(salesAreaSub, addressSub).subscribe((response) => {
             this.onCompleted.emit(true);
+            
+            // Fetch geo
+            this.shipmentApi.geo(this.location.address).subscribe((geo) => {
+                if (geo && geo.json) {
+                    this.location.geo = geo.json();
+                    this.cleanJobsiteMarker();
+                    this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
+                    this.addMarkerToMap(this.jobsiteMarker);
+                    this.loadings.map = false;
+                }
+            });
         });
 
         // Fetch pods
@@ -360,9 +372,19 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             });
 
             if (this.pods.length > 0) {
-                this.podsIndex = this.pods.length === 1 ? 0 : undefined;
-                this.pods.length === 1 ? this.podChanged(this.pods[0]) : this.podChanged(undefined)
-            }
+                if (this.pod === undefined) {
+                    this.podsIndex = this.pods.length === 1 ? 0 : undefined;
+                    this.pods.length === 1 ? this.podChanged(this.pods[0]) : this.podChanged(undefined);
+                }
+                else {
+                    this.pods.forEach((pod, index) => {
+                        if (this.pod.shipmentLocationId === pod.shipmentLocationId){
+                            this.podsIndex = index;
+                            this.podChanged(this.pods[index]);
+                        }
+                    });
+                }
+            }         
 
             this.loadings.pods = false;
         });
@@ -406,11 +428,13 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 return this.shipmentApi.geo(address.json());
             })
             .subscribe((geo) => {
-                this.pod.geo = geo.json();
-                this.cleanJobsiteMarker();
-                this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
-                this.addMarkerToMap(this.jobsiteMarker);
-                this.loadings.map = false;
+                if (geo.json) {
+                    this.pod.geo = geo.json();
+                    this.cleanJobsiteMarker();
+                    this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
+                    this.addMarkerToMap(this.jobsiteMarker);
+                    this.loadings.map = false;
+                }
             });
 
         // this.shipmentApi.jobsiteGeo(pod).subscribe((geo) => {

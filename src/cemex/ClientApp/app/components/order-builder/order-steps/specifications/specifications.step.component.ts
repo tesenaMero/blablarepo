@@ -6,12 +6,12 @@ import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.s
 import { ProjectProfileApi, CatalogApi, PlantApi, ContractsApi } from '../../../../shared/services/api';
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { SearchProductService } from '../../../../shared/services/product-search.service';
-import { DeliveryMode } from '../../../../models/delivery.model';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { Validations } from '../../../../utils/validations';
 import { ModalService } from '../../../../shared/components/modal'
 import { Observable } from 'rxjs/Observable';
 import { PreProduct } from './preproduct'
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 import * as _ from 'lodash';
 
@@ -28,16 +28,19 @@ export class SpecificationsStepComponent implements StepEventsListener {
     today: Date;
 
     // One box one preProduct
-    private preProducts = [];
+    private preProducts: Array<PreProduct> = [];
 
     // Consts
     private UTILS = Validations;
-    private MODE = DeliveryMode;
 
     private loadings = {
         projectProfiles: true,
         catalog: true
     }
+
+    // Global
+    // Only usd for readymix
+    globalContract: any;
 
     // Subs
     productsSub: any;
@@ -95,7 +98,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private plantApi: PlantApi,
         private searchProductService: SearchProductService,
         private dashboard: DashboardService,
-        private modal: ModalService
+        private modal: ModalService,
+        private t: TranslationService
     ) {
         this.today = new Date();
         this.step.setEventsListener(this);
@@ -107,17 +111,20 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.searchProductService.fetchProductColors(this.manager.productLine.productLineId);
         this.modal.open('search-product');
 
-        // What the f is this
         this.searchProductService.searchedProduct.subscribe(product => {
             if (product) {
                 let filteredProducts = SpecificationsStepComponent.availableProducts.filter((availableProducts) => {
                     return availableProducts.commercialCode === product.commercialCode;
                 });
-                if (filteredProducts.length) { preProduct.product = filteredProducts[0]; }
+                if (filteredProducts.length) {
+                    preProduct.product = filteredProducts[0];
+                    this.onCompleted.emit(true);
+                }
                 else {
                     SpecificationsStepComponent.availableProducts.push(product);
                     preProduct.product = product;
                     preProduct.productChanged();
+                    this.onCompleted.emit(true);
                 }
             }
         });
@@ -155,6 +162,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     onShowed() {
         // Unlock
+        this.onCompleted.emit(false);
         this.lockRequests = false;
 
         // Define validations for each preproduct already added
@@ -220,7 +228,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     // Enable product selection anyways
                     item.disableds.products = false;
                 });
-            });
+            }
+            );
     }
 
     fetchProductsReadyMix(salesDocumentType) {
@@ -310,6 +319,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
                         item.paymentChanged();
                     })
                 }
+                else {
+                    this.dashboard.alertError("No payment type available for this jobsite");
+                }
                 return;
             }
 
@@ -317,43 +329,66 @@ export class SpecificationsStepComponent implements StepEventsListener {
             if (!cash) {
                 let customerId = this.customerService.currentCustomer().legalEntityId;
                 this.paymentTermsApi.getCashTerm(customerId).subscribe((result) => {
-                    paymentTerms = result.json().paymentTerms;
-                    if (paymentTerms.length) { paymentTerms.push(paymentTerms[0]); }
+                    let cashTerm = result.json().paymentTerms;
 
-                    // Set default payment terms for preproducts
-                    SpecificationsStepComponent.availablePayments = paymentTerms;
-
-                    // Set available payments and loading state
-                    this.preProducts.forEach((item: PreProduct) => {
-                        item.loadings.payments = false;
-                        item.disableds.payments = false;
-                        item.availablePayments = paymentTerms;
-
-                        // Select credit by default
-                        if (credit) {
-                            item.payment = credit;
-                            item.paymentChanged();
-                        }
+                    const singleCash = cashTerm.find((term: any) => {
+                        return term.paymentTermType.paymentTermTypeCode === 'CASH';
                     });
+
+                    // If cash founded, add it
+                    if (singleCash) { paymentTerms.push(singleCash); }
+
+                    // Set buisness logic with cash added into payemnt terms
+                    this.setPaymentsBuisnessLogic(paymentTerms, credit);
                 });
             }
             else {
-                // Set default payment terms for preproducts
-                SpecificationsStepComponent.availablePayments = paymentTerms;
-
-                // Set available payments and loading state
-                this.preProducts.forEach((item: PreProduct) => {
-                    item.loadings.payments = false;
-                    item.disableds.payments = false;
-                    item.availablePayments = paymentTerms;
-
-                    // Select credit by default
-                    if (credit) {
-                        item.payment = credit;
-                        item.paymentChanged();
-                    }
-                });
+                // Set buisness logic with defualt payment terms
+                this.setPaymentsBuisnessLogic(paymentTerms, credit);
             }
+        });
+    }
+
+    setPaymentsBuisnessLogic(paymentTerms, credit) {
+        // Set default payment terms for preproducts
+        SpecificationsStepComponent.availablePayments = paymentTerms;
+
+        // Set available payments and loading state
+        this.preProducts.forEach((item: PreProduct) => {
+            item.availablePayments = paymentTerms;
+            // In the case where payment is not showed to the user select credit by default
+            // If there is no credit try to select whatever lol
+            if (Validations.shouldHidePayment()) {
+                if (credit) {
+                    item.payment = credit;
+                }
+                else if (paymentTerms.length) {
+                    item.payment = paymentTerms[0];
+                }
+                else {
+                    // No payments term
+                    this.dashboard.alertError("No payemnts terms available!", 0);
+                }
+            }
+            else {
+                if (paymentTerms.length === 1) {
+                    item.payment = paymentTerms[0];
+                    item.disableds.payments = false;
+                }
+                else if (paymentTerms.length > 0) {
+                    item.payment = undefined;
+                    item.disableds.payments = false;
+                }
+                else {
+                    // No payments
+                    item.payment = undefined;
+                    item.disableds.payments = true;
+                    this.dashboard.alertError("No payemnts terms available!", 0);
+                }
+            }
+
+            item.paymentChanged();
+            item.loadings.payments = false;
         });
     }
 
@@ -472,11 +507,40 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     productChanged(preProduct: PreProduct) {
-        preProduct.productChanged();
+        const readymixCase = Validations.isReadyMix() && this.globalContract;
+        if (readymixCase) {
+            // Do not fetch contracts, just add product
+            preProduct.productChanged(false);
+        }
+        else {
+            preProduct.productChanged();
+        }
     }
 
     contractChanged(preProduct: PreProduct) {
-        preProduct.contractChanged();
+        // Readymix scenario
+        // All products should be using the same contract
+        if (Validations.isReadyMix()) {
+            this.globalContract = preProduct.contract;
+            this.preProducts.forEach((item: PreProduct, index) => {
+                item.contract = this.globalContract;
+                item.contractChanged();
+
+                if (this.globalContract) {
+                    // Valid contract selected
+                    if (index > 0) { item.disableds.contracts = true; }
+                }
+                else {
+                    // Contract unselected
+                    item.disableds.contracts = false;
+                }
+            });
+        }
+
+        // Normal scenario
+        else {
+            preProduct.contractChanged();
+        }
     }
 
     plantChanged(preProduct: PreProduct) {
@@ -488,14 +552,31 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     add() {
-        this.preProducts.push(new PreProduct(
+        const shouldFetchContracts = !(Validations.isReadyMix() && this.globalContract);
+        let preProduct = new PreProduct(
             this.productsApi,
             this.manager,
             this.paymentTermsApi,
             this.plantApi,
             this.customerService,
-            this.dashboard
-        ));
+            this.dashboard,
+            this.t,
+            shouldFetchContracts
+        )
+
+        // Readymix case where everything has to be from the same contract
+        if (Validations.isReadyMix() && this.globalContract) {
+            preProduct.contract = this.globalContract;
+            preProduct.disableds.contracts = true;
+
+            if (this.preProducts.length) {
+                // Set the same product as initial so ensure they belong to the same contract
+                preProduct.product = this.preProducts[0].product;
+                preProduct.availableContracts = this.preProducts[0].availableContracts;
+            }
+        }
+
+        this.preProducts.push(preProduct);
     }
 
     remove(index: any) {
@@ -503,63 +584,74 @@ export class SpecificationsStepComponent implements StepEventsListener {
         product.deleting = true;
         setTimeout(() => {
             this.preProducts.splice(index, 1);
+
+            // Readymix case when all contracts should be the same.
+            // Case when the first product is removed
+            if (Validations.isReadyMix() && this.preProducts.length) {
+                if (this.preProducts[0].disableds.contracts) {
+                    this.preProducts[0].disableds.contracts = false;
+                }
+            }
         }, 400);
     }
 
     qty(product: PreProduct, toAdd: number) {
-        if (this.isMXCustomer()) {
-            if (product.quantity <= 1 && toAdd < 0) { return; }
-            const shippingConditionId = _.get(this.manager, 'shippingCondition.shippingConditionId');
-            const isDelivery = shippingConditionId === this.MODE.Delivery;
-            let conversion = product.convertToTons(product.quantity + toAdd);
+        if (product.quantity <= 1 && toAdd < 0) { return; }
+        if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
+        product.quantity += toAdd;
+        return;
+        // if (this.isMXCustomer()) {
+        //     if (product.quantity <= 1 && toAdd < 0) { return; }
+        //     const isDelivery = Validations.isDelivery();
+        //     let conversion = product.convertToTons(product.quantity + toAdd);
 
-            let newQty = product.quantity + toAdd;
-            let contractBalance = product.getContractBalance(); //remaining of contract
-            let maxCapacitySalesArea = product.getMaximumCapacity();
+        //     let newQty = product.quantity + toAdd;
+        //     let contractBalance = product.getContractBalance(); //remaining of contract
+        //     let maxCapacitySalesArea = product.getMaximumCapacity();
 
-            if (contractBalance === undefined) {
-                if (isDelivery) {
-                    if (((this.manager.productLine.productId == 2) || (this.manager.productLine.productId == 1)) && (conversion <= maxCapacitySalesArea)) {
-                        return product.quantity = newQty;
-                    }
-                    else {
-                        if (conversion <= maxCapacitySalesArea) {
-                            return product.quantity = newQty;
-                        }
-                    }
-                }
-                else {
-                    if (conversion <= maxCapacitySalesArea) {
-                        return product.quantity = newQty;
-                    }
-                }
-            }
-            else {
-                if (conversion > contractBalance) {
-                    return this.dashboard.alertError("Maxiumum capacity limit reached", 10000);
-                }
-                if (!isDelivery) {
-                    if (conversion <= maxCapacitySalesArea) {
-                        return product.quantity = newQty;
-                    }
-                }
-                else {
-                    if ((conversion <= maxCapacitySalesArea)) {
-                        return product.quantity = newQty;
-                    }
-                }
-            }
-            if (conversion <= maxCapacitySalesArea) {
-                return product.quantity = newQty;
-            }
+        //     if (contractBalance === undefined) {
+        //         if (isDelivery) {
+        //             if (((this.manager.productLine.productLineId == 2) || (this.manager.productLine.productLineId == 1)) && (conversion <= maxCapacitySalesArea)) {
+        //                 return product.quantity = newQty;
+        //             }
+        //             else {
+        //                 if (conversion <= maxCapacitySalesArea) {
+        //                     return product.quantity = newQty;
+        //                 }
+        //             }
+        //         }
+        //         else {
+        //             if (conversion <= maxCapacitySalesArea) {
+        //                 return product.quantity = newQty;
+        //             }
+        //         }
+        //     }
+        //     else {
+        //         if (conversion > contractBalance) {
+        //             return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
+        //         }
+        //         if (!isDelivery) {
+        //             if (conversion <= maxCapacitySalesArea) {
+        //                 return product.quantity = newQty;
+        //             }
+        //         }
+        //         else {
+        //             if ((conversion <= maxCapacitySalesArea)) {
+        //                 return product.quantity = newQty;
+        //             }
+        //         }
+        //     }
+        //     if (conversion <= maxCapacitySalesArea) {
+        //         return product.quantity = newQty;
+        //     }
 
-            return this.dashboard.alertError("Maxiumum capacity limit reached", 10000);
-        }
-        else {
-            if (product.quantity <= 1 && toAdd < 0) { return; }
-            if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
-            product.quantity += toAdd;
-        }
+        //     return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
+        // }
+        // else {
+        //     if (product.quantity <= 1 && toAdd < 0) { return; }
+        //     if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
+        //     product.quantity += toAdd;
+        // }
     }
 
     todayStr() {

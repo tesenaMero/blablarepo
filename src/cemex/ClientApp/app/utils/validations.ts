@@ -17,17 +17,17 @@ export class Validations {
 
     constructor() {}
 
-    static init(manager: any, customer: any) {
+    static init(manager: CreateOrderService, customer: CustomerService) {
         Validations.manager = manager;
         Validations.customer = customer;
     }
 
     static isMexicoCustomer() {
-        return this.customer.currentCustomer() && this.customer.currentCustomer().countryCode.trim() === "MX"
+        return this.customer.currentCustomer() && this.customer.currentCustomer().countryCode && this.customer.currentCustomer().countryCode.trim() === "MX" || undefined
     }
 
     static isUSACustomer() {
-        return this.customer.currentCustomer() && this.customer.currentCustomer().countryCode.trim() === "US"
+        return this.customer.currentCustomer() && this.customer.currentCustomer().countryCode && this.customer.currentCustomer().countryCode.trim() === "US" || undefined
     }
 
     static isReadyMix() {
@@ -42,17 +42,18 @@ export class Validations {
         return _.get(this.manager, 'productLine.productLineId') === this.PRODUCT_LINES.CementBulk
     }
 
+    // TODO: Replace Id with code in enum
     static isPickup() {
-        return _.get(this.manager, 'shippingCondition.shippingConditionId') === this.MODE.Pickup
+        return _.get(this.manager, 'shippingCondition.shippingConditionCode') === this.MODE.Pickup;
     }
 
+    // TODO: Replace Id with code in enum
     static isDelivery() {
-        return _.get(this.manager, 'shippingCondition.shippingConditionId') === this.MODE.Delivery
+        return _.get(this.manager, 'shippingCondition.shippingConditionCode') === this.MODE.Delivery;
     }
 
     static shouldHidePayment() {
-        return this.customer.currentCustomer().countryCode.trim() === "US" 
-                || _.get(this.manager, 'productLine.productId') === this.PRODUCT_LINES.Readymix;
+        return Validations.isUSACustomer() || Validations.isReadyMix();
     }
 
     static shouldHidePOD(): boolean {

@@ -22,7 +22,7 @@
     </div>
 
     <modal id="pp-creator">
-        <project-profile-creator (confirmed)="closeModal('pp-creator')" (canceled)="closeModal('pp-creator')"></project-profile-creator>
+        <project-profile-creator (confirmed)="projectProfileCreated()" (canceled)="closeModal('pp-creator')"></project-profile-creator>
     </modal>
 
     <dls-table [rows]="rows" [columns]="columns"></dls-table>

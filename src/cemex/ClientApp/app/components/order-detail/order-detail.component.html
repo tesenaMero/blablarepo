@@ -12,7 +12,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="location" *ngIf="orderDetailData">
         <div class="row">
             <div class="col-md-5">
@@ -37,7 +37,7 @@
                         {{orderDetailData.pointOfDelivery.pointOfDeliveryDesc}}
                     </div>
                     <div class="detail" *ngIf="streetPOD">
-                        {{streetPOD.domicileNum}} {{streetPOD.streetName}}, {{streetPOD.cityDesc}}, {{streetPOD.regionDesc}}, {{streetPOD.postalCode}}   
+                        {{streetPOD.domicileNum}} {{streetPOD.streetName}}, {{streetPOD.cityDesc}}, {{streetPOD.regionDesc}}, {{streetPOD.postalCode}}
                     </div>
                 </div>
             </div>
@@ -75,8 +75,8 @@
             </div>
         </div>
     </div>
-    
-    <div class="nav-tab-container"  *ngIf="orderDetailData">
+
+    <div class="nav-tab-container" *ngIf="orderDetailData">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#products" role="tab">{{ t.pt('views.details.products') }}</a>
@@ -89,11 +89,11 @@
             </li> -->
         </ul>
     </div>
-    
+
     <!-- Tab panes -->
-    <div class="tab-content"  *ngIf="orderDetailData">
+    <div class="tab-content" *ngIf="orderDetailData">
         <div class="tab-pane fade show active" id="products" role="tabpanel">
-            <div class="products-container"> 
+            <div class="products-container">
                 <div class="card-container product" id="products-id" *ngFor="let itemData of orderDetailData.items">
                     <div class="row">
                         <div class="col-md-4 col-sm-12 left-container">
@@ -167,7 +167,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.dischargeTime">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData?.orderItemProfile?.dischargeTime">
                                     <div class="group">
                                         <div class="title">
                                             {{ t.pt('views.details.discharge_time') }}
@@ -202,13 +202,13 @@
                                         <div class="title">
                                             {{ t.pt('views.details.delivery_mode') }}
                                         </div>
-                                        <div class="value">                                            
+                                        <div class="value">
                                             {{orderDetailData.shippingCondition.shippingConditionDesc}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">                                        
+                            <div class="row">
                                 <div class="col-md-3 col-xs-6" *ngIf="itemData?.orderItemProfile.pumpCapacity">
                                     <div class="group">
                                         <div class="title">
@@ -244,23 +244,23 @@
                                         <div class="title">
                                             {{ t.pt('views.details.kicker') }}
                                         </div>
-                                        <div class="value">                                            
+                                        <div class="value">
                                             {{itemData.orderItemProfile.kicker}}
                                         </div>
                                     </div>
-                                </div>   
-                            </div>         
-                            <div class="row">  
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.loadSize">
                                     <div class="group">
                                         <div class="title">
                                             {{ t.pt('views.details.load_size') }}
                                         </div>
-                                        <div class="value">  
+                                        <div class="value">
                                             {{itemData.orderItemProfile.loadSize.loadSizeDesc}}
                                         </div>
                                     </div>
-                                </div>  
+                                </div>
                                 <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.timePerLoad?.timePerLoadDesc">
                                     <div class="group">
                                         <div class="title">
@@ -270,8 +270,8 @@
                                             {{itemData.orderItemProfile.timePerLoad.timePerLoadDesc}}
                                         </div>
                                     </div>
-                                </div>        
-                            </div>   
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-sm-8" *ngIf="itemData.orderItemProfile?.additionalServices">
                                     <div class="group">
@@ -282,12 +282,12 @@
                                             {{itemData.orderItemProfile.additionalServices[0].additionalServiceDesc}}
                                         </div>
                                     </div>
-                                </div>                                            
-                            </div>         
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>          
+            </div>
         </div>
         <div class="tab-pane fade" id="action-log" role="tabpanel">
             <order-detail-logs orderItemId=2></order-detail-logs>
