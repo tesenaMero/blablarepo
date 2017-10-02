@@ -990,6 +990,7 @@
     "views.specifications.verify_plant": "Verify plant section",
     "views.specifications.verify_contract": "Verify contract section",
     "views.specifications.verify_payment": "Verify payment section",
+    "views.specifications.verify_products_selected": "Verify the product(s) selected",
     "views.specifications.maximum_capacity_reached": "Maximum capacity limit reached",
     "views.specifications.product_description": "Product description",
     "views.specifications.quantity": "Quantity",
@@ -1017,6 +1018,8 @@
     "views.specifications.pickup": "Pickup",
     "views.specifications.add_product": "+ Add Product",
     "views.specifications.no_payment_terms": "No payemnts terms available!",
+    "views.specifications.no_payment_jobsite": "No payment type available for this jobsite",
+
 
     "formats.date.default.format": "MM/DD/YY",
     "formats.number.currency.template": "%u%n",

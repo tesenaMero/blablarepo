@@ -17,7 +17,7 @@
         "@angular/platform-browser-dynamic": "4.3.2",
         "@angular/platform-server": "4.3.2",
         "@angular/router": "4.3.2",
-        "@cemex-core/angular-services-v2": "^1.0.26",
+        "@cemex-core/angular-services-v2": "^1.0.14",
         "@cemex-core/constants-v2": "^1.0.2",
         "@cemex-core/events-v1": "^1.0.7",
         "@cemex-core/types-v1": "^1.0.2",
