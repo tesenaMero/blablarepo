@@ -881,6 +881,11 @@
     "views.cross.placed": "Order placed successfully, requesting order code...",
 
     "views.builder.proceed_cash": "Proceed with to cash orders payment",
+    "views.builder.product_line": "Product line",
+    "views.builder.location": "Location",
+    "views.builder.specifications": "Specifications",
+    "views.builder.review": "Review",
+    "views.builder.summary": "Summary",
 
     "views.checkout.recovering_prices": "Recovering prices",
     "views.checkout.prices_error": "Prices error",

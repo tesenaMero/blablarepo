@@ -60,6 +60,7 @@
             <div class="col-md-12 info">
                 <span class="value status" [ngClass]="{
                     canceled:   orderDetailData.status.statusDesc == 'Canceled - Hdr',
+                    canceled:   orderDetailData.status.statusDesc == 'Canceled',
                     confirmed:  orderDetailData.status.statusCode == 'CONF',
                     draft:      orderDetailData.status.statusDesc == 'Draft - Hdr',
                     draft:      orderDetailData.status.statusCode == 'DRFT',
@@ -209,7 +210,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-3 col-xs-6" *ngIf="itemData?.orderItemProfile.pumpCapacity">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData?.orderItemProfile?.pumpCapacity">
                                     <div class="group">
                                         <div class="title">
                                             {{ t.pt('views.details.pump_capacity_min') }}
@@ -219,17 +220,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.timePerLoad">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData?.orderItemProfile?.timePerLoad">
                                     <div class="group">
                                         <div class="title">
                                             {{ t.pt('views.details.pump_capacity_max') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData?.orderItemProfile.timePerLoad.timePerLoadDesc.timePerLoadDesc}}**
+                                            {{ itemData?.orderItemProfile?.timePerLoad?.timePerLoadDesc }}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.element">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData?.orderItemProfile?.element">
                                     <div class="group">
                                         <div class="title">
                                             {{ t.pt('views.details.application') }}
@@ -239,7 +240,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.kicker">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData?.orderItemProfile?.kicker">
                                     <div class="group">
                                         <div class="title">
                                             {{ t.pt('views.details.kicker') }}
@@ -251,7 +252,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.loadSize">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData?.orderItemProfile?.loadSize">
                                     <div class="group">
                                         <div class="title">
                                             {{ t.pt('views.details.load_size') }}
@@ -261,7 +262,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile.timePerLoad?.timePerLoadDesc">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData?.orderItemProfile?.timePerLoad?.timePerLoadDesc">
                                     <div class="group">
                                         <div class="title">
                                             {{ t.pt('views.details.spacing') }}
@@ -273,7 +274,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-8" *ngIf="itemData.orderItemProfile?.additionalServices">
+                                <div class="col-sm-8" *ngIf="itemData?.orderItemProfile?.additionalServices">
                                     <div class="group">
                                         <div class="title">
                                             {{ t.pt('views.details.addition_serv') }}

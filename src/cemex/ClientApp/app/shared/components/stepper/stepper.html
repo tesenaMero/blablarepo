@@ -22,7 +22,7 @@
     <div class="col col-lg-2">
         <div class="cto-container center-with-steps">
             <div class="float-md-right text-right">
-                <button routerLink="../orders" *ngIf="currentStep.showControls && isFirstStep" class="button mb-2 button-ghost">Exit</button>
+                <button routerLink="../orders" *ngIf="currentStep.showControls && isFirstStep" class="button mb-2 button-ghost">{{ t.pt('views.stepper.exit') }}</button>
                 <button (click)="backAvailable && prev()" *ngIf="currentStep.showControls && !isFirstStep" class="button mb-2" [ngClass]="{ 'disabled': !backAvailable, 'button-ghost': backAvailable }">{{ t.pt('views.stepper.back') }}</button>
                 <button (click)="nextAvailable && next()" *ngIf="currentStep.showControls && !isLastStep()" class="button" [ngClass]="{ 'disabled': !nextAvailable, 'bright-green': nextAvailable }">{{ t.pt('views.stepper.next') }}</button>
                 <button (click)="nextAvailable && finish()" *ngIf="currentStep.showControls && isLastStep()" class="button" [ngClass]="{ 'disabled': !nextAvailable, 'bright-green': nextAvailable }">{{ finishText }}</button>

@@ -879,6 +879,11 @@
     "views.cross.placed": "Orden realizada satisfactorimente, solicitando código...",
 
     "views.builder.proceed_cash": "Proceder con pago en efectivo",
+    "views.builder.product_line": "Linea de producto",
+    "views.builder.location": "Ubicación",
+    "views.builder.specifications": "Specificaciones",
+    "views.builder.review": "Vista previa",
+    "views.builder.summary": "Resumen",
 
     "views.checkout.recovering_prices": "Recuperando precios",
     "views.checkout.prices_error": "Error precios",
