@@ -82,15 +82,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md 4 mt-3">
-                    <div class="group">
-                        <label>{{ t.pt('views.specifications.product_id') }}</label>
-                        <div class="input">
-                            <span>{{ product?.product?.commercialCode }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-5 mt-3">
+               <div class="col-md-5 mt-3">
                     <div class="group">
                         <label [ngClass]="{ loading: product.loadings.contracts }">Contract</label>
                         <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.disableds.contracts }">
@@ -238,14 +230,6 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md 4 mt-3">
-                    <div class="group">
-                        <label>Product ID</label>
-                        <div class="input">
-                            <span>{{ product?.product?.commercialCode }}</span>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label [ngClass]="{ loading: product.loadings.contracts }">Contract</label>
@@ -406,14 +390,6 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 mt-3">
-                    <div class="group">
-                        <label>{{ t.pt('views.specifications.product_id') }}</label>
-                        <div class="input">
-                            <span>{{ product?.product?.commercialCode }}</span>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-md-5 mt-3">
                     <div class="group">
                         <label [ngClass]="{ loading: product.loadings.contracts }">{{ t.pt('views.specifications.contract') }}</label>

@@ -9,7 +9,6 @@ import { JobsiteApi } from './jobsite.service';
 import { ProductsApi } from './products.service'
 import { OrderDetailApi } from './order-detail.service'
 import { ShippingConditionApi } from './shipping-condition.service';
-import { LegalEntitiesApi } from './legal-entities.service';
 import { DraftsService } from './drafts.service';
 import { CatalogApi } from './catalog.service';
 import { ProductColorApi } from './product-colors.service';
@@ -30,7 +29,6 @@ export {
     JobsiteApi,
     ProductsApi,
     OrderDetailApi,
-    LegalEntitiesApi,
     ShippingConditionApi,
     DraftsService,
     CatalogApi,
