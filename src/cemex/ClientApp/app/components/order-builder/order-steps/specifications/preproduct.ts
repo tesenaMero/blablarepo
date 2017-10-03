@@ -427,11 +427,9 @@ export class PreProduct {
         const salesAreaArray = _.get(this.manager, 'salesArea');
         let salesArea = _.get(this.manager, 'salesArea[0]');
         if (salesAreaArray && salesAreaArray.length > 1) {
-            salesArea = salesAreaArray.forEach((sa, index) => {
-                if (_.get(sa, 'divisionCode') == "02"){
-                    return sa;
-                }                    
-            });
+            salesArea = salesAreaArray.find(sa => {
+                return _.get(sa, 'salesArea.divisionCode') == "02";
+            })
         }
         
         if (salesArea) { return _.get(salesArea, 'maximumLot.amount'); }
