@@ -302,7 +302,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 return term.paymentTermType.paymentTermTypeCode === 'CASH';
             });
 
-            const credit = paymentTerms.find((term: any) => {
+            let credit = paymentTerms.find((term: any) => {
                 return term.paymentTermType.paymentTermTypeCode === 'CREDIT';
             });
 
@@ -315,7 +315,22 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     })
                 }
                 else {
-                    this.dashboard.alertError(this.t.pt('views.specifications.no_payment_jobsite'));
+                    // Fetch credit manually
+                    //this.dashboard.alertInfo("Retrieving credit...", 0);
+                    let customerId = this.customerService.currentCustomer().legalEntityId;
+                    this.paymentTermsApi.getCreditTerm(customerId).subscribe((result) => {
+                        credit = result.json().paymentTerms.find((term: any) => {
+                            return term.paymentTermType.paymentTermTypeCode === 'CREDIT';
+                        });
+
+                        // If credit found, set it in background
+                        if (credit) {
+                            this.preProducts.forEach((item: PreProduct) => {
+                                item.payment = credit;
+                                item.paymentChanged();
+                            })
+                        }
+                    });
                 }
                 return;
             }
@@ -330,7 +345,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                         return term.paymentTermType.paymentTermTypeCode === 'CASH';
                     });
 
-                    // If cash founded, add it
+                    // If cash found, add it
                     if (singleCash) { paymentTerms.push(singleCash); }
 
                     // Set buisness logic with cash added into payemnt terms
@@ -585,7 +600,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     qty(product: PreProduct, toAdd: number) {
-        if (this.isMXCustomer()) {
+        if (this.isMXCustomer() && !Validations.isReadyMix()) {
             if (product.quantity <= 1 && toAdd < 0) { return; }
             const isDelivery = Validations.isDelivery();
             let conversion = product.convertToTons(product.quantity + toAdd);
@@ -612,10 +627,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 }
             }
             else {
+                // TODO: Fix case when conversion is undefined
                 if (conversion > contractBalance) {
                     return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
                 }
-                if (!isDelivery) {
+                else if (!isDelivery) {
                     if (conversion <= maxCapacitySalesArea) {
                         return product.quantity = newQty;
                     }

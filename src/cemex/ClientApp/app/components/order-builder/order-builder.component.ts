@@ -145,6 +145,7 @@ export class OrderBuilderComponent implements OnDestroy {
 
             // Save cash orders to show later
             localStorage.setItem('tempCashOrders', JSON.stringify(this.cashOrders));
+            localStorage.setItem('manager', JSON.stringify(this.manager));
 
             // Pay credit orders
             if (this.cashOrders.length) {

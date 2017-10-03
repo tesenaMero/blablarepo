@@ -19,4 +19,8 @@ export class PaymentTermsApi {
     getCashTerm(customerId: number) {
         return this.api.get(`/v1/im/paymentterms?customerId=${customerId}&paymentTermCode=ZCON`);
     }
+
+    getCreditTerm(customerId: number) {
+        return this.api.get(`/v1/im/paymentterms?customerId=${customerId}&paymentTermCode=CRED`);
+    }
 }
