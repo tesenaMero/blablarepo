@@ -508,6 +508,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     productChanged(preProduct: PreProduct) {
         const readymixCase = Validations.isReadyMix() && this.globalContract;
+        // If its readymix case and its not the first one
         if (readymixCase) {
             // Do not fetch contracts, just add product
             preProduct.productChanged(false);
@@ -607,7 +608,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
             if (contractBalance === undefined) {
                 if (isDelivery) {
-                    if (((this.manager.productLine.productLineId == 2) || (this.manager.productLine.productLineId == 1)) && (conversion <= maxCapacitySalesArea)) {
+                    if (( Validations.isBulkCement() || Validations.isCementBag() ) && (conversion <= maxCapacitySalesArea)) {
                         return product.quantity = newQty;
                     }
                     else {

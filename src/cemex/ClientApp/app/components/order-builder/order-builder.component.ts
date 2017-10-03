@@ -147,18 +147,16 @@ export class OrderBuilderComponent implements OnDestroy {
             localStorage.setItem('tempCashOrders', JSON.stringify(this.cashOrders));
 
             // Pay credit orders
-            if (this.creditOrders.length) {
+            if (this.cashOrders.length) {
+                this.flowMidCash(this.cashOrders);
+            }
+            else if (this.creditOrders.length) {
                 if (Validations.isCement() && Validations.isMexicoCustomer()) {
                     this.flowCementMX();
                 }
                 else {
                     this.basicFlow();
                 }
-            }
-
-            // Pay cash orders only
-            else if (this.cashOrders.length) {
-                this.flowMidCash(this.cashOrders);
             }
         }
         else {

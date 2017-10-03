@@ -9,7 +9,8 @@ export class Validations {
     static MODE = DeliveryMode;
     static PRODUCT_LINES = {
         Readymix: 6,
-        CementBulk: 1
+        CementBulk: 1,
+        CementBag: 2
     }
 
     static manager: any;
@@ -40,6 +41,10 @@ export class Validations {
 
     static isBulkCement() {
         return _.get(this.manager, 'productLine.productLineId') === this.PRODUCT_LINES.CementBulk
+    }
+
+    static isCementBag() {
+        return _.get(this.manager, 'productLine.productLineId') === this.PRODUCT_LINES.CementBag
     }
 
     // TODO: Replace Id with code in enum
