@@ -44,8 +44,8 @@ export class CrossProductComponent implements OnInit {
         private modalService: ModalService,
         private t: TranslationService
         ) {
-            let manager = localStorage.getItem('manager');
-            console.log('manager: ', JSON.parse(manager));
+            // let manager = localStorage.getItem('manager');
+            // console.log('manager: ', JSON.parse(manager));
     }
 
     ngOnInit(): void {

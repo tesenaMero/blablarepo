@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { WindowRef } from '../window-ref.service';
+import { Broadcaster } from '@cemex-core/events-v1/dist';
 
 const d = new Date();
 const sessionId = btoa(d.toISOString().replace(/-/g, '').replace(/:/g, '').replace('Z', '').replace('T', ''));
@@ -14,12 +15,16 @@ export class Api {
     public acceptLanguage = 'en-US';
     private jwt = null;
     private authorization = null;    
-    
 
-    constructor(private _http: Http, private winRef: WindowRef) {
+    constructor(private _http: Http, private winRef: WindowRef, private eventBroadcaster: Broadcaster) {
         if (this.apiRoot.slice(-1) == "/") {
             this.apiRoot = this.apiRoot.slice(0, -1);
         }
+        // OnChange Legal entity
+        // this.eventBroadcaster.on<string>(Broadcaster.DCM_LEGAL_ENTITY_CHANGE)
+        //     .subscribe((response) => {
+        //         this.getLocale();
+        //     });
     }
 
     public get(url: string, options: RequestOptionsArgs = {}): Observable<Response> {
@@ -83,5 +88,13 @@ export class Api {
     public clearToken(): void {
         this.authorization = null;
         this.jwt = null;
+    }
+
+    public getLocale() {        
+        let language = localStorage.getItem('language');
+        let countryCode = JSON.parse(sessionStorage.getItem('user_legal_entity'));
+        if (language && countryCode){            
+            this.acceptLanguage = language + '-' + countryCode.countryCode.trim();
+        }
     }
 }
