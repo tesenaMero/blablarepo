@@ -875,10 +875,17 @@
     "views.search.product_code": "Product Code",
     "views.search.product_description": "Product Description",
     "views.search.products": "Products",
-
+    "views.search.filter_code_ph": "Filter by Product Code",
+    "views.search.filter_desc_ph": "Filter by Product Description",
+    
     "views.cross.placed": "Order placed successfully, requesting order code...",
 
     "views.builder.proceed_cash": "Proceed with to cash orders payment",
+    "views.builder.product_line": "Product line",
+    "views.builder.location": "Location",
+    "views.builder.specifications": "Specifications",
+    "views.builder.review": "Review",
+    "views.builder.summary": "Summary",
 
     "views.checkout.recovering_prices": "Recovering prices",
     "views.checkout.prices_error": "Prices error",
@@ -912,6 +919,8 @@
     "views.location.no_contact": "No contact found",
     "views.location.find_pod": "Find point of delivery",
     "views.location.no_pod": "No points of deliveries found",
+    "views.location.put_pod": "Put your purchase order",
+    "views.location.comments_ph": "Comments belong here",
     "views.location.select_existing_pod": "Select from existing POD",
     "views.location.select_location": "Please select location",
     "views.location.select_pod": "Please select point of delivery",
@@ -921,6 +930,19 @@
     "views.location.select_contact": "Please select location",
     "views.location.special_instr": "Special instructions",
     "views.location.address_short": "Address cannot be that short.",
+    
+    "views.location.name": "Name:",
+    "views.location.phone": "Phone number:",
+    "views.location.create_one": "+ Create a new one",
+    "views.location.all_selected": "All selected",
+    "views.location.select": "Select",
+    "views.location.type_serch": "Type in search box to see results...",
+    "views.location.nothing_found": "Nothing found...",
+    "views.location.search": "Search...",
+    "views.location.checked": "checked",
+    "views.location.checked_plural": "checked",
+    "views.location.uncheck_all": "Uncheck all",
+    "views.location.check_all": "Check all",
 
     "views.mode.delivery": "Delivery",
     "views.mode.or": "or",
@@ -968,6 +990,7 @@
     "views.specifications.verify_plant": "Verify plant section",
     "views.specifications.verify_contract": "Verify contract section",
     "views.specifications.verify_payment": "Verify payment section",
+    "views.specifications.verify_products_selected": "Verify the product(s) selected",
     "views.specifications.maximum_capacity_reached": "Maximum capacity limit reached",
     "views.specifications.product_description": "Product description",
     "views.specifications.quantity": "Quantity",
@@ -994,6 +1017,9 @@
     "views.specifications.delivery": "Delivery",
     "views.specifications.pickup": "Pickup",
     "views.specifications.add_product": "+ Add Product",
+    "views.specifications.no_payment_terms": "No payemnts terms available!",
+    "views.specifications.no_payment_jobsite": "No payment type available for this jobsite",
+
 
     "formats.date.default.format": "MM/DD/YY",
     "formats.number.currency.template": "%u%n",
@@ -1031,5 +1057,11 @@
     "locations.detail.page.termsConditions": "Terms + Conditions",
     "locations.detail.page.totalAmountExTax": "Total Amount Ex Tax",
     "locations.detail.page.totalTax": "Total Tax",
-    "locations.detail.page.totalAmountIncTax": "Total Amount inc Tax"
+    "locations.detail.page.totalAmountIncTax": "Total Amount inc Tax",
+
+    "views.stepper.exit": "Exit",
+    "views.stepper.next": "Next",
+    "views.stepper.back": "Back",
+    "views.stepper.finish": "Finish"
+    
 }

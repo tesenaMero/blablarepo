@@ -320,7 +320,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     })
                 }
                 else {
-                    this.dashboard.alertError("No payment type available for this jobsite");
+                    this.dashboard.alertError(this.t.pt('views.specifications.no_payment_jobsite'));
                 }
                 return;
             }
@@ -367,7 +367,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 }
                 else {
                     // No payments term
-                    this.dashboard.alertError("No payemnts terms available!", 0);
+                    this.dashboard.alertError(this.t.pt('views.specifications.no_payment_terms'), 0);
                 }
             }
             else {
@@ -383,7 +383,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     // No payments
                     item.payment = undefined;
                     item.disableds.payments = true;
-                    this.dashboard.alertError("No payemnts terms available!", 0);
+                    this.dashboard.alertError(this.t.pt('views.specifications.no_payment_terms'), 0);
                 }
             }
 
@@ -596,62 +596,58 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     qty(product: PreProduct, toAdd: number) {
-        if (product.quantity <= 1 && toAdd < 0) { return; }
-        if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
-        product.quantity += toAdd;
-        return;
-        // if (this.isMXCustomer()) {
-        //     if (product.quantity <= 1 && toAdd < 0) { return; }
-        //     const isDelivery = Validations.isDelivery();
-        //     let conversion = product.convertToTons(product.quantity + toAdd);
+        if (this.isMXCustomer()) {
+            if (product.quantity <= 1 && toAdd < 0) { return; }
+            const isDelivery = Validations.isDelivery();
+            let conversion = product.convertToTons(product.quantity + toAdd);
 
-        //     let newQty = product.quantity + toAdd;
-        //     let contractBalance = product.getContractBalance(); //remaining of contract
-        //     let maxCapacitySalesArea = product.getMaximumCapacity();
+            let newQty = product.quantity + toAdd;
+            let contractBalance = product.getContractBalance(); //remaining of contract
+            let maxCapacitySalesArea = product.getMaximumCapacity();
 
-        //     if (contractBalance === undefined) {
-        //         if (isDelivery) {
-        //             if (((this.manager.productLine.productLineId == 2) || (this.manager.productLine.productLineId == 1)) && (conversion <= maxCapacitySalesArea)) {
-        //                 return product.quantity = newQty;
-        //             }
-        //             else {
-        //                 if (conversion <= maxCapacitySalesArea) {
-        //                     return product.quantity = newQty;
-        //                 }
-        //             }
-        //         }
-        //         else {
-        //             if (conversion <= maxCapacitySalesArea) {
-        //                 return product.quantity = newQty;
-        //             }
-        //         }
-        //     }
-        //     else {
-        //         if (conversion > contractBalance) {
-        //             return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
-        //         }
-        //         if (!isDelivery) {
-        //             if (conversion <= maxCapacitySalesArea) {
-        //                 return product.quantity = newQty;
-        //             }
-        //         }
-        //         else {
-        //             if ((conversion <= maxCapacitySalesArea)) {
-        //                 return product.quantity = newQty;
-        //             }
-        //         }
-        //     }
-        //     if (conversion <= maxCapacitySalesArea) {
-        //         return product.quantity = newQty;
-        //     }
+            if (contractBalance === undefined) {
+                if (isDelivery) {
+                    if (((this.manager.productLine.productLineId == 2) || (this.manager.productLine.productLineId == 1)) && (conversion <= maxCapacitySalesArea)) {
+                        return product.quantity = newQty;
+                    }
+                    else {
+                        if (conversion <= maxCapacitySalesArea) {
+                            return product.quantity = newQty;
+                        }
+                    }
+                }
+                else {
+                    if (conversion <= maxCapacitySalesArea) {
+                        return product.quantity = newQty;
+                    }
+                }
+            }
+            else {
+                if (conversion > contractBalance) {
+                    return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
+                }
+                if (!isDelivery) {
+                    if (conversion <= maxCapacitySalesArea) {
+                        return product.quantity = newQty;
+                    }
+                }
+                else {
+                    if ((conversion <= maxCapacitySalesArea)) {
+                        return product.quantity = newQty;
+                    }
+                }
+            }
+            if (conversion <= maxCapacitySalesArea) {
+                return product.quantity = newQty;
+            }
 
-        //     return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
-        // }
-        // else {
-        //     if (product.quantity <= 1 && toAdd < 0) { return; }
-        //     if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
-        //     product.quantity += toAdd;
-        // }
+            return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
+        }
+        else {
+            if (product.quantity <= 1 && toAdd < 0) { return; }
+            if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
+            product.quantity += toAdd;
+        }
     }
 
     todayStr() {

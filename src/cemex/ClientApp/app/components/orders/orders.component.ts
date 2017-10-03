@@ -63,15 +63,15 @@ export class OrdersComponent implements OnInit {
     initOrders() {
         this.columns = [
             //{ inner: '<i class="star cmx-icon-favourite-active" aria-hidden="true"></i>', width: 5 },
-            { name: "Order No", width: 15 },
-            { name: "Submitted", width: 15 },
-            { name: "Location", width: 25 },
-            { name: "Puchase Order Number", width: 15 },
-            { name: "Products", width: 10 },
-            { name: "Amount", width: 10, sortable: false },
-            { name: "Requested date", width: 20 },
-            { name: "Status", width: 18 },
-            { name: "Total amount", width: 13 },
+            { name: this.t.pt('views.table.order_no'), width: 15 },
+            { name: this.t.pt('views.table.submitted'), width: 15 },
+            { name: this.t.pt('views.table.location'), width: 25 },
+            { name: this.t.pt('views.table.pon'), width: 15 },
+            { name: this.t.pt('views.table.products'), width: 10 },
+            { name: this.t.pt('views.table.amount'), width: 10, sortable: false },
+            { name: this.t.pt('views.table.request_date'), width: 20 },
+            { name: this.t.pt('views.table.status'), width: 18 },
+            { name: this.t.pt('views.table.total'), width: 13 },
         ]
 
         this.orders.forEach((order) => {
