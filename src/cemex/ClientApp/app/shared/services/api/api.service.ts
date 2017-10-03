@@ -21,10 +21,10 @@ export class Api {
             this.apiRoot = this.apiRoot.slice(0, -1);
         }
         // OnChange Legal entity
-        this.eventBroadcaster.on<string>(Broadcaster.DCM_LEGAL_ENTITY_CHANGE)
-            .subscribe((response) => {
-                this.getLocale();
-            });
+        // this.eventBroadcaster.on<string>(Broadcaster.DCM_LEGAL_ENTITY_CHANGE)
+        //     .subscribe((response) => {
+        //         this.getLocale();
+        //     });
     }
 
     public get(url: string, options: RequestOptionsArgs = {}): Observable<Response> {

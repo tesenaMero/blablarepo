@@ -37,7 +37,7 @@ export class CashCheckoutComponent implements OnInit {
         var retrievedObject = localStorage.getItem('tempCashOrders');
         console.log('tempCashOrders: ', JSON.parse(retrievedObject));
 
-        let manager = localStorage.getItem('manager');
-        console.log('manager: ', JSON.parse(manager));
+        // let manager = localStorage.getItem('manager');
+        // console.log('manager: ', JSON.parse(manager));
     }
 }
