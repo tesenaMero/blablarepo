@@ -168,17 +168,20 @@ export class OrderBuilderComponent implements OnDestroy {
         const customer = this.customerService.currentCustomer();
         let data = [];
 
-        cashOrders.forEach(item => {
-            data.push({
-                orderID: this.draftOrder.orderId,
-                companyCode: this.draftOrder.salesArea.salesOrganizationCode,
-                customerCode: customer.legalEntityTypeCode,
-                jobSiteCode: this.draftOrder.jobsite.jobsiteCode,
-                payerCode: customer.legalEntityTypeCode,
-                orderAmount: item.totalPrice,
-                documents: []
-            })
+        let orderAmount = 0;
+        cashOrders.forEach((item) => {
+            orderAmount += item.totalPrice;
         });
+
+        data.push({
+            orderID: this.draftOrder.orderId,
+            companyCode: this.draftOrder.salesArea.salesOrganizationCode,
+            customerCode: customer.legalEntityTypeCode,
+            jobSiteCode: this.draftOrder.jobsite.jobsiteCode,
+            payerCode: customer.legalEntityTypeCode,
+            orderAmount: orderAmount,
+            documents: []
+        })
 
         const cartItems = {
             sourceApp: "order-taking",
@@ -190,7 +193,7 @@ export class OrderBuilderComponent implements OnDestroy {
             },
             data: data
         }
-
+        
         let encoded = this.jsonObjService.encodeJson(cartItems);
         this.document.location.href = 'https://dcm-qa.mybluemix.net/invoices-payments/open/' + encoded;
     }

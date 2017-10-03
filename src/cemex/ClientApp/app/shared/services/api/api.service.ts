@@ -16,7 +16,11 @@ export class Api {
     private authorization = null;    
     
 
-    constructor(private _http: Http, private winRef: WindowRef) {}
+    constructor(private _http: Http, private winRef: WindowRef) {
+        if (this.apiRoot.slice(-1) == "/") {
+            this.apiRoot = this.apiRoot.slice(0, -1);
+        }
+    }
 
     public get(url: string, options: RequestOptionsArgs = {}): Observable<Response> {
         options.headers = this.getHeaders();

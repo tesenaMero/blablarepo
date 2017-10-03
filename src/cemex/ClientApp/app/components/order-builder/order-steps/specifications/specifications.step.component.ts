@@ -40,7 +40,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     // Global
     // Only usd for readymix
-    globalContract: any;
+    static globalContract: any;
 
     // Subs
     productsSub: any;
@@ -79,11 +79,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
     static catalogs = [];
     get catalogs() {
         return SpecificationsStepComponent.catalogs;
-    }
-
-    static plants = [];
-    get plants() {
-        return SpecificationsStepComponent.plants;
     }
 
     constructor(
@@ -507,27 +502,20 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     productChanged(preProduct: PreProduct) {
-        const readymixCase = Validations.isReadyMix() && this.globalContract;
-        // If its readymix case and its not the first one
-        if (readymixCase) {
-            // Do not fetch contracts, just add product
-            preProduct.productChanged(false);
-        }
-        else {
-            preProduct.productChanged();
-        }
+        const readymixCase = Validations.isReadyMix() && SpecificationsStepComponent.globalContract;
+        preProduct.productChanged();
     }
 
     contractChanged(preProduct: PreProduct) {
         // Readymix scenario
         // All products should be using the same contract
         if (Validations.isReadyMix()) {
-            this.globalContract = preProduct.contract;
+            SpecificationsStepComponent.globalContract = preProduct.contract;
             this.preProducts.forEach((item: PreProduct, index) => {
-                item.contract = this.globalContract;
+                item.contract = SpecificationsStepComponent.globalContract;
                 item.contractChanged();
 
-                if (this.globalContract) {
+                if (SpecificationsStepComponent.globalContract) {
                     // Valid contract selected
                     if (index > 0) { item.disableds.contracts = true; }
                 }
@@ -553,7 +541,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     add() {
-        const shouldFetchContracts = !(Validations.isReadyMix() && this.globalContract);
+        const shouldFetchContracts = !(Validations.isReadyMix() && SpecificationsStepComponent.globalContract);
         let preProduct = new PreProduct(
             this.productsApi,
             this.manager,
@@ -566,8 +554,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         )
 
         // Readymix case where everything has to be from the same contract
-        if (Validations.isReadyMix() && this.globalContract) {
-            preProduct.contract = this.globalContract;
+        if (Validations.isReadyMix() && SpecificationsStepComponent.globalContract) {
+            preProduct.contract = SpecificationsStepComponent.globalContract;
             preProduct.disableds.contracts = true;
 
             if (this.preProducts.length) {
@@ -608,7 +596,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
             if (contractBalance === undefined) {
                 if (isDelivery) {
-                    if (( Validations.isBulkCement() || Validations.isCementBag() ) && (conversion <= maxCapacitySalesArea)) {
+                    if ((Validations.isBulkCement() || Validations.isCementBag()) && (conversion <= maxCapacitySalesArea)) {
                         return product.quantity = newQty;
                     }
                     else {
