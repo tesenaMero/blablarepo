@@ -14,9 +14,11 @@ export class Api {
     public acceptLanguage = 'en-US';
     private jwt = null;
     private authorization = null;    
-    
 
-    constructor(private _http: Http, private winRef: WindowRef) {}
+
+    constructor(private _http: Http, private winRef: WindowRef) {
+        this.getLocale();
+    }
 
     public get(url: string, options: RequestOptionsArgs = {}): Observable<Response> {
         options.headers = this.getHeaders();
@@ -79,5 +81,14 @@ export class Api {
     public clearToken(): void {
         this.authorization = null;
         this.jwt = null;
+    }
+
+    public getLocale() {        
+        let language = localStorage.getItem('language');
+        let countryCode = JSON.parse(sessionStorage.getItem('user_legal_entity'));
+        if (language && countryCode){            
+            // console.log("'" + language + '-' + countryCode.countryCode.trim() + "'");
+            this.acceptLanguage = language + '-' + countryCode.countryCode.trim();
+        }
     }
 }

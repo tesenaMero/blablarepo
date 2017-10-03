@@ -27,7 +27,8 @@
                             </label>
                             <div class="noselect input number-stepper">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <input class="value">{{ product.quantity | number:'1.3-3' }}</input>
+                                <span class="value">{{ product.quantity | number:'1.3-3' }}</span>
+                                <!-- <input type="number" name="quantity" class="value" [ngModel]="product.quantity | number:'1.3-3'" (ngModelChange)="product.quantity = $event" /> -->
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacity()">
