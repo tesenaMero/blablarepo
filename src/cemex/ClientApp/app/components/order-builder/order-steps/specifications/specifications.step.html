@@ -83,7 +83,7 @@
                 </div>
             </div>
             <div class="row">
-               <div class="col-md-5 mt-3">
+                <div class="col-md-5 mt-3">
                     <div class="group">
                         <label [ngClass]="{ loading: product.loadings.contracts }">Contract</label>
                         <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.disableds.contracts }">
@@ -465,7 +465,7 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group" *ngIf="product.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeDesc !== 'Pump'">
+                <div class="group" *ngIf="product.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeDesc === 'Pump'">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         {{ t.pt('views.specifications.pump_capacity') }}
                     </label>

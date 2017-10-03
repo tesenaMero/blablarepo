@@ -147,18 +147,16 @@ export class OrderBuilderComponent implements OnDestroy {
             localStorage.setItem('tempCashOrders', JSON.stringify(this.cashOrders));
 
             // Pay credit orders
-            if (this.creditOrders.length) {
+            if (this.cashOrders.length) {
+                this.flowMidCash(this.cashOrders);
+            }
+            else if (this.creditOrders.length) {
                 if (Validations.isCement() && Validations.isMexicoCustomer()) {
                     this.flowCementMX();
                 }
                 else {
                     this.basicFlow();
                 }
-            }
-
-            // Pay cash orders only
-            else if (this.cashOrders.length) {
-                this.flowMidCash(this.cashOrders);
             }
         }
         else {
@@ -170,17 +168,20 @@ export class OrderBuilderComponent implements OnDestroy {
         const customer = this.customerService.currentCustomer();
         let data = [];
 
-        cashOrders.forEach(item => {
-            data.push({
-                orderID: this.draftOrder.orderId,
-                companyCode: this.draftOrder.salesArea.salesOrganizationCode,
-                customerCode: customer.legalEntityTypeCode,
-                jobSiteCode: this.draftOrder.jobsite.jobsiteCode,
-                payerCode: customer.legalEntityTypeCode,
-                orderAmount: item.totalPrice,
-                documents: []
-            })
+        let orderAmount = 0;
+        cashOrders.forEach((item) => {
+            orderAmount += item.totalPrice;
         });
+
+        data.push({
+            orderID: this.draftOrder.orderId,
+            companyCode: this.draftOrder.salesArea.salesOrganizationCode,
+            customerCode: customer.legalEntityTypeCode,
+            jobSiteCode: this.draftOrder.jobsite.jobsiteCode,
+            payerCode: customer.legalEntityTypeCode,
+            orderAmount: orderAmount,
+            documents: []
+        })
 
         const cartItems = {
             sourceApp: "order-taking",
@@ -192,7 +193,7 @@ export class OrderBuilderComponent implements OnDestroy {
             },
             data: data
         }
-
+        
         let encoded = this.jsonObjService.encodeJson(cartItems);
         this.document.location.href = 'https://dcm-qa.mybluemix.net/invoices-payments/open/' + encoded;
     }

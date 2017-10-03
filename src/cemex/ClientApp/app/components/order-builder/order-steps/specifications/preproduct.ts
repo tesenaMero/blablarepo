@@ -216,8 +216,14 @@ export class PreProduct {
             this.availableContracts = contracts;
 
             if (contracts.length > 0) {
-                this.disableds.contracts = false;
+                // Add no contract option
                 this.availableContracts.unshift(undefined);
+
+                // Set default contract
+                this.contract = undefined;
+                this.contractChanged();
+                
+                this.disableds.contracts = false;
             }
             else { this.disableds.contracts = true; } // Disable it if no contracts
 
@@ -259,6 +265,7 @@ export class PreProduct {
             if (matchingUnit) { this.unit = matchingUnit; }
             else {
                 if (this.availableUnits.length) { this.unit = this.availableUnits[0]; }
+                else { this.unit = undefined; }
             }
         });
     }
@@ -326,6 +333,14 @@ export class PreProduct {
                 return result.json();
             })
         ).subscribe((response) => {
+            if (Validations.isReadyMix()) {
+                this.unit = {};
+                this.unit.alternativeUnit = this.contract.unitOfMeasure;
+                this.disableds.units = true;
+                this.loadings.units = false;
+                return;
+            }
+
             // Match unit of measure and preselect it
             let matchingUnit = this.availableUnits.find((unit) => {
                 return unit.alternativeUnit.unitCode == this.product.unitOfMeasure.unitCode;

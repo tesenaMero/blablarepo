@@ -393,15 +393,18 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             // Fetch contacts
             this.shipmentApi.contacts(this.location).subscribe((response => {
                 this.contacts = response.json().contacts;
-                this.contacts.forEach((contact, index) => {
-                    contact.id = index;
-                    contact.name = contact.name;
-                });
-                if (this.contacts.length > 0) {
-                    this.contactsIndex = undefined;
-                    this.contactChanged(undefined);
+                if (this.contacts) {
+                    this.contacts.forEach((contact, index) => {
+                        contact.id = index;
+                        contact.name = contact.name;
+                    });
+                    
+                    if (this.contacts.length > 0) {
+                        this.contactsIndex = undefined;
+                        this.contactChanged(undefined);
+                    }
+                    this.loadings.contacts = false;
                 }
-                this.loadings.contacts = false;
             }));
         }
     }

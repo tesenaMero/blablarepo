@@ -68,7 +68,7 @@ export class SearchProductComponent {
     productColorChanged(productColor: any) {
         this.message = false;
         this.setProducts([]);
-        this.productsApi.byProductColorAndSalesDocumentAndPlant(3, this.productColorSelected).subscribe((response) => {
+        this.productsApi.byProductColorAndSalesDocumentAndPlant(5, this.productColorSelected).subscribe((response) => {
             this.setProducts(response.json().products);
         });
     }
@@ -76,7 +76,7 @@ export class SearchProductComponent {
     plantChanged(plant: any) {
         this.setProducts([]);
         if (this.productColorSelected !== null) {
-            this.productsApi.byProductColorAndSalesDocumentAndPlant(3, this.productColorSelected, plant).subscribe((response) => {
+            this.productsApi.byProductColorAndSalesDocumentAndPlant(5, this.productColorSelected, plant).subscribe((response) => {
                 this.setProducts(response.json().products);
             });
         }
