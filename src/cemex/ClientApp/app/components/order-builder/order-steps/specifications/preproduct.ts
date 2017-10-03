@@ -53,7 +53,8 @@ export class PreProduct {
         catalogs: true,
         units: true,
         payments: true,
-        plants: true
+        plants: true,
+        quantity: true
     }
 
     validations = {
@@ -234,6 +235,7 @@ export class PreProduct {
     fetchUnits() {
         this.loadings.units = true;
         this.disableds.units = true;
+        this.disableds.quantity = true;
 
         // Fetch product base unit + alt units parallel
         Observable.forkJoin(
@@ -246,10 +248,12 @@ export class PreProduct {
 
                 if (units.length > 0) {
                     this.disableds.units = false;
+                    this.disableds.quantity = false;
                     this.unit = units[0];
                 }
                 else {
                     this.disableds.units = true;
+                    this.disableds.quantity = true;
                 }
 
                 this.loadings.units = false;
@@ -302,12 +306,14 @@ export class PreProduct {
         else {
             this.disableds.units = true;
             this.loadings.units = true;
+            this.disableds.quantity = true;
             this.productsApi.units(this.contract.salesDocument.salesDocumentId).subscribe((result) => {
                 let units = result.json().productUnitConversions;
                 this.availableUnits = units;
                 if (units.length) {
                     this.unit = units[0];
                     this.disableds.units = false;
+                    this.disableds.quantity = false;
                 }
                 else {
                     this.unit = undefined;
@@ -321,6 +327,7 @@ export class PreProduct {
     private forkUnitsFromContracts() {
         this.loadings.units = true;
         this.disableds.units = true;
+        this.disableds.quantity = true;
 
         // Fetch parallel units from contract + contract base unit
         Observable.forkJoin(
@@ -337,6 +344,7 @@ export class PreProduct {
                 this.unit = {};
                 this.unit.alternativeUnit = this.contract.unitOfMeasure;
                 this.disableds.units = true;
+                this.disableds.quantity = false;
                 this.loadings.units = false;
                 return;
             }
@@ -411,7 +419,7 @@ export class PreProduct {
         
         let factor = this.unit.numerator / this.unit.denominator;
         let convertion = qty * factor;
-        return convertion;
+        return convertion || undefined;
     }
 
     // Maximum capacity salesArea
