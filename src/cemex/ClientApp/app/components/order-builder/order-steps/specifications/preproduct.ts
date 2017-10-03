@@ -428,7 +428,7 @@ export class PreProduct {
         let salesArea = _.get(this.manager, 'salesArea[0]');
         if (salesAreaArray && salesAreaArray.length > 1) {
             salesArea = salesAreaArray.forEach((sa, index) => {
-                if (_.has(sa, 'divisionCode.02')){
+                if (_.get(sa, 'divisionCode') == "02"){
                     return sa;
                 }                    
             });
