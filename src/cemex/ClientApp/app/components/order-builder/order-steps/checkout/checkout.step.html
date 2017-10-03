@@ -97,7 +97,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 mt-4" *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">
+                <div class="col-md-3 mt-4" *ngIf="UTIL.isDelivery()">
                     <div class="group">
                         <div class="title">
                             {{ t.pt('views.checkout.pod') }}
@@ -235,7 +235,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3 mt-4" *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">
+                        <div class="col-md-3 mt-4" *ngIf="UTIL.isDelivery()">
                             <div class="group">
                                 <div class="title">
                                     {{ t.pt('views.checkout.pod') }}
@@ -405,7 +405,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3 mt-4" *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">
+                        <div class="col-md-3 mt-4" *ngIf="UTIL.isDelivery()">
                             <div class="group">
                                 <div class="title">
                                     {{ t.pt('views.checkout.pod') }}
