@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { CreateOrderService } from '../../shared/services/create-order.service';
 import { DashboardService } from '../../shared/services/dashboard.service'
 import { CustomerService } from '../../shared/services/customer.service'
-import { LegalEntitiesApi, SalesDocumentApi, ShipmentLocationApi } from '../../shared/services/api';
+import { SalesDocumentApi, ShipmentLocationApi } from '../../shared/services/api';
 
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
@@ -37,7 +37,6 @@ export class DashboardComponent implements OnInit {
         private router: Router,
         private shipmentLocationApi: ShipmentLocationApi,
         private dashboard: DashboardService,
-        private legalEnitityApi: LegalEntitiesApi,
         private customerService: CustomerService,
         private salesDocumentService: SalesDocumentApi,
         private __: ChangeDetectorRef
@@ -48,13 +47,6 @@ export class DashboardComponent implements OnInit {
         // 'J': Jobsite, ...
         this.shipmentLocationApi.fetchShipmentLocationTypes();
         this.dashboard.alertSubject.subscribe((alert) => this.handleAlert(alert));
-
-        this.legalEnitityApi.all().subscribe((response) => {
-            let legalEntities = response.json().legalEntities
-            this.customers = legalEntities;
-            this.customerService.setAvailableCustomers(legalEntities);
-            this.customerService.setCustomer(legalEntities[0]);
-        });
 
         // this.salesDocumentService.all().subscribe((response) => {
         //     console.log(response.json());

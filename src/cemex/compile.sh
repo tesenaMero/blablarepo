@@ -14,6 +14,14 @@ if [ "$1" == "clean" ]; then
     rm -rf wwwroot/dist/
 fi
 
+# Default dev
+export API_ENV=dev/
+export API_HOST=https://api.us2.apiconnect.ibmcloud.com/
+export API_HOST_FULL=https://api.us2.apiconnect.ibmcloud.com/cnx-gbl-org-development/dev/
+export API_ORG=cnx-gbl-org-development/
+export APP_CODE=OrderProductCat_App
+export CLIENT_ID=dd2ee55f-c93c-4c1b-b852-58c18cc7c277
+
 if [ "$1" == "quality" ]; then
     export API_HOST=https://api.us2.apiconnect.ibmcloud.com/
     export API_HOST_FULL=https://api.us2.apiconnect.ibmcloud.com/cnx-gbl-org-quality/quality/
@@ -21,16 +29,6 @@ if [ "$1" == "quality" ]; then
     export API_ENV=quality/
     export APP_CODE=OrderProductCat_App
     export CLIENT_ID=721e5c7b-73b8-40e1-8cb2-31c7dbdbd1be
-fi
-
-
-if [ "$1" == "dev" ]; then
-    unset API_HOST
-    unset API_HOST_FULL
-    unset API_ORG
-    unset API_ENV
-    unset APP_CODE
-    unset CLIENT_ID
 fi
 
 printf "Cleaning ${CYAN}dls submodule${NC} dist\n"
