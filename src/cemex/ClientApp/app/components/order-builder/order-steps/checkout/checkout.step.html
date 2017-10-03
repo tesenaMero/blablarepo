@@ -78,16 +78,6 @@
                 <div class="col-md-3 mt-4">
                     <div class="group">
                         <div class="title">
-                            {{ t.pt('views.checkout.product_id') }}
-                        </div>
-                        <div class="desc">
-                            {{ item?.product?.product?.productId }}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 mt-4">
-                    <div class="group">
-                        <div class="title">
                             {{ t.pt('views.checkout.maximum_capacity') }}
                         </div>
                         <div class="desc">
@@ -107,7 +97,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 mt-4">
+                <div class="col-md-3 mt-4" *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">
                     <div class="group">
                         <div class="title">
                             {{ t.pt('views.checkout.pod') }}
@@ -226,16 +216,6 @@
                         <div class="col-md-3 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    {{ t.pt('views.checkout.product_id') }}
-                                </div>
-                                <div class="desc">
-                                    {{ item?.product?.product?.productId }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2 mt-4">
-                            <div class="group">
-                                <div class="title">
                                     {{ t.pt('views.checkout.maximum_capacity') }}
                                 </div>
                                 <div class="desc">
@@ -255,7 +235,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3 mt-4">
+                        <div class="col-md-3 mt-4" *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">
                             <div class="group">
                                 <div class="title">
                                     {{ t.pt('views.checkout.pod') }}
@@ -406,16 +386,6 @@
                         <div class="col-md-3 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    {{ t.pt('views.checkout.product_id') }}
-                                </div>
-                                <div class="desc">
-                                    {{ item?.product?.product?.productId }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2 mt-4">
-                            <div class="group">
-                                <div class="title">
                                     {{ t.pt('views.checkout.maximum_capacity') }}
                                 </div>
                                 <div class="desc">
@@ -435,7 +405,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3 mt-4">
+                        <div class="col-md-3 mt-4" *ngIf="manager?.shippingCondition?.shippingConditionId == this.MODE.Delivery">
                             <div class="group">
                                 <div class="title">
                                     {{ t.pt('views.checkout.pod') }}
