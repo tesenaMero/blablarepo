@@ -318,7 +318,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     // Fetch credit manually
                     //this.dashboard.alertInfo("Retrieving credit...", 0);
                     let customerId = this.customerService.currentCustomer().legalEntityId;
-                    this.paymentTermsApi.getCreditTerm(customerId).subscribe((item) => {
+                    this.paymentTermsApi.getCreditTerm(customerId).subscribe((result) => {
                         credit = result.json().paymentTerms.find((term: any) => {
                             return term.paymentTermType.paymentTermTypeCode === 'CREDIT';
                         });
