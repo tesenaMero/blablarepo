@@ -69,10 +69,11 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
 
         // Patch optimal sources then recovers prices
         this.onCompleted.emit(false);
-        if (this.shouldCallOptimalSource()) {
+        if (this.shouldCallOptimalSource() && (!this.manager.isPatched)) {
             this.dashboard.alertInfo(this.t.pt('views.checkout.recovering_prices'), 0);
-            this.drafts.optimalSourcesPatch(this.draftId).flatMap((x) => {
-                return this.drafts.prices(this.draftId);
+            this.drafts.optimalSourcesPatch(this.manager.draftId).flatMap((x) => {
+                this.manager.isPatched = true;
+                return this.drafts.prices(this.manager.draftId);
             }).subscribe((response) => {
                 this.handlePrices(response);
             }, (error) => {
@@ -81,7 +82,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
             });
         }
         else if (this.shouldCallPrices()) {
-            this.drafts.prices(this.draftId).subscribe((response) => {
+            this.drafts.prices(this.manager.draftId).subscribe((response) => {
                 this.handlePrices(response);
             });
         }
@@ -108,7 +109,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     }
 
     handlePrices(response) {
-        this.draftOrder = response.json();
+        this.draftOrder = this.manager.draftOrder || response.json();
         
         // If locked (stepper is moving most likely) then dont do the call 
         if (this.lockRequests) { return; }

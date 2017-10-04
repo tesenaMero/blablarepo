@@ -24,17 +24,17 @@ import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 })
 export class StepperComponent implements AfterContentInit {
     @Input() finishText?: string = this.t.pt('views.stepper.finish');
+    @Output() onFinish = new EventEmitter<any>();
+    @Output() onRendered = new EventEmitter<any>();
 
     @ViewChild('controlNext') controlNext;
     @ViewChild('controlPrev') controlBack;
+    @ContentChildren(Step) steps: QueryList<Step>;
 
     nextAvailable: boolean = false;
     backAvailable: boolean = true;
     isFirstStep: boolean = true;
     overlay: boolean = false;
-
-    @ContentChildren(Step) steps: QueryList<Step>;
-    @Output() onFinish = new EventEmitter<any>();
 
     currentStep: any;
     constructor(private zone: NgZone, private t: TranslationService) {
@@ -51,6 +51,8 @@ export class StepperComponent implements AfterContentInit {
         let currentIndex = this.getActiveStepIndex();
         if (currentIndex == 0) { this.isFirstStep = true; }
         else { this.isFirstStep = false; }
+
+        this.onRendered.emit();
     }
 
     makeStepperClass(size: number) {
@@ -143,7 +145,7 @@ export class StepperComponent implements AfterContentInit {
         }, 600);
     }
 
-    private selectStep(step: Step) {
+    selectStep(step: Step) {
         // Deactivate all steps except one
         this.steps.toArray().forEach(step => step.active = false);
         this.currentStep = step;

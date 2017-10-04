@@ -39,6 +39,10 @@ export class CreateOrderService {
     public additionalServices: Array<any>;
     public products: Array<any>;
     public product: any;
+    public lastStep: any;
+    public draftId: any;
+    public isPatched: any = false;
+    public draftOrder: any;
 
     constructor() {
         this.initializeOrder();

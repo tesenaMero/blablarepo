@@ -57,15 +57,19 @@ export class CrossProductComponent implements OnInit {
             }
             const jObj: JsonObj = this.encDecJsonObjService.decodeJson(params['id']);
             // console.log('data example recieved !!!! ', this.encDecJsonObjService.decodeJson("LS1RZmQxWFg5QkRNMW9qSTBsV2J0OTJRdlJuSXNJU04xWURNd0FETXdBVE9pb2pJbFIyYkRSbmJsMVdkajlHWmlzM1c2SXljMDVXWnRWM1l2Um1Jc0FqT2lRbmIxOVdiQlJuYmwxV2VoQlZaajVXWTJSV1lpd2lJaW9qSWxObWJsSlhabVZtVTA1V1p0bFhZd0pDTHdBVE42SUNkdVYzYnRGa2NsUm1jdkpDTGlJRE14UVRNd1VqTndBakk2SVNaazkyUXlWV2VoQm5Jc0lpTXdFRE54QVROMkFETWlvaklsUjJiRFZHZHBObFl2cG1Jc0lDTzBJek0yRURNMUFETWlvaklsUjJiREpYWnQ5R2R6VjNZaXdpSXdnVE0zSWlPaVVHWnZOVWV1RkdjdDkyWWlzM1c2SVNZMEZHWml3aUkwSlhZajF5WnVsR2N3OUdhekppT2ljM2JvTjFiVTVXWmxKM1l6SkNMaW9GTXpVakw0RWpPd1VqT3lFRFYyRVRMNUFUTDNFRE15SWlPaVVHZGhSbUlzSXljMDVXWnRsWFl3MXljbE5XYXZabmJwSmlPaUFIY0JWMll5VjNiekp5ZQ--"))
-            console.log('data recieved -> ', jObj);
+            //console.log('data recieved -> ', jObj);
 
-            if (!this.checkPayment(jObj)) { return; }
-            this.flowCementMX(jObj);
+            if (!this.checkPayment(jObj)) {
+                this.router.navigate(['/ordersnproduct/app/new']); 
+            }
+            else {
+                this.flowCementMX(jObj);
+            }
         });
     }
 
-    closeModal(id: string){
-        this.modalService.close(id);
+    closeModal(){
+        this.modalService.close('success-order');
         setTimeout(function() {
             this.router.navigate(['/ordersnproduct/app/orders']);
         }, 1000);
@@ -86,6 +90,7 @@ export class CrossProductComponent implements OnInit {
                 this.orderCode = response.json().orderCode;
                 this.dashboard.alertSuccess(this.t.pt('views.common.order_code') + this.orderCode + " " + this.t.pt('views.common.placed_success'), 30000);
                 this.modalService.open('success-order');
+                localStorage.removeItem('manager');
             }, error => {
                 this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
             })
@@ -93,13 +98,16 @@ export class CrossProductComponent implements OnInit {
 
     checkPayment(obj) {
         let res: number;
+        let toCommit = 0;
         obj.data.forEach(el => {
-            let toCommit = 0;
             el.documents.forEach(doc => {
                 toCommit += doc.toCommit;
             });
+
             res = el.orderAmount - toCommit;
         });
+        
+        if (toCommit === 0) { return false; }
         return !Boolean(res);
     }
 

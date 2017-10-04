@@ -8,8 +8,9 @@ import { CustomerService } from '../../../../shared/services/customer.service';
 import { DraftsService } from '../../../../shared/services/api/drafts.service';
 import { Validations } from '../../../../utils/validations';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
-
 import { } from '@types/googlemaps';
+
+let CircularJSON = require('circular-json');
 
 @Component({
     selector: 'review-step',
@@ -77,6 +78,7 @@ export class ReviewStepComponent implements StepEventsListener {
         this.dashboard.alertInfo(this.t.pt('views.review.saving_draft'), 0);
         let draftSub = this.drafts.add(this.generateOrderObj()).subscribe((response) => {
             this.dashboard.alertSuccess(this.t.pt('views.review.draft_saved'));
+            this.manager.draftId = response.json().id;
             this.onCompleted.emit(response.json().id)
         }, (error) => {
             this.dashboard.alertError(this.t.pt('views.review.draft_no_saved'));
