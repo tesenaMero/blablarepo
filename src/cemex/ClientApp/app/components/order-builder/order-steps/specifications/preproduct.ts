@@ -189,7 +189,7 @@ export class PreProduct {
 
         // TODO:
         // Set minimum quantity
-        this.quantity = 1;
+        // this.quantity = 1;
     }
 
     plantChanged() {

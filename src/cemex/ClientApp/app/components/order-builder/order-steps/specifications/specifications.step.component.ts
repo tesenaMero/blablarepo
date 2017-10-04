@@ -655,6 +655,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
     }
 
+    valuechange(newValue) {
+        console.log(newValue)
+    }
+
     todayStr() {
         return new Date().toJSON().split('T')[0];
     }
