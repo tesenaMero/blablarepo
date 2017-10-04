@@ -22,6 +22,12 @@
     }
 }
 
+.button-container {
+    display: flex; 
+    justify-content: flex-end;
+    align-self: center;
+}
+
 .cto-container {
     float: right;
     text-align: right;
