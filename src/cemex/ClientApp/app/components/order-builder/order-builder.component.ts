@@ -37,6 +37,12 @@ export class OrderBuilderComponent implements OnDestroy {
 
     private sub: Subscription;
 
+    private pl_step_name = this.t.pt('views.builder.product_line');
+    private location_step_name = this.t.pt('views.builder.location');
+    private specifications_step_name = this.t.pt('views.builder.specifications');
+    private review_step_name = this.t.pt('views.builder.review');
+    private summary_step_name = this.t.pt('views.builder.summary');
+
     constructor(
         @Inject(DOCUMENT) private document: any,
         private _changeDetector: ChangeDetectorRef,

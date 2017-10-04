@@ -824,7 +824,7 @@
     "views.project.profile.truck": "Truck",
     "views.project.profile.created": "Project profile created successfully.",
     "views.project.profile.create": "Create a new profile.",
-    "views.project.profile.application": "Aplication",
+    "views.project.profile.application": "Application",
     "views.project.profile.spacing": "Spacing",
     "views.project.profile.load_size": "Load Size",
     "views.project.profile.saving": "Saving...",
@@ -927,7 +927,7 @@
     "views.location.purchase_order": "Purchase order",
     "views.location.purchase_order_error": "Please enter valid purchase order.",
     "views.location.contact_person": "Contact person",
-    "views.location.select_contact": "Please select location",
+    "views.location.select_contact": "Please select contact person",
     "views.location.special_instr": "Special instructions",
     "views.location.address_short": "Address cannot be that short.",
     

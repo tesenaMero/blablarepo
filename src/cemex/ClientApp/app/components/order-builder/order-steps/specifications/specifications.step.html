@@ -27,7 +27,7 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <span class="value">{{ product.quantity | number:'1.3-3' }}</span>
+                                <input class="value" type="number" value="{{ product.quantity | number:'1.3-3' }}" (ngModelChange)="valuechange($event)" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info" *ngIf="isMXCustomer() && product.maximumCapacity">
@@ -173,7 +173,7 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <span class="value">{{ product.quantity | number:'1.3-3' }}</span>
+                                <input class="value" type="number" value="{{ product.quantity | number:'1.3-3' }}" (ngModelChange)="valuechange($event)" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info" *ngIf="UTILS.isMexicoCustomer() && product.maximumCapacity">
@@ -338,7 +338,7 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <span class="value">{{ product.quantity | number:'1.3-3' }}</span>
+                                <input class="value" type="number" value="{{ product.quantity | number:'1.3-3' }}" (ngModelChange)="valuechange($event)" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                         </div>

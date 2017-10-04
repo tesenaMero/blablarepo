@@ -12,6 +12,7 @@ export class ProjectProfileCreatorComponent {
     @Output() canceled = new EventEmitter<any>();
     @Output() confirmed = new EventEmitter<any>();
 
+    public isMX: boolean = false;
     private postingTheOrder: boolean;
     private finishedOrder: boolean;
     private loadingCatalog: boolean;
@@ -29,12 +30,18 @@ export class ProjectProfileCreatorComponent {
         }
     };
 
+    
+
     // CustomerService.currentCustomer().legalEntityId || 
     constructor(private CatalogApi: CatalogApi, private ProjectProfileApi: ProjectProfileApi, private CustomerService: CustomerService, private t: TranslationService) {
         this.CustomerService.customerSubject.subscribe((customer) => {
             if (customer) {
                 this.loadingCatalog = true;
                 const customerId = customer.legalEntityId;
+
+                if ((customer.countryCode).trim() === 'MX') {
+                    this.isMX = true;
+                }
 
                 let sub = this.CatalogApi.byProductLine(customerId, '0006').map((response) => response.json()).subscribe((response) => {
                     response.catalogs.forEach((catalog) => {

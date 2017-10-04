@@ -1,21 +1,21 @@
 <div>
-    <stepper (onFinish)="finishSteps()" (onRendered)="stepperRendered()" finishText="Order">
-        <step name="Product line" [showExit]="true" [showControls]="true">
+    <stepper (onFinish)="finishSteps()" finishText="Order">
+        <step name="{{ pl_step_name }}" [showExit]="true" [showControls]="true">
             <product-selection-step (onCompleted)="productStepCompleted($event)"></product-selection-step>
         </step>
         <step *ngIf="shouldShowDeliveryMode()" [automatic]="true" [showControls]="true" [showExit]="false" [inLine]="false" title="Delivery mode">
             <mode-step (onCompleted)="modeStepCompleted($event)"></mode-step>
         </step>
-        <step name="Location">
+        <step name="{{ location_step_name }}">
             <location-step (requestNext)="locationStepRequestedNext($event)" (onCompleted)="locationStepCompleted($event)"></location-step>
         </step>
-        <step name="Specifications">
+        <step name="{{ specifications_step_name }}">
             <specifications-step (onCompleted)="specificationsStepCompleted($event)"></specifications-step>
         </step>
-        <step name="Review">
+        <step name="{{ review_step_name }}">
             <review-step (onCompleted)="reviewStepCompleted($event)"></review-step>
         </step>
-        <step name="Summary">
+        <step name="{{ summary_step_name }}">
             <checkout-step [draftId]="draftId" (onCompleted)="checkoutCompleted($event)"></checkout-step>
         </step>
     </stepper>

@@ -3,7 +3,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { ProjectProfileApi } from '../../shared/services/api'
 import { CustomerService } from '../../shared/services/customer.service';
-import { ModalService } from '../../shared/components/modal'
+import { ModalService } from '../../shared/components/modal';
+
 
 let $ = require("jquery");
 
@@ -28,14 +29,12 @@ export class ProjectProfilesComponent {
 
         this.columns = [
             //{ inner: '<i class="star cmx-icon-favourite-active" aria-hidden="true"></i>', width: 5 },
-            { name: "Name", width: 20 },
-            { name: "Discharge Time", width: 10 },
-            { name: "Transport Method", width: 10 },
+            { name: "Name", width: 25 },
+            { name: "Discharge Time", width: 20 },
+            { name: "Transport Method", width: 20 },
             { name: "Unload Type", width: 10 },
             { name: "Kicker", width: 10 },
-            { name: "Additional Services", width: 20 },
-            { name: "", width: 5, sortable: false },
-            { name: "", width: 10, sortable: false },
+            { name: "", width: 15, sortable: false },
         ]
     }
 
@@ -72,12 +71,8 @@ export class ProjectProfilesComponent {
                 { inner: profile.project.projectProperties.transportMethod.transportMethodDesc },
                 { inner: profile.project.projectProperties.unloadType && profile.project.projectProperties.unloadType.unloadTypeDesc },
                 { inner: profile.project.projectProperties.kicker, class: "capitalize" },
-                { inner: "Extra hourts, Sundaly / Holiday" },
-                { inner: "EDIT", class: "action-button", click: (item) => {
-                    this.openModal('pp-creator');
-                } },
                 { inner: "DELETE", class: "action-button", click: (item) => {
-                    this.ppService.delete(item.profile.profileId).subscribe(res => res.ok && this.fetchProjectProfiles())
+                    this.ppService.delete(profile.profileId).subscribe(res => res.ok && this.fetchProjectProfiles())
                 }},
             ]
         });
