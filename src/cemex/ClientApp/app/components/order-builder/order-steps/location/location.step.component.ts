@@ -90,6 +90,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         selectionLimit: 1,
         autoUnselect: true,
         addOption: true,
+        closeOnSelect: true,
         maxHeight: '237px'
     };
 
