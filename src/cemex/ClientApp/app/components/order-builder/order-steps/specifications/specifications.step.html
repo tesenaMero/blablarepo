@@ -321,9 +321,9 @@
                         </label>
                         <div class="input product-selection dropdown" [ngClass]="{ disabled: product.disableds.products }">
                             <span class="selection">
-                                {{ product.product?.commercialDesc }}
+                                {{ product.product?.commercialCode }} / {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
-                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialDesc }}</option>
+                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode }} / {{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
                             <!-- <span class="action">Change</span> -->
