@@ -262,6 +262,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.shipmentApi.shipmentLocationTypes.subscribe(data => {
             if (data) { this.fetchJobsites(); }
         });
+
+        // if the user got the location step by pressign the back button
+        if(this.contact.name && this.contact.phone) {
+            this.validations.contactPerson.valid = true;
+        }
     }
 
     shouldShowPOD(): boolean {

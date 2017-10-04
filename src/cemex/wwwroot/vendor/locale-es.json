@@ -925,7 +925,7 @@
     "views.location.purchase_order": "Orden de compra",
     "views.location.purchase_order_error": "Por favor introduce una orden de compra valida.",
     "views.location.contact_person": "Contacto",
-    "views.location.select_contact": "Por favor selecciona una ubicacion",
+    "views.location.select_contact": "Por favor selecciona una contacto",
     "views.location.special_instr": "Indicaciones especiales",
     "views.location.address_short": "La direccion es muy corta.",
 
