@@ -32,7 +32,8 @@ import { OrderDetailCommentsComponent } from './components/order-detail/order-de
 import { OrderDetailLogsComponent } from './components/order-detail/order-detail-logs/order-detail-logs.component';
 import { SelectDropdownModule } from './shared/components/selectwithsearch/dropdown.module';
 import { CrossProductComponent } from './components/cross-product/crossProduct.component';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DateTimePickerModule } from 'ng-pick-datetime';
 // Pipes
 import {
     NoSpacePipe,
@@ -150,6 +151,8 @@ export const sharedConfig: NgModule = {
         FlexLayoutModule,
         CmxCoreCommonModule,
         CmxSharedModule,
+        DateTimePickerModule,
+        BrowserAnimationsModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full'},
             { path: 'ordersnproduct', redirectTo: 'app', pathMatch: 'prefix'},
