@@ -22,8 +22,6 @@ export class OrderBuilderComponent implements OnDestroy {
     @ViewChild(StepperComponent) stepper;
     private isReadyMix: boolean = false;
     private isBulkCementUSA: boolean = false;
-    private rebuildOrder = false;
-    private currentCustomer: any;
 
     private draftId: any;
     private draftOrder: any;
@@ -48,27 +46,18 @@ export class OrderBuilderComponent implements OnDestroy {
         private modal: ModalService,
         private t: TranslationService) {
 
-        this.rebuildOrder = false;
-        this.sub = this.customerService.customerSubject.subscribe((customer) => {
-            Validations.init(this.manager, this.customerService);
-            if (customer && customer != this.currentCustomer) {
-                this.currentCustomer = customer;
-                this.rebuild();
-            }
-        });
+        Validations.init(this.manager, this.customerService);
+
+        // Rebuild builder state from manager if any
+        let managerJSON = localStorage.getItem('manager');
+        if (managerJSON) { this.rebuildManager(JSON.parse(managerJSON)) }
     }
 
     ngOnDestroy(): void {
-        this.sub.unsubscribe();
     }
 
-    // Rebuilds the component
-    rebuild() {
-        this.manager.resetOrder();
-
-        // Go into js event loop
-        setTimeout(() => { this.rebuildOrder = false; }, 0);
-        setTimeout(() => { this.rebuildOrder = true; }, 0);
+    rebuildManager(manager: any) {
+        console.log(manager);
     }
 
     // Steps events
@@ -134,18 +123,46 @@ export class OrderBuilderComponent implements OnDestroy {
         this.placeOrder();
     }
 
+    getManagerState() {
+        let cache = [];
+        JSON.stringify(this.manager, (key, value) => {
+            if (typeof value === 'object' && value !== null) {
+                // If circular, discard key
+                if (cache.indexOf(value) !== -1) { return; }
+                cache.push(value);
+            }
+            return value;
+        });
+
+        // GC
+        cache = null;
+    }
+
     // Payment flow
     // --------------------------------------------------------------------
     placeOrder() {
+        // Save manager in localstroage
+        // TODO: 
+        // ----------------------------------------------------------
+        let cache = [];
+        localStorage.setItem('manager', JSON.stringify(this.manager, (key, value) => {
+            if (typeof value === 'object' && value !== null) {
+                // If circular, discard key
+                if (cache.indexOf(value) !== -1) { return; }
+                cache.push(value);
+            }
+            return value;
+        }));
+
+        // GC
+        cache = null;
+        // ----------------------------------------------------------
+
         if (Validations.isMexicoCustomer() && Validations.isCement()) {
             this.dashboard.alertInfo(this.t.pt('views.common.placing') + " " + this.draftOrder.orderId, 0);
 
             this.cashOrders = this.getCashOrders();
             this.creditOrders = this.getCreditOrders();
-
-            // Save cash orders to show later
-            localStorage.setItem('tempCashOrders', JSON.stringify(this.cashOrders));
-            // localStorage.setItem('manager', JSON.stringify(this.manager));
 
             // Pay credit orders
             if (this.cashOrders.length) {
@@ -194,23 +211,23 @@ export class OrderBuilderComponent implements OnDestroy {
             },
             data: data
         }
-        
+
         let encoded = this.jsonObjService.encodeJson(cartItems);
         this.document.location.href = 'https://dcm-qa.mybluemix.net/invoices-payments/open/' + encoded;
     }
 
     flowCementMX() {
         this.drafts.createOrder(this.draftId, '')
-        .flatMap((response) => {
-            this.dashboard.alertSuccess(this.t.pt('views.common.credit') + " " + this.t.pt('views.common.requesting_code'), 0);
-            return this.drafts.validateRequestId(response.json().id);
-        })
-        .subscribe((response) => {
-            this.dashboard.alertSuccess(this.t.pt('views.common.credit') + " " +  this.t.pt('views.common.order_code') + response.json().orderCode + " " + this.t.pt('views.common.placed_success'), 30000);
-            this.showSuccessModal(response.json().orderCode);
-        }, error => {
-            this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
-        })
+            .flatMap((response) => {
+                this.dashboard.alertSuccess(this.t.pt('views.common.credit') + " " + this.t.pt('views.common.requesting_code'), 0);
+                return this.drafts.validateRequestId(response.json().id);
+            })
+            .subscribe((response) => {
+                this.dashboard.alertSuccess(this.t.pt('views.common.credit') + " " + this.t.pt('views.common.order_code') + response.json().orderCode + " " + this.t.pt('views.common.placed_success'), 30000);
+                this.showSuccessModal(response.json().orderCode);
+            }, error => {
+                this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
+            })
     }
 
     basicFlow() {
