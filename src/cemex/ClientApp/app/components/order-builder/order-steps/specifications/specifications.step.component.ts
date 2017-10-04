@@ -158,30 +158,33 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     castProducts() {
         const shouldFetchContracts = !(Validations.isReadyMix() && SpecificationsStepComponent.globalContract);
-        this.manager.products.forEach((item, index) => {
-            let p = new PreProduct(
-                this.productsApi,
-                this.manager,
-                this.paymentTermsApi,
-                this.plantApi,
-                this.customerService,
-                this.dashboard,
-                this.t,
-                shouldFetchContracts);
-
-            p.product = item.product;
-            p.quantity = item.quantity;
-            p.contract = item.contract || undefined;
-            p.payment = item.payment || undefined;
-            p.maximumCapacity = item.maximumCapacity || undefined;
-
-            this.preProducts.push(p);
-        });
+        if (this.manager && this.manager.products) {
+            this.manager.products.forEach((item, index) => {
+                let p = new PreProduct(
+                    this.productsApi,
+                    this.manager,
+                    this.paymentTermsApi,
+                    this.plantApi,
+                    this.customerService,
+                    this.dashboard,
+                    this.t,
+                    shouldFetchContracts);
+    
+                p.product = item.product;
+                p.quantity = item.quantity;
+                p.contract = item.contract || undefined;
+                p.payment = item.payment || undefined;
+                p.maximumCapacity = item.maximumCapacity || undefined;
+    
+                this.preProducts.push(p);
+            });
+        }
     }
 
     onShowed() {
         // Transform recovered manager products as preproducts
-        if(localStorage.getItem('manager')) {
+        let restoredManager = CircularJSON.parse(localStorage.getItem('manager'));
+        if(restoredManager) {
             this.castProducts();
         }
 

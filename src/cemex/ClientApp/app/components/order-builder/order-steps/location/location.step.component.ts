@@ -264,7 +264,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         });
 
         // if the user got the location step by pressign the back button
-        if(this.contact.name && this.contact.phone) {
+        if(this.contact && this.contact.name && this.contact.phone) {
             this.validations.contactPerson.valid = true;
         }
     }

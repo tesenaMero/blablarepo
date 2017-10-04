@@ -43,6 +43,7 @@ export class CreateOrderService {
     public draftId: any;
     public isPatched: any = false;
     public draftOrder: any;
+    public restored = false;
 
     constructor() {
         this.initializeOrder();

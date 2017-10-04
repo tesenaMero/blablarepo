@@ -71,7 +71,14 @@ export class OrderBuilderComponent implements OnDestroy {
 
     rebuildManager(managerJSON) {
         let restoredManager =  CircularJSON.parse(managerJSON) as CreateOrderService;
+        // if (restoredManager.restored) {
+        //     localStorage.removeItem('manager');
+        //     return;
+        // }
+
         console.log(restoredManager)
+        // restoredManager.restored = true;
+        // this.manager.restored = restoredManager.restored;
         this.manager.jobsite = restoredManager.jobsite;
         this.manager.draftId = restoredManager.draftId;
         this.manager.pointOfDelivery = restoredManager.pointOfDelivery || undefined;
