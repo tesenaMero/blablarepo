@@ -14,6 +14,7 @@ import { PreProduct } from './preproduct'
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 import * as _ from 'lodash';
+let CircularJSON = require('circular-json');
 
 @Component({
     selector: 'specifications-step',
@@ -155,7 +156,38 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return true;
     }
 
+    castProducts() {
+        const shouldFetchContracts = !(Validations.isReadyMix() && SpecificationsStepComponent.globalContract);
+        if (this.manager && this.manager.products) {
+            this.manager.products.forEach((item, index) => {
+                let p = new PreProduct(
+                    this.productsApi,
+                    this.manager,
+                    this.paymentTermsApi,
+                    this.plantApi,
+                    this.customerService,
+                    this.dashboard,
+                    this.t,
+                    shouldFetchContracts);
+    
+                p.product = item.product;
+                p.quantity = item.quantity;
+                p.contract = item.contract || undefined;
+                p.payment = item.payment || undefined;
+                p.maximumCapacity = item.maximumCapacity || undefined;
+    
+                this.preProducts.push(p);
+            });
+        }
+    }
+
     onShowed() {
+        // Transform recovered manager products as preproducts
+        let restoredManager = CircularJSON.parse(localStorage.getItem('manager'));
+        if(restoredManager) {
+            this.castProducts();
+        }
+
         // Unlock
         this.onCompleted.emit(false);
         this.lockRequests = false;
@@ -607,7 +639,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
             let newQty = product.quantity + toAdd;
             let contractBalance = product.getContractBalance(); //remaining of contract
-            let maxCapacitySalesArea = product.getMaximumCapacity();
+            let maxCapacitySalesArea = product.maximumCapacity;
 
             if (contractBalance === undefined) {
                 if (isDelivery) {

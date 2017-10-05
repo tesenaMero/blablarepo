@@ -30,8 +30,8 @@
                                 <input class="value" type="number" value="{{ product.quantity | number:'1.3-3' }}" (ngModelChange)="valuechange($event)" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacity()">
-                                {{ t.pt('views.specifications.maximum_capacity') }} {{ product.getMaximumCapacity() }} Ton(s)
+                            <div class="info" *ngIf="isMXCustomer() && product.maximumCapacity">
+                                {{ t.pt('views.specifications.maximum_capacity') }} {{ product.maximumCapacity }} Ton(s)
                             </div>
                         </div>
                         <div class="group w40">
@@ -176,8 +176,8 @@
                                 <input class="value" type="number" value="{{ product.quantity | number:'1.3-3' }}" (ngModelChange)="valuechange($event)" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="UTILS.isMexicoCustomer() && product.getMaximumCapacity()">
-                                {{ t.pt('views.specifications.maximum_capacity') }} {{ product.getMaximumCapacity() }} Ton(s)
+                            <div class="info" *ngIf="UTILS.isMexicoCustomer() && product.maximumCapacity">
+                                {{ t.pt('views.specifications.maximum_capacity') }} {{ product.maximumCapacity }} Ton(s)
                             </div>
                         </div>
                         <div class="group w40">

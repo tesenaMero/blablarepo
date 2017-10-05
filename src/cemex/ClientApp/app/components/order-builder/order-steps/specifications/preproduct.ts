@@ -27,6 +27,7 @@ export class PreProduct {
     projectProfile: any = {};
     templateProfile: any = {};
     additionalServices = [];
+    maximumCapacity: any;
 
     // Availables
     availableProducts = [];
@@ -64,9 +65,12 @@ export class PreProduct {
         product: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_products_selected') }
     }
 
-    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean) {
+    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean, private templateProduct?: any) {
         // Optionals
         if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
+
+        // Max capacity
+        this.maximumCapacity = this.getMaximumCapacity();
 
         // Conts
         const SSC = SpecificationsStepComponent;
@@ -171,7 +175,7 @@ export class PreProduct {
     contractChanged() {
         if (this.contract) {
             this.validations.contract.valid = true;
-            
+
             this.fetchUnitsFromContract();
 
             // If should get payment terms from contract
@@ -182,7 +186,7 @@ export class PreProduct {
         else {
             this.validations.contract.valid = false;
             this.fetchUnits();
-            
+
             // Reset available payments
             this.availablePayments = SpecificationsStepComponent.availablePayments;
         }
@@ -223,7 +227,7 @@ export class PreProduct {
                 // Set default contract
                 this.contract = undefined;
                 this.contractChanged();
-                
+
                 this.disableds.contracts = false;
             }
             else { this.disableds.contracts = true; } // Disable it if no contracts
@@ -257,7 +261,7 @@ export class PreProduct {
                 }
 
                 this.loadings.units = false;
-                
+
             })
         ).subscribe((response) => {
             // Map product base unit with available units and map it
@@ -377,7 +381,7 @@ export class PreProduct {
     // TODO: define product lines 2 and 3
     fetchManeuvering() {
         // Maneouvering additional service
-        if (Validations.isDelivery() && 
+        if (Validations.isDelivery() &&
             (this.product.product.productLine.productLineId === 2 || this.product.product.productLine.productLineId === 3)) {
 
             let area = this.manager.salesArea.find((a) => {
@@ -412,18 +416,18 @@ export class PreProduct {
     }
 
     // Convert to tons quantity selected
-    convertToTons(qty): any{
-        if(this.unit === undefined){
+    convertToTons(qty): any {
+        if (this.unit === undefined) {
             return qty;
         }
-        
+
         let factor = this.unit.numerator / this.unit.denominator;
         let convertion = qty * factor;
         return convertion || undefined;
     }
 
     // Maximum capacity salesArea
-    getMaximumCapacity() {
+    private getMaximumCapacity() {
         const salesAreaArray = _.get(this.manager, 'salesArea');
         let salesArea = _.get(this.manager, 'salesArea[0]');
         if (salesAreaArray && salesAreaArray.length > 1) {
@@ -431,13 +435,13 @@ export class PreProduct {
                 return _.get(sa, 'salesArea.divisionCode') == "02";
             })
         }
-        
+
         if (salesArea) { return _.get(salesArea, 'maximumLot.amount'); }
         else { return undefined; }
     }
 
     // Maximum capacity contract
-    getContractBalance(){
+    getContractBalance() {
         if (this.contract) {
             const volume = _.get(this.contract, 'salesDocument.volume');
             if (volume) {
@@ -447,23 +451,6 @@ export class PreProduct {
         return undefined;
     }
 
-    // Returns the minor maximum capacity contract or jobsite
-    getMaximumCapacityContractAndJobsite(){
-        let contractBalance = this.getContractBalance();
-        let maxCapacitySalesArea = this.getMaximumCapacity(); 
-        if (contractBalance !== undefined){
-            if (maxCapacitySalesArea !== undefined) {
-                if (contractBalance < maxCapacitySalesArea) {
-                    return contractBalance;
-                }
-                else {
-                    return maxCapacitySalesArea;
-                }
-            }
-        }
-        return maxCapacitySalesArea;
-    }
-    
     // Minimum capacity salesArea
     getMinimumCapacity() {
         const salesArea = _.get(this.manager, 'salesArea[0]');
