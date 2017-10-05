@@ -8,7 +8,9 @@ import { CustomerService } from '../../../../shared/services/customer.service';
 import { DraftsService } from '../../../../shared/services/api/drafts.service';
 import { Validations } from '../../../../utils/validations';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
+
 import { } from '@types/googlemaps';
+import * as _ from 'lodash';
 declare var google: any;
 
 @Component({
@@ -26,6 +28,7 @@ export class ReviewStepComponent implements StepEventsListener {
 
     // Google map
     private map: any; // Map instance
+    private geocoder: any;
     private infoWindow: any;
     private jobsiteMarker: any;
 
@@ -59,28 +62,47 @@ export class ReviewStepComponent implements StepEventsListener {
                 this.isMapLoaded = true;
                 this.map = map;
                 map.setOptions({ zoom: 14, center: { lat: 25.6487281, lng: -100.4431818 } });
+                this.geocoder = new google.maps.Geocoder();
                 this.loadMarkersInMap();
             });
         }
         else {
             google.maps.event.trigger(this.map, "resize");
+            this.geocoder = new google.maps.Geocoder();
             this.loadMarkersInMap();
         }
     }
 
     loadMarkersInMap() {
         this.cleanJobsiteMarker();
-        
-        if (this.manager.jobsite && this.manager.jobsite.geo) {
-            this.jobsiteMarker = this.makeJobsiteMarker(this.manager.jobsite.geo);
+
+        if (this.manager.jobsite && this.manager.jobsite.geo && 1 > 2) {
+            this.jobsiteMarker = this.makeJobsiteMarker(this.positionFromJobsiteGeo(this.manager.jobsite.geo));
             this.addMarkerToMap(this.jobsiteMarker);
         }
+        else if (this.manager.jobsite && this.manager.jobsite.address && this.manager.jobsite.address.streetName) {
+            let address = this.manager.jobsite.address.streetName;
+            let position = this.geoFromAddress(address);
+            if (position) {
+                this.jobsiteMarker = this.makeJobsiteMarker(position);
+                this.addMarkerToMap(this.jobsiteMarker);
+            }
+        }
+    }
+
+    geoFromAddress(address) {
+        this.geocoder.geocode({ 'address': address }, (results, status) => {
+            if (status === 'OK') {
+                console.log(results);
+                return results[0].geometry.location;
+            }
+        });
     }
 
     saveDraft() {
         // If locked (stepper is moving most likely) then dont do the call 
         if (this.lockRequests) { return; }
-        
+
         this.dashboard.alertInfo(this.t.pt('views.review.saving_draft'), 0);
         let draftSub = this.drafts.add(this.generateOrderObj()).subscribe((response) => {
             this.dashboard.alertSuccess(this.t.pt('views.review.draft_saved'));
@@ -253,10 +275,13 @@ export class ReviewStepComponent implements StepEventsListener {
 
     // Map stuff
     // ====================
+    positionFromJobsiteGeo(geo) {
+        return { lat: parseFloat(geo.latitude), lng: parseFloat(geo.longitude) }
+    }
+
     makeJobsiteMarker(geo: any): google.maps.Marker {
-        
         let marker = new google.maps.Marker({
-            position: { lat: parseFloat(geo.latitude), lng: parseFloat(geo.longitude) },
+            position: geo,
             title: 'jobsite'
         });
 
