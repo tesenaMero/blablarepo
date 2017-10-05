@@ -29,11 +29,11 @@ export class ProjectProfilesComponent {
 
         this.columns = [
             //{ inner: '<i class="star cmx-icon-favourite-active" aria-hidden="true"></i>', width: 5 },
-            { name: "Name", width: 25 },
-            { name: "Discharge Time", width: 20 },
-            { name: "Transport Method", width: 20 },
-            { name: "Unload Type", width: 10 },
-            { name: "Kicker", width: 10 },
+            { name: this.t.pt('views.project.profile.table_name'), width: 25 },
+            { name: this.t.pt('views.project.profile.table_dischare_time'), width: 20 },
+            { name: this.t.pt('views.project.profile.table_transport_method'), width: 20 },
+            { name: this.t.pt('views.project.profile.table_unload_type'), width: 10 },
+            { name: this.t.pt('views.project.profile.table_kicker'), width: 10 },
             { name: "", width: 15, sortable: false },
         ]
     }
