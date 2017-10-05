@@ -46,12 +46,8 @@ export class DashboardComponent implements OnInit {
         // Fetch locations types:
         // 'J': Jobsite, ...
         this.shipmentLocationApi.fetchShipmentLocationTypes();
+        this.salesDocumentService.fetchSalesDocuments();
         this.dashboard.alertSubject.subscribe((alert) => this.handleAlert(alert));
-
-        // this.salesDocumentService.all().subscribe((response) => {
-        //     console.log(response.json());
-        // });
-
         this.initLanguage();
     }
 

@@ -3,7 +3,7 @@ import { ProductsApi, Api } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.service';
-import { ProjectProfileApi, CatalogApi, PlantApi, ContractsApi } from '../../../../shared/services/api';
+import { ProjectProfileApi, CatalogApi, PlantApi, ContractsApi, SalesDocumentApi } from '../../../../shared/services/api';
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { SearchProductService } from '../../../../shared/services/product-search.service';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
@@ -95,7 +95,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private searchProductService: SearchProductService,
         private dashboard: DashboardService,
         private modal: ModalService,
-        private t: TranslationService
+        private t: TranslationService,
+        private salesDocumentsService: SalesDocumentApi
     ) {
         this.today = new Date();
         this.step.setEventsListener(this);
@@ -156,6 +157,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return true;
     }
 
+    // TODO: fix this shit daniel cmon
     castProducts() {
         const shouldFetchContracts = !(Validations.isReadyMix() && SpecificationsStepComponent.globalContract);
         if (this.manager && this.manager.products) {
@@ -210,10 +212,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         // Fetch products
         if (Validations.isReadyMix()) {
-            this.fetchProductsReadyMix(this.manager.getSalesDocumentType());
+            this.fetchProductsReadyMix(this.salesDocumentsService.getDocument("A"));
         }
         else {
-            this.fetchProducts(this.manager.getSalesDocumentType());
+            this.fetchProducts(this.salesDocumentsService.getDocument("T"));
         }
 
         this.getAdditionalServices();
@@ -221,7 +223,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.getProjectProfiles();
     }
 
-    fetchProducts(salesDocumentType) {
+    fetchProducts(salesDocumentType: any) {
         // Disable contracts while fetching products
         this.preProducts.forEach((item: PreProduct) => {
             item.disableds.contracts = true;
@@ -232,7 +234,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         this.productsSub = this.productsApi.top(
             this.manager.jobsite,
-            salesDocumentType,
+            salesDocumentType.salesDocumentTypeId,
             this.manager.productLine,
             this.manager.shippingCondition).subscribe((result) => {
                 let topProducts = result.json().products;
@@ -259,7 +261,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             );
     }
 
-    fetchProductsReadyMix(salesDocumentType) {
+    fetchProductsReadyMix(salesDocumentType: any) {
         // Disable contracts while fetching products
         this.preProducts.forEach((item: PreProduct) => {
             item.disableds.contracts = true;
@@ -270,7 +272,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         this.productsSub = this.productsApi.top(
             this.manager.jobsite,
-            salesDocumentType,
+            salesDocumentType.salesDocumentTypeId,
             this.manager.productLine,
             this.manager.shippingCondition,
             this.manager.purchaseOrder).subscribe((result) => {
