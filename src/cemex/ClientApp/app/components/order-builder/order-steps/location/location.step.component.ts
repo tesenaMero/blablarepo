@@ -120,6 +120,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     // Google map
     private map: any; // Map instance
+    private geocoder = new google.maps.Geocoder();
     private infoWindow: any;
     private jobsiteMarker: any;
 
@@ -359,12 +360,16 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             
             // Fetch geo
             this.shipmentApi.geo(this.location.address).subscribe((geo) => {
-                if (geo && geo.json) {
+                if (geo && geo.json && Number(geo.json().latitude) != 0 && Number(geo.json().longitude) != 0 ) {
                     this.location.geo = geo.json();
                     this.cleanJobsiteMarker();
                     this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
                     this.addMarkerToMap(this.jobsiteMarker);
                     this.loadings.map = false;
+                }
+                else if (this.location.address && this.location.address.streetName) {
+                    let address = this.location.address.streetName;
+                    this.geoFromAddress(address);
                 }
             });
         });
@@ -415,6 +420,20 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         }
     }
 
+    geoFromAddress(address) {
+        this.geocoder.geocode({ 'address': address }, (results, status) => {
+            if (status === google.maps.GeocoderStatus.OK) {
+                //return { lat: parseFloat(results[0].geometry.location.lat()), lng: parseFloat(results[0].geometry.location.lng()) }
+                let position = results[0].geometry.location;
+                if (position) {
+                    this.jobsiteMarker = this.makeJobsiteMarker(position);
+                    this.addMarkerToMap(this.jobsiteMarker);
+                    this.loadings.map = false;
+                }
+            }
+        });
+    }
+
     podChanged(pod: any) {
         if (!pod) {
             this.validations.pod.valid = false;
@@ -437,11 +456,16 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 return this.shipmentApi.geo(address.json());
             })
             .subscribe((geo) => {
-                if (geo.json) {
+                if (geo.json && Number(geo.json().latitude) != 0 && Number(geo.json().longitude) != 0) {
                     this.pod.geo = geo.json();
                     this.cleanJobsiteMarker();
                     this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
                     this.addMarkerToMap(this.jobsiteMarker);
+                    this.loadings.map = false;
+                }
+                else if (this.pod.address && this.pod.address.streetName) {
+                    let address = this.pod.address.streetName;
+                    this.geoFromAddress(address);
                     this.loadings.map = false;
                 }
             });

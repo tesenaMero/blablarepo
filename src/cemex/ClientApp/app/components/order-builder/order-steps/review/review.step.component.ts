@@ -76,25 +76,25 @@ export class ReviewStepComponent implements StepEventsListener {
     loadMarkersInMap() {
         this.cleanJobsiteMarker();
 
-        if (this.manager.jobsite && this.manager.jobsite.geo && 1 > 2) {
+        if (this.manager.jobsite && this.manager.jobsite.geo) {
             this.jobsiteMarker = this.makeJobsiteMarker(this.positionFromJobsiteGeo(this.manager.jobsite.geo));
             this.addMarkerToMap(this.jobsiteMarker);
         }
         else if (this.manager.jobsite && this.manager.jobsite.address && this.manager.jobsite.address.streetName) {
             let address = this.manager.jobsite.address.streetName;
-            let position = this.geoFromAddress(address);
-            if (position) {
-                this.jobsiteMarker = this.makeJobsiteMarker(position);
-                this.addMarkerToMap(this.jobsiteMarker);
-            }
+            this.geoFromAddress(address);
         }
     }
 
     geoFromAddress(address) {
         this.geocoder.geocode({ 'address': address }, (results, status) => {
             if (status === 'OK') {
-                console.log(results);
-                return results[0].geometry.location;
+                //return { lat: parseFloat(results[0].geometry.location.lat()), lng: parseFloat(results[0].geometry.location.lng()) }
+                let position = results[0].geometry.location;
+                if (position) {
+                    this.jobsiteMarker = this.makeJobsiteMarker(position);
+                    this.addMarkerToMap(this.jobsiteMarker);
+                }
             }
         });
     }
