@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { PlantApi, ProductColorApi, ProductsApi, ShipmentLocationApi } from '../../shared/services/api';
+import { PlantApi, ProductColorApi, ProductsApi, ShipmentLocationApi, SalesDocumentApi } from '../../shared/services/api';
 import { CreateOrderService } from '../../shared/services/create-order.service';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../shared/components/selectwithsearch/";
 import { Plant, ProductColor, ProductWrapper } from '../../shared/types';
@@ -49,7 +49,8 @@ export class SearchProductComponent {
         private productsApi: ProductsApi, 
         private shipmentLocationApi: ShipmentLocationApi, 
         private searchProductService: SearchProductService,
-        private customerService: CustomerService) {
+        private customerService: CustomerService,
+        private salesDocumentService: SalesDocumentApi) {
         this.searchProductService.productColors.subscribe(response => {
             if (!response) { return; }
             
@@ -68,7 +69,8 @@ export class SearchProductComponent {
     productColorChanged(productColor: any) {
         this.message = false;
         this.setProducts([]);
-        this.productsApi.byProductColorAndSalesDocumentAndPlant(5, this.productColorSelected).subscribe((response) => {
+        const salesDocumentId = this.salesDocumentService.getDocument("R").salesDocumentTypeId;
+        this.productsApi.byProductColorAndSalesDocumentAndPlant(salesDocumentId, this.productColorSelected).subscribe((response) => {
             this.setProducts(response.json().products);
         });
     }
@@ -76,7 +78,8 @@ export class SearchProductComponent {
     plantChanged(plant: any) {
         this.setProducts([]);
         if (this.productColorSelected !== null) {
-            this.productsApi.byProductColorAndSalesDocumentAndPlant(5, this.productColorSelected, plant).subscribe((response) => {
+            const salesDocumentId = this.salesDocumentService.getDocument("R").salesDocumentTypeId;
+            this.productsApi.byProductColorAndSalesDocumentAndPlant(salesDocumentId, this.productColorSelected, plant).subscribe((response) => {
                 this.setProducts(response.json().products);
             });
         }
