@@ -10,8 +10,6 @@ import { Validations } from '../../../../utils/validations';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { } from '@types/googlemaps';
 
-let CircularJSON = require('circular-json');
-
 @Component({
     selector: 'review-step',
     templateUrl: './review.step.html',
@@ -67,8 +65,11 @@ export class ReviewStepComponent implements StepEventsListener {
         }
 
         this.cleanJobsiteMarker();
-        this.jobsiteMarker = this.makeJobsiteMarker(this.manager.jobsite.geo);
-        this.addMarkerToMap(this.jobsiteMarker);
+        
+        if (this.manager.jobsite && this.manager.jobsite.geo) {
+            this.jobsiteMarker = this.makeJobsiteMarker(this.manager.jobsite.geo);
+            this.addMarkerToMap(this.jobsiteMarker);
+        }
     }
 
     saveDraft() {
