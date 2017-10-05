@@ -9,6 +9,7 @@ import { DraftsService } from '../../../../shared/services/api/drafts.service';
 import { Validations } from '../../../../utils/validations';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { } from '@types/googlemaps';
+declare var google: any;
 
 @Component({
     selector: 'review-step',
@@ -58,12 +59,16 @@ export class ReviewStepComponent implements StepEventsListener {
                 this.isMapLoaded = true;
                 this.map = map;
                 map.setOptions({ zoom: 14, center: { lat: 25.6487281, lng: -100.4431818 } });
+                this.loadMarkersInMap();
             });
         }
         else {
             google.maps.event.trigger(this.map, "resize");
+            this.loadMarkersInMap();
         }
+    }
 
+    loadMarkersInMap() {
         this.cleanJobsiteMarker();
         
         if (this.manager.jobsite && this.manager.jobsite.geo) {
@@ -249,6 +254,7 @@ export class ReviewStepComponent implements StepEventsListener {
     // Map stuff
     // ====================
     makeJobsiteMarker(geo: any): google.maps.Marker {
+        
         let marker = new google.maps.Marker({
             position: { lat: parseFloat(geo.latitude), lng: parseFloat(geo.longitude) },
             title: 'jobsite'

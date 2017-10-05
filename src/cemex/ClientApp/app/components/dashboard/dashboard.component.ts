@@ -99,6 +99,7 @@ export class DashboardComponent implements OnInit {
 
     private logout() {
         this.session.logout();
+        localStorage.removeItem('manager');
         this.router.navigate(['/ordersnproduct/app/login']);
     }
 

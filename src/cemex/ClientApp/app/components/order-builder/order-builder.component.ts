@@ -24,6 +24,8 @@ export class OrderBuilderComponent implements OnDestroy {
     @ViewChild(StepperComponent) stepper: StepperComponent;
     @Input() restoreOrder? = false;
 
+    private messages: any[] = [];
+
     private isReadyMix: boolean = false;
     private isBulkCementUSA: boolean = false;
 
@@ -71,12 +73,7 @@ export class OrderBuilderComponent implements OnDestroy {
 
     rebuildManager(managerJSON) {
         let restoredManager =  CircularJSON.parse(managerJSON) as CreateOrderService;
-        // if (restoredManager.restored) {
-        //     localStorage.removeItem('manager');
-        //     return;
-        // }
-
-        console.log(restoredManager)
+        
         // restoredManager.restored = true;
         // this.manager.restored = restoredManager.restored;
         this.manager.jobsite = restoredManager.jobsite;
@@ -188,7 +185,6 @@ export class OrderBuilderComponent implements OnDestroy {
     // --------------------------------------------------------------------
     placeOrder() {
         // Save manager in localstroage allowing 
-        //localStorage.setItem('manager', JSON.stringify(Cycle.decycle(this.manager)));
         localStorage.setItem('manager', CircularJSON.stringify(this.manager))
 
         if (Validations.isMexicoCustomer() && Validations.isCement()) {
@@ -202,12 +198,7 @@ export class OrderBuilderComponent implements OnDestroy {
                 this.flowMidCash(this.cashOrders);
             }
             else if (this.creditOrders.length) {
-                if (Validations.isCement() && Validations.isMexicoCustomer()) {
-                    this.flowCementMX();
-                }
-                else {
-                    this.basicFlow();
-                }
+                this.flowCementMX();
             }
         }
         else {
@@ -257,8 +248,13 @@ export class OrderBuilderComponent implements OnDestroy {
             })
             .subscribe((response) => {
                 this.dashboard.alertSuccess(this.t.pt('views.common.credit') + " " + this.t.pt('views.common.order_code') + response.json().orderCode + " " + this.t.pt('views.common.placed_success'), 30000);
+
+                // Remove first three and last three chars and split messages
+                // TODO: Tell middleware to change the format of the messages
+                this.messages = response.json().messages.substring(3).slice(0, -3).split("|");
                 this.showSuccessModal(response.json().orderCode);
             }, error => {
+                localStorage.removeItem('manager');
                 this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
             })
     }
@@ -275,6 +271,7 @@ export class OrderBuilderComponent implements OnDestroy {
                 this.showSuccessModal(this.draftId);
             }
         }, error => {
+            localStorage.removeItem('manager');
             this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
         });
     }
@@ -317,6 +314,7 @@ export class OrderBuilderComponent implements OnDestroy {
     }
 
     closeModal() {
+        this.messages = null;
         this.router.navigate(['/ordersnproduct/app/orders']);
         this.modal.close('success-placement');
     }
