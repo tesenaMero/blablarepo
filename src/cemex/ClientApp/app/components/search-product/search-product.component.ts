@@ -24,7 +24,7 @@ export class SearchProductComponent {
     private productColors: ProductColor[] = [];
     private products: ProductWrapper[] = [];
     private filteredProducts = []
-    private selectedProduct = {};
+    private selectedProduct: any;
 
     private productDescriptionInput = "";
     private productCodeInput = "";
@@ -118,8 +118,13 @@ export class SearchProductComponent {
     }
 
     confirm() {
-        this.searchProductService.searchedProduct.next(this.selectedProduct);
-        this.confirmed.emit();
+        if (this.selectedProduct === undefined) {
+            this.confirmed.emit();
+        }
+        else {
+            this.searchProductService.searchedProduct.next(this.selectedProduct);
+            this.confirmed.emit();
+        }
     }
 
     cancel() {
