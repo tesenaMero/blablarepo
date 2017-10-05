@@ -655,8 +655,14 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
     }
 
-    valuechange(newValue) {
-        console.log(newValue)
+    valuechange(product: PreProduct, newValue: number) {
+        let mymodel = newValue;
+        if(newValue < 0 || newValue == null){
+            mymodel = 1;
+        }
+        product.quantity = mymodel;
+
+        return product.quantity;
     }
 
     todayStr() {
