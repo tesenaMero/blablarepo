@@ -428,6 +428,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 //return { lat: parseFloat(results[0].geometry.location.lat()), lng: parseFloat(results[0].geometry.location.lng()) }
                 let position = results[0].geometry.location;
                 if (position) {
+                    this.cleanJobsiteMarker();
                     this.jobsiteMarker = this.makeJobsiteMarker(position);
                     this.addMarkerToMap(this.jobsiteMarker);
                     this.loadings.map = false;
@@ -468,7 +469,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 else if (this.pod.address && this.pod.address.streetName) {
                     let address = this.pod.address.streetName;
                     this.geoFromAddress(address);
-                    this.loadings.map = false;
                 }
             });
 
