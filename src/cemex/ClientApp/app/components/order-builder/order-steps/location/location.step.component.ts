@@ -120,7 +120,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     // Google map
     private map: any; // Map instance
-    private geocoder = new google.maps.Geocoder();
+    private geocoder: any;
     private infoWindow: any;
     private jobsiteMarker: any;
 
@@ -253,10 +253,12 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 this.map = map;
                 map.setOptions({ zoom: 14, center: { lat: 50.077626, lng: 14.424686 } });
                 google.maps.event.trigger(this.map, "resize");
+                this.geocoder = new google.maps.Geocoder();
             });
         }
         else {
             google.maps.event.trigger(this.map, "resize");
+            this.geocoder = new google.maps.Geocoder();
         }
 
         // Guard to fetch jobsites when I got shipment locations
@@ -363,7 +365,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 if (geo && geo.json && Number(geo.json().latitude) != 0 && Number(geo.json().longitude) != 0 ) {
                     this.location.geo = geo.json();
                     this.cleanJobsiteMarker();
-                    this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
+                    this.jobsiteMarker = this.makeJobsiteMarker(this.positionFromJobsiteGeo(geo.json()));
                     this.addMarkerToMap(this.jobsiteMarker);
                     this.loadings.map = false;
                 }
@@ -422,7 +424,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     geoFromAddress(address) {
         this.geocoder.geocode({ 'address': address }, (results, status) => {
-            if (status === google.maps.GeocoderStatus.OK) {
+            if (status === "OK") {
                 //return { lat: parseFloat(results[0].geometry.location.lat()), lng: parseFloat(results[0].geometry.location.lng()) }
                 let position = results[0].geometry.location;
                 if (position) {
@@ -459,7 +461,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 if (geo.json && Number(geo.json().latitude) != 0 && Number(geo.json().longitude) != 0) {
                     this.pod.geo = geo.json();
                     this.cleanJobsiteMarker();
-                    this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
+                    this.jobsiteMarker = this.makeJobsiteMarker(this.positionFromJobsiteGeo(geo.json()));
                     this.addMarkerToMap(this.jobsiteMarker);
                     this.loadings.map = false;
                 }
@@ -561,17 +563,15 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     // Map stuff
     // ====================
+    positionFromJobsiteGeo(geo) {
+        return { lat: parseFloat(geo.latitude), lng: parseFloat(geo.longitude) }
+    }
+
     makeJobsiteMarker(geo: any): google.maps.Marker {
         let marker = new google.maps.Marker({
-            position: { lat: parseFloat(geo.latitude), lng: parseFloat(geo.longitude) },
-            title: 'jobsite',
-            icon: '/images/map/jobsite.png'
+            position: geo,
+            title: 'jobsite'
         });
-
-        // marker.addListener('click', () => {
-        //     this.showPlantInfo(plant, marker);
-        // });
-
         return marker;
     }
 
