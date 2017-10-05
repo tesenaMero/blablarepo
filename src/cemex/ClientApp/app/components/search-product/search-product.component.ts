@@ -89,10 +89,14 @@ export class SearchProductComponent {
 
     }
 
-    filterProductByProductDescription(event: any) {
+    filterProductByProductDescription(event) {
         this.filteredProducts = this.products;
         this.productCodeInput = "";
-        this.filteredProducts = this.filteredProducts.filter((product: any) => product.commercialDesc.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1);
+        this.filteredProducts = this.filteredProducts.filter((item) => {
+            if (item.commercialDesc) { 
+                return item.commercialDesc.toLowerCase().indexOf(event.toLowerCase()) > -1;
+            }
+        });
     }
 
     filterProductByProductCode(event: any) {
