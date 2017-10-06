@@ -96,29 +96,18 @@ export class StepperComponent implements AfterContentInit {
         this.animatePrev(currentIndex - 1);
     }
 
-    complete(index?: number) {
-        if (index === undefined) {
+    complete() {
+        if (this.currentStep == this.getStepByIndex(this.getActiveStepIndex())) {
             this.currentStep.completed = true;
             if (this.currentStep.automatic) { this.next(); }
             this.nextAvailable = true;
         }
-        else {
-            let step = this.getStepByIndex(index);
-            if (step) { step.completed = true; }
-            if (step == this.currentStep) { this.nextAvailable = true; }
-        }
     }
 
     // If not index given, uncomplete current step
-    uncomplete(index?: number) {
-        if (index === undefined) {
-            this.currentStep.completed = false;
-            this.nextAvailable = false;
-        }
-        else {
-            let step = this.getStepByIndex(index);
-            if (step) { step.completed = false; }
-        }
+    uncomplete() {
+        this.currentStep.completed = false;
+        this.nextAvailable = false;
     }
 
     finish(result: any) {
