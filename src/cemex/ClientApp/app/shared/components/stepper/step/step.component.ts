@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 
 export interface StepEventsListener {
     onShowed(): void;
@@ -10,7 +10,7 @@ export abstract class _Step {
 
 @Component({
     selector: 'step',
-    template: `<ng-content *ngIf="active"></ng-content>`,
+    template: `<ng-content *ngIf="render"></ng-content>`,
     host: {'class': 'carousel-item', '[class.active]': 'active' }
 })
 export class Step {
@@ -26,6 +26,7 @@ export class Step {
     onBeforeBack = () => { }
 
     private stepEventsListener: StepEventsListener = null;
+    render: boolean = false;
     completed: boolean = false;
 
     constructor() {}
