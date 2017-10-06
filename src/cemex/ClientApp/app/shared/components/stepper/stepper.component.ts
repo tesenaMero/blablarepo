@@ -156,7 +156,9 @@ export class StepperComponent implements AfterContentInit {
         if (currentIndex == 0) { this.isFirstStep = true; }
         else { this.isFirstStep = false; }
 
-        step.show();
+        // Show after dom rendered
+        setTimeout(step.show.bind(step), 0);
+        //step.show();
     }
 
     private selectStepByIndex(index: number) {

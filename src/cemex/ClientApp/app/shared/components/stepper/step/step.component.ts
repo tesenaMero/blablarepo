@@ -10,7 +10,7 @@ export abstract class _Step {
 
 @Component({
     selector: 'step',
-    template: `<ng-content></ng-content>`,
+    template: `<ng-content *ngIf="active"></ng-content>`,
     host: {'class': 'carousel-item', '[class.active]': 'active' }
 })
 export class Step {
