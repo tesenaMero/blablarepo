@@ -37,7 +37,7 @@ export class ShipmentLocationApi {
 
         // If locations type already defined
         if (locationType) {
-            return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`);
+            return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}&orderBlocked=false`);
         }
 
         // Fetch location types then jobsites
@@ -47,7 +47,7 @@ export class ShipmentLocationApi {
             .flatMap((types) => {
                 locationType = types && types.find(item => item.shipmentLocationTypeCode === 'J');
 
-                return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}`);
+                return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}&orderBlocked=false`);
             })
         }
     }

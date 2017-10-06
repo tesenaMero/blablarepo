@@ -10,6 +10,9 @@
         @include media-breakpoint-up(md) {
             border-right: 1px solid #DFE4EB;
         }
+        &.no-separator {
+            border: 0;
+        }
     }
     .right-side {
         .title {

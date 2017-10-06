@@ -108,9 +108,10 @@ nav.side-nav-bar {
     z-index: $dashboard-index + 1 !important;
 }
 
-// /deep/.cmx-side-nav-bar-desk {
-//     transition: tranform 0.25s ease-in-out !important;
-// }
+/deep/.cmx-side-nav-bar-desk {
+    transition: transform 0.25s ease-in-out !important;
+}
+
 /deep/.legal-entity {
     height: 100% !important;
     display: block !important;

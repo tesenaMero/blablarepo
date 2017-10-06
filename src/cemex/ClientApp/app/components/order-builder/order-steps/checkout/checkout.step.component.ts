@@ -23,12 +23,6 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     @Input() draftId: any;
 
     UTIL = Validations;
-
-    private PRODUCT_LINES = {
-        Readymix: 6,
-        CementBulk: 1
-    }
-
     draftOrder: any;
 
     // Readymix
