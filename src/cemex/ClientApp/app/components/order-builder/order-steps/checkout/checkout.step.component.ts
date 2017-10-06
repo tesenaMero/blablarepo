@@ -33,6 +33,8 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     }
 
     // Sub
+    optimalSourceSub: any;
+    pricesSub: any;
     lockRequests: boolean = false;
 
     constructor( @Inject(Step) private step: Step,
@@ -53,6 +55,9 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     onBeforeBack() {
         // Cancel needed requests and lock
         this.lockRequests = true;
+        if (this.optimalSourceSub) { this.optimalSourceSub.unsubscribe(); }
+        if (this.pricesSub) { this.pricesSub.unsubscribe(); }
+        this.onCompleted.emit(false);
     }
 
     onShowed() {
@@ -63,9 +68,9 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
 
         // Patch optimal sources then recovers prices
         this.onCompleted.emit(false);
-        if (this.shouldCallOptimalSource() && (!this.manager.isPatched)) {
+        if (this.shouldCallOptimalSource()) {
             this.dashboard.alertInfo(this.t.pt('views.checkout.recovering_prices'), 0);
-            this.drafts.optimalSourcesPatch(this.manager.draftId).flatMap((x) => {
+            this.optimalSourceSub = this.drafts.optimalSourcesPatch(this.manager.draftId).flatMap((x) => {
                 this.manager.isPatched = true;
                 return this.drafts.prices(this.manager.draftId);
             }).subscribe((response) => {
@@ -76,7 +81,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
             });
         }
         else if (this.shouldCallPrices()) {
-            this.drafts.prices(this.manager.draftId).subscribe((response) => {
+            this.pricesSub = this.drafts.prices(this.manager.draftId).subscribe((response) => {
                 this.handlePrices(response);
             });
         }
