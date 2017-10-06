@@ -393,7 +393,7 @@ MultiselectDropdown.decorators = [{
     args: [{
         selector: 'ss-multiselect-dropdown',
         template: `
-        <div *ngIf="!settings.addingOption" class="dropdown selection" [ngClass]="settings.containerClasses" [class.open]="isVisible"><button type="button" class="dropdown-toggle" [ngClass]="settings.buttonClasses" (click)="toggleDropdown()" [disabled]="disabled">{{ title }}<span _ngcontent-c42="" class="arrow cmx-icon-straight-arrow-down" style="float: right;line-height: 24px;color: #37A7F8;"></span></button>
+        <div *ngIf="!settings.addingOption" class="dropdown selection" [ngClass]="settings.containerClasses" [class.open]="isVisible"><button type="button" class="dropdown-toggle" [ngClass]="settings.buttonClasses" (click)="toggleDropdown()" [disabled]="disabled">{{ title }}<span _ngcontent-c42="" class="arrow cmx-icon-straight-arrow-down" style="right: 12px;position: absolute;line-height: 24px;color: #37A7F8;"></span></button>
             <ul #scroller *ngIf="isVisible" class="dropdown-menu" (scroll)="settings.isLazyLoad ? checkScrollPosition($event) : null" (wheel)="settings.stopScrollPropagation ? checkScrollPropagation($event, scroller) : null" [class.pull-right]="settings.pullRight"
                 [class.dropdown-menu-right]="settings.pullRight" [style.max-height]="settings.maxHeight" style="border: 1px solid #ACAEBA;margin-left: -1px;overflow-x: hidden;display: block; height: auto; overflow-y: auto">
                 <li class="dropdown-item search" *ngIf="settings.enableSearch">
