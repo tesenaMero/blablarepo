@@ -16,11 +16,13 @@ export class PreProduct {
     // Props
     maneuvering: boolean = false;
     quantity: number = 1;
+    newValue: number = 1;
     date: any = new Date();
     time = "13:00";
     unit: any;
     payment: any;
     contract: any;
+    maxCapacity: any;
     product: any;
     productBaseUnit: any;
     plant: any;
@@ -62,7 +64,8 @@ export class PreProduct {
         plant: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_plant') },
         contract: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_contract') },
         payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') },
-        product: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_products_selected') }
+        product: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_products_selected') },
+        maxCapacity: { valid: false, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') }
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean, private templateProduct?: any) {
@@ -194,6 +197,14 @@ export class PreProduct {
         // TODO:
         // Set minimum quantity
         // this.quantity = 1;
+    }
+
+    quantityGood(){
+        this.validations.maxCapacity.valid = true;
+    }
+
+    quantityBad(){
+        this.validations.maxCapacity.valid = false;
     }
 
     plantChanged() {
@@ -472,6 +483,7 @@ export class PreProduct {
         if (Validations.isCement()) {
             this.validations.plant.mandatory = false;
             this.validations.contract.mandatory = false;
+            this.validations.maxCapacity.mandatory = true;
         }
 
         // Pickup && Mexico
@@ -483,6 +495,10 @@ export class PreProduct {
         // Payment case
         if (this.shouldHidePayment()) {
             this.validations.payment.mandatory = false;
+        }
+
+        if(Validations.isMexicoCustomer()){
+            this.validations.maxCapacity.mandatory = true;
         }
 
     }

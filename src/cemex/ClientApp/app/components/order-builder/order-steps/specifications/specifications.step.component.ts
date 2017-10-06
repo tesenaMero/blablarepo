@@ -689,8 +689,24 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
     }
 
-    valuechange(newValue) {
-        console.log(newValue)
+    valuechange(product: PreProduct, newValue: number) {
+        let prodQuntity = newValue;
+        let maxCapacitySalesArea = product.getMaximumCapacity();
+        let conversion = product.convertToTons(newValue);
+
+        if(newValue < 0 || newValue == null){
+            newValue = 1;
+        }
+
+        if (conversion > maxCapacitySalesArea) {
+            product.quantityBad();
+            return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
+        } else {
+            product.quantityGood();
+        }
+        
+        product.quantity = prodQuntity;
+        return product.quantity;
     }
 
     todayStr() {
