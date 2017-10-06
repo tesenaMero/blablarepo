@@ -619,6 +619,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
 
         this.preProducts.push(preProduct);
+
+        if (this.preProducts.length > 0) {
+            this.onCompleted.emit(true);
+        }
     }
 
     remove(index: any) {
@@ -626,6 +630,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         product.deleting = true;
         setTimeout(() => {
             this.preProducts.splice(index, 1);
+
+            if (this.preProducts.length == 0) {
+                this.onCompleted.emit(false);
+            }
 
             // Readymix case when all contracts should be the same.
             // Case when the first product is removed
