@@ -75,7 +75,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mt-4 invisible">
+                <div class="col-md-3 mt-4" *ngIf="!UTIL.isUSACustomer()">
                     <div class="group">
                         <div class="title">
                             {{ t.pt('views.checkout.maximum_capacity') }}
@@ -541,7 +541,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 mt-4">
+                        <div class="col-md-3 mt-4" *ngIf="!UTIL.isUSACustomer()">
                             <div class="group">
                                 <div class="title">
                                     {{ t.pt('views.checkout.maximum_capacity') }}
@@ -554,10 +554,10 @@
                         <div class="col-md-4 mt-4">
                             <div class="group">
                                 <div class="title">
-                                    {{ t.pt('views.checkout.maximum_capacity') }}
+                                    {{ t.pt('views.checkout.contract') }}
                                 </div>
                                 <div class="desc">
-                                    {{ item?.contract?.salesDocument?.salesDocumentCode }} Remaining volume: {{ item?.contract?.salesDocument?.volume?.total.quantity.amount }}
+                                    {{ item?.contract?.salesDocument?.salesDocumentCode }}
                                 </div>
                             </div>
                         </div>
