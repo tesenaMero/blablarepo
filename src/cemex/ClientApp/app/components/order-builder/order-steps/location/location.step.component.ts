@@ -283,7 +283,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.locations = response.json().shipmentLocations;
             this.locations.forEach((location, index) => {
                 location.id = index;
-                location.name = location.shipmentLocationDesc;
+                location.name = location.shipmentLocationDesc + ' (' + location.shipmentLocationCode + ')';
             })
             if (this.location) {
                 this.jobsiteChanged(this.location);
