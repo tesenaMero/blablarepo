@@ -656,12 +656,22 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     valuechange(product: PreProduct, newValue: number) {
-        let mymodel = newValue;
-        if(newValue < 0 || newValue == null){
-            mymodel = 1;
-        }
-        product.quantity = mymodel;
+        let prodQuntity = newValue;
+        let maxCapacitySalesArea = product.getMaximumCapacity();
+        let conversion = product.convertToTons(newValue);
 
+        if(newValue < 0 || newValue == null){
+            newValue = 1;
+        }
+
+        if (conversion > maxCapacitySalesArea) {
+            product.quantityBad();
+            return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
+        } else {
+            product.quantityGood();
+        }
+        
+        product.quantity = prodQuntity;
         return product.quantity;
     }
 
