@@ -37,18 +37,12 @@ export class ProductSelectionStepComponent {
             }
             else {
                 // Bag cement
-                if (bagCement || multiproduct) {
+                if (bagCement && multiproduct) {
                     bagCement && productLines.splice(productLines.indexOf(bagCement), 1);
                     multiproduct && productLines.splice(productLines.indexOf(multiproduct), 1);
-
-                    if (bagCement && multiproduct) {
-                        let cementPackageMultiproducts = this.joinProductLines(bagCement, multiproduct, this.t.pt('views.product.selection.cement_package_multi'));
-                        productLines.push(cementPackageMultiproducts);
-                    }
-                    else {
-                        let cementPackageMultiproducts = this.joinProductLines({ productLineId: 2 }, { productLineId: 3 }, this.t.pt('views.product.selection.cement_package_multi'));
-                        productLines.push(cementPackageMultiproducts);
-                    }
+                    let cementPackageMultiproducts = this.joinProductLines(bagCement, multiproduct, this.t.pt('views.product.selection.cement_package_multi'));
+                    
+                    productLines.push(cementPackageMultiproducts);
                 }
             }
 

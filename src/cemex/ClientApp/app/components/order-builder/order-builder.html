@@ -28,7 +28,7 @@
                 <span class="cmx-icon-accepted-ok"></span>
                 <div class="success-text">
                     {{ t.pt('views.common.order_code') }}{{ orderCode }} {{ t.pt('views.common.was_submited') }}
-                    <div *ngFor="let message of messages">
+                    <div class="order-message" *ngFor="let message of messages">
                         {{ message }}
                     </div>
                 </div>

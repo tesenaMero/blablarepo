@@ -220,7 +220,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         this.getAdditionalServices();
         this.getPaymentTerms();
-        this.getProjectProfiles();
+
+        if (Validations.isReadyMix()) {
+            this.getProjectProfiles();
+        }
     }
 
     fetchProducts(salesDocumentType: any) {
@@ -450,7 +453,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
             }
 
             this.preProducts.forEach((item: PreProduct) => {
-                item.loadings.projectProfiles = false;
+                if (profiles.length) { item.loadings.projectProfiles = false; }
+                else { item.loadings.projectProfiles = true; }
             });
         });
 
@@ -689,8 +693,24 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
     }
 
-    valuechange(newValue) {
-        console.log(newValue)
+    valuechange(product: PreProduct, newValue: number) {
+        let prodQuntity = newValue;
+        let maxCapacitySalesArea = product.maximumCapacity;
+        let conversion = product.convertToTons(newValue);
+
+        if(newValue < 0 || newValue == null){
+            newValue = 1;
+        }
+
+        if (conversion > maxCapacitySalesArea) {
+            product.quantityBad();
+            return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
+        } else {
+            product.quantityGood();
+        }
+        
+        product.quantity = prodQuntity;
+        return product.quantity;
     }
 
     todayStr() {

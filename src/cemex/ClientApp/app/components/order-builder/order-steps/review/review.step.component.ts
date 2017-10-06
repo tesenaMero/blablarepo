@@ -36,7 +36,14 @@ export class ReviewStepComponent implements StepEventsListener {
     draftSub: any;
     lockRequests: boolean = false;
 
-    constructor( @Inject(Step) private step: Step, private manager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private dashboard: DashboardService, private drafts: DraftsService, private customerService: CustomerService, private t: TranslationService) {
+    constructor(
+        @Inject(Step) private step: Step,
+        private manager: CreateOrderService,
+        private shipmentApi: ShipmentLocationApi,
+        private dashboard: DashboardService,
+        private drafts: DraftsService,
+        private customerService: CustomerService,
+        private t: TranslationService) {
         this.step.setEventsListener(this);
         this.step.onBeforeBack = () => this.onBeforeBack();
     }
@@ -56,7 +63,12 @@ export class ReviewStepComponent implements StepEventsListener {
         this.onCompleted.emit(false);
         this.saveDraft();
 
-        // Load map
+        // Make sure div is rendered before loading the map
+        //setTimeout(this.loadMap.bind(this), 0);
+        this.loadMap();
+    }
+
+    loadMap() {
         if (!this.isMapLoaded) {
             GoogleMapsHelper.lazyLoadMap("summary-map", (map) => {
                 this.isMapLoaded = true;

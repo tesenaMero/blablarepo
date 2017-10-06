@@ -12,7 +12,8 @@ export class PurchaseOrderApi {
     // /v4/sm/purchaseorders/8000000610/validate?productLine=6&jobsiteId=1059
     validate(purchaseOrder: string, productLine: any, location: any) {
         // Case when both product lines in one
-        if (productLine.productLineId = "2,3") { productLine.productLineId = this.CEMENT_BAG_ID }
-        return this.api.get("/v4/sm/purchaseorders/" + purchaseOrder + "/validate?productLine=" + productLine.productLineId + "&jobsiteId=" + location.shipmentLocationId);
+        let productLineId = productLine.productLineId;
+        if (productLineId = "2,3") { productLineId = this.CEMENT_BAG_ID }
+        return this.api.get("/v4/sm/purchaseorders/" + purchaseOrder + "/validate?productLine=" + productLineId + "&jobsiteId=" + location.shipmentLocationId);
     }
 }

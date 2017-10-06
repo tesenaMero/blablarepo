@@ -72,7 +72,7 @@ export class StepperComponent implements AfterContentInit {
     next(ignore = false) {
         if (!this.currentStep.completed) { return; }
         if (!ignore && !this.currentStep.canAdvance()) { return; }
-        
+
         let currentIndex = this.getActiveStepIndex();
 
         // If last step
@@ -89,7 +89,6 @@ export class StepperComponent implements AfterContentInit {
 
         // Callback
         this.currentStep.onBeforeBack();
-
         this.uncomplete();
 
         // If last step or index not found
@@ -112,11 +111,9 @@ export class StepperComponent implements AfterContentInit {
         this.onFinish.emit(result);
     }
 
-    changeShowOverlay() {
+    private changeShowOverlay() {
         this.overlay = !this.overlay;
     }
-
-    private validateNext
 
     private isLastStep() {
         let currentIndex = this.getActiveStepIndex();
@@ -124,52 +121,80 @@ export class StepperComponent implements AfterContentInit {
     }
 
     private animateNext(toIndex: number) {
+        let step: Step = this.getStepByIndex(toIndex);
+        if (step) { step.render = true; }
+
         this.controlNext.nativeElement.click();
         this.nextAvailable = false;
         this.backAvailable = false;
         setTimeout(() => {
             this.nextAvailable = true;
             this.backAvailable = true;
-            this.selectStepByIndex(toIndex);
+            if (step) { this.selectStep(step); }
         }, 600);
     }
 
     private animatePrev(toIndex: number) {
+        let step: Step = this.getStepByIndex(toIndex);
+        if (step) { step.render = true; }
+        
         this.controlBack.nativeElement.click();
         this.nextAvailable = false;
         this.backAvailable = false;
         setTimeout(() => {
             this.nextAvailable = true;
             this.backAvailable = true;
-            this.selectStepByIndex(toIndex);
+            if (step) { this.selectStep(step); }
         }, 600);
     }
 
     selectStep(step: Step) {
         // Deactivate all steps except one
-        this.steps.toArray().forEach(step => step.active = false);
-        this.currentStep = step;
+        this.steps.toArray().forEach((item) => {
+            if (item != step) {
+                item.active = false
+                item.render = false;
+            }
+        });
 
+        this.currentStep = step;
         step.active = true;
+        step.render = true;
 
         let currentIndex = this.getActiveStepIndex();
         if (currentIndex == 0) { this.isFirstStep = true; }
         else { this.isFirstStep = false; }
 
-        step.show();
+        if (!this.currentStep.completed)
+            this.nextAvailable = false;
+        else
+            this.nextAvailable = true;
+
+        // Show after dom rendered
+        setTimeout(step.show.bind(step), 0);
+        //step.show();
+    }
+
+    private getNextStep() {
+        const nextIndex = this.getActiveStepIndex() + 1;
+        if (this.steps.length - 1 <= nextIndex) {
+            return this.getStepByIndex(nextIndex)
+        }
+    }
+
+    private getPrevStep() {
+        const prevIndex = this.getActiveStepIndex() - 1;
+        if (prevIndex >= 0) {
+            return this.getStepByIndex(prevIndex)
+        }
     }
 
     private selectStepByIndex(index: number) {
         let step = this.getStepByIndex(index);
         if (step) { this.selectStep(step); }
-
-        if (!this.currentStep.completed)
-            this.nextAvailable = false;
-        else
-            this.nextAvailable = true;
     }
 
-    private getStepByIndex(index: number) {
+    private getStepByIndex(index: number): Step {
         let step = this.steps.toArray()[index];
         if (step) { return step; }
     }

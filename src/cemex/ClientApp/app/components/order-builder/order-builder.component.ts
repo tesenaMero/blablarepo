@@ -89,11 +89,10 @@ export class OrderBuilderComponent implements OnDestroy {
         this.manager.isPatched = restoredManager.isPatched || false;
         
         // Go to last step step
+        //this.stepper.selectStep(this.stepper.steps.last)
         this.stepper.steps.forEach((step, index) => {
-            if (index === this.stepper.steps.length - 1) {
-                // If last
-                this.stepper.selectStep(step)
-            }
+            // If last
+            if (index === this.stepper.steps.length - 1) { this.stepper.selectStep(step) }
             else {
                 step.completed = true;
                 step.active = false;
