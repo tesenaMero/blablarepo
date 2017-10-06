@@ -35,6 +35,7 @@ export class StepperComponent implements AfterContentInit {
     backAvailable: boolean = true;
     isFirstStep: boolean = true;
     overlay: boolean = false;
+    moving: boolean = false;
 
     currentStep: any;
     constructor(private zone: NgZone, private t: TranslationService) {
@@ -97,7 +98,7 @@ export class StepperComponent implements AfterContentInit {
     }
 
     complete() {
-        if (this.currentStep == this.getStepByIndex(this.getActiveStepIndex())) {
+        if (!this.moving) {
             this.currentStep.completed = true;
             if (this.currentStep.automatic) { this.next(); }
             this.nextAvailable = true;
@@ -124,6 +125,7 @@ export class StepperComponent implements AfterContentInit {
     }
 
     private animateNext(toIndex: number) {
+        this.moving = true;
         let step: Step = this.getStepByIndex(toIndex);
         if (step) { step.render = true; }
 
@@ -134,10 +136,12 @@ export class StepperComponent implements AfterContentInit {
             this.nextAvailable = true;
             this.backAvailable = true;
             if (step) { this.selectStep(step); }
+            this.moving = false;
         }, 600);
     }
 
     private animatePrev(toIndex: number) {
+        this.moving = true;
         let step: Step = this.getStepByIndex(toIndex);
         if (step) { step.render = true; }
         
@@ -148,6 +152,7 @@ export class StepperComponent implements AfterContentInit {
             this.nextAvailable = true;
             this.backAvailable = true;
             if (step) { this.selectStep(step); }
+            this.moving = false;
         }, 600);
     }
 
