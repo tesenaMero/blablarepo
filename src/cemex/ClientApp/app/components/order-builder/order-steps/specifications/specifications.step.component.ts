@@ -220,7 +220,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         this.getAdditionalServices();
         this.getPaymentTerms();
-        this.getProjectProfiles();
+
+        if (Validations.isReadyMix()) {
+            this.getProjectProfiles();
+        }
     }
 
     fetchProducts(salesDocumentType: any) {
@@ -450,7 +453,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
             }
 
             this.preProducts.forEach((item: PreProduct) => {
-                item.loadings.projectProfiles = false;
+                if (profiles.length) { item.loadings.projectProfiles = false; }
+                else { item.loadings.projectProfiles = true; }
             });
         });
 
