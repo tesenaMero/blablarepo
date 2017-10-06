@@ -381,7 +381,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.pods = response.json().shipmentLocations;
             this.pods.forEach((pod, index) => {
                 pod.id = index;
-                pod.name = pod.shipmentLocationDesc;
+                pod.name = pod.shipmentLocationDesc + ' (' + pod.shipmentLocationCode + ')';
             });
 
             if (this.pods.length > 0) {
