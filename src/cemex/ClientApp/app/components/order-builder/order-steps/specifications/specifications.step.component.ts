@@ -691,7 +691,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     valuechange(product: PreProduct, newValue: number) {
         let prodQuntity = newValue;
-        let maxCapacitySalesArea = product.getMaximumCapacity();
+        let maxCapacitySalesArea = product.maximumCapacity;
         let conversion = product.convertToTons(newValue);
 
         if(newValue < 0 || newValue == null){
