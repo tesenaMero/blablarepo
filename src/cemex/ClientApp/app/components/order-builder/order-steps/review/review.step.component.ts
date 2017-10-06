@@ -53,9 +53,8 @@ export class ReviewStepComponent implements StepEventsListener {
     onBeforeBack() {
         // Cancel needed requests and lock
         this.lockRequests = true;
-        if (this.draftSub) {
-            this.draftSub.unsubscribe();
-        }
+        if (this.draftSub) { this.draftSub.unsubscribe(); }
+        this.onCompleted.emit(false);
     }
 
     onShowed() {

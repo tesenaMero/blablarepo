@@ -96,15 +96,29 @@ export class StepperComponent implements AfterContentInit {
         this.animatePrev(currentIndex - 1);
     }
 
-    complete() {
-        this.currentStep.completed = true;
-        if (this.currentStep.automatic) { this.next(); }
-        this.nextAvailable = true;
+    complete(index?: number) {
+        if (index === undefined) {
+            this.currentStep.completed = true;
+            if (this.currentStep.automatic) { this.next(); }
+            this.nextAvailable = true;
+        }
+        else {
+            let step = this.getStepByIndex(index);
+            if (step) { step.completed = true; }
+            if (step == this.currentStep) { this.nextAvailable = true; }
+        }
     }
 
-    uncomplete() {
-        this.currentStep.completed = false;
-        this.nextAvailable = false;
+    // If not index given, uncomplete current step
+    uncomplete(index?: number) {
+        if (index === undefined) {
+            this.currentStep.completed = false;
+            this.nextAvailable = false;
+        }
+        else {
+            let step = this.getStepByIndex(index);
+            if (step) { step.completed = false; }
+        }
     }
 
     finish(result: any) {
@@ -150,10 +164,15 @@ export class StepperComponent implements AfterContentInit {
 
     selectStep(step: Step) {
         // Deactivate all steps except one
-        this.steps.toArray().forEach((item) => {
+        let currentIndex = this.getActiveStepIndex();
+        this.steps.toArray().forEach((item, index) => {
             if (item != step) {
                 item.active = false
                 item.render = false;
+            }
+
+            if (index > currentIndex) {
+                item.completed = false;
             }
         });
 
@@ -161,7 +180,6 @@ export class StepperComponent implements AfterContentInit {
         step.active = true;
         step.render = true;
 
-        let currentIndex = this.getActiveStepIndex();
         if (currentIndex == 0) { this.isFirstStep = true; }
         else { this.isFirstStep = false; }
 

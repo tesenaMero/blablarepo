@@ -162,6 +162,7 @@ export class OrderBuilderComponent implements OnDestroy {
     }
 
     finishSteps() {
+        this.stepper.uncomplete();
         this.placeOrder();
     }
 
@@ -255,6 +256,7 @@ export class OrderBuilderComponent implements OnDestroy {
             }, error => {
                 localStorage.removeItem('manager');
                 this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
+                this.stepper.complete();
             })
     }
 
@@ -272,6 +274,7 @@ export class OrderBuilderComponent implements OnDestroy {
         }, error => {
             localStorage.removeItem('manager');
             this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
+            this.stepper.complete();
         });
     }
 
