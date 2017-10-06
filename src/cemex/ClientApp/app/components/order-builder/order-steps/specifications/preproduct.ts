@@ -106,7 +106,7 @@ export class PreProduct {
             this.disableds.payments = true;
         }
         this.loadings.payments = false;
-        this.paymentChanged();
+        //this.paymentChanged();
 
         // Available project profiles init
         // -------------------------------------------------------
@@ -137,7 +137,7 @@ export class PreProduct {
         if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
 
         this.product = product;
-        this.productChanged(shouldFetchContracts);
+        //this.productChanged(shouldFetchContracts);
     }
 
     productChanged(shouldFetchContracts?: boolean) {
@@ -237,7 +237,6 @@ export class PreProduct {
 
                 // Set default contract
                 this.contract = undefined;
-                this.contractChanged();
 
                 this.disableds.contracts = false;
             }
@@ -310,7 +309,7 @@ export class PreProduct {
             }
 
             this.loadings.payments = false;
-            this.paymentChanged();
+            //this.paymentChanged();
         })
     }
 
@@ -383,6 +382,8 @@ export class PreProduct {
                 }
                 // No units available so disable it
                 else {
+                    this.dashboard.alertError("No units available for this contract", 8000);
+                    this.unit = undefined;
                     this.disableds.units = true;
                 }
             }

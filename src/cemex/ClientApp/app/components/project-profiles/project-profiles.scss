@@ -1,12 +1,11 @@
 @import "~bootstrap/scss/bootstrap-grid.scss";
 @import "../../scss/responsive.scss";
 @import "../../scss/mixins/animations.scss";
-
 $link-blue: #3FA9F5;
 .layout {
-    padding: 34px 26px 34px 26px;
+    padding: 42px 26px 34px 26px;
     @include media-breakpoint-down(sm) {
-        padding: 34px 17px 34px 17px;
+        padding: 42px 17px 34px 17px;
     }
 }
 
