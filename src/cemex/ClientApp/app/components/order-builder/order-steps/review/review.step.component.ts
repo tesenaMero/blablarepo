@@ -115,13 +115,13 @@ export class ReviewStepComponent implements StepEventsListener {
         // If locked (stepper is moving most likely) then dont do the call 
         if (this.lockRequests) { return; }
 
-        this.dashboard.alertInfo(this.t.pt('views.review.saving_draft'), 0);
+        //this.dashboard.alertInfo(this.t.pt('views.review.saving_draft'), 0);
         let draftSub = this.drafts.add(this.generateOrderObj()).subscribe((response) => {
-            this.dashboard.alertSuccess(this.t.pt('views.review.draft_saved'));
+            //this.dashboard.alertSuccess(this.t.pt('views.review.draft_saved'));
             this.manager.draftId = response.json().id;
             this.onCompleted.emit(response.json().id)
         }, (error) => {
-            this.dashboard.alertError(this.t.pt('views.review.draft_no_saved'));
+            //this.dashboard.alertError(this.t.pt('views.review.draft_no_saved'));
         });
     }
 
