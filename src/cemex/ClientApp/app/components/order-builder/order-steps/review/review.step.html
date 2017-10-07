@@ -54,7 +54,7 @@
 </div>
 
 <div *ngFor="let item of manager.products" class="card-container row product">
-    <div class="col-md-4 col-sm-12 left-container">
+    <div class="col-md-4 col-sm-12 left-container" style="overflow: hidden;text-overflow: ellipsis;">
         <div class="name">
             {{ item?.product?.commercialDesc }}
         </div>
