@@ -106,7 +106,7 @@ export class PreProduct {
             this.disableds.payments = true;
         }
         this.loadings.payments = false;
-        //this.paymentChanged();
+        this.paymentChanged();
 
         // Available project profiles init
         // -------------------------------------------------------
@@ -309,7 +309,7 @@ export class PreProduct {
             }
 
             this.loadings.payments = false;
-            //this.paymentChanged();
+            this.paymentChanged();
         })
     }
 

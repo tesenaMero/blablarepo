@@ -335,7 +335,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
             let paymentTerms = result.json().paymentTerms;
 
-            const cash = paymentTerms.find((term: any) => {
+            let cash = paymentTerms.find((term: any) => {
                 return term.paymentTermType.paymentTermTypeCode === 'CASH';
             });
 
