@@ -22,8 +22,8 @@ export class ProductsApi {
         return this.api.get(`/v2/mm/myproducts?productId=${productId}&salesDocumentTypeId=${salesDocumentTypeId}&shippingConditionId=${shippingCondition.shippingConditionId}&shipmentLocationId=${jobsite.shipmentLocationId}.2`);
     }
 
-    byProductColorAndSalesDocumentAndPlant(salesDocumentTypeId, productColorId, plantId?): Observable<Response> {
-        return this.api.get(`/v2/mm/myproducts?${(plantId === void 0) ? `` : `plantId=${plantId}&`}salesDocumentTypeId=${salesDocumentTypeId}&productColorId=${productColorId}`);
+    byProductColorAndSalesDocumentAndPlant(shipmentLocation, salesDocumentTypeId, productColorId, productLineId: number, plantId? ): Observable<Response> {
+        return this.api.get(`/v2/mm/myproducts?${(plantId === void 0) ? `` : `plantId=${plantId}&`}salesDocumentTypeId=${salesDocumentTypeId}&productColorId=${productColorId}&productLineId=${productLineId}&shipmentLocationId=${shipmentLocation}.2`);
     }
     
     units(productId: any): Observable<Response> {
