@@ -1010,7 +1010,7 @@
 	"views.location.purchase_order": "Orden de compra",
 	"views.location.purchase_order_error": "Introduce una orden de compra valida.",
 	"views.location.contact_person": "Contacto",	
-	"views.location.select_contact": "Selecciona una ubicación",	
+	"views.location.select_contact": "Selecciona una contacto",	
 	"views.location.special_instr": "Instrucciones de envío",	   
 	"views.location.address_short": "La dirección es muy corta.",	   
 

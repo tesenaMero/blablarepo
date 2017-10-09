@@ -54,7 +54,7 @@
 </div>
 
 <div *ngFor="let item of manager.products" class="card-container row product">
-    <div class="col-md-4 col-sm-12 left-container">
+    <div class="col-md-4 col-sm-12 left-container" style="overflow: hidden;text-overflow: ellipsis;">
         <div class="name">
             {{ item?.product?.commercialDesc }}
         </div>
@@ -119,11 +119,11 @@
                         {{ t.pt('views.review.product_id') }}
                     </div>
                     <div class="value">
-                        {{ item?.product?.product?.productId }}
+                        {{ item?.product?.commercialCode }}
                     </div>
                 </div>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-2" *ngIf="!UTIL.isUSACustomer()">
                 <div class="group">
                     <div class="title">
                         {{ t.pt('views.review.maximum_capacity') }}
@@ -139,7 +139,7 @@
                         {{ t.pt('views.review.contract') }}
                     </div>
                     <div class="value" *ngIf="item?.contract?.salesDocument">
-                        {{ t.pt('views.review.contract') }} {{ item?.contract?.salesDocument?.salesDocumentCode }}
+                        {{ item?.contract?.salesDocument?.salesDocumentCode }}
                     </div>
                 </div>
             </div>

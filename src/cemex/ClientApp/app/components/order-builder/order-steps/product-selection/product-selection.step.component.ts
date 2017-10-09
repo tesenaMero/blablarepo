@@ -35,21 +35,16 @@ export class ProductSelectionStepComponent {
             if (!Validations.isMexicoCustomer()) {
                 multiproduct && productLines.splice(productLines.indexOf(multiproduct), 1);
             }
-            else {
-                // Bag cement
-                if (bagCement || multiproduct) {
-                    bagCement && productLines.splice(productLines.indexOf(bagCement), 1);
-                    multiproduct && productLines.splice(productLines.indexOf(multiproduct), 1);
-
-                    if (bagCement && multiproduct) {
-                        let cementPackageMultiproducts = this.joinProductLines(bagCement, multiproduct, this.t.pt('views.product.selection.cement_package_multi'));
-                        productLines.push(cementPackageMultiproducts);
-                    }
-                    else {
-                        let cementPackageMultiproducts = this.joinProductLines({ productLineId: 2 }, { productLineId: 3 }, this.t.pt('views.product.selection.cement_package_multi'));
-                        productLines.push(cementPackageMultiproducts);
-                    }
-                }
+            else if (bagCement && multiproduct) {
+                bagCement && productLines.splice(productLines.indexOf(bagCement), 1);
+                multiproduct && productLines.splice(productLines.indexOf(multiproduct), 1);
+                
+                let cementPackageMultiproducts = this.joinProductLines(bagCement,
+                    multiproduct,
+                    this.t.pt('views.product.selection.cement_package_multi')
+                );
+                
+                productLines.push(cementPackageMultiproducts);
             }
 
             this.productLines = productLines;

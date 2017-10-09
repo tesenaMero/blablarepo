@@ -27,7 +27,7 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <input class="value" type="number" value="{{ product.quantity }}" [ngModel]="prodQuntity" (ngModelChange)="valuechange(product, $event)"  min="1" max="{{ product.getMaximumCapacity() }}"/>
+                                <input class="value" type="number" value="{{ product.quantity }}" [ngModel]="prodQuntity" (ngModelChange)="valuechange(product, $event)" min="1" max="{{ product.getMaximumCapacity() }}" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info" *ngIf="isMXCustomer() && product.maximumCapacity">
@@ -103,9 +103,9 @@
                         <label [ngClass]="{ loading: product.loadings.payments }">{{ t.pt('views.specifications.payment') }}</label>
                         <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.payments }">
                             <span>
-                                {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
+                                {{ product.payment?.paymentTermDesc }}
                                 <select [(ngModel)]="product.payment" (ngModelChange)="paymentChanged(product)" class="input behind">
-                                    <option selected *ngFor="let payment of product.availablePayments" [ngValue]="payment">{{ payment.paymentTermType.paymentTermTypeDesc }}</option>
+                                    <option selected *ngFor="let payment of product.availablePayments" [ngValue]="payment">{{ payment.paymentTermDesc }}</option>
                                 </select>
                                 </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -173,7 +173,7 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <input class="value" type="number" value="{{ product.quantity }}" [ngModel]="prodQuntity" (ngModelChange)="valuechange(product, $event)"  min="1" max="{{ product.getMaximumCapacity() }}" />
+                                <input class="value" type="number" value="{{ product.quantity }}" [ngModel]="prodQuntity" (ngModelChange)="valuechange(product, $event)" min="1" max="{{ product.getMaximumCapacity() }}" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info" *ngIf="UTILS.isMexicoCustomer() && product.maximumCapacity">
@@ -252,9 +252,9 @@
                         <label [ngClass]="{ loading: product.loadings.payments }">{{ t.pt('views.specifications.payment') }}</label>
                         <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.payments }">
                             <span>
-                                {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
+                                {{ product.payment?.paymentTermDesc }}
                                 <select [(ngModel)]="product.payment" (ngModelChange)="paymentChanged(product)" class="input behind">
-                                    <option selected *ngFor="let payment of product.availablePayments" [ngValue]="payment">{{ payment.paymentTermType.paymentTermTypeDesc }}</option>
+                                    <option selected *ngFor="let payment of product.availablePayments" [ngValue]="payment">{{ payment.paymentTermDesc }}</option>
                                 </select>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -338,7 +338,7 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <input class="value" type="number" value="{{ product.quantity }}" [ngModel]="prodQuntity" (ngModelChange)="valuechange(product, $event)"  min="1" />
+                                <input class="value" type="number" value="{{ product.quantity }}" [ngModel]="prodQuntity" (ngModelChange)="valuechange(product, $event)" min="1" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                         </div>

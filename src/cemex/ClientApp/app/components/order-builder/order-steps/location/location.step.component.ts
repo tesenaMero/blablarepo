@@ -247,6 +247,22 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.hiddens.pods = false;
         }
 
+        // Make sure div is rendered before loading the map
+        //setTimeout(this.loadMap.bind(this), 0)
+        this.loadMap();
+
+        // Guard to fetch jobsites when I got shipment locations
+        this.shipmentApi.shipmentLocationTypes.subscribe(data => {
+            if (data) { this.fetchJobsites(); }
+        });
+
+        // if the user got the location step by pressign the back button
+        if(this.contact && this.contact.name && this.contact.phone) {
+            this.validations.contactPerson.valid = true;
+        }
+    }
+
+    loadMap() {
         if (!this.isMapLoaded) {
             GoogleMapsHelper.lazyLoadMap("jobsite-selection-map", (map) => {
                 this.isMapLoaded = true;
@@ -259,16 +275,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         else {
             google.maps.event.trigger(this.map, "resize");
             this.geocoder = new google.maps.Geocoder();
-        }
-
-        // Guard to fetch jobsites when I got shipment locations
-        this.shipmentApi.shipmentLocationTypes.subscribe(data => {
-            if (data) { this.fetchJobsites(); }
-        });
-
-        // if the user got the location step by pressign the back button
-        if(this.contact && this.contact.name && this.contact.phone) {
-            this.validations.contactPerson.valid = true;
         }
     }
 
