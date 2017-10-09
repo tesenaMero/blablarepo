@@ -371,7 +371,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.shipmentApi.geo(this.location.address).subscribe((geo) => {
                 if (geo && geo.json && Number(geo.json().latitude) != 0 && Number(geo.json().longitude) != 0 ) {
                     this.location.geo = geo.json();
-                    console.log("jobsite geo", this.location.geo)
                     this.cleanJobsiteMarker();
                     this.jobsiteMarker = this.makeJobsiteMarker(this.positionFromJobsiteGeo(geo.json()));
                     this.addMarkerToMap(this.jobsiteMarker);
@@ -437,7 +436,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 let position = results[0].geometry.location;
                 if (position) {
                     this.cleanJobsiteMarker();
-                    console.log("position", position)
                     this.jobsiteMarker = this.makeJobsiteMarker(position);
                     this.addMarkerToMap(this.jobsiteMarker);
                     this.loadings.map = false;
@@ -470,7 +468,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             .subscribe((geo) => {
                 if (geo.json && Number(geo.json().latitude) != 0 && Number(geo.json().longitude) != 0) {
                     this.pod.geo = geo.json();
-                    console.log("pod geo", this.pod.geo)
                     this.cleanJobsiteMarker();
                     this.jobsiteMarker = this.makeJobsiteMarker(this.positionFromJobsiteGeo(geo.json()));
                     this.addMarkerToMap(this.jobsiteMarker);
@@ -478,7 +475,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 }
                 else if (this.pod.address && this.pod.address.streetName) {
                     let address = this.pod.address.streetName;
-                    console.log("pod address", address)
                     this.geoFromAddress(address);
                 }
             });
