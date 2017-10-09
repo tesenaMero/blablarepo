@@ -285,7 +285,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     fetchJobsites() {
-        this.shipmentApi.all(this.manager.productLine).subscribe((response) => {
+        this.shipmentApi.all(this.manager.productLine, Validations.isReadyMix()).subscribe((response) => {
             this.locations = response.json().shipmentLocations;
             this.locations.forEach((location, index) => {
                 location.id = index;
