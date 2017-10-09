@@ -44,6 +44,7 @@ export class CreateOrderService {
     public isPatched: any = false;
     public draftOrder: any;
     public restored = false;
+    public shipmentLocation: any;
 
     constructor() {
         this.initializeOrder();
