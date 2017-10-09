@@ -659,16 +659,19 @@ export class SpecificationsStepComponent implements StepEventsListener {
             if (contractBalance === undefined) {
                 if (isDelivery) {
                     if ((Validations.isBulkCement() || Validations.isCementBag()) && (conversion <= maxCapacitySalesArea)) {
+                        product.quantityGood();
                         return product.quantity = newQty;
                     }
                     else {
                         if (conversion <= maxCapacitySalesArea) {
+                            product.quantityGood();
                             return product.quantity = newQty;
                         }
                     }
                 }
                 else {
                     if (conversion <= maxCapacitySalesArea) {
+                        product.quantityGood();
                         return product.quantity = newQty;
                     }
                 }
@@ -680,16 +683,19 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 }
                 else if (!isDelivery) {
                     if (conversion <= maxCapacitySalesArea) {
+                        product.quantityGood();
                         return product.quantity = newQty;
                     }
                 }
                 else {
                     if ((conversion <= maxCapacitySalesArea)) {
+                        product.quantityGood();
                         return product.quantity = newQty;
                     }
                 }
             }
             if (conversion <= maxCapacitySalesArea) {
+                product.quantityGood();
                 return product.quantity = newQty;
             }
 
@@ -700,17 +706,17 @@ export class SpecificationsStepComponent implements StepEventsListener {
             if (product.quantity <= 1 && toAdd < 0) { return; }
             if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
             product.quantity += toAdd;
+            product.quantityGood();
         }
     }
 
     valuechange(product: PreProduct, newValue: number) {
-        let prodQuntity = newValue;
+        product.quantityBad();
+        if(newValue < 0 || newValue == null){       
+            return this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 10000);
+        }
         let maxCapacitySalesArea = product.maximumCapacity;
         let conversion = product.convertToTons(newValue);
-
-        if(newValue < 0 || newValue == null){
-            newValue = 1;
-        }
 
         if (conversion > maxCapacitySalesArea && Validations.isCement() && Validations.isDelivery()) {
             product.quantityBad();
@@ -718,9 +724,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         } else {
             product.quantityGood();
         }
-        
-        product.quantity = prodQuntity;
-        return product.quantity;
+        return product.quantity = newValue;
     }
 
     todayStr() {
