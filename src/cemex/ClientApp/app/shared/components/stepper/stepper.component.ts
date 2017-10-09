@@ -33,7 +33,7 @@ export class StepperComponent implements AfterContentInit {
 
     nextAvailable: boolean = false;
     backAvailable: boolean = true;
-    isFirstStep: boolean = true;
+    //isFirstStep: boolean = true;
     overlay: boolean = false;
     moving: boolean = false;
 
@@ -48,10 +48,6 @@ export class StepperComponent implements AfterContentInit {
         if (activeSteps.length === 0) {
             this.selectStep(this.steps.first);
         }
-
-        let currentIndex = this.getActiveStepIndex();
-        if (currentIndex == 0) { this.isFirstStep = true; }
-        else { this.isFirstStep = false; }
 
         this.onRendered.emit();
     }
@@ -124,6 +120,11 @@ export class StepperComponent implements AfterContentInit {
         return currentIndex >= this.steps.length - 1;
     }
 
+    private isFirstStep() {
+        let currentIndex = this.getActiveStepIndex();
+        return currentIndex == 0;
+    }
+
     private animateNext(toIndex: number) {
         this.moving = true;
         let step: Step = this.getStepByIndex(toIndex);
@@ -173,9 +174,6 @@ export class StepperComponent implements AfterContentInit {
         this.currentStep = step;
         step.active = true;
         step.render = true;
-
-        if (currentIndex == 0) { this.isFirstStep = true; }
-        else { this.isFirstStep = false; }
 
         if (!this.currentStep.completed)
             this.nextAvailable = false;
