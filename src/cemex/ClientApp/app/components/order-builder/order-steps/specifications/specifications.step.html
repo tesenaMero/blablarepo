@@ -103,9 +103,9 @@
                         <label [ngClass]="{ loading: product.loadings.payments }">{{ t.pt('views.specifications.payment') }}</label>
                         <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.payments }">
                             <span>
-                                {{ product.payment?.paymentTermDesc }}
+                                {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
                                 <select [(ngModel)]="product.payment" (ngModelChange)="paymentChanged(product)" class="input behind">
-                                    <option selected *ngFor="let payment of product.availablePayments" [ngValue]="payment">{{ payment.paymentTermDesc }}</option>
+                                    <option selected *ngFor="let payment of product.availablePayments" [ngValue]="payment">{{ payment.paymentTermType.paymentTermTypeDesc }}</option>
                                 </select>
                                 </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
@@ -252,9 +252,9 @@
                         <label [ngClass]="{ loading: product.loadings.payments }">{{ t.pt('views.specifications.payment') }}</label>
                         <div class="input flex-space-between dropdown" [ngClass]="{ disabled: product.disableds.payments }">
                             <span>
-                                {{ product.payment?.paymentTermDesc }}
+                                {{ product.payment?.paymentTermType.paymentTermTypeDesc }}
                                 <select [(ngModel)]="product.payment" (ngModelChange)="paymentChanged(product)" class="input behind">
-                                    <option selected *ngFor="let payment of product.availablePayments" [ngValue]="payment">{{ payment.paymentTermDesc }}</option>
+                                    <option selected *ngFor="let payment of product.availablePayments" [ngValue]="payment">{{ payment.paymentTermType.paymentTermTypeDesc }}</option>
                                 </select>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
