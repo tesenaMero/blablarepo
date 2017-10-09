@@ -175,7 +175,7 @@ export class ReviewStepComponent implements StepEventsListener {
         let baseItem = {
             "itemSeqNum": 10 * (index + 1),
             "purchaseOrder": _.purchaseOrder ? _.purchaseOrder : "",
-            "requestedDateTime": this.combineDateTime(preProduct).toISOString(),
+            "requestedDateTime": this.combineDateTime(preProduct),
             "currency": {
                 "currencyCode": this.getCustomerCurrency()
             },
@@ -245,13 +245,13 @@ export class ReviewStepComponent implements StepEventsListener {
         }
     }
 
-    private combineDateTime(preProduct): Date {
-        preProduct.date = new Date(preProduct.date);
-        let year = preProduct.date.getFullYear()
-        let month = preProduct.date.getMonth() + 1
-        let day = preProduct.date.getDate()
-        let dateStr = '' + year + '-' + month + '-' + day;
-        return new Date(dateStr + ' ' + preProduct.time);
+    private combineDateTime(preProduct): String {
+        const time = preProduct.time.split(':');
+        const newDateTime = new Date(preProduct.date);
+
+        newDateTime.setUTCHours(time[0]);
+        newDateTime.setUTCMinutes(time[1]);
+        return newDateTime.toISOString();
     }
 
     private safeContactName() {

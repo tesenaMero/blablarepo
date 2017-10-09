@@ -484,7 +484,6 @@ export class PreProduct {
         if (Validations.isCement()) {
             this.validations.plant.mandatory = false;
             this.validations.contract.mandatory = false;
-            this.validations.maxCapacity.mandatory = true;
         }
 
         // Pickup && Mexico
@@ -498,7 +497,7 @@ export class PreProduct {
             this.validations.payment.mandatory = false;
         }
 
-        if(Validations.isMexicoCustomer()){
+        if(Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery()){
             this.validations.maxCapacity.mandatory = true;
         }
 

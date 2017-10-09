@@ -647,6 +647,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     qty(product: PreProduct, toAdd: number) {
         if (this.isMXCustomer() && !Validations.isReadyMix()) {
+            product.quantityGood();
             if (product.quantity <= 1 && toAdd < 0) { return; }
             const isDelivery = Validations.isDelivery();
             let conversion = product.convertToTons(product.quantity + toAdd);
@@ -695,6 +696,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
         }
         else {
+            product.quantityGood();
             if (product.quantity <= 1 && toAdd < 0) { return; }
             if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
             product.quantity += toAdd;
@@ -710,7 +712,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             newValue = 1;
         }
 
-        if (conversion > maxCapacitySalesArea) {
+        if (conversion > maxCapacitySalesArea && Validations.isCement() && Validations.isDelivery()) {
             product.quantityBad();
             return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
         } else {
