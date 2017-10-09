@@ -25,7 +25,6 @@ let CircularJSON = require('circular-json');
 export class SpecificationsStepComponent implements StepEventsListener {
     @Output() initializeProductColorsEmitter = new EventEmitter<any>();
     @Output() onCompleted = new EventEmitter<any>();
-    @Output() quantityResult = new EventEmitter<number>();
 
     today: Date;
 
@@ -718,7 +717,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
         let maxCapacitySalesArea = product.maximumCapacity;
         let conversion = product.convertToTons(newValue);
-        
+
         if (conversion > maxCapacitySalesArea && Validations.isCement() && Validations.isDelivery()) {
             product.quantityBad();
             return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
