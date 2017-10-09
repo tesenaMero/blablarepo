@@ -106,7 +106,7 @@ export class PreProduct {
             this.disableds.payments = true;
         }
         this.loadings.payments = false;
-        //this.paymentChanged();
+        this.paymentChanged();
 
         // Available project profiles init
         // -------------------------------------------------------
@@ -137,7 +137,7 @@ export class PreProduct {
         if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
 
         this.product = product;
-        //this.productChanged(shouldFetchContracts);
+        this.productChanged(shouldFetchContracts);
     }
 
     productChanged(shouldFetchContracts?: boolean) {
@@ -259,6 +259,7 @@ export class PreProduct {
             this.productsApi.units(this.product.product.productId).map((result) => {
                 let units = result.json().productUnitConversions;
                 this.availableUnits = units;
+                this.product.availableUnits = units;
 
                 if (units.length > 0) {
                     this.disableds.units = false;
@@ -309,12 +310,13 @@ export class PreProduct {
             }
 
             this.loadings.payments = false;
-            //this.paymentChanged();
+            this.paymentChanged();
         })
     }
 
     fetchUnitsFromContract() {
         if (this.contract.unitOfMeasure) {
+            // Fetch base unit and units from contracts and preselect
             this.forkUnitsFromContracts();
         }
         else {
@@ -323,7 +325,9 @@ export class PreProduct {
             this.disableds.quantity = true;
             this.productsApi.units(this.contract.salesDocument.salesDocumentId).subscribe((result) => {
                 let units = result.json().productUnitConversions;
-                this.availableUnits = units;
+                if (units) { this.availableUnits = units; }
+                else { this.availableUnits = this.product.availableUnits; }
+
                 if (units.length) {
                     this.unit = units[0];
                     this.disableds.units = false;
@@ -347,7 +351,8 @@ export class PreProduct {
         Observable.forkJoin(
             this.productsApi.units(this.contract.salesDocument.salesDocumentId).map((result) => {
                 let units = result.json().productUnitConversions;
-                this.availableUnits = units;
+                if (units.length) { this.availableUnits = units; }
+                else { this.availableUnits = this.product.availableUnits; }
             }),
             this.productsApi.unitByUnitOfMeasure(this.contract.unitOfMeasure).map((result) => {
                 this.contract.unitOfMeasure = result.json();
@@ -374,17 +379,20 @@ export class PreProduct {
             if (matchingUnit) {
                 this.unit = matchingUnit;
                 this.disableds.units = true;
+                this.disableds.quantity = false;
             }
             else {
                 // Preselect first one and let the user change it
                 if (this.availableUnits.length) {
                     this.unit = this.availableUnits[0];
+                    this.disableds.quantity = false;
                 }
                 // No units available so disable it
                 else {
                     this.dashboard.alertError("No units available for this contract", 8000);
                     this.unit = undefined;
                     this.disableds.units = true;
+                    this.disableds.quantity = true;
                 }
             }
         });
@@ -484,7 +492,6 @@ export class PreProduct {
         if (Validations.isCement()) {
             this.validations.plant.mandatory = false;
             this.validations.contract.mandatory = false;
-            this.validations.maxCapacity.mandatory = true;
         }
 
         // Pickup && Mexico
@@ -498,7 +505,7 @@ export class PreProduct {
             this.validations.payment.mandatory = false;
         }
 
-        if(Validations.isMexicoCustomer()){
+        if(Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery()){
             this.validations.maxCapacity.mandatory = true;
         }
 

@@ -43,9 +43,9 @@ pipelines:
               - tar xvfJ node-v6.10.0-linux-x64.tar.xz
               - ls
               - mv node-v6.10.0-linux-x64 node
-              - cf set-env ngx42 PATH "/bin:/usr/bin:/home/vcap/app/node/bin"
+              - cf set-env ngx44 PATH "/bin:/usr/bin:/home/vcap/app/node/bin"
               - ls
-              - cf push ngx42
+              - cf push ngx44
     release-qa:
       - step:
           script: # Modify the commands below to build your repository.

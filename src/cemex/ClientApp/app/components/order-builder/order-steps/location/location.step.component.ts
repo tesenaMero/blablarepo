@@ -298,6 +298,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 this.jobsiteChanged(this.locations[0]);
                 this.locationIndex = 0;
             }
+
             this.loadings.locations = false;
         });
     }
@@ -459,7 +460,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.loadings.map = true;
 
         // Fetch geolocation
-        this.shipmentApi.address(this.location)
+        this.shipmentApi.address(this.pod)
             .flatMap((address) => {
                 this.pod.address = address.json();
                 return this.shipmentApi.geo(address.json());
