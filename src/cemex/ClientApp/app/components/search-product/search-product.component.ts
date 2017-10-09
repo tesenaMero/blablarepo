@@ -62,7 +62,7 @@ export class SearchProductComponent {
                     this.orderManager.jobsite.address.countryCode,
                     this.orderManager.jobsite.address.regionCode,
                     this.orderManager.productLine.productLineId,
-                    this.orderManager.shipmentLocation.shipmentLocationId
+                    this.orderManager.jobsite.shipmentLocationId
                 ).subscribe((response) => { this.plants = response.json().plants; });
             }
         })
@@ -72,6 +72,7 @@ export class SearchProductComponent {
         this.message = false;
         this.setProducts([]);
         const salesDocumentId = this.salesDocumentService.getDocument("R").salesDocumentTypeId;
+        console.log(this.orderManager);
         this.productsApi.byProductColorAndSalesDocumentAndPlant(this.orderManager.jobsite.shipmentLocationId, salesDocumentId, this.productColorSelected, this.orderManager.productLine.productLineId).subscribe((response) => {
             this.setProducts(response.json().products);
         });
