@@ -72,8 +72,6 @@ export class SearchProductComponent {
         this.message = false;
         this.setProducts([]);
         const salesDocumentId = this.salesDocumentService.getDocument("R").salesDocumentTypeId;
-        console.log(this.productColorSelected);
-        console.log(this.orderManager);
         this.productsApi.byProductColorAndSalesDocumentAndPlant(this.orderManager.jobsite.shipmentLocationId, salesDocumentId, this.productColorSelected, this.orderManager.productLine.productLineId).subscribe((response) => {
             this.setProducts(response.json().products);
         });
