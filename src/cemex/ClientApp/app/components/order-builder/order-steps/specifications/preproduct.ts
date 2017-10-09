@@ -65,7 +65,7 @@ export class PreProduct {
         contract: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_contract') },
         payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') },
         product: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_products_selected') },
-        maxCapacity: { valid: false, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') }
+        maxCapacity: { valid: true, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') }
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean, private templateProduct?: any) {
