@@ -113,10 +113,10 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="product.maneuveringAvailable">
                 <div class="col-md-3 mt-3">
-                    <div class="group" *ngIf="product.maneuveringAvailable">
-                        <label>{{ product.payment?.paymentTermType.aditional_services }}</label>
+                    <div class="group">
+                        <label>{{ t.pt('views.specifications.aditional_services') }}</label>
                         <div class="service">
                             <input [(ngModel)]="product.maneuvering" checked type="checkbox" id="maneuvering{{ index }}">
                             <label for="maneuvering{{ index }}">
@@ -263,11 +263,11 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4 mt-3">
+                <div class="col-md-4 mt-3" *ngIf="product.maneuveringAvailable">
                     <div class="flex-container justify-content-between">
                         <div class="group">
                             <label>{{ t.pt('views.specifications.aditional_services') }}</label>
-                            <div class="service spaced-top" [ngClass]="{ invisible: !product.maneuveringAvailable }">
+                            <div class="service spaced-top">
                                 <input [(ngModel)]="product.maneuvering" checked type="checkbox" id="maneuvering{{ index }}">
                                 <label for="maneuvering{{ index }}">
                                     <svg class="icon-checkbox-active">
@@ -525,33 +525,33 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-9">
-                    <div class="row">
-                        <div class="col-md-12 mt-3">
-                            <label class="additional-services">{{ t.pt('views.specifications.aditional_services') }}</label>
-                        </div>
-                        <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let i = index;">
-                            <div class="group">
-                                <div class="service">
-                                    <input (change)="changeAditionalService(product, $event.target, i)" type="checkbox" id="{{ rmxService.entryCode }}{{ index }}">
-                                    <label for="{{ rmxService.entryCode }}{{ index }}">
-                                        <svg class="icon-checkbox-active">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
-                                        </svg>
-                                        <svg class="icon-checkbox-static">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
-                                        </svg>
-                                        <svg class="icon-checkbox-hover">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
-                                        </svg>
-                                        <span>{{rmxService.entryDesc}}</span>
-                                    </label>
-                                </div>
-                            </div>
+            <div class="row" *ngIf="readyMixAdditionalServices.lenght">
+                <div class="col-md-12 mt-3">
+                    <label class="additional-services">{{ t.pt('views.specifications.aditional_services') }}</label>
+                </div>
+            </div>
+            <div class="row" *ngIf="readyMixAdditionalServices.lenght">
+                <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let i = index;">
+                    <div class="group">
+                        <div class="service">
+                            <input (change)="changeAditionalService(product, $event.target, i)" type="checkbox" id="{{ rmxService.entryCode }}{{ index }}">
+                            <label for="{{ rmxService.entryCode }}{{ index }}">
+                                    <svg class="icon-checkbox-active">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
+                                    </svg>
+                                    <svg class="icon-checkbox-static">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                                    </svg>
+                                    <svg class="icon-checkbox-hover">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                                    </svg>
+                                    <span>{{rmxService.entryDesc}}</span>
+                                </label>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-3">
                     <div class="group mt-3">
                         <label>{{ t.pt('views.specifications.delivery_mode') }}</label>
@@ -561,9 +561,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12 mt-3 flex-end">
-                    <button (click)="remove(index)" class="noborder">{{ t.pt('views.specifications.remove_product') }}</button>
-                </div>
+            </div>
+            <div class="col-md-12 mt-3 flex-end">
+                <button (click)="remove(index)" class="noborder">{{ t.pt('views.specifications.remove_product') }}</button>
             </div>
         </div>
     </ng-container>
