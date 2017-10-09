@@ -434,7 +434,7 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group">
+                <div class="group" *ngIf="!UTILS.isReadyMix()">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         {{ t.pt('views.specifications.transport_method') }}
                     </label>
