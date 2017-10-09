@@ -182,8 +182,12 @@ export class PreProduct {
             this.fetchUnitsFromContract();
 
             // If should get payment terms from contract
-            if (this.contract.salesDocument.paymentTerm) {
+            if (this.contract.salesDocument.paymentTerm && this.contract.salesDocument.paymentTerm.checkPaymentTerm == true) {
                 this.getContractPaymentTerm(this.contract.salesDocument.paymentTerm.paymentTermId);
+            }
+            else {
+                // Reset available payments
+                this.availablePayments = SpecificationsStepComponent.availablePayments;
             }
         }
         else {
@@ -234,14 +238,15 @@ export class PreProduct {
             if (contracts.length > 0) {
                 // Add no contract option
                 this.availableContracts.unshift(undefined);
-
-                // Set default contract
-                this.contract = undefined;
-
                 this.disableds.contracts = false;
             }
-            else { this.disableds.contracts = true; } // Disable it if no contracts
+            else {
+                // Disable it if no contracts
+                this.disableds.contracts = true;
+            }
 
+            // Set default contract
+            this.contract = undefined;
             this.loadings.contracts = false;
         });
     }
