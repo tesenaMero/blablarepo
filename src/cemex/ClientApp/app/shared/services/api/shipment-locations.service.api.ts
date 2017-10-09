@@ -31,13 +31,20 @@ export class ShipmentLocationApi {
         return this.api.get('/v1/im/shipmentlocationtypes');
     }
 
-    all(productLine): Observable<Response> {
+    all(productLine, isReadyMix?: boolean): Observable<Response> {
+        if (isReadyMix === undefined) { isReadyMix = false; }
+
         let customerId = this.customerService.currentCustomer().legalEntityId;
         let locationType = this.shipmentLocationTypes.getValue() && this.shipmentLocationTypes.getValue().find(item => item.shipmentLocationTypeCode === 'J');
 
         // If locations type already defined
+        let url = `/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}&orderBlocked=false`
+
+        // Readymix case, show only with documents
+        if (isReadyMix) { url += "&hasDocument=true" }
+
         if (locationType) {
-            return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}&orderBlocked=false`);
+            return this.api.get(url);
         }
 
         // Fetch location types then jobsites
@@ -47,7 +54,7 @@ export class ShipmentLocationApi {
             .flatMap((types) => {
                 locationType = types && types.find(item => item.shipmentLocationTypeCode === 'J');
 
-                return this.api.get(`/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}&orderBlocked=false`);
+                return this.api.get(url);
             })
         }
     }
