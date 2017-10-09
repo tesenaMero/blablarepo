@@ -1052,6 +1052,8 @@
 	"views.review.spacing": "Spacing",
 	"views.review.kicker": "Kicker",
 
+	"views.specifications.negative_amount" : "Amount should be higher than 0",
+	"views.specifications.contract_remaining_amount_overflow" : "Contract remaining amount reached",
 	"views.specifications.verify_unit": "Verify unit section",
 	"views.specifications.verify_plant": "Verify plant section",
 	"views.specifications.verify_contract": "Verify contract section",

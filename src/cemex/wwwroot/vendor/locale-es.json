@@ -1056,6 +1056,8 @@
 	"views.review.spacing": "Frecuencia",	
 	"views.review.kicker": "Ajuste",
 	
+	"views.specifications.negative_amount" : "El monto debe ser mayor a 0",
+	"views.specifications.contract_remaining_amount_overflow" : "Remanente del contrato alcanzado",
 	"views.specifications.verify_unit": "Verifica sección de unidad",
 	"views.specifications.verify_plant": "Verifica la planta",
 	"views.specifications.verify_contract": "Verifica el contrato",

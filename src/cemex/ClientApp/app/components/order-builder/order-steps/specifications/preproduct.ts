@@ -65,7 +65,9 @@ export class PreProduct {
         contract: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_contract') },
         payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') },
         product: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_products_selected') },
-        maxCapacity: { valid: false, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') }
+        maxCapacity: { valid: true, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') },
+        contract_balance: { valid: true, mandatory: true, text: this.t.pt('views.specifications.contract_remaining_amount_overflow') },
+        productQuatity : { valid: true, mandatory: true, text: this.t.pt('views.specifications.negative_amount') }
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean, private templateProduct?: any) {
@@ -146,7 +148,6 @@ export class PreProduct {
 
         // Optionals
         if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
-
         if (!this.product) {
             // Disable stuff and remove loadings
             this.disableds.products = true;
@@ -185,6 +186,9 @@ export class PreProduct {
             if (this.contract.salesDocument.paymentTerm) {
                 this.getContractPaymentTerm(this.contract.salesDocument.paymentTerm.paymentTermId);
             }
+            if (Validations.isReadyMix()) {
+                this.disableds.quantity = false;
+            }
         }
         else {
             this.validations.contract.valid = false;
@@ -199,12 +203,28 @@ export class PreProduct {
         // this.quantity = 1;
     }
 
-    quantityGood(){
-        this.validations.maxCapacity.valid = true;
+    setQuantityValidation(valid: boolean) {
+        if (valid) {
+            this.validations.maxCapacity.valid = true;
+        } else {
+            this.validations.maxCapacity.valid = false;
+        }
     }
 
-    quantityBad(){
-        this.validations.maxCapacity.valid = false;
+    setContractBalanceValidation(valid: boolean) {
+        if (valid) {
+            this.validations.contract_balance.valid = true;
+        } else {
+            this.validations.contract_balance.valid = false;
+        }
+    }
+
+    setProductNegativeAmountValidation(valid: boolean) {
+        if (valid) {
+            this.validations.productQuatity.valid = true;
+        } else {
+            this.validations.productQuatity.valid = false;
+        }
     }
 
     plantChanged() {
@@ -230,7 +250,6 @@ export class PreProduct {
         ).subscribe((result) => {
             let contracts = result.json().products;
             this.availableContracts = contracts;
-
             if (contracts.length > 0) {
                 // Add no contract option
                 this.availableContracts.unshift(undefined);
@@ -262,7 +281,9 @@ export class PreProduct {
 
                 if (units.length > 0) {
                     this.disableds.units = false;
-                    this.disableds.quantity = false;
+                    if (!Validations.isReadyMix()) {
+                        this.disableds.quantity = false;
+                    }
                     this.unit = units[0];
                 }
                 else {
@@ -484,7 +505,6 @@ export class PreProduct {
         if (Validations.isCement()) {
             this.validations.plant.mandatory = false;
             this.validations.contract.mandatory = false;
-            this.validations.maxCapacity.mandatory = true;
         }
 
         // Pickup && Mexico
@@ -498,7 +518,7 @@ export class PreProduct {
             this.validations.payment.mandatory = false;
         }
 
-        if(Validations.isMexicoCustomer()){
+        if (Validations.isMexicoCustomer() && Validations.isCement()) {
             this.validations.maxCapacity.mandatory = true;
         }
 

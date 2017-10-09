@@ -171,13 +171,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     this.dashboard,
                     this.t,
                     shouldFetchContracts);
-    
+
                 p.product = item.product;
                 p.quantity = item.quantity;
                 p.contract = item.contract || undefined;
                 p.payment = item.payment || undefined;
                 p.maximumCapacity = item.maximumCapacity || undefined;
-    
+
                 this.preProducts.push(p);
             });
         }
@@ -186,7 +186,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     onShowed() {
         // Transform recovered manager products as preproducts
         let restoredManager = CircularJSON.parse(localStorage.getItem('manager'));
-        if(restoredManager) {
+        if (restoredManager) {
             this.castProducts();
         }
 
@@ -633,80 +633,65 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }, 400);
     }
 
-    qty(product: PreProduct, toAdd: number) {
-        if (this.isMXCustomer() && !Validations.isReadyMix()) {
-            if (product.quantity <= 1 && toAdd < 0) { return; }
-            const isDelivery = Validations.isDelivery();
-            let conversion = product.convertToTons(product.quantity + toAdd);
-
-            let newQty = product.quantity + toAdd;
-            let contractBalance = product.getContractBalance(); //remaining of contract
-            let maxCapacitySalesArea = product.maximumCapacity;
-
-            if (contractBalance === undefined) {
-                if (isDelivery) {
-                    if ((Validations.isBulkCement() || Validations.isCementBag()) && (conversion <= maxCapacitySalesArea)) {
-                        return product.quantity = newQty;
-                    }
-                    else {
-                        if (conversion <= maxCapacitySalesArea) {
-                            return product.quantity = newQty;
-                        }
-                    }
-                }
-                else {
-                    if (conversion <= maxCapacitySalesArea) {
-                        return product.quantity = newQty;
-                    }
-                }
-            }
-            else {
-                // TODO: Fix case when conversion is undefined
-                if (conversion > contractBalance) {
-                    return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
-                }
-                else if (!isDelivery) {
-                    if (conversion <= maxCapacitySalesArea) {
-                        return product.quantity = newQty;
-                    }
-                }
-                else {
-                    if ((conversion <= maxCapacitySalesArea)) {
-                        return product.quantity = newQty;
-                    }
-                }
-            }
-            if (conversion <= maxCapacitySalesArea) {
-                return product.quantity = newQty;
-            }
-
-            return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
-        }
-        else {
-            if (product.quantity <= 1 && toAdd < 0) { return; }
-            if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
-            product.quantity += toAdd;
-        }
-    }
-
-    valuechange(product: PreProduct, newValue: number) {
-        let prodQuntity = newValue;
+    changeQty(product: PreProduct, newValue: any) {
+        //inicialize
+        product.setProductNegativeAmountValidation(true);
+        product.setContractBalanceValidation(true);
+        product.setQuantityValidation(true);
+        let contractBalance = product.getContractBalance();
         let maxCapacitySalesArea = product.maximumCapacity;
+        const isDelivery = Validations.isDelivery();
         let conversion = product.convertToTons(newValue);
-
-        if(newValue < 0 || newValue == null){
-            newValue = 1;
+        //general validation for negative values
+        if (newValue <= 0 || newValue === null) {
+            product.setProductNegativeAmountValidation(false);
+            this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 3000);
+            return product.quantity = newValue;
         }
-
-        if (conversion > maxCapacitySalesArea) {
-            product.quantityBad();
-            return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
-        } else {
-            product.quantityGood();
+        //country dependent - no US quantity validation      
+        if (this.isMXCustomer) {
+            //contract remaining amount validation
+            if (contractBalance) {
+                //---------------------------------------------------------- CONVERSION NEEDS TO BE FINISHED than remove this condition
+                if ((newValue > contractBalance) || (conversion > contractBalance)) {
+                    product.setContractBalanceValidation(false);
+                    this.dashboard.alertError(this.t.pt('views.specifications.contract_remaining_amount_overflow'), 3000);
+                    return product.quantity = newValue;
+                }
+            }
+            //delivery mode only
+            if (isDelivery) {
+                //only cement
+                if ((Validations.isBulkCement() || Validations.isCementBag())) {
+                    //jobsite max capacity area
+                    if ((newValue <= maxCapacitySalesArea) || (conversion <= maxCapacitySalesArea)) {
+                        product.setQuantityValidation(true);
+                        return product.quantity = newValue;
+                    }
+                    // error on capacity overflow
+                    else {
+                        this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 3000);
+                        product.setQuantityValidation(false);
+                        return product.quantity = newValue;
+                    }
+                }
+                //no ready mix, multiproducts, aggregates
+                else {
+                    product.setQuantityValidation(true);
+                    return product.quantity = newValue;
+                }
+            }
+            //no pickup validation
+            else {
+                product.setQuantityValidation(true);
+                return product.quantity = newValue;
+            }
         }
-        
-        product.quantity = prodQuntity;
-        return product.quantity;
+        //no US validation
+        else {
+            product.setQuantityValidation(true);
+            return product.quantity = newValue;
+        }
     }
 
     todayStr() {
