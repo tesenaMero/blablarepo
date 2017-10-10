@@ -433,13 +433,15 @@ export class PreProduct {
 
     // TODO: define product lines 2 and 3
     fetchManeuvering() {
+        this.maneuveringAvailable = false;
         // Maneouvering additional service
         if (Validations.isDelivery() &&
             (this.product.product.productLine.productLineId === 2 || this.product.product.productLine.productLineId === 3)) {
 
             let area = this.manager.salesArea.find((a) => {
                 let id = this.product.product.productLine.productLineId;
-                return id === 2 ? a.salesArea.salesAreaId === 2 : a.salesArea.salesAreaId === 219;
+
+                return id === 2 ? a.salesArea.divisionCode === '02' : a.salesArea.divisionCode === '09';
             });
 
             // check if salesarea has maneouvering enabled
