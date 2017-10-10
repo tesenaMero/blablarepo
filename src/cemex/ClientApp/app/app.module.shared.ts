@@ -1,3 +1,4 @@
+import { TrimLeadingZeroesPipe } from './pipes/trim-leading-zeroes.pipe';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -114,6 +115,7 @@ export const sharedConfig: NgModule = {
         SumGroupProductPipe,
         DatePipe,
         UnitCodeMapperPipe,
+        TrimLeadingZeroesPipe,
 
         // Regular components
         OrdersTableComponent,

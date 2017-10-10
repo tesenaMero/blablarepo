@@ -242,7 +242,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.manager.shippingCondition).subscribe((result) => {
                 let topProducts = result.json().products;
                 SpecificationsStepComponent.availableProducts = topProducts;
-
+                
                 // Set defaults value
                 this.preProducts.forEach((item: PreProduct) => {
                     item.loadings.products = false;
@@ -282,7 +282,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 if (result.json().totalCount > 0) {
                     let topProducts = result.json().products;
                     SpecificationsStepComponent.availableProducts = topProducts;
-
+                    
                     // Set defaults value
                     this.preProducts.forEach((item: PreProduct) => {
                         item.loadings.products = false;
