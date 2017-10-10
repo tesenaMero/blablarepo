@@ -89,15 +89,17 @@ export class OrderBuilderComponent implements OnDestroy {
         this.manager.isPatched = restoredManager.isPatched || false;
         
         // Go to last step step
+        this.stepper.goToLastStep();
         //this.stepper.selectStep(this.stepper.steps.last)
-        this.stepper.steps.forEach((step, index) => {
-            // If last
-            if (index === this.stepper.steps.length - 1) { this.stepper.selectStep(step) }
-            else {
-                step.completed = true;
-                step.active = false;
-            }
-        })
+        // this.stepper.steps.forEach((step, index) => {
+        //     // If last
+        //     if (index === this.stepper.steps.length - 1) { this.stepper.selectStep(step) }
+        //     else {
+        //         console.log("completing step ", index);
+        //         step.completed = true;
+        //         step.active = false;
+        //     }
+        // })
 
         localStorage.removeItem('manager');
     }
@@ -111,11 +113,16 @@ export class OrderBuilderComponent implements OnDestroy {
         else { this.stepper.uncomplete(); }
     }
 
-    productStepCompleted(product: any) {
-        this.isReadyMix = Validations.isReadyMix();
-        this.isBulkCementUSA = (Validations.isBulkCement()) && (Validations.isUSACustomer());
-        this._changeDetector.detectChanges();
-        this.stepper.complete();
+    productStepCompleted(productLine: any) {
+        if (productLine) {
+            this.isReadyMix = Validations.isReadyMix();
+            this.isBulkCementUSA = (Validations.isBulkCement()) && (Validations.isUSACustomer());
+            this._changeDetector.detectChanges();
+            this.stepper.complete();
+        }
+        else {
+            this.stepper.uncomplete();
+        }
     }
 
     locationStepCompleted(event: any) {

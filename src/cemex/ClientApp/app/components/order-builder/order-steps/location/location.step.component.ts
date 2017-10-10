@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
-import { Step, StepEventsListener, _Step } from '../../../../shared/components/stepper/'
+import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
 import { ShipmentLocationApi, PurchaseOrderApi, ShippingConditionApi } from '../../../../shared/services/api';
@@ -456,6 +456,9 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                     this.addMarkerToMap(this.jobsiteMarker);
                     this.loadings.map = false;
                 }
+            }
+            else {
+                this.loadings.map = false;
             }
         });
     }
