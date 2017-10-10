@@ -33,7 +33,7 @@ import { OrderDetailLogsComponent } from './components/order-detail/order-detail
 import { SelectDropdownModule } from './shared/components/selectwithsearch/dropdown.module';
 import { CrossProductComponent } from './components/cross-product/crossProduct.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DateTimePickerModule } from 'ng-pick-datetime';
+import { DateTimePickerModule } from './shared/components/ng-pick-datetime';
 // Pipes
 import {
     NoSpacePipe,
