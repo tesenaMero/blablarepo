@@ -525,12 +525,12 @@
                     </div>
                 </div>
             </div>
-            <div class="row" *ngIf="readyMixAdditionalServices.lenght">
+            <div class="row" *ngIf="readyMixAdditionalServices && readyMixAdditionalServices.lenght">
                 <div class="col-md-12 mt-3">
                     <label class="additional-services">{{ t.pt('views.specifications.aditional_services') }}</label>
                 </div>
             </div>
-            <div class="row" *ngIf="readyMixAdditionalServices.lenght">
+            <div class="row" *ngIf="readyMixAdditionalServices && readyMixAdditionalServices.lenght">
                 <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let i = index;">
                     <div class="group">
                         <div class="service">

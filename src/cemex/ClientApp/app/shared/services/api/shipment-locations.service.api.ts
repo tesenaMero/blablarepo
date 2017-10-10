@@ -41,7 +41,7 @@ export class ShipmentLocationApi {
         let url = `/v4/sm/myshipmentlocations?legalEntityId=${customerId}.1&shipmentLocationTypeId=${locationType.shipmentLocationTypeId}&productLineId=${productLine.productLineId}&orderBlocked=false`
 
         // Readymix case, show only with documents
-        if (isReadyMix) { url += "&hasDocument=true" }
+        if (isReadyMix) { url += "&hasDocuments=true" }
 
         if (locationType) {
             return this.api.get(url);
