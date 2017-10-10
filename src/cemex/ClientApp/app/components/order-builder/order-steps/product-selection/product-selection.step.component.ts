@@ -21,7 +21,30 @@ export class ProductSelectionStepComponent implements StepEventsListener {
     productLines = [];
     productLine: any;
 
-    constructor(private api: ProductLineApi, private orderManager: CreateOrderService, private customerService: CustomerService, private t: TranslationService) {
+    constructor(
+        @Inject(Step) private step: Step,
+        private api: ProductLineApi, 
+        private orderManager: CreateOrderService, 
+        private customerService: CustomerService, 
+        private t: TranslationService) {
+
+        // Interface
+        this.step.setEventsListener(this);
+            
+        // Init product lines from api
+        this.initProductLines();
+    }
+
+    onShowed() {
+        if (this.productLine) {
+            this.onCompleted.emit(this.productLine);
+        }
+        else {
+            this.onCompleted.emit(false);
+        }
+    }
+
+    initProductLines() {
         this.loading = true;
         this.api.all().subscribe((response) => {
             let productLines = response.json().productLines;
@@ -49,15 +72,6 @@ export class ProductSelectionStepComponent implements StepEventsListener {
         }, error => {
             this.loading = false;
         });
-    }
-
-    onShowed() {
-        if (this.productLine) {
-            this.onCompleted.emit(this.productLine);
-        }
-        else {
-            this.onCompleted.emit(false);
-        }
     }
 
     shouldHide(productLine: any): boolean {
