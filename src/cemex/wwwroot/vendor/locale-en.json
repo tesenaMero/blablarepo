@@ -1006,7 +1006,7 @@
 	"views.location.purchase_order": "Purchase order",
 	"views.location.purchase_order_error": "Please enter valid purchase order.",
 	"views.location.contact_person": "Contact person",
-	"views.location.select_contact": "Please select location",
+	"views.location.select_contact": "Please select contact",
 	"views.location.special_instr": "Special instructions",
 	"views.location.address_short": "Address cannot be that short.",
 

@@ -95,6 +95,21 @@ nav.side-nav-bar {
     }
 }
 
+// /deep/.legal-entity .ul-legal-entity li p.active {
+//     font-style: normal !important;
+// }
+/deep/.cmx-title-section {
+    height: auto !important;
+    min-height: 85px !important;
+}
+
+/deep/.selected-legal-entity-desk {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
+    padding-top: 22px !important;
+    padding-bottom: 10px !important;
+}
+
 // Overrides ugly ass cmx-component
 /deep/.cmx-nav-header {
     padding: 5px 18px !important;
@@ -108,9 +123,10 @@ nav.side-nav-bar {
     z-index: $dashboard-index + 1 !important;
 }
 
-// /deep/.cmx-side-nav-bar-desk {
-//     transition: tranform 0.25s ease-in-out !important;
-// }
+/deep/.cmx-side-nav-bar-desk {
+    transition: transform 0.25s ease-in-out !important;
+}
+
 /deep/.legal-entity {
     height: 100% !important;
     display: block !important;

@@ -108,7 +108,7 @@ export class PreProduct {
             this.disableds.payments = true;
         }
         this.loadings.payments = false;
-        //this.paymentChanged();
+        this.paymentChanged();
 
         // Available project profiles init
         // -------------------------------------------------------
@@ -139,7 +139,7 @@ export class PreProduct {
         if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
 
         this.product = product;
-        //this.productChanged(shouldFetchContracts);
+        this.productChanged(shouldFetchContracts);
     }
 
     productChanged(shouldFetchContracts?: boolean) {
@@ -183,8 +183,11 @@ export class PreProduct {
             this.fetchUnitsFromContract();
 
             // If should get payment terms from contract
-            if (this.contract.salesDocument.paymentTerm) {
+            if (this.contract.salesDocument.paymentTerm && this.contract.salesDocument.paymentTerm.checkPaymentTerm == true) {
                 this.getContractPaymentTerm(this.contract.salesDocument.paymentTerm.paymentTermId);
+            }  else {
+                // Reset available payments
+                this.availablePayments = SpecificationsStepComponent.availablePayments;
             }
             if (Validations.isReadyMix()) {
                 this.disableds.quantity = false;
@@ -253,14 +256,15 @@ export class PreProduct {
             if (contracts.length > 0) {
                 // Add no contract option
                 this.availableContracts.unshift(undefined);
-
-                // Set default contract
-                this.contract = undefined;
-
                 this.disableds.contracts = false;
             }
-            else { this.disableds.contracts = true; } // Disable it if no contracts
+            else {
+                // Disable it if no contracts
+                this.disableds.contracts = true;
+            }
 
+            // Set default contract
+            this.contract = undefined;
             this.loadings.contracts = false;
         });
     }
@@ -278,6 +282,7 @@ export class PreProduct {
             this.productsApi.units(this.product.product.productId).map((result) => {
                 let units = result.json().productUnitConversions;
                 this.availableUnits = units;
+                this.product.availableUnits = units;
 
                 if (units.length > 0) {
                     this.disableds.units = false;
@@ -330,12 +335,13 @@ export class PreProduct {
             }
 
             this.loadings.payments = false;
-            //this.paymentChanged();
+            this.paymentChanged();
         })
     }
 
     fetchUnitsFromContract() {
         if (this.contract.unitOfMeasure) {
+            // Fetch base unit and units from contracts and preselect
             this.forkUnitsFromContracts();
         }
         else {
@@ -344,7 +350,9 @@ export class PreProduct {
             this.disableds.quantity = true;
             this.productsApi.units(this.contract.salesDocument.salesDocumentId).subscribe((result) => {
                 let units = result.json().productUnitConversions;
-                this.availableUnits = units;
+                if (units) { this.availableUnits = units; }
+                else { this.availableUnits = this.product.availableUnits; }
+
                 if (units.length) {
                     this.unit = units[0];
                     this.disableds.units = false;
@@ -368,7 +376,8 @@ export class PreProduct {
         Observable.forkJoin(
             this.productsApi.units(this.contract.salesDocument.salesDocumentId).map((result) => {
                 let units = result.json().productUnitConversions;
-                this.availableUnits = units;
+                if (units.length) { this.availableUnits = units; }
+                else { this.availableUnits = this.product.availableUnits; }
             }),
             this.productsApi.unitByUnitOfMeasure(this.contract.unitOfMeasure).map((result) => {
                 this.contract.unitOfMeasure = result.json();
@@ -395,17 +404,20 @@ export class PreProduct {
             if (matchingUnit) {
                 this.unit = matchingUnit;
                 this.disableds.units = true;
+                this.disableds.quantity = false;
             }
             else {
                 // Preselect first one and let the user change it
                 if (this.availableUnits.length) {
                     this.unit = this.availableUnits[0];
+                    this.disableds.quantity = false;
                 }
                 // No units available so disable it
                 else {
                     this.dashboard.alertError("No units available for this contract", 8000);
                     this.unit = undefined;
                     this.disableds.units = true;
+                    this.disableds.quantity = true;
                 }
             }
         });
@@ -518,7 +530,7 @@ export class PreProduct {
             this.validations.payment.mandatory = false;
         }
 
-        if (Validations.isMexicoCustomer() && Validations.isCement()) {
+        if(Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery()){
             this.validations.maxCapacity.mandatory = true;
         }
 

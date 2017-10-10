@@ -220,7 +220,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         this.getAdditionalServices();
         this.getPaymentTerms();
-        this.getProjectProfiles();
+
+        if (Validations.isReadyMix()) {
+            this.getProjectProfiles();
+        }
     }
 
     fetchProducts(salesDocumentType: any) {
@@ -332,7 +335,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
             let paymentTerms = result.json().paymentTerms;
 
-            const cash = paymentTerms.find((term: any) => {
+            let cash = paymentTerms.find((term: any) => {
                 return term.paymentTermType.paymentTermTypeCode === 'CASH';
             });
 
@@ -450,7 +453,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
             }
 
             this.preProducts.forEach((item: PreProduct) => {
-                item.loadings.projectProfiles = false;
+                if (profiles.length) { item.loadings.projectProfiles = false; }
+                else { item.loadings.projectProfiles = true; }
             });
         });
 
@@ -615,6 +619,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
 
         this.preProducts.push(preProduct);
+
+        if (this.preProducts.length > 0) {
+            this.onCompleted.emit(true);
+        }
     }
 
     remove(index: any) {
@@ -622,6 +630,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         product.deleting = true;
         setTimeout(() => {
             this.preProducts.splice(index, 1);
+
+            if (this.preProducts.length == 0) {
+                this.onCompleted.emit(false);
+            }
 
             // Readymix case when all contracts should be the same.
             // Case when the first product is removed

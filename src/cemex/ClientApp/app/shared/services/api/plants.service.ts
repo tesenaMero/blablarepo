@@ -18,9 +18,9 @@ export class PlantApi {
         }
     }
 
-    forSearch(countryCode: string, regionCode: string, productLine: string) {
+    forSearch(countryCode: string, regionCode: string, productLine: string, shipmentLocation: string) {
         //https://api.us2.apiconnect.ibmcloud.com/cnx-gbl-org-development/dev/v5/dm/plants?countryCode=MX®ionCode=NL&productTypeId=2,3
-        return this.api.get(`/v5/dm/plants?countryCode=${countryCode}&regionCode=${regionCode}&productTypeId=${productLine}`);
+        return this.api.get(`/v5/dm/plants?countryCode=${countryCode}&regionCode=${regionCode}&productTypeId=${productLine}&shipmentLocationId=${shipmentLocation}`);
     }
 
 }

@@ -36,7 +36,14 @@ export class ReviewStepComponent implements StepEventsListener {
     draftSub: any;
     lockRequests: boolean = false;
 
-    constructor( @Inject(Step) private step: Step, private manager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private dashboard: DashboardService, private drafts: DraftsService, private customerService: CustomerService, private t: TranslationService) {
+    constructor(
+        @Inject(Step) private step: Step,
+        private manager: CreateOrderService,
+        private shipmentApi: ShipmentLocationApi,
+        private dashboard: DashboardService,
+        private drafts: DraftsService,
+        private customerService: CustomerService,
+        private t: TranslationService) {
         this.step.setEventsListener(this);
         this.step.onBeforeBack = () => this.onBeforeBack();
     }
@@ -46,9 +53,8 @@ export class ReviewStepComponent implements StepEventsListener {
     onBeforeBack() {
         // Cancel needed requests and lock
         this.lockRequests = true;
-        if (this.draftSub) {
-            this.draftSub.unsubscribe();
-        }
+        if (this.draftSub) { this.draftSub.unsubscribe(); }
+        this.onCompleted.emit(false);
     }
 
     onShowed() {
@@ -56,7 +62,12 @@ export class ReviewStepComponent implements StepEventsListener {
         this.onCompleted.emit(false);
         this.saveDraft();
 
-        // Load map
+        // Make sure div is rendered before loading the map
+        //setTimeout(this.loadMap.bind(this), 0);
+        this.loadMap();
+    }
+
+    loadMap() {
         if (!this.isMapLoaded) {
             GoogleMapsHelper.lazyLoadMap("summary-map", (map) => {
                 this.isMapLoaded = true;
@@ -103,13 +114,13 @@ export class ReviewStepComponent implements StepEventsListener {
         // If locked (stepper is moving most likely) then dont do the call 
         if (this.lockRequests) { return; }
 
-        this.dashboard.alertInfo(this.t.pt('views.review.saving_draft'), 0);
+        //this.dashboard.alertInfo(this.t.pt('views.review.saving_draft'), 0);
         let draftSub = this.drafts.add(this.generateOrderObj()).subscribe((response) => {
-            this.dashboard.alertSuccess(this.t.pt('views.review.draft_saved'));
+            //this.dashboard.alertSuccess(this.t.pt('views.review.draft_saved'));
             this.manager.draftId = response.json().id;
             this.onCompleted.emit(response.json().id)
         }, (error) => {
-            this.dashboard.alertError(this.t.pt('views.review.draft_no_saved'));
+            //this.dashboard.alertError(this.t.pt('views.review.draft_no_saved'));
         });
     }
 
@@ -164,7 +175,7 @@ export class ReviewStepComponent implements StepEventsListener {
         let baseItem = {
             "itemSeqNum": 10 * (index + 1),
             "purchaseOrder": _.purchaseOrder ? _.purchaseOrder : "",
-            "requestedDateTime": this.combineDateTime(preProduct).toISOString(),
+            "requestedDateTime": this.combineDateTime(preProduct),
             "currency": {
                 "currencyCode": this.getCustomerCurrency()
             },
@@ -234,13 +245,13 @@ export class ReviewStepComponent implements StepEventsListener {
         }
     }
 
-    private combineDateTime(preProduct): Date {
-        preProduct.date = new Date(preProduct.date);
-        let year = preProduct.date.getFullYear()
-        let month = preProduct.date.getMonth() + 1
-        let day = preProduct.date.getDate()
-        let dateStr = '' + year + '-' + month + '-' + day;
-        return new Date(dateStr + ' ' + preProduct.time);
+    private combineDateTime(preProduct): String {
+        const time = preProduct.time.split(':');
+        const newDateTime = new Date(preProduct.date);
+
+        newDateTime.setUTCHours(time[0]);
+        newDateTime.setUTCMinutes(time[1]);
+        return newDateTime.toISOString();
     }
 
     private safeContactName() {

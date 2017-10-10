@@ -33,8 +33,9 @@ export class StepperComponent implements AfterContentInit {
 
     nextAvailable: boolean = false;
     backAvailable: boolean = true;
-    isFirstStep: boolean = true;
+    //isFirstStep: boolean = true;
     overlay: boolean = false;
+    moving: boolean = false;
 
     currentStep: any;
     constructor(private zone: NgZone, private t: TranslationService) {
@@ -47,10 +48,6 @@ export class StepperComponent implements AfterContentInit {
         if (activeSteps.length === 0) {
             this.selectStep(this.steps.first);
         }
-
-        let currentIndex = this.getActiveStepIndex();
-        if (currentIndex == 0) { this.isFirstStep = true; }
-        else { this.isFirstStep = false; }
 
         this.onRendered.emit();
     }
@@ -72,7 +69,7 @@ export class StepperComponent implements AfterContentInit {
     next(ignore = false) {
         if (!this.currentStep.completed) { return; }
         if (!ignore && !this.currentStep.canAdvance()) { return; }
-        
+
         let currentIndex = this.getActiveStepIndex();
 
         // If last step
@@ -89,7 +86,6 @@ export class StepperComponent implements AfterContentInit {
 
         // Callback
         this.currentStep.onBeforeBack();
-
         this.uncomplete();
 
         // If last step or index not found
@@ -98,11 +94,14 @@ export class StepperComponent implements AfterContentInit {
     }
 
     complete() {
-        this.currentStep.completed = true;
-        if (this.currentStep.automatic) { this.next(); }
-        this.nextAvailable = true;
+        if (!this.moving) {
+            this.currentStep.completed = true;
+            if (this.currentStep.automatic) { this.next(); }
+            this.nextAvailable = true;
+        }
     }
 
+    // If not index given, uncomplete current step
     uncomplete() {
         this.currentStep.completed = false;
         this.nextAvailable = false;
@@ -112,64 +111,100 @@ export class StepperComponent implements AfterContentInit {
         this.onFinish.emit(result);
     }
 
-    changeShowOverlay() {
+    private changeShowOverlay() {
         this.overlay = !this.overlay;
     }
-
-    private validateNext
 
     private isLastStep() {
         let currentIndex = this.getActiveStepIndex();
         return currentIndex >= this.steps.length - 1;
     }
 
+    private isFirstStep() {
+        let currentIndex = this.getActiveStepIndex();
+        return currentIndex == 0;
+    }
+
     private animateNext(toIndex: number) {
+        this.moving = true;
+        let step: Step = this.getStepByIndex(toIndex);
+        if (step) { step.render = true; }
+
         this.controlNext.nativeElement.click();
         this.nextAvailable = false;
         this.backAvailable = false;
         setTimeout(() => {
             this.nextAvailable = true;
             this.backAvailable = true;
-            this.selectStepByIndex(toIndex);
+            if (step) { this.selectStep(step); }
+            this.moving = false;
         }, 600);
     }
 
     private animatePrev(toIndex: number) {
+        this.moving = true;
+        let step: Step = this.getStepByIndex(toIndex);
+        if (step) { step.render = true; }
+        
         this.controlBack.nativeElement.click();
         this.nextAvailable = false;
         this.backAvailable = false;
         setTimeout(() => {
             this.nextAvailable = true;
             this.backAvailable = true;
-            this.selectStepByIndex(toIndex);
+            if (step) { this.selectStep(step); }
+            this.moving = false;
         }, 600);
     }
 
     selectStep(step: Step) {
         // Deactivate all steps except one
-        this.steps.toArray().forEach(step => step.active = false);
-        this.currentStep = step;
-
-        step.active = true;
-
         let currentIndex = this.getActiveStepIndex();
-        if (currentIndex == 0) { this.isFirstStep = true; }
-        else { this.isFirstStep = false; }
+        this.steps.toArray().forEach((item, index) => {
+            if (item != step) {
+                item.active = false
+                item.render = false;
+            }
 
-        step.show();
-    }
+            if (index > currentIndex) {
+                item.completed = false;
+            }
+        });
 
-    private selectStepByIndex(index: number) {
-        let step = this.getStepByIndex(index);
-        if (step) { this.selectStep(step); }
+        this.currentStep = step;
+        step.active = true;
+        step.render = true;
 
         if (!this.currentStep.completed)
             this.nextAvailable = false;
         else
             this.nextAvailable = true;
+
+        // Show after dom rendered
+        setTimeout(step.show.bind(step), 0);
+        //step.show();
     }
 
-    private getStepByIndex(index: number) {
+    private getNextStep() {
+        const nextIndex = this.getActiveStepIndex() + 1;
+        if (this.steps.length - 1 <= nextIndex) {
+            return this.getStepByIndex(nextIndex)
+        }
+    }
+
+    private getPrevStep() {
+        const prevIndex = this.getActiveStepIndex() - 1;
+        if (prevIndex >= 0) {
+            return this.getStepByIndex(prevIndex)
+        }
+    }
+
+    private selectStepByIndex(index: number) {
+        let step = this.getStepByIndex(index);
+        if (step) { this.selectStep(step); }
+    }
+
+    private getStepByIndex(index: number): Step {
         let step = this.steps.toArray()[index];
         if (step) { return step; }
     }
