@@ -72,9 +72,9 @@
                             <label>{{ t.pt('views.specifications.request_time') }}</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    <owl-date-time [(ngModel)]="product.time" 
+                                    <owl-date-time [(ngModel)]="product.time"
                                         (ngModelChange)="product.time = $event"
-                                        [type]="'timer'" [dateFormat]="'hh:mm'" [placeHolder]="'hh:mm'"
+                                        [type]="'timer'" [dateFormat]="'HH:mm'" [placeHolder]="'HH:mm'"
                                         [inputId]="'time' + index">
                                     </owl-date-time>
                                 </span>
@@ -225,9 +225,9 @@
                             <label>{{ t.pt('views.specifications.request_time') }}</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    <owl-date-time [(ngModel)]="product.time" 
+                                    <owl-date-time [(ngModel)]="product.time"
                                         (ngModelChange)="product.time = $event"
-                                        [type]="'timer'" [dateFormat]="'hh:mm'" [placeHolder]="'hh:mm'"
+                                        [type]="'timer'" [dateFormat]="'HH:mm'" [placeHolder]="'HH:mm'"
                                         [inputId]="'time' + index">
                                     </owl-date-time>
                                 </span>
@@ -390,9 +390,9 @@
                             <label>{{ t.pt('views.specifications.request_time') }}</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    <owl-date-time [(ngModel)]="product.time" 
+                                    <owl-date-time [(ngModel)]="product.time"
                                         (ngModelChange)="product.time = $event"
-                                        [type]="'timer'" [dateFormat]="'hh:mm'" [placeHolder]="'hh:mm'"
+                                        [type]="'timer'" [dateFormat]="'HH:mm'" [placeHolder]="'HH:mm'"
                                         [inputId]="'time' + index">
                                     </owl-date-time>
                                 </span>
@@ -479,7 +479,7 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group" *ngIf="product.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeDesc === 'Pump'">
+                <div class="group" *ngIf="product.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeId === 2">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         {{ t.pt('views.specifications.pump_capacity') }}
                     </label>
@@ -540,12 +540,12 @@
                     </div>
                 </div>
             </div>
-            <div class="row" *ngIf="readyMixAdditionalServices.lenght">
+            <div class="row" *ngIf="readyMixAdditionalServices && readyMixAdditionalServices.lenght">
                 <div class="col-md-12 mt-3">
                     <label class="additional-services">{{ t.pt('views.specifications.aditional_services') }}</label>
                 </div>
             </div>
-            <div class="row" *ngIf="readyMixAdditionalServices.lenght">
+            <div class="row" *ngIf="readyMixAdditionalServices && readyMixAdditionalServices.lenght">
                 <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let i = index;">
                     <div class="group">
                         <div class="service">

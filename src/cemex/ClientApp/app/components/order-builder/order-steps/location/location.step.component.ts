@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
-import { Step, StepEventsListener, _Step } from '../../../../shared/components/stepper/'
+import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
 import { ShipmentLocationApi, PurchaseOrderApi, ShippingConditionApi } from '../../../../shared/services/api';
@@ -424,16 +424,21 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             // Fetch contacts
             this.shipmentApi.contacts(this.location).subscribe((response => {
                 this.contacts = response.json().contacts;
+                this.contactsIndex = undefined;
                 if (this.contacts) {
-                    this.contacts.forEach((contact, index) => {
-                        contact.id = index;
-                        contact.name = contact.name;
-                    });
-
                     if (this.contacts.length > 0) {
-                        this.contactsIndex = undefined;
-                        this.contactChanged(undefined);
-                    }
+                        this.contacts.forEach((contact, index) => {
+                            contact.id = index;
+                            if(this.contact && this.contact.contactId === contact.contactId){
+                                this.contactsIndex = index;
+                            }
+                        });
+                        if (this.contactsIndex) {
+                            this.contactChanged(this.contact);                            
+                        } else {
+                            this.contactChanged(undefined);                            
+                        }
+                    }                    
                     this.loadings.contacts = false;
                 }
             }));
@@ -451,6 +456,9 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                     this.addMarkerToMap(this.jobsiteMarker);
                     this.loadings.map = false;
                 }
+            }
+            else {
+                this.loadings.map = false;
             }
         });
     }

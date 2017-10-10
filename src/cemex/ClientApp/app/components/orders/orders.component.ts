@@ -115,7 +115,7 @@ export class OrdersComponent implements OnInit {
                 { inner: order.purchaseOrder, hideMobile: true },
                 { inner: "<i class='cmx-icon-track'></i>", hideMobile: true },
                 { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY') },
-                { inner: "<span class='status " + order.status.statusDesc.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
+                { inner: "<span class='status " + order.status.statusCode.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
             ]);
         });
     }
@@ -143,29 +143,27 @@ export class OrdersComponent implements OnInit {
     }
 
     orderResquestClicked() {
-        this.router.navigate(['/ordersnproduct/app/new']);
-
         // Set customer
-        // this.customer = this.customerService.currentCustomer();
-        // // Only for MX validate BD conexion
-        // if (this.customer.countryCode.trim() === 'MX') {
-        //     this.dash.alertInfo(this.t.pt('views.common.validating_connection'), 0);
-        //     this.ping.validatePingSalesOrder().subscribe((response) => {
-        //         if (response.json().success === 'Y') {
-        //             this.router.navigate(['/ordersnproduct/app/new']);
-        //             this.dash.closeAlert();
-        //         }
-        //         else {
-        //             this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
-        //         }
-        //     },
-        //         error => {
-        //             this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
-        //         });
-        // }
-        // else {
-        //     this.router.navigate(['/ordersnproduct/app/new']);
-        // }
+        this.customer = this.customerService.currentCustomer();
+        // Only for MX validate BD conexion
+        if (this.customer.countryCode.trim() === 'MX') {
+            this.dash.alertInfo(this.t.pt('views.common.validating_connection'), 0);
+            this.ping.validatePingSalesOrder().subscribe((response) => {
+                if (response.json().success === 'Y') {
+                    this.router.navigate(['/ordersnproduct/app/new']);
+                    this.dash.closeAlert();
+                }
+                else {
+                    this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
+                }
+            },
+                error => {
+                    this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
+                });
+        }
+        else {
+            this.router.navigate(['/ordersnproduct/app/new']);
+        }
     }
 }
 

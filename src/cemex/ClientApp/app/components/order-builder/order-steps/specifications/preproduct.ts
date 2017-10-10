@@ -18,7 +18,7 @@ export class PreProduct {
     quantity: number = 1;
     newValue: number = 1;
     date: any = new Date();
-    time = "13:00";
+    time = new Date();
     unit: any;
     payment: any;
     contract: any;
@@ -65,7 +65,7 @@ export class PreProduct {
         contract: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_contract') },
         payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') },
         product: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_products_selected') },
-        maxCapacity: { valid: true, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') }
+        maxCapacity: { valid: true, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') },
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean, private templateProduct?: any) {
@@ -203,11 +203,11 @@ export class PreProduct {
         // this.quantity = 1;
     }
 
-    quantityGood(){
+    quantityGood() {
         this.validations.maxCapacity.valid = true;
     }
 
-    quantityBad(){
+    quantityBad() {
         this.validations.maxCapacity.valid = false;
     }
 
@@ -427,7 +427,7 @@ export class PreProduct {
         this.plantApi.byCountryCodeAndRegionCode(
             countryCode.trim(),
             this.manager.jobsite.address.regionCode,
-            this.product.productId
+            this.product.product.productId
         ).subscribe((response) => {
             this.availablePlants = response.json().plants;
             this.loadings.plants = false;
@@ -510,7 +510,7 @@ export class PreProduct {
             this.validations.payment.mandatory = false;
         }
 
-        if(Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery()){
+        if (Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery()) {
             this.validations.maxCapacity.mandatory = true;
         }
 
