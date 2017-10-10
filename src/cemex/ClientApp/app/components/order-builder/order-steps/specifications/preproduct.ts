@@ -421,13 +421,13 @@ export class PreProduct {
         }
     }
 
-    getPlants() {
+    getPlants() {           
         let countryCode = this.manager.jobsite.address.countryCode || this.customerService.currentCustomer().countryCode;
         this.loadings.plants = true;
         this.plantApi.byCountryCodeAndRegionCode(
             countryCode.trim(),
             this.manager.jobsite.address.regionCode,
-            this.product.productId
+            this.product.product.productId
         ).subscribe((response) => {
             this.availablePlants = response.json().plants;
             this.loadings.plants = false;
