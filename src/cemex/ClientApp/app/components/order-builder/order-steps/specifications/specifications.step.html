@@ -27,7 +27,7 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <input class="value" type="number" value="{{ product.quantity }}" [ngModel]="prodQuntity" (ngModelChange)="valuechange(product, $event)"  min="1" max="{{ product.getMaximumCapacity() }}"/>
+                                <input class="value" type="number" [ngModel]="product.quantity | number:'1.3-3'" (ngModelChange)="valuechange(product, $event)" min="0.001" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info" *ngIf="isMXCustomer() && product.maximumCapacity">
@@ -58,7 +58,7 @@
                                 <span class="mb-0 value">
                                     <!-- {{ product?.date | date: 'shortDate' }} -->
                                     <!-- <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" [min-date]="today" /> -->
-                                    <input type="date" min="{{ todayStr() }}" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event"/>
+                                    <input type="date" min="{{ todayStr() }}" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.dateChanged($event)"/>
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-calendar"></span></span>
@@ -113,10 +113,10 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="product.maneuveringAvailable">
                 <div class="col-md-3 mt-3">
-                    <div class="group" *ngIf="product.maneuveringAvailable">
-                        <label>{{ product.payment?.paymentTermType.aditional_services }}</label>
+                    <div class="group">
+                        <label>{{ t.pt('views.specifications.aditional_services') }}</label>
                         <div class="service">
                             <input [(ngModel)]="product.maneuvering" checked type="checkbox" id="maneuvering{{ index }}">
                             <label for="maneuvering{{ index }}">
@@ -173,7 +173,7 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <input class="value" type="number" value="{{ product.quantity }}" [ngModel]="prodQuntity" (ngModelChange)="valuechange(product, $event)"  min="1" max="{{ product.getMaximumCapacity() }}" />
+                                <input class="value" type="number" [ngModel]="product.quantity | number:'1.3-3'" (ngModelChange)="valuechange(product, $event)" min="0.001" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info" *ngIf="UTILS.isMexicoCustomer() && product.maximumCapacity">
@@ -206,7 +206,7 @@
                                 <span class="mb-0 value">
                                     <!-- {{ product?.date | date: 'shortDate' }} -->
                                     <!-- <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" [min-date]="today" /> -->
-                                    <input type="date" min="{{ todayStr() }}" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event"/>
+                                    <input type="date" min="{{ todayStr() }}" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.dateChanged($event)"/>
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-calendar"></span></span>
@@ -263,11 +263,11 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4 mt-3">
+                <div class="col-md-4 mt-3" *ngIf="product.maneuveringAvailable">
                     <div class="flex-container justify-content-between">
                         <div class="group">
                             <label>{{ t.pt('views.specifications.aditional_services') }}</label>
-                            <div class="service spaced-top" [ngClass]="{ invisible: !product.maneuveringAvailable }">
+                            <div class="service spaced-top">
                                 <input [(ngModel)]="product.maneuvering" checked type="checkbox" id="maneuvering{{ index }}">
                                 <label for="maneuvering{{ index }}">
                                     <svg class="icon-checkbox-active">
@@ -338,7 +338,7 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <input class="value" type="number" value="{{ product.quantity }}" [ngModel]="prodQuntity" (ngModelChange)="valuechange(product, $event)"  min="1" />
+                                <input class="value" type="number" [ngModel]="product.quantity | number:'1.3-3'" (ngModelChange)="valuechange(product, $event)" min="0.001" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                         </div>
@@ -366,7 +366,8 @@
                                 <span class="mb-0 value">
                                     <!--  -->
                                     <!-- <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" /> -->
-                                    <input type="date" min="{{ todayStr() }}" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event" />
+                                    <!-- <input type="date" min="{{ todayStr() }}" max="{{ maxDateStr() }}" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.dateChanged($event)" /> -->
+                                    <input type="date" min="{{ todayStr() }}" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.dateChanged($event)"/>
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-calendar"></span></span>
@@ -464,7 +465,7 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group" *ngIf="product.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeDesc === 'Pump'">
+                <div class="group" *ngIf="product.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeId === 2">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         {{ t.pt('views.specifications.pump_capacity') }}
                     </label>
@@ -525,33 +526,33 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-9">
-                    <div class="row">
-                        <div class="col-md-12 mt-3">
-                            <label class="additional-services">{{ t.pt('views.specifications.aditional_services') }}</label>
-                        </div>
-                        <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let i = index;">
-                            <div class="group">
-                                <div class="service">
-                                    <input (change)="changeAditionalService(product, $event.target, i)" type="checkbox" id="{{ rmxService.entryCode }}{{ index }}">
-                                    <label for="{{ rmxService.entryCode }}{{ index }}">
-                                        <svg class="icon-checkbox-active">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
-                                        </svg>
-                                        <svg class="icon-checkbox-static">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
-                                        </svg>
-                                        <svg class="icon-checkbox-hover">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
-                                        </svg>
-                                        <span>{{rmxService.entryDesc}}</span>
-                                    </label>
-                                </div>
-                            </div>
+            <div class="row" *ngIf="readyMixAdditionalServices && readyMixAdditionalServices.lenght">
+                <div class="col-md-12 mt-3">
+                    <label class="additional-services">{{ t.pt('views.specifications.aditional_services') }}</label>
+                </div>
+            </div>
+            <div class="row" *ngIf="readyMixAdditionalServices && readyMixAdditionalServices.lenght">
+                <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let i = index;">
+                    <div class="group">
+                        <div class="service">
+                            <input (change)="changeAditionalService(product, $event.target, i)" type="checkbox" id="{{ rmxService.entryCode }}{{ index }}">
+                            <label for="{{ rmxService.entryCode }}{{ index }}">
+                                    <svg class="icon-checkbox-active">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
+                                    </svg>
+                                    <svg class="icon-checkbox-static">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                                    </svg>
+                                    <svg class="icon-checkbox-hover">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                                    </svg>
+                                    <span>{{rmxService.entryDesc}}</span>
+                                </label>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-3">
                     <div class="group mt-3">
                         <label>{{ t.pt('views.specifications.delivery_mode') }}</label>
@@ -561,9 +562,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12 mt-3 flex-end">
-                    <button (click)="remove(index)" class="noborder">{{ t.pt('views.specifications.remove_product') }}</button>
-                </div>
+            </div>
+            <div class="col-md-12 mt-3 flex-end">
+                <button (click)="remove(index)" class="noborder">{{ t.pt('views.specifications.remove_product') }}</button>
             </div>
         </div>
     </ng-container>

@@ -115,7 +115,7 @@ export class OrdersComponent implements OnInit {
                 { inner: order.purchaseOrder, hideMobile: true },
                 { inner: "<i class='cmx-icon-track'></i>", hideMobile: true },
                 { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY') },
-                { inner: "<span class='status " + order.status.statusDesc.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
+                { inner: "<span class='status " + order.status.statusCode.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
             ]);
         });
     }

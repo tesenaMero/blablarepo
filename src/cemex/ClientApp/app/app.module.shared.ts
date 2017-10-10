@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
+import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 // Components
 import { AppComponent } from './components/app/app.component';
@@ -144,6 +145,7 @@ export const sharedConfig: NgModule = {
         ModalComponent,
     ],
     imports: [
+        DateValueAccessorModule,
         NguiDatetimePickerModule,
         SelectDropdownModule,
         FlexLayoutModule,

@@ -335,7 +335,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
             let paymentTerms = result.json().paymentTerms;
 
-            const cash = paymentTerms.find((term: any) => {
+            let cash = paymentTerms.find((term: any) => {
                 return term.paymentTermType.paymentTermTypeCode === 'CASH';
             });
 
@@ -619,6 +619,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
 
         this.preProducts.push(preProduct);
+
+        if (this.preProducts.length > 0) {
+            this.onCompleted.emit(true);
+        }
     }
 
     remove(index: any) {
@@ -626,6 +630,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         product.deleting = true;
         setTimeout(() => {
             this.preProducts.splice(index, 1);
+
+            if (this.preProducts.length == 0) {
+                this.onCompleted.emit(false);
+            }
 
             // Readymix case when all contracts should be the same.
             // Case when the first product is removed
@@ -639,6 +647,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     qty(product: PreProduct, toAdd: number) {
         if (this.isMXCustomer() && !Validations.isReadyMix()) {
+            product.quantityGood();
             if (product.quantity <= 1 && toAdd < 0) { return; }
             const isDelivery = Validations.isDelivery();
             let conversion = product.convertToTons(product.quantity + toAdd);
@@ -650,16 +659,19 @@ export class SpecificationsStepComponent implements StepEventsListener {
             if (contractBalance === undefined) {
                 if (isDelivery) {
                     if ((Validations.isBulkCement() || Validations.isCementBag()) && (conversion <= maxCapacitySalesArea)) {
+                        product.quantityGood();
                         return product.quantity = newQty;
                     }
                     else {
                         if (conversion <= maxCapacitySalesArea) {
+                            product.quantityGood();
                             return product.quantity = newQty;
                         }
                     }
                 }
                 else {
                     if (conversion <= maxCapacitySalesArea) {
+                        product.quantityGood();
                         return product.quantity = newQty;
                     }
                 }
@@ -671,46 +683,48 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 }
                 else if (!isDelivery) {
                     if (conversion <= maxCapacitySalesArea) {
+                        product.quantityGood();
                         return product.quantity = newQty;
                     }
                 }
                 else {
                     if ((conversion <= maxCapacitySalesArea)) {
+                        product.quantityGood();
                         return product.quantity = newQty;
                     }
                 }
             }
             if (conversion <= maxCapacitySalesArea) {
+                product.quantityGood();
                 return product.quantity = newQty;
             }
 
             return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
         }
         else {
+            product.quantityGood();
             if (product.quantity <= 1 && toAdd < 0) { return; }
             if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
             product.quantity += toAdd;
+            product.quantityGood();
         }
     }
 
     valuechange(product: PreProduct, newValue: number) {
-        let prodQuntity = newValue;
+        product.quantityBad();
+        if(newValue < 0 || newValue == null){       
+            return this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 10000);
+        }
         let maxCapacitySalesArea = product.maximumCapacity;
         let conversion = product.convertToTons(newValue);
 
-        if(newValue < 0 || newValue == null){
-            newValue = 1;
-        }
-
-        if (conversion > maxCapacitySalesArea) {
+        if (conversion > maxCapacitySalesArea && Validations.isCement() && Validations.isDelivery()) {
             product.quantityBad();
             return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
         } else {
             product.quantityGood();
         }
-        
-        product.quantity = prodQuntity;
-        return product.quantity;
+        return product.quantity = newValue;
     }
 
     todayStr() {

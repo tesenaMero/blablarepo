@@ -43,9 +43,9 @@ pipelines:
               - tar xvfJ node-v6.10.0-linux-x64.tar.xz
               - ls
               - mv node-v6.10.0-linux-x64 node
-              - cf set-env ngx42 PATH "/bin:/usr/bin:/home/vcap/app/node/bin"
+              - cf set-env ngx44 PATH "/bin:/usr/bin:/home/vcap/app/node/bin"
               - ls
-              - cf push ngx42
+              - cf push ngx44
     release-qa:
       - step:
           script: # Modify the commands below to build your repository.
@@ -85,3 +85,42 @@ pipelines:
               - cf set-env order-taking-qav2 PATH "/bin:/usr/bin:/home/vcap/app/node/bin"
               - ls
               - cf push order-taking-qav2
+    pre-dev:
+      - step:
+          script: # Modify the commands below to build your repository.
+              - apt-get update && apt-get -y install xz-utils
+              - export GO_DEV="DEV"
+              - export NVM_DIR=/home/pipeline/nvm
+              - export NODE_VERSION=5.10.1
+              - export NVM_VERSION=0.29.0
+              - curl https://raw.githubusercontent.com/creationix/nvm/v${NVM_VERSION}/install.sh | bash
+              - . $NVM_DIR/nvm.sh
+              - nvm install $NODE_VERSION
+              - nvm alias default $NODE_VERSION
+              - nvm use default
+              - node -v
+              - npm -v
+              - curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&source=github" | tar -zx
+              - mv cf /usr/local/bin
+              - cf --version
+              - cf api https://api.ng.bluemix.net
+              - cf login -u $BMX_DEP_USER -p $BMX_DEP_PWD -o ORDERPROD-GBL-ORG -s Development
+              - git submodule update --init --recursive
+              # - npm install webpack -g
+              # - cd src/dotnetstarter
+              # - npm install
+              # - cd ClientApp/uicomponents
+              # - git checkout master
+              # - cd ../..
+              # - webpack --config webpack.config.vendor.js
+              # - webpack --config webpack.config.js
+              # - dotnet restore
+              # - dotnet publish -r ubuntu.14.04-x64
+              # - cd bin/Debug/netcoreapp1.1/publish
+              - wget "https://nodejs.org/dist/v6.10.0/node-v6.10.0-linux-x64.tar.xz"
+              - tar xvfJ node-v6.10.0-linux-x64.tar.xz
+              - ls
+              - mv node-v6.10.0-linux-x64 node
+              - cf set-env pre-order-taking PATH "/bin:/usr/bin:/home/vcap/app/node/bin"
+              - ls
+              - cf push pre-order-taking
