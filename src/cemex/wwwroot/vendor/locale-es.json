@@ -860,6 +860,8 @@
     "views.project.profile.table_kicker": "Ajuste",
 	"views.details.order": "Pedido",
 	"views.details.request_date": "Fecha de solicitud",
+	"views.details.delivery_date": "Fecha de entrega",
+	"views.details.delivery_time": "Tiempo de entrega",
 	"views.details.location": "Ubicación",
 	"views.details.pod": "Punto de entrega",
 	"views.details.submitted": "Enviado",
