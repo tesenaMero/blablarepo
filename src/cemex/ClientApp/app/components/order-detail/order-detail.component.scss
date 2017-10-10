@@ -1,6 +1,6 @@
 @import "~bootstrap/scss/bootstrap-grid.scss";
 .layout {
-    padding: 34px 26px 34px 26px;
+    padding: 42px 26px 34px 26px;
     @include media-breakpoint-down(sm) {
         padding: 17px 17px 34px 17px;
     }
@@ -16,8 +16,8 @@
     margin-right: 40px;
     h1 {
         margin-left: 12px;
-        color: #001C3B;	
-        font-size: 30px;	
+        color: #001C3B;
+        font-size: 30px;
         font-weight: bold;
     }
 }
@@ -43,6 +43,7 @@
 .nav-tab-container {
     margin-top: 33px;
 }
+
 .nav-tabs .nav-item {
     .nav-link {
         color: #333333;
@@ -136,6 +137,7 @@
         }
     }
 }
+
 .request-date {
     .title {
         color: #333333;

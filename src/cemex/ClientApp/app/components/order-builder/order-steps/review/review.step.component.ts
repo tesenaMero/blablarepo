@@ -10,6 +10,8 @@ import { Validations } from '../../../../utils/validations';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 import { } from '@types/googlemaps';
+import * as _ from 'lodash';
+declare var google: any;
 
 @Component({
     selector: 'review-step',
@@ -26,6 +28,7 @@ export class ReviewStepComponent implements StepEventsListener {
 
     // Google map
     private map: any; // Map instance
+    private geocoder: any;
     private infoWindow: any;
     private jobsiteMarker: any;
 
@@ -33,7 +36,14 @@ export class ReviewStepComponent implements StepEventsListener {
     draftSub: any;
     lockRequests: boolean = false;
 
-    constructor( @Inject(Step) private step: Step, private manager: CreateOrderService, private shipmentApi: ShipmentLocationApi, private dashboard: DashboardService, private drafts: DraftsService, private customerService: CustomerService, private t: TranslationService) {
+    constructor(
+        @Inject(Step) private step: Step,
+        private manager: CreateOrderService,
+        private shipmentApi: ShipmentLocationApi,
+        private dashboard: DashboardService,
+        private drafts: DraftsService,
+        private customerService: CustomerService,
+        private t: TranslationService) {
         this.step.setEventsListener(this);
         this.step.onBeforeBack = () => this.onBeforeBack();
     }
@@ -43,9 +53,8 @@ export class ReviewStepComponent implements StepEventsListener {
     onBeforeBack() {
         // Cancel needed requests and lock
         this.lockRequests = true;
-        if (this.draftSub) {
-            this.draftSub.unsubscribe();
-        }
+        if (this.draftSub) { this.draftSub.unsubscribe(); }
+        this.onCompleted.emit(false);
     }
 
     onShowed() {
@@ -53,33 +62,65 @@ export class ReviewStepComponent implements StepEventsListener {
         this.onCompleted.emit(false);
         this.saveDraft();
 
-        // Load map
+        // Make sure div is rendered before loading the map
+        //setTimeout(this.loadMap.bind(this), 0);
+        this.loadMap();
+    }
+
+    loadMap() {
         if (!this.isMapLoaded) {
             GoogleMapsHelper.lazyLoadMap("summary-map", (map) => {
                 this.isMapLoaded = true;
                 this.map = map;
                 map.setOptions({ zoom: 14, center: { lat: 25.6487281, lng: -100.4431818 } });
+                this.geocoder = new google.maps.Geocoder();
+                this.loadMarkersInMap();
             });
         }
         else {
             google.maps.event.trigger(this.map, "resize");
+            this.geocoder = new google.maps.Geocoder();
+            this.loadMarkersInMap();
         }
+    }
 
+    loadMarkersInMap() {
         this.cleanJobsiteMarker();
-        this.jobsiteMarker = this.makeJobsiteMarker(this.manager.jobsite.geo);
-        this.addMarkerToMap(this.jobsiteMarker);
+
+        if (this.manager.jobsite && this.manager.jobsite.geo) {
+            this.jobsiteMarker = this.makeJobsiteMarker(this.positionFromJobsiteGeo(this.manager.jobsite.geo));
+            this.addMarkerToMap(this.jobsiteMarker);
+        }
+        else if (this.manager.jobsite && this.manager.jobsite.address && this.manager.jobsite.address.streetName) {
+            let address = this.manager.jobsite.address.streetName;
+            this.geoFromAddress(address);
+        }
+    }
+
+    geoFromAddress(address) {
+        this.geocoder.geocode({ 'address': address }, (results, status) => {
+            if (status === 'OK') {
+                //return { lat: parseFloat(results[0].geometry.location.lat()), lng: parseFloat(results[0].geometry.location.lng()) }
+                let position = results[0].geometry.location;
+                if (position) {
+                    this.jobsiteMarker = this.makeJobsiteMarker(position);
+                    this.addMarkerToMap(this.jobsiteMarker);
+                }
+            }
+        });
     }
 
     saveDraft() {
         // If locked (stepper is moving most likely) then dont do the call 
         if (this.lockRequests) { return; }
-        
-        this.dashboard.alertInfo(this.t.pt('views.review.saving_draft'), 0);
+
+        //this.dashboard.alertInfo(this.t.pt('views.review.saving_draft'), 0);
         let draftSub = this.drafts.add(this.generateOrderObj()).subscribe((response) => {
-            this.dashboard.alertSuccess(this.t.pt('views.review.draft_saved'));
+            //this.dashboard.alertSuccess(this.t.pt('views.review.draft_saved'));
+            this.manager.draftId = response.json().id;
             this.onCompleted.emit(response.json().id)
         }, (error) => {
-            this.dashboard.alertError(this.t.pt('views.review.draft_no_saved'));
+            //this.dashboard.alertError(this.t.pt('views.review.draft_no_saved'));
         });
     }
 
@@ -134,7 +175,7 @@ export class ReviewStepComponent implements StepEventsListener {
         let baseItem = {
             "itemSeqNum": 10 * (index + 1),
             "purchaseOrder": _.purchaseOrder ? _.purchaseOrder : "",
-            "requestedDateTime": this.combineDateTime(preProduct).toISOString(),
+            "requestedDateTime": this.combineDateTime(preProduct),
             "currency": {
                 "currencyCode": this.getCustomerCurrency()
             },
@@ -204,13 +245,13 @@ export class ReviewStepComponent implements StepEventsListener {
         }
     }
 
-    private combineDateTime(preProduct): Date {
-        preProduct.date = new Date(preProduct.date);
-        let year = preProduct.date.getFullYear()
-        let month = preProduct.date.getMonth() + 1
-        let day = preProduct.date.getDate()
-        let dateStr = '' + year + '-' + month + '-' + day;
-        return new Date(dateStr + ' ' + preProduct.time);
+    private combineDateTime(preProduct): String {
+        const time = preProduct.time.split(':');
+        const newDateTime = new Date(preProduct.date);
+
+        newDateTime.setUTCHours(time[0]);
+        newDateTime.setUTCMinutes(time[1]);
+        return newDateTime.toISOString();
     }
 
     private safeContactName() {
@@ -245,9 +286,13 @@ export class ReviewStepComponent implements StepEventsListener {
 
     // Map stuff
     // ====================
+    positionFromJobsiteGeo(geo) {
+        return { lat: parseFloat(geo.latitude), lng: parseFloat(geo.longitude) }
+    }
+
     makeJobsiteMarker(geo: any): google.maps.Marker {
         let marker = new google.maps.Marker({
-            position: { lat: parseFloat(geo.latitude), lng: parseFloat(geo.longitude) },
+            position: geo,
             title: 'jobsite'
         });
 

@@ -1,4 +1,4 @@
-import { Component, ViewChild, ChangeDetectorRef, NgZone, Inject, OnDestroy } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef, NgZone, Inject, OnDestroy, Input } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
 import { Router } from '@angular/router'
 import { StepperComponent } from '../../shared/components/stepper/';
@@ -13,17 +13,21 @@ import { Validations } from '../../utils/validations'
 import { Subscription } from 'rxjs/Subscription';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
+let CircularJSON = require('circular-json');
+
 @Component({
     selector: 'order-builder',
     templateUrl: './order-builder.html',
     styleUrls: ['./order-builder.scss']
 })
 export class OrderBuilderComponent implements OnDestroy {
-    @ViewChild(StepperComponent) stepper;
+    @ViewChild(StepperComponent) stepper: StepperComponent;
+    @Input() restoreOrder? = false;
+
+    private messages: any[] = [];
+
     private isReadyMix: boolean = false;
     private isBulkCementUSA: boolean = false;
-    private rebuildOrder = false;
-    private currentCustomer: any;
 
     private draftId: any;
     private draftOrder: any;
@@ -54,27 +58,48 @@ export class OrderBuilderComponent implements OnDestroy {
         private modal: ModalService,
         private t: TranslationService) {
 
-        this.rebuildOrder = false;
-        this.sub = this.customerService.customerSubject.subscribe((customer) => {
-            Validations.init(this.manager, this.customerService);
-            if (customer && customer != this.currentCustomer) {
-                this.currentCustomer = customer;
-                this.rebuild();
-            }
-        });
+        Validations.init(this.manager, this.customerService);
+    }
+
+    // Content children are set
+    stepperRendered() {
+        // Rebuild builder state from manager if any
+        let managerJSON = localStorage.getItem('manager');
+        if (managerJSON) { this.rebuildManager(managerJSON); }
     }
 
     ngOnDestroy(): void {
-        this.sub.unsubscribe();
     }
 
-    // Rebuilds the component
-    rebuild() {
-        this.manager.resetOrder();
+    rebuildManager(managerJSON) {
+        let restoredManager =  CircularJSON.parse(managerJSON) as CreateOrderService;
+        
+        // restoredManager.restored = true;
+        // this.manager.restored = restoredManager.restored;
+        this.manager.jobsite = restoredManager.jobsite;
+        this.manager.draftId = restoredManager.draftId;
+        this.manager.pointOfDelivery = restoredManager.pointOfDelivery || undefined;
+        this.manager.productLine = restoredManager.productLine;
+        this.manager.products = restoredManager.products;
+        this.manager.salesArea = restoredManager.salesArea;
+        this.manager.shippingCondition = restoredManager.shippingCondition;
+        this.manager.contact = restoredManager.contact || undefined;
+        this.manager.purchaseOrder = restoredManager.purchaseOrder || undefined;
+        this.manager.instructions = restoredManager.instructions || undefined;
+        this.manager.isPatched = restoredManager.isPatched || false;
+        
+        // Go to last step step
+        //this.stepper.selectStep(this.stepper.steps.last)
+        this.stepper.steps.forEach((step, index) => {
+            // If last
+            if (index === this.stepper.steps.length - 1) { this.stepper.selectStep(step) }
+            else {
+                step.completed = true;
+                step.active = false;
+            }
+        })
 
-        // Go into js event loop
-        setTimeout(() => { this.rebuildOrder = false; }, 0);
-        setTimeout(() => { this.rebuildOrder = true; }, 0);
+        localStorage.removeItem('manager');
     }
 
     // Steps events
@@ -137,33 +162,43 @@ export class OrderBuilderComponent implements OnDestroy {
     }
 
     finishSteps() {
+        this.stepper.uncomplete();
         this.placeOrder();
+    }
+
+    getManagerState() {
+        let cache = [];
+        JSON.stringify(this.manager, (key, value) => {
+            if (typeof value === 'object' && value !== null) {
+                // If circular, discard key
+                if (cache.indexOf(value) !== -1) { return; }
+                cache.push(value);
+            }
+            return value;
+        });
+
+        // GC
+        cache = null;
     }
 
     // Payment flow
     // --------------------------------------------------------------------
     placeOrder() {
+        // Save manager in localstroage allowing 
+        localStorage.setItem('manager', CircularJSON.stringify(this.manager))
+
         if (Validations.isMexicoCustomer() && Validations.isCement()) {
             this.dashboard.alertInfo(this.t.pt('views.common.placing') + " " + this.draftOrder.orderId, 0);
 
             this.cashOrders = this.getCashOrders();
             this.creditOrders = this.getCreditOrders();
 
-            // Save cash orders to show later
-            localStorage.setItem('tempCashOrders', JSON.stringify(this.cashOrders));
-            // localStorage.setItem('manager', JSON.stringify(this.manager));
-
             // Pay credit orders
             if (this.cashOrders.length) {
                 this.flowMidCash(this.cashOrders);
             }
             else if (this.creditOrders.length) {
-                if (Validations.isCement() && Validations.isMexicoCustomer()) {
-                    this.flowCementMX();
-                }
-                else {
-                    this.basicFlow();
-                }
+                this.flowCementMX();
             }
         }
         else {
@@ -200,23 +235,29 @@ export class OrderBuilderComponent implements OnDestroy {
             },
             data: data
         }
-        
+
         let encoded = this.jsonObjService.encodeJson(cartItems);
         this.document.location.href = 'https://dcm-qa.mybluemix.net/invoices-payments/open/' + encoded;
     }
 
     flowCementMX() {
         this.drafts.createOrder(this.draftId, '')
-        .flatMap((response) => {
-            this.dashboard.alertSuccess(this.t.pt('views.common.credit') + " " + this.t.pt('views.common.requesting_code'), 0);
-            return this.drafts.validateRequestId(response.json().id);
-        })
-        .subscribe((response) => {
-            this.dashboard.alertSuccess(this.t.pt('views.common.credit') + " " +  this.t.pt('views.common.order_code') + response.json().orderCode + " " + this.t.pt('views.common.placed_success'), 30000);
-            this.showSuccessModal(response.json().orderCode);
-        }, error => {
-            this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
-        })
+            .flatMap((response) => {
+                this.dashboard.alertSuccess(this.t.pt('views.common.credit') + " " + this.t.pt('views.common.requesting_code'), 0);
+                return this.drafts.validateRequestId(response.json().id);
+            })
+            .subscribe((response) => {
+                this.dashboard.alertSuccess(this.t.pt('views.common.credit') + " " + this.t.pt('views.common.order_code') + response.json().orderCode + " " + this.t.pt('views.common.placed_success'), 30000);
+
+                // Remove first three and last three chars and split messages
+                // TODO: Tell middleware to change the format of the messages
+                this.messages = response.json().messages.substring(3).slice(0, -3).split("|");
+                this.showSuccessModal(response.json().orderCode);
+            }, error => {
+                localStorage.removeItem('manager');
+                this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
+                this.stepper.complete();
+            })
     }
 
     basicFlow() {
@@ -231,7 +272,9 @@ export class OrderBuilderComponent implements OnDestroy {
                 this.showSuccessModal(this.draftId);
             }
         }, error => {
+            localStorage.removeItem('manager');
             this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
+            this.stepper.complete();
         });
     }
 
@@ -269,9 +312,11 @@ export class OrderBuilderComponent implements OnDestroy {
     showSuccessModal(orderCode) {
         this.orderCode = orderCode;
         this.modal.open('success-placement');
+        localStorage.removeItem('manager');
     }
 
     closeModal() {
+        this.messages = null;
         this.router.navigate(['/ordersnproduct/app/orders']);
         this.modal.close('success-placement');
     }

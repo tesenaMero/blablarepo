@@ -16,17 +16,20 @@ export class PreProduct {
     // Props
     maneuvering: boolean = false;
     quantity: number = 1;
+    newValue: number = 1;
     date: any = new Date();
     time = "13:00";
     unit: any;
     payment: any;
     contract: any;
+    maxCapacity: any;
     product: any;
     productBaseUnit: any;
     plant: any;
     projectProfile: any = {};
     templateProfile: any = {};
     additionalServices = [];
+    maximumCapacity: any;
 
     // Availables
     availableProducts = [];
@@ -61,12 +64,16 @@ export class PreProduct {
         plant: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_plant') },
         contract: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_contract') },
         payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') },
-        product: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_products_selected') }
+        product: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_products_selected') },
+        maxCapacity: { valid: true, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') }
     }
 
-    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean) {
+    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean, private templateProduct?: any) {
         // Optionals
         if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
+
+        // Max capacity
+        this.maximumCapacity = this.getMaximumCapacity();
 
         // Conts
         const SSC = SpecificationsStepComponent;
@@ -171,25 +178,37 @@ export class PreProduct {
     contractChanged() {
         if (this.contract) {
             this.validations.contract.valid = true;
-            
+
             this.fetchUnitsFromContract();
 
             // If should get payment terms from contract
-            if (this.contract.salesDocument.paymentTerm) {
+            if (this.contract.salesDocument.paymentTerm && this.contract.salesDocument.paymentTerm.checkPaymentTerm == true) {
                 this.getContractPaymentTerm(this.contract.salesDocument.paymentTerm.paymentTermId);
+            }
+            else {
+                // Reset available payments
+                this.availablePayments = SpecificationsStepComponent.availablePayments;
             }
         }
         else {
             this.validations.contract.valid = false;
             this.fetchUnits();
-            
+
             // Reset available payments
             this.availablePayments = SpecificationsStepComponent.availablePayments;
         }
 
         // TODO:
         // Set minimum quantity
-        this.quantity = 1;
+        // this.quantity = 1;
+    }
+
+    quantityGood(){
+        this.validations.maxCapacity.valid = true;
+    }
+
+    quantityBad(){
+        this.validations.maxCapacity.valid = false;
     }
 
     plantChanged() {
@@ -219,15 +238,15 @@ export class PreProduct {
             if (contracts.length > 0) {
                 // Add no contract option
                 this.availableContracts.unshift(undefined);
-
-                // Set default contract
-                this.contract = undefined;
-                this.contractChanged();
-                
                 this.disableds.contracts = false;
             }
-            else { this.disableds.contracts = true; } // Disable it if no contracts
+            else {
+                // Disable it if no contracts
+                this.disableds.contracts = true;
+            }
 
+            // Set default contract
+            this.contract = undefined;
             this.loadings.contracts = false;
         });
     }
@@ -245,6 +264,7 @@ export class PreProduct {
             this.productsApi.units(this.product.product.productId).map((result) => {
                 let units = result.json().productUnitConversions;
                 this.availableUnits = units;
+                this.product.availableUnits = units;
 
                 if (units.length > 0) {
                     this.disableds.units = false;
@@ -257,7 +277,7 @@ export class PreProduct {
                 }
 
                 this.loadings.units = false;
-                
+
             })
         ).subscribe((response) => {
             // Map product base unit with available units and map it
@@ -301,6 +321,7 @@ export class PreProduct {
 
     fetchUnitsFromContract() {
         if (this.contract.unitOfMeasure) {
+            // Fetch base unit and units from contracts and preselect
             this.forkUnitsFromContracts();
         }
         else {
@@ -309,7 +330,9 @@ export class PreProduct {
             this.disableds.quantity = true;
             this.productsApi.units(this.contract.salesDocument.salesDocumentId).subscribe((result) => {
                 let units = result.json().productUnitConversions;
-                this.availableUnits = units;
+                if (units) { this.availableUnits = units; }
+                else { this.availableUnits = this.product.availableUnits; }
+
                 if (units.length) {
                     this.unit = units[0];
                     this.disableds.units = false;
@@ -333,7 +356,8 @@ export class PreProduct {
         Observable.forkJoin(
             this.productsApi.units(this.contract.salesDocument.salesDocumentId).map((result) => {
                 let units = result.json().productUnitConversions;
-                this.availableUnits = units;
+                if (units.length) { this.availableUnits = units; }
+                else { this.availableUnits = this.product.availableUnits; }
             }),
             this.productsApi.unitByUnitOfMeasure(this.contract.unitOfMeasure).map((result) => {
                 this.contract.unitOfMeasure = result.json();
@@ -360,15 +384,20 @@ export class PreProduct {
             if (matchingUnit) {
                 this.unit = matchingUnit;
                 this.disableds.units = true;
+                this.disableds.quantity = false;
             }
             else {
                 // Preselect first one and let the user change it
                 if (this.availableUnits.length) {
                     this.unit = this.availableUnits[0];
+                    this.disableds.quantity = false;
                 }
                 // No units available so disable it
                 else {
+                    this.dashboard.alertError("No units available for this contract", 8000);
+                    this.unit = undefined;
                     this.disableds.units = true;
+                    this.disableds.quantity = true;
                 }
             }
         });
@@ -377,7 +406,7 @@ export class PreProduct {
     // TODO: define product lines 2 and 3
     fetchManeuvering() {
         // Maneouvering additional service
-        if (Validations.isDelivery() && 
+        if (Validations.isDelivery() &&
             (this.product.product.productLine.productLineId === 2 || this.product.product.productLine.productLineId === 3)) {
 
             let area = this.manager.salesArea.find((a) => {
@@ -412,18 +441,18 @@ export class PreProduct {
     }
 
     // Convert to tons quantity selected
-    convertToTons(qty): any{
-        if(this.unit === undefined){
+    convertToTons(qty): any {
+        if (this.unit === undefined) {
             return qty;
         }
-        
+
         let factor = this.unit.numerator / this.unit.denominator;
         let convertion = qty * factor;
         return convertion || undefined;
     }
 
     // Maximum capacity salesArea
-    getMaximumCapacity() {
+    private getMaximumCapacity() {
         const salesAreaArray = _.get(this.manager, 'salesArea');
         let salesArea = _.get(this.manager, 'salesArea[0]');
         if (salesAreaArray && salesAreaArray.length > 1) {
@@ -431,13 +460,13 @@ export class PreProduct {
                 return _.get(sa, 'salesArea.divisionCode') == "02";
             })
         }
-        
+
         if (salesArea) { return _.get(salesArea, 'maximumLot.amount'); }
         else { return undefined; }
     }
 
     // Maximum capacity contract
-    getContractBalance(){
+    getContractBalance() {
         if (this.contract) {
             const volume = _.get(this.contract, 'salesDocument.volume');
             if (volume) {
@@ -447,23 +476,6 @@ export class PreProduct {
         return undefined;
     }
 
-    // Returns the minor maximum capacity contract or jobsite
-    getMaximumCapacityContractAndJobsite(){
-        let contractBalance = this.getContractBalance();
-        let maxCapacitySalesArea = this.getMaximumCapacity(); 
-        if (contractBalance !== undefined){
-            if (maxCapacitySalesArea !== undefined) {
-                if (contractBalance < maxCapacitySalesArea) {
-                    return contractBalance;
-                }
-                else {
-                    return maxCapacitySalesArea;
-                }
-            }
-        }
-        return maxCapacitySalesArea;
-    }
-    
     // Minimum capacity salesArea
     getMinimumCapacity() {
         const salesArea = _.get(this.manager, 'salesArea[0]');
@@ -496,6 +508,10 @@ export class PreProduct {
         // Payment case
         if (this.shouldHidePayment()) {
             this.validations.payment.mandatory = false;
+        }
+
+        if(Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery()){
+            this.validations.maxCapacity.mandatory = true;
         }
 
     }

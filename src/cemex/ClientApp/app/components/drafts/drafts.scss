@@ -2,7 +2,7 @@
 @import "../../scss/responsive.scss";
 $link-blue: #3FA9F5;
 .layout {
-    padding: 34px 26px 34px 26px;
+    padding: 42px 26px 34px 26px;
     @include media-breakpoint-down(sm) {
         padding: 18px 0 34px 0;
         /deep/.title-nav {

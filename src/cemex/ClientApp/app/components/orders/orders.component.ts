@@ -48,8 +48,14 @@ export class OrdersComponent implements OnInit {
                     return true;
                     }
                 });
-                
-                this.initOrders();
+                let countryCode = JSON.parse(sessionStorage.getItem('user_legal_entity'));                
+                // if Usa customer
+                if (countryCode && countryCode.countryCode.trim() === "US"){            
+                    this.initUsaCustomerOrders();
+                }   
+                else{
+                    this.initOrders();
+                }
             }
             this.isLoading = false;
         }, error => {
@@ -90,6 +96,30 @@ export class OrdersComponent implements OnInit {
         });
     }
 
+    initUsaCustomerOrders() {
+        this.columns = [
+            { name: this.t.pt('views.table.order_no'), width: 15 },
+            { name: this.t.pt('views.table.submitted'), width: 15 },
+            { name: this.t.pt('views.table.location'), width: 25 },
+            { name: this.t.pt('views.table.pon'), width: 15 },
+            { name: this.t.pt('views.table.products'), width: 10 },
+            { name: this.t.pt('views.table.request_date'), width: 20 },
+            { name: this.t.pt('views.table.status'), width: 18 },
+        ]
+
+        this.orders.forEach((order) => {
+            this.rows.push([
+                { inner: this.getOrderCode(order), class: "order-id", title: true, click: () => this.goToDetail(order) },
+                { inner: moment.utc(order.updatedDateTime).local().format('DD/MM/YYYY'), hideMobile: true },
+                { inner: order.jobsite.jobsiteCode + " " + order.jobsite.jobsiteDesc, subtitle: true },
+                { inner: order.purchaseOrder, hideMobile: true },
+                { inner: "<i class='cmx-icon-track'></i>", hideMobile: true },
+                { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY') },
+                { inner: "<span class='status " + order.status.statusDesc.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
+            ]);
+        });
+    }
+
     goToDetail(order) {
         this.router.navigate(['/ordersnproduct/app/order-detail'], {
             queryParams: {
@@ -113,27 +143,29 @@ export class OrdersComponent implements OnInit {
     }
 
     orderResquestClicked() {
+        this.router.navigate(['/ordersnproduct/app/new']);
+
         // Set customer
-        this.customer = this.customerService.currentCustomer();
-        // Only for MX validate BD conexion
-        if (this.customer.countryCode.trim() === 'MX') {
-            this.dash.alertInfo(this.t.pt('views.common.validating_connection'), 0);
-            this.ping.validatePingSalesOrder().subscribe((response) => {
-                if (response.json().success === 'Y') {
-                    this.router.navigate(['/ordersnproduct/app/new']);
-                    this.dash.closeAlert();
-                }
-                else {
-                    this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
-                }
-            },
-                error => {
-                    this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
-                });
-        }
-        else {
-            this.router.navigate(['/ordersnproduct/app/new']);
-        }
+        // this.customer = this.customerService.currentCustomer();
+        // // Only for MX validate BD conexion
+        // if (this.customer.countryCode.trim() === 'MX') {
+        //     this.dash.alertInfo(this.t.pt('views.common.validating_connection'), 0);
+        //     this.ping.validatePingSalesOrder().subscribe((response) => {
+        //         if (response.json().success === 'Y') {
+        //             this.router.navigate(['/ordersnproduct/app/new']);
+        //             this.dash.closeAlert();
+        //         }
+        //         else {
+        //             this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
+        //         }
+        //     },
+        //         error => {
+        //             this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
+        //         });
+        // }
+        // else {
+        //     this.router.navigate(['/ordersnproduct/app/new']);
+        // }
     }
 }
 

@@ -3,7 +3,7 @@ import { ProductsApi, Api } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.service';
-import { ProjectProfileApi, CatalogApi, PlantApi, ContractsApi } from '../../../../shared/services/api';
+import { ProjectProfileApi, CatalogApi, PlantApi, ContractsApi, SalesDocumentApi } from '../../../../shared/services/api';
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { SearchProductService } from '../../../../shared/services/product-search.service';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
@@ -14,6 +14,7 @@ import { PreProduct } from './preproduct'
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 import * as _ from 'lodash';
+let CircularJSON = require('circular-json');
 
 @Component({
     selector: 'specifications-step',
@@ -94,7 +95,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private searchProductService: SearchProductService,
         private dashboard: DashboardService,
         private modal: ModalService,
-        private t: TranslationService
+        private t: TranslationService,
+        private salesDocumentsService: SalesDocumentApi
     ) {
         this.today = new Date();
         this.step.setEventsListener(this);
@@ -155,7 +157,39 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return true;
     }
 
+    // TODO: fix this shit daniel cmon
+    castProducts() {
+        const shouldFetchContracts = !(Validations.isReadyMix() && SpecificationsStepComponent.globalContract);
+        if (this.manager && this.manager.products) {
+            this.manager.products.forEach((item, index) => {
+                let p = new PreProduct(
+                    this.productsApi,
+                    this.manager,
+                    this.paymentTermsApi,
+                    this.plantApi,
+                    this.customerService,
+                    this.dashboard,
+                    this.t,
+                    shouldFetchContracts);
+    
+                p.product = item.product;
+                p.quantity = item.quantity;
+                p.contract = item.contract || undefined;
+                p.payment = item.payment || undefined;
+                p.maximumCapacity = item.maximumCapacity || undefined;
+    
+                this.preProducts.push(p);
+            });
+        }
+    }
+
     onShowed() {
+        // Transform recovered manager products as preproducts
+        let restoredManager = CircularJSON.parse(localStorage.getItem('manager'));
+        if(restoredManager) {
+            this.castProducts();
+        }
+
         // Unlock
         this.onCompleted.emit(false);
         this.lockRequests = false;
@@ -178,18 +212,21 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         // Fetch products
         if (Validations.isReadyMix()) {
-            this.fetchProductsReadyMix(this.manager.getSalesDocumentType());
+            this.fetchProductsReadyMix(this.salesDocumentsService.getDocument("A"));
         }
         else {
-            this.fetchProducts(this.manager.getSalesDocumentType());
+            this.fetchProducts(this.salesDocumentsService.getDocument("T"));
         }
 
         this.getAdditionalServices();
         this.getPaymentTerms();
-        this.getProjectProfiles();
+
+        if (Validations.isReadyMix()) {
+            this.getProjectProfiles();
+        }
     }
 
-    fetchProducts(salesDocumentType) {
+    fetchProducts(salesDocumentType: any) {
         // Disable contracts while fetching products
         this.preProducts.forEach((item: PreProduct) => {
             item.disableds.contracts = true;
@@ -200,7 +237,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         this.productsSub = this.productsApi.top(
             this.manager.jobsite,
-            salesDocumentType,
+            salesDocumentType.salesDocumentTypeId,
             this.manager.productLine,
             this.manager.shippingCondition).subscribe((result) => {
                 let topProducts = result.json().products;
@@ -227,7 +264,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             );
     }
 
-    fetchProductsReadyMix(salesDocumentType) {
+    fetchProductsReadyMix(salesDocumentType: any) {
         // Disable contracts while fetching products
         this.preProducts.forEach((item: PreProduct) => {
             item.disableds.contracts = true;
@@ -238,7 +275,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         this.productsSub = this.productsApi.top(
             this.manager.jobsite,
-            salesDocumentType,
+            salesDocumentType.salesDocumentTypeId,
             this.manager.productLine,
             this.manager.shippingCondition,
             this.manager.purchaseOrder).subscribe((result) => {
@@ -298,7 +335,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
             let paymentTerms = result.json().paymentTerms;
 
-            const cash = paymentTerms.find((term: any) => {
+            let cash = paymentTerms.find((term: any) => {
                 return term.paymentTermType.paymentTermTypeCode === 'CASH';
             });
 
@@ -416,7 +453,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
             }
 
             this.preProducts.forEach((item: PreProduct) => {
-                item.loadings.projectProfiles = false;
+                if (profiles.length) { item.loadings.projectProfiles = false; }
+                else { item.loadings.projectProfiles = true; }
             });
         });
 
@@ -581,6 +619,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
 
         this.preProducts.push(preProduct);
+
+        if (this.preProducts.length > 0) {
+            this.onCompleted.emit(true);
+        }
     }
 
     remove(index: any) {
@@ -588,6 +630,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         product.deleting = true;
         setTimeout(() => {
             this.preProducts.splice(index, 1);
+
+            if (this.preProducts.length == 0) {
+                this.onCompleted.emit(false);
+            }
 
             // Readymix case when all contracts should be the same.
             // Case when the first product is removed
@@ -601,27 +647,31 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     qty(product: PreProduct, toAdd: number) {
         if (this.isMXCustomer() && !Validations.isReadyMix()) {
+            product.quantityGood();
             if (product.quantity <= 1 && toAdd < 0) { return; }
             const isDelivery = Validations.isDelivery();
             let conversion = product.convertToTons(product.quantity + toAdd);
 
             let newQty = product.quantity + toAdd;
             let contractBalance = product.getContractBalance(); //remaining of contract
-            let maxCapacitySalesArea = product.getMaximumCapacity();
+            let maxCapacitySalesArea = product.maximumCapacity;
 
             if (contractBalance === undefined) {
                 if (isDelivery) {
                     if ((Validations.isBulkCement() || Validations.isCementBag()) && (conversion <= maxCapacitySalesArea)) {
+                        product.quantityGood();
                         return product.quantity = newQty;
                     }
                     else {
                         if (conversion <= maxCapacitySalesArea) {
+                            product.quantityGood();
                             return product.quantity = newQty;
                         }
                     }
                 }
                 else {
                     if (conversion <= maxCapacitySalesArea) {
+                        product.quantityGood();
                         return product.quantity = newQty;
                     }
                 }
@@ -633,26 +683,48 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 }
                 else if (!isDelivery) {
                     if (conversion <= maxCapacitySalesArea) {
+                        product.quantityGood();
                         return product.quantity = newQty;
                     }
                 }
                 else {
                     if ((conversion <= maxCapacitySalesArea)) {
+                        product.quantityGood();
                         return product.quantity = newQty;
                     }
                 }
             }
             if (conversion <= maxCapacitySalesArea) {
+                product.quantityGood();
                 return product.quantity = newQty;
             }
 
             return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
         }
         else {
+            product.quantityGood();
             if (product.quantity <= 1 && toAdd < 0) { return; }
             if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
             product.quantity += toAdd;
+            product.quantityGood();
         }
+    }
+
+    valuechange(product: PreProduct, newValue: number) {
+        product.quantityBad();
+        if(newValue < 0 || newValue == null){       
+            return this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 10000);
+        }
+        let maxCapacitySalesArea = product.maximumCapacity;
+        let conversion = product.convertToTons(newValue);
+
+        if (conversion > maxCapacitySalesArea && Validations.isCement() && Validations.isDelivery()) {
+            product.quantityBad();
+            return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
+        } else {
+            product.quantityGood();
+        }
+        return product.quantity = newValue;
     }
 
     todayStr() {

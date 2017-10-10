@@ -23,12 +23,6 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     @Input() draftId: any;
 
     UTIL = Validations;
-
-    private PRODUCT_LINES = {
-        Readymix: 6,
-        CementBulk: 1
-    }
-
     draftOrder: any;
 
     // Readymix
@@ -39,6 +33,8 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     }
 
     // Sub
+    optimalSourceSub: any;
+    pricesSub: any;
     lockRequests: boolean = false;
 
     constructor( @Inject(Step) private step: Step,
@@ -59,6 +55,9 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     onBeforeBack() {
         // Cancel needed requests and lock
         this.lockRequests = true;
+        if (this.optimalSourceSub) { this.optimalSourceSub.unsubscribe(); }
+        if (this.pricesSub) { this.pricesSub.unsubscribe(); }
+        this.onCompleted.emit(false);
     }
 
     onShowed() {
@@ -71,8 +70,9 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         this.onCompleted.emit(false);
         if (this.shouldCallOptimalSource()) {
             this.dashboard.alertInfo(this.t.pt('views.checkout.recovering_prices'), 0);
-            this.drafts.optimalSourcesPatch(this.draftId).flatMap((x) => {
-                return this.drafts.prices(this.draftId);
+            this.optimalSourceSub = this.drafts.optimalSourcesPatch(this.manager.draftId).flatMap((x) => {
+                this.manager.isPatched = true;
+                return this.drafts.prices(this.manager.draftId);
             }).subscribe((response) => {
                 this.handlePrices(response);
             }, (error) => {
@@ -81,7 +81,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
             });
         }
         else if (this.shouldCallPrices()) {
-            this.drafts.prices(this.draftId).subscribe((response) => {
+            this.pricesSub = this.drafts.prices(this.manager.draftId).subscribe((response) => {
                 this.handlePrices(response);
             });
         }
@@ -108,7 +108,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
     }
 
     handlePrices(response) {
-        this.draftOrder = response.json();
+        this.draftOrder = this.manager.draftOrder || response.json();
         
         // If locked (stepper is moving most likely) then dont do the call 
         if (this.lockRequests) { return; }

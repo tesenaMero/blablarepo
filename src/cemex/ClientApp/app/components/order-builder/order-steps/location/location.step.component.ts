@@ -120,6 +120,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     // Google map
     private map: any; // Map instance
+    private geocoder: any;
     private infoWindow: any;
     private jobsiteMarker: any;
 
@@ -127,13 +128,13 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     private UTILS: any;
 
-    constructor( 
-        @Inject(Step) private step: Step, 
-        private manager: CreateOrderService, 
-        private shipmentApi: ShipmentLocationApi, 
-        private customerService: CustomerService, 
-        private purchaseOrderApi: PurchaseOrderApi, 
-        private dashboard: DashboardService, 
+    constructor(
+        @Inject(Step) private step: Step,
+        private manager: CreateOrderService,
+        private shipmentApi: ShipmentLocationApi,
+        private customerService: CustomerService,
+        private purchaseOrderApi: PurchaseOrderApi,
+        private dashboard: DashboardService,
         private shippingConditionApi: ShippingConditionApi,
         private t: TranslationService) {
 
@@ -246,22 +247,35 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.hiddens.pods = false;
         }
 
+        // Make sure div is rendered before loading the map
+        //setTimeout(this.loadMap.bind(this), 0)
+        this.loadMap();
+
+        // Guard to fetch jobsites when I got shipment locations
+        this.shipmentApi.shipmentLocationTypes.subscribe(data => {
+            if (data) { this.fetchJobsites(); }
+        });
+
+        // if the user got the location step by pressign the back button
+        if (this.contact && this.contact.name && this.contact.phone) {
+            this.validations.contactPerson.valid = true;
+        }
+    }
+
+    loadMap() {
         if (!this.isMapLoaded) {
             GoogleMapsHelper.lazyLoadMap("jobsite-selection-map", (map) => {
                 this.isMapLoaded = true;
                 this.map = map;
                 map.setOptions({ zoom: 14, center: { lat: 50.077626, lng: 14.424686 } });
                 google.maps.event.trigger(this.map, "resize");
+                this.geocoder = new google.maps.Geocoder();
             });
         }
         else {
             google.maps.event.trigger(this.map, "resize");
+            this.geocoder = new google.maps.Geocoder();
         }
-
-        // Guard to fetch jobsites when I got shipment locations
-        this.shipmentApi.shipmentLocationTypes.subscribe(data => {
-            if (data) { this.fetchJobsites(); }
-        });
     }
 
     shouldShowPOD(): boolean {
@@ -271,11 +285,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     fetchJobsites() {
-        this.shipmentApi.all(this.manager.productLine).subscribe((response) => {
+        this.shipmentApi.all(this.manager.productLine, Validations.isReadyMix()).subscribe((response) => {
             this.locations = response.json().shipmentLocations;
             this.locations.forEach((location, index) => {
                 location.id = index;
-                location.name = location.shipmentLocationDesc;
+                location.name = location.shipmentLocationDesc + ' (' + location.shipmentLocationCode + ')';
             })
             if (this.location) {
                 this.jobsiteChanged(this.location);
@@ -284,6 +298,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 this.jobsiteChanged(this.locations[0]);
                 this.locationIndex = 0;
             }
+
             this.loadings.locations = false;
         });
     }
@@ -318,30 +333,30 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
         // Make salesarea call, dont fetch yet
         let salesAreaSub = this.shipmentApi.salesAreas(this.location, this.manager.productLine)
-        .map((salesAreas) => {
-            if (salesAreas.json().jobsiteSalesAreas.length > 0) {
-                let salesArea = salesAreas.json().jobsiteSalesAreas;
-                this.manager.salesArea = salesArea;
+            .map((salesAreas) => {
+                if (salesAreas.json().jobsiteSalesAreas.length > 0) {
+                    let salesArea = salesAreas.json().jobsiteSalesAreas;
+                    this.manager.salesArea = salesArea;
 
-                // If its not pickup then all we need to be fetched is sales areas.
-                // If its pickup we need to wait for address object to be fetched
-                if (!Validations.isPickup()) {
-                    this.onCompleted.emit(true);
-                }
-
-                let shouldValidatePurchaseOrder = false;
-                salesArea.forEach((item) => {
-                    if (item.purchaseOrderValidation) {
-                        shouldValidatePurchaseOrder = true;
-                        return;
+                    // If its not pickup then all we need to be fetched is sales areas.
+                    // If its pickup we need to wait for address object to be fetched
+                    if (!Validations.isPickup()) {
+                        this.onCompleted.emit(true);
                     }
-                });
 
-                this.location.purchaseOrderValidation = shouldValidatePurchaseOrder;
-                this.validations.purchaseOrder.mandatory = shouldValidatePurchaseOrder;
-            }
-            this.loadings.purchaseOrder = false;
-        });
+                    let shouldValidatePurchaseOrder = false;
+                    salesArea.forEach((item) => {
+                        if (item.purchaseOrderValidation) {
+                            shouldValidatePurchaseOrder = true;
+                            return;
+                        }
+                    });
+
+                    this.location.purchaseOrderValidation = shouldValidatePurchaseOrder;
+                    this.validations.purchaseOrder.mandatory = shouldValidatePurchaseOrder;
+                }
+                this.loadings.purchaseOrder = false;
+            });
 
         //  Make address, dont fetch yet
         let addressSub = this.shipmentApi.address(this.location).map((address) => {
@@ -351,17 +366,32 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         // Fork join address + sales areas (fetch)
         this.salesAdressSub = Observable.forkJoin(salesAreaSub, addressSub).subscribe((response) => {
             this.onCompleted.emit(true);
-            
-            // Fetch geo
-            this.shipmentApi.geo(this.location.address).subscribe((geo) => {
-                if (geo && geo.json) {
-                    this.location.geo = geo.json();
-                    this.cleanJobsiteMarker();
-                    this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
-                    this.addMarkerToMap(this.jobsiteMarker);
-                    this.loadings.map = false;
-                }
-            });
+
+            const hasGeoLink = this.location.address &&
+                this.location.address.geoPlace &&
+                this.location.address.geoPlace.links &&
+                this.location.address.geoPlace.links.self || undefined
+
+            if (!hasGeoLink) {
+                let address = this.location.address.streetName;
+                this.geoFromAddress(address);
+            }
+            else {
+                // Fetch geo
+                this.shipmentApi.geo(this.location.address).subscribe((geo) => {
+                    if (geo && geo.json && Number(geo.json().latitude) != 0 && Number(geo.json().longitude) != 0) {
+                        this.location.geo = geo.json();
+                        this.cleanJobsiteMarker();
+                        this.jobsiteMarker = this.makeJobsiteMarker(this.positionFromJobsiteGeo(geo.json()));
+                        this.addMarkerToMap(this.jobsiteMarker);
+                        this.loadings.map = false;
+                    }
+                    else if (this.location.address && this.location.address.streetName) {
+                        let address = this.location.address.streetName;
+                        this.geoFromAddress(address);
+                    }
+                });
+            }
         });
 
         // Fetch pods
@@ -369,7 +399,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.pods = response.json().shipmentLocations;
             this.pods.forEach((pod, index) => {
                 pod.id = index;
-                pod.name = pod.shipmentLocationDesc;
+                pod.name = pod.shipmentLocationDesc + ' (' + pod.shipmentLocationCode + ')';
             });
 
             if (this.pods.length > 0) {
@@ -379,13 +409,13 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 }
                 else {
                     this.pods.forEach((pod, index) => {
-                        if (this.pod.shipmentLocationId === pod.shipmentLocationId){
+                        if (this.pod.shipmentLocationId === pod.shipmentLocationId) {
                             this.podsIndex = index;
                             this.podChanged(this.pods[index]);
                         }
                     });
                 }
-            }         
+            }
 
             this.loadings.pods = false;
         });
@@ -399,7 +429,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                         contact.id = index;
                         contact.name = contact.name;
                     });
-                    
+
                     if (this.contacts.length > 0) {
                         this.contactsIndex = undefined;
                         this.contactChanged(undefined);
@@ -408,6 +438,21 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 }
             }));
         }
+    }
+
+    geoFromAddress(address) {
+        this.geocoder.geocode({ 'address': address }, (results, status) => {
+            if (status === "OK") {
+                //return { lat: parseFloat(results[0].geometry.location.lat()), lng: parseFloat(results[0].geometry.location.lng()) }
+                let position = results[0].geometry.location;
+                if (position) {
+                    this.cleanJobsiteMarker();
+                    this.jobsiteMarker = this.makeJobsiteMarker(position);
+                    this.addMarkerToMap(this.jobsiteMarker);
+                    this.loadings.map = false;
+                }
+            }
+        });
     }
 
     podChanged(pod: any) {
@@ -426,18 +471,22 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.loadings.map = true;
 
         // Fetch geolocation
-        this.shipmentApi.address(this.location)
+        this.shipmentApi.address(this.pod)
             .flatMap((address) => {
                 this.pod.address = address.json();
                 return this.shipmentApi.geo(address.json());
             })
             .subscribe((geo) => {
-                if (geo.json) {
+                if (geo.json && Number(geo.json().latitude) != 0 && Number(geo.json().longitude) != 0) {
                     this.pod.geo = geo.json();
                     this.cleanJobsiteMarker();
-                    this.jobsiteMarker = this.makeJobsiteMarker(geo.json());
+                    this.jobsiteMarker = this.makeJobsiteMarker(this.positionFromJobsiteGeo(geo.json()));
                     this.addMarkerToMap(this.jobsiteMarker);
                     this.loadings.map = false;
+                }
+                else if (this.pod.address && this.pod.address.streetName) {
+                    let address = this.pod.address.streetName;
+                    this.geoFromAddress(address);
                 }
             });
 
@@ -532,17 +581,15 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     // Map stuff
     // ====================
+    positionFromJobsiteGeo(geo) {
+        return { lat: parseFloat(geo.latitude), lng: parseFloat(geo.longitude) }
+    }
+
     makeJobsiteMarker(geo: any): google.maps.Marker {
         let marker = new google.maps.Marker({
-            position: { lat: parseFloat(geo.latitude), lng: parseFloat(geo.longitude) },
-            title: 'jobsite',
-            icon: '/images/map/jobsite.png'
+            position: geo,
+            title: 'jobsite'
         });
-
-        // marker.addListener('click', () => {
-        //     this.showPlantInfo(plant, marker);
-        // });
-
         return marker;
     }
 

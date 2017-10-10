@@ -1,5 +1,5 @@
-<div *ngIf="rebuildOrder">
-    <stepper (onFinish)="finishSteps()" finishText="Order">
+<div>
+    <stepper (onFinish)="finishSteps()" (onRendered)="stepperRendered()" finishText="Order">
         <step name="{{ pl_step_name }}" [showExit]="true" [showControls]="true">
             <product-selection-step (onCompleted)="productStepCompleted($event)"></product-selection-step>
         </step>
@@ -28,6 +28,9 @@
                 <span class="cmx-icon-accepted-ok"></span>
                 <div class="success-text">
                     {{ t.pt('views.common.order_code') }}{{ orderCode }} {{ t.pt('views.common.was_submited') }}
+                    <div class="order-message" *ngFor="let message of messages">
+                        {{ message }}
+                    </div>
                 </div>
                 <button *ngIf="!cashOrders.length" class="button back-to-orders" (click)="closeModal()">{{ t.pt('views.common.back_orders') }}</button>
                 <button *ngIf="cashOrders.length" class="button back-to-orders" (click)="payCashOrders()">{{ t.pt('views.builder.proceed_cash') }}</button>

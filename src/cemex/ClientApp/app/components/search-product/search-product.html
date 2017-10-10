@@ -31,7 +31,7 @@
             </div>
             <div class="col-sm-6">
                 <label for="product-description" class="">{{ t.pt('views.search.product_description') }}</label>
-                <input type="text" [(ngModel)]="productDescriptionInput" class="form-control dls required " (keyup)="filterProductByProductDescription($event)" id="product-description" placeholder="{{ t.pt('views.search.filter_desc_ph') }}" name="product-description" />
+                <input type="text" [(ngModel)]="productDescriptionInput" class="form-control dls required " (ngModelChange)="filterProductByProductDescription($event)" id="product-description" placeholder="{{ t.pt('views.search.filter_desc_ph') }}" name="product-description" />
             </div>
         </div>
         <hr class="separator" />

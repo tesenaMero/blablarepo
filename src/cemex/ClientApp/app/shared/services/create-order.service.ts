@@ -39,6 +39,12 @@ export class CreateOrderService {
     public additionalServices: Array<any>;
     public products: Array<any>;
     public product: any;
+    public lastStep: any;
+    public draftId: any;
+    public isPatched: any = false;
+    public draftOrder: any;
+    public restored = false;
+    public shipmentLocation: any;
 
     constructor() {
         this.initializeOrder();
@@ -127,16 +133,6 @@ export class CreateOrderService {
 
     setProduct(product) {
         this.product = product;
-    }
-
-    getSalesDocumentType() {
-        const READYMIX_LINE = 6;
-        let salesDocumentType = '3';
-        if (this.productLine.productLineId == READYMIX_LINE) {
-            salesDocumentType = '1';
-        }
-
-        return salesDocumentType;
     }
 
     resetOrder() {

@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { PlantApi, ProductColorApi, ProductsApi, ShipmentLocationApi } from '../../shared/services/api';
+import { PlantApi, ProductColorApi, ProductsApi, ShipmentLocationApi, SalesDocumentApi } from '../../shared/services/api';
 import { CreateOrderService } from '../../shared/services/create-order.service';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../shared/components/selectwithsearch/";
 import { Plant, ProductColor, ProductWrapper } from '../../shared/types';
@@ -24,13 +24,14 @@ export class SearchProductComponent {
     private productColors: ProductColor[] = [];
     private products: ProductWrapper[] = [];
     private filteredProducts = []
-    private selectedProduct = {};
+    private selectedProduct: any;
 
     private productDescriptionInput = "";
     private productCodeInput = "";
 
     private productColorSelected = null;
     private plantSelected = null;
+
 
     private message: boolean = false;
 
@@ -49,7 +50,8 @@ export class SearchProductComponent {
         private productsApi: ProductsApi, 
         private shipmentLocationApi: ShipmentLocationApi, 
         private searchProductService: SearchProductService,
-        private customerService: CustomerService) {
+        private customerService: CustomerService,
+        private salesDocumentService: SalesDocumentApi) {
         this.searchProductService.productColors.subscribe(response => {
             if (!response) { return; }
             
@@ -59,7 +61,8 @@ export class SearchProductComponent {
                 this.plantApi.forSearch(
                     this.orderManager.jobsite.address.countryCode,
                     this.orderManager.jobsite.address.regionCode,
-                    this.orderManager.productLine.productLineId
+                    this.orderManager.productLine.productLineId,
+                    this.orderManager.jobsite.shipmentLocationId
                 ).subscribe((response) => { this.plants = response.json().plants; });
             }
         })
@@ -68,7 +71,8 @@ export class SearchProductComponent {
     productColorChanged(productColor: any) {
         this.message = false;
         this.setProducts([]);
-        this.productsApi.byProductColorAndSalesDocumentAndPlant(5, this.productColorSelected).subscribe((response) => {
+        const salesDocumentId = this.salesDocumentService.getDocument("R").salesDocumentTypeId;
+        this.productsApi.byProductColorAndSalesDocumentAndPlant(this.orderManager.jobsite.shipmentLocationId, salesDocumentId, this.productColorSelected, this.orderManager.productLine.productLineId).subscribe((response) => {
             this.setProducts(response.json().products);
         });
     }
@@ -76,7 +80,8 @@ export class SearchProductComponent {
     plantChanged(plant: any) {
         this.setProducts([]);
         if (this.productColorSelected !== null) {
-            this.productsApi.byProductColorAndSalesDocumentAndPlant(5, this.productColorSelected, plant).subscribe((response) => {
+            const salesDocumentId = this.salesDocumentService.getDocument("R").salesDocumentTypeId;
+            this.productsApi.byProductColorAndSalesDocumentAndPlant(this.orderManager.jobsite.shipmentLocationId, salesDocumentId, this.productColorSelected, this.orderManager.productLine.productLineId, plant).subscribe((response) => {
                 this.setProducts(response.json().products);
             });
         }
@@ -86,10 +91,14 @@ export class SearchProductComponent {
 
     }
 
-    filterProductByProductDescription(event: any) {
+    filterProductByProductDescription(event) {
         this.filteredProducts = this.products;
         this.productCodeInput = "";
-        this.filteredProducts = this.filteredProducts.filter((product: any) => product.commercialDesc.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1);
+        this.filteredProducts = this.filteredProducts.filter((item) => {
+            if (item.commercialDesc) { 
+                return item.commercialDesc.toLowerCase().indexOf(event.toLowerCase()) > -1;
+            }
+        });
     }
 
     filterProductByProductCode(event: any) {
@@ -118,8 +127,13 @@ export class SearchProductComponent {
     }
 
     confirm() {
-        this.searchProductService.searchedProduct.next(this.selectedProduct);
-        this.confirmed.emit();
+        if (this.selectedProduct === undefined) {
+            this.confirmed.emit();
+        }
+        else {
+            this.searchProductService.searchedProduct.next(this.selectedProduct);
+            this.confirmed.emit();
+        }
     }
 
     cancel() {
