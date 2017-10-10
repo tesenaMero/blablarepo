@@ -101,6 +101,16 @@ export class StepperComponent implements AfterContentInit {
         }
     }
 
+    goToLastStep() {
+        this.selectStep(this.steps.last)
+        this.steps.forEach((step) => {
+            if (step != this.steps.last) {
+                step.completed = true;
+                step.active = false;
+            }
+        });
+    }
+
     // If not index given, uncomplete current step
     uncomplete() {
         this.currentStep.completed = false;
@@ -160,7 +170,7 @@ export class StepperComponent implements AfterContentInit {
     selectStep(step: Step) {
         // Deactivate all steps except one
         let currentIndex = this.getActiveStepIndex();
-        this.steps.toArray().forEach((item, index) => {
+        this.steps.forEach((item, index) => {
             if (item != step) {
                 item.active = false
                 item.render = false;
@@ -183,6 +193,10 @@ export class StepperComponent implements AfterContentInit {
         // Show after dom rendered
         setTimeout(step.show.bind(step), 0);
         //step.show();
+    }
+
+    private fireShowEvent() {
+        
     }
 
     private getNextStep() {

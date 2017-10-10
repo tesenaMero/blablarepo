@@ -16,10 +16,6 @@ export class ProductSelectionStepComponent {
     @Output() onCompleted = new EventEmitter<any>();
     private loading = true;
     private MODE = DeliveryMode;
-    private PRODUCT_LINES = {
-        Readymix: 6,
-        CementBulk: 1
-    }
 
     productLines = [];
     productLine: any;

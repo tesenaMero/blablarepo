@@ -427,7 +427,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 if (this.contacts) {
                     this.contacts.forEach((contact, index) => {
                         contact.id = index;
-                        contact.name = contact.name;
+                        //contact.name = contact.name;
                     });
                     if (this.contacts.length > 0) {
                         if (this.contact) {
