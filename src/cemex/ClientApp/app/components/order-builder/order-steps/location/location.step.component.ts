@@ -456,6 +456,9 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                     this.loadings.map = false;
                 }
             }
+            else {
+                this.loadings.map = false;
+            }
         });
     }
 

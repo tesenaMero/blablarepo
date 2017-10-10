@@ -464,7 +464,7 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group" *ngIf="product.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeDesc === 'Pump'">
+                <div class="group" *ngIf="product.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeId === 2">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         {{ t.pt('views.specifications.pump_capacity') }}
                     </label>
