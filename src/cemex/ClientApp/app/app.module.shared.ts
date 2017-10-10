@@ -57,7 +57,6 @@ import { ModalComponent, ModalService } from './shared/components/modal';
 
 // Services
 import { WindowRef } from './shared/services/window-ref.service';
-import { NguiDatetimePickerModule } from './shared/components/datetimepicker';
 import { OrderRequestHelper } from './utils/order-request.helper';
 import { OrdersModel } from './shared/schema';
 import { SessionService, AuthGuard } from './shared/services/session.service';
@@ -145,7 +144,6 @@ export const sharedConfig: NgModule = {
         ModalComponent,
     ],
     imports: [
-        NguiDatetimePickerModule,
         SelectDropdownModule,
         FlexLayoutModule,
         CmxCoreCommonModule,
