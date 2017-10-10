@@ -5,6 +5,7 @@ import { DeliveryMode } from '../../../../models/delivery.model'
 import { CustomerService } from '../../../../shared/services/customer.service'
 import { Validations } from '../../../../utils/validations';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
+import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 
 @Component({
     selector: 'product-selection-step',
@@ -12,7 +13,7 @@ import { TranslationService } from '@cemex-core/angular-services-v2/dist';
     styleUrls: ['./product-selection.step.scss'],
     host: { 'class': 'w-100' }
 })
-export class ProductSelectionStepComponent {
+export class ProductSelectionStepComponent implements StepEventsListener {
     @Output() onCompleted = new EventEmitter<any>();
     private loading = true;
     private MODE = DeliveryMode;
@@ -50,6 +51,15 @@ export class ProductSelectionStepComponent {
         });
     }
 
+    onShowed() {
+        if (this.productLine) {
+            this.onCompleted.emit(this.productLine);
+        }
+        else {
+            this.onCompleted.emit(false);
+        }
+    }
+
     shouldHide(productLine: any): boolean {
         return productLine.productLineId == 5;
     }
@@ -66,16 +76,16 @@ export class ProductSelectionStepComponent {
         return { productLineDesc: newName, productLineId: a.productLineId + "," + b.productLineId }
     }
 
-    select(product: any) {
-        this.productLine = product;
-        this.orderManager.selectProductLine(product);
+    select(productLine: any) {
+        this.productLine = productLine;
+        this.orderManager.selectProductLine(productLine);
 
         // Readymix case and Bulk Cement
         if (Validations.isReadyMix() || this.isBulkCementUSA()) {
             this.orderManager.shippingCondition = { shippingConditionCode: this.MODE.Delivery };
         }
 
-        this.onCompleted.emit(product);
+        this.onCompleted.emit(productLine);
     }
 
     isBulkCementUSA(): boolean {

@@ -113,11 +113,16 @@ export class OrderBuilderComponent implements OnDestroy {
         else { this.stepper.uncomplete(); }
     }
 
-    productStepCompleted(product: any) {
-        this.isReadyMix = Validations.isReadyMix();
-        this.isBulkCementUSA = (Validations.isBulkCement()) && (Validations.isUSACustomer());
-        this._changeDetector.detectChanges();
-        this.stepper.complete();
+    productStepCompleted(productLine: any) {
+        if (productLine) {
+            this.isReadyMix = Validations.isReadyMix();
+            this.isBulkCementUSA = (Validations.isBulkCement()) && (Validations.isUSACustomer());
+            this._changeDetector.detectChanges();
+            this.stepper.complete();
+        }
+        else {
+            this.stepper.uncomplete();
+        }
     }
 
     locationStepCompleted(event: any) {
