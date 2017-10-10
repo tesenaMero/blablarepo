@@ -61,11 +61,12 @@ export class PreProduct {
     }
 
     validations = {
+        date: { valid: false, mandatory: true, text: "Invalid date" },
         plant: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_plant') },
         contract: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_contract') },
         payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') },
         product: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_products_selected') },
-        maxCapacity: { valid: true, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') }
+        maxCapacity: { valid: true, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') },
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean, private templateProduct?: any) {
@@ -203,11 +204,11 @@ export class PreProduct {
         // this.quantity = 1;
     }
 
-    quantityGood(){
+    quantityGood() {
         this.validations.maxCapacity.valid = true;
     }
 
-    quantityBad(){
+    quantityBad() {
         this.validations.maxCapacity.valid = false;
     }
 
@@ -249,6 +250,33 @@ export class PreProduct {
             this.contract = undefined;
             this.loadings.contracts = false;
         });
+    }
+
+    // date: yyyy-MM-dd
+    dateChanged(date) {
+        if (!this.isDateBeforeToday(date)) {
+            this.date = date;
+            this.validations.date.valid = true;
+        }
+        else {
+            this.validations.date.valid = false;
+        }
+    }
+
+    isDateBeforeToday(date) {
+        return new Date(date) < new Date();
+    }
+
+    defaultDateString() {
+        let d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
     }
 
     fetchUnits() {
@@ -421,7 +449,7 @@ export class PreProduct {
         }
     }
 
-    getPlants() {           
+    getPlants() {
         let countryCode = this.manager.jobsite.address.countryCode || this.customerService.currentCustomer().countryCode;
         this.loadings.plants = true;
         this.plantApi.byCountryCodeAndRegionCode(
@@ -510,7 +538,7 @@ export class PreProduct {
             this.validations.payment.mandatory = false;
         }
 
-        if(Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery()){
+        if (Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery()) {
             this.validations.maxCapacity.mandatory = true;
         }
 
