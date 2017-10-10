@@ -429,10 +429,14 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                         contact.id = index;
                         contact.name = contact.name;
                     });
-
                     if (this.contacts.length > 0) {
-                        this.contactsIndex = undefined;
-                        this.contactChanged(undefined);
+                        if (this.contact) {
+                            this.contactsIndex = this.contact.id;
+                            this.contactChanged(this.contact);                            
+                        } else {
+                            this.contactsIndex = undefined;
+                            this.contactChanged(undefined);                            
+                        }
                     }
                     this.loadings.contacts = false;
                 }
