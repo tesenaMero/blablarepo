@@ -260,8 +260,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         if (this.contact && this.contact.name && this.contact.phone) {
             this.validations.contactPerson.valid = true;
         }
-        console.log("manage", this.manager);
-        console.log("contact", this.contact);
     }
 
     loadMap() {
