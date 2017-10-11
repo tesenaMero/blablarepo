@@ -124,9 +124,9 @@ export class OrdersComponent implements OnInit {
         this.router.navigate(['/ordersnproduct/app/order-detail'], {
             queryParams: {
                 orderId: order.orderId ? order.orderId : null,
-                typeCode: order.orderType ? order.orderType.orderTypeCode : null,
                 orderCode: order.orderCode ? order.orderCode : null,
-                businessLine: order.orderCode ? order.salesArea.businessLine.businessLineCode : null
+                businessLine: order.salesArea ? order.salesArea.businessLine.businessLineCode : null,
+                country: order.salesArea.countryCode ? order.salesArea.countryCode : null
             }
         });
     }
