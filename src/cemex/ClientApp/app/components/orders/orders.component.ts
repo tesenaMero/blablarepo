@@ -110,7 +110,7 @@ export class OrdersComponent implements OnInit {
         this.orders.forEach((order) => {
             this.rows.push([
                 { inner: this.getOrderCode(order), class: "order-id", title: true, click: () => this.goToDetail(order) },
-                { inner: moment.utc(order.updatedDateTime).local().format('DD/MM/YYYY'), hideMobile: true },
+                { inner: moment.utc(order.createdDateTime).local().format('DD/MM/YYYY'), hideMobile: true },
                 { inner: order.jobsite.jobsiteCode + " " + order.jobsite.jobsiteDesc, subtitle: true },
                 { inner: order.purchaseOrder, hideMobile: true },
                 { inner: "<i class='cmx-icon-track'></i>", hideMobile: true },
