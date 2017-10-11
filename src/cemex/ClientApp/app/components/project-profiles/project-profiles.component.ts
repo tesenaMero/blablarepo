@@ -25,30 +25,26 @@ export class ProjectProfilesComponent {
         this.CustomerService.customerSubject.subscribe((customer) => {
             if (customer) {
                 this.fetchProjectProfiles(customer);
-            if ((customer.countryCode).trim() === 'MX') {
+                if ((customer.countryCode).trim() === 'MX') {
                     this.isMX = true;
-            } else {
+                } else {
                     this.isMX = false;
+                }
             }
-        }
-        
-        this.columns = [
-            //{ inner: '<i class="star cmx-icon-favourite-active" aria-hidden="true"></i>', width: 5 },
-            { name: this.t.pt('views.project.profile.table_name'), width: 25 },
-            { name: this.t.pt('views.project.profile.table_element'), width: 20 },
-            { name: this.t.pt('views.project.profile.table_time_per_load'), width: 20 },
-            { name: this.t.pt('views.project.profile.table_load_size'), width: 10 },
-            { name: this.t.pt('views.project.profile.table_kicker'), width: 10 },
-            { name: "", width: 15, sortable: false },
-        ]
-        
 
+            this.columns = [
+                //{ inner: '<i class="star cmx-icon-favourite-active" aria-hidden="true"></i>', width: 5 },
+                { name: this.t.pt('views.project.profile.table_name'), width: 25 },
+                { name: this.t.pt('views.project.profile.table_element'), width: 20 },
+                { name: this.t.pt('views.project.profile.table_time_per_load'), width: 20 },
+                { name: this.t.pt('views.project.profile.table_load_size'), width: 10 },
+                { name: this.t.pt('views.project.profile.table_kicker'), width: 10 },
+                { name: "", width: 15, sortable: false },
+            ]
         });
-
-        
     }
 
-    closeModal(id: string){
+    closeModal(id: string) {
         this.modalService.close(id);
     }
 
@@ -72,23 +68,23 @@ export class ProjectProfilesComponent {
             }
         });
     }
-    
+
     initData(profiles: any) {
 
-            this.rows = profiles.map((profile) => {
-                const projectProperties = profile.project.projectProperties;
+        this.rows = profiles.map((profile) => {
+            const projectProperties = profile.project.projectProperties;
             return [
-                { inner: profile.profileName }, 
-                { inner: projectProperties.element ? profile.project.projectProperties.element.elementCode : "--"},
+                { inner: profile.profileName },
+                { inner: projectProperties.element ? profile.project.projectProperties.element.elementCode : "--" },
                 { inner: projectProperties.timePerLoad ? profile.project.projectProperties.timePerLoad.timePerLoadDesc : "--" },
-                { inner: projectProperties.loadSize ? profile.project.projectProperties.loadSize.loadSizeDesc : "--"},
+                { inner: projectProperties.loadSize ? profile.project.projectProperties.loadSize.loadSizeDesc : "--" },
                 { inner: projectProperties.kicker, class: "capitalize" },
-                { inner: "DELETE", class: "action-button", click: (item) => {
-                    this.ppService.delete(profile.profileId).subscribe(res => res.ok && this.fetchProjectProfiles())
-                }},
+                {
+                    inner: "DELETE", class: "action-button", click: (item) => {
+                        this.ppService.delete(profile.profileId).subscribe(res => res.ok && this.fetchProjectProfiles())
+                    }
+                },
             ]
         });
-        
     }
-    
 }
