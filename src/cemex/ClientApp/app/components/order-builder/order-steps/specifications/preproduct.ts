@@ -431,13 +431,11 @@ export class PreProduct {
         ).subscribe((response) => {
             this.availablePlants = response.json().plants;
             this.loadings.plants = false;
-            if (this.availablePlants.length === 1) {
-                this.plant = this.availablePlants[0];
-            }
-            else {
-                this.plant = undefined;
-            }
-            this.validations.plant.valid = false;
+
+            if (this.availablePlants.length === 1) { this.plant = this.availablePlants[0]; }
+            else { this.plant = undefined; }
+
+            this.plantChanged();
         }, error => {
             this.loadings.plants = false;
             this.plant = undefined;
