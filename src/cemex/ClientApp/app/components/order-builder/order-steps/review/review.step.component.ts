@@ -250,9 +250,6 @@ export class ReviewStepComponent implements StepEventsListener {
         const time = moment.utc(preProduct.time).local().format('HH:mm');
         const newDateTime = moment.utc(preProduct.date).local();
 
-        console.log(newDateTime.toISOString());
-        console.log(newDateTime.format());
-
         return newDateTime.toISOString();
     }
 
