@@ -20,7 +20,7 @@
                     <label for="pp-discharge" class="">{{ t.pt('views.project.profile.dischare_time') }}</label>
                     <select (change)="onChangeDischargeTime($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option [value]=null></option>
+                        <option [value]="null"></option>
                         <option *ngFor="let entry of catalogs.DCT" [value]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
@@ -37,7 +37,7 @@
                     <label for="pp-discharge" class="">{{ t.pt('views.project.profile.unload_type') }}</label>
                     <select (change)="onChangeUnloadType($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option [value]=null></option>
+                        <option [value]="null"></option>
                         <option *ngFor="let entry of catalogs.ULT; let i = index" [attr.data-index]="i" [value]="i">{{entry.entryDesc}}</option>
                     </select>
                 </div>
@@ -54,7 +54,7 @@
                     <label for="pp-discharge" class="">{{ t.pt('views.project.profile.application') }}</label>
                     <select (change)="onChangeApplicationType($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option [value]=null></option>
+                        <option [value]="null"></option>
                         <option *ngFor="let entry of catalogs.ELM" [value]="entry.entryId">{{entry.entryDesc}}</option> 
                    </select>
                 </div>
@@ -62,7 +62,7 @@
                     <label for="pp-transport" class="">{{ t.pt('views.project.profile.spacing') }}</label>
                     <select (change)="onChangeSpacing($event.target.value)" name="pp-transport" id="pp-transport" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option [value]=null></option>
+                        <option [value]="null"></option>
                         <option *ngFor="let entry of catalogs.TPL" [value]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
@@ -72,7 +72,7 @@
                     <label for="pp-discharge" class="">{{ t.pt('views.project.profile.load_size') }}</label>
                     <select (change)="onChangeLoadSize($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option [value]=null></option>
+                        <option [value]="null></option>
                         <option *ngFor="let entry of catalogs.LSC" [value]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>

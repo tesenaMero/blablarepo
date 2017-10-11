@@ -205,20 +205,20 @@ export class ReviewStepComponent implements StepEventsListener {
                 "timePerLoadId": projectProperties.timePerLoad.timePerLoadId
             }
             if (Validations.isMexicoCustomer()) {
-            baseItem.orderItemProfile["unloadType"] = {
-                "unloadTypeId": projectProperties.unloadType.unloadTypeId
-            }
-            if (projectProperties.unloadType.unloadTypeCode === 'PUMP') {
-            baseItem.orderItemProfile["pumpCapacityFrom"] = {
-                "pumpCapacityId": projectProperties.pumpCapacity.pumpCapacityId
-            }
-            baseItem.orderItemProfile["pumpCapacityTo"] = {
-                "pumpCapacityId": projectProperties.pumpCapacity.pumpCapacityId
-            }
-            }
-            baseItem.orderItemProfile["dischargeTime"] = {
-                "dischargeTimeId": projectProperties.dischargeTime.dischargeTimeId
-            }
+                baseItem.orderItemProfile["unloadType"] = {
+                    "unloadTypeId": projectProperties.unloadType.unloadTypeId
+                }
+                if (projectProperties.unloadType.unloadTypeCode === 'PUMP') {
+                    baseItem.orderItemProfile["pumpCapacityFrom"] = {
+                        "pumpCapacityId": projectProperties.pumpCapacity.pumpCapacityId
+                    }
+                    baseItem.orderItemProfile["pumpCapacityTo"] = {
+                        "pumpCapacityId": projectProperties.pumpCapacity.pumpCapacityId
+                    }
+                }
+                baseItem.orderItemProfile["dischargeTime"] = {
+                    "dischargeTimeId": projectProperties.dischargeTime.dischargeTimeId
+                }
             }
 
         }
