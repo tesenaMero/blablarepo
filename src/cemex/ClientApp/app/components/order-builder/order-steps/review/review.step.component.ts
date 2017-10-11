@@ -8,9 +8,11 @@ import { CustomerService } from '../../../../shared/services/customer.service';
 import { DraftsService } from '../../../../shared/services/api/drafts.service';
 import { Validations } from '../../../../utils/validations';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
+import { PreProduct } from '../specifications/preproduct'
 
 import { } from '@types/googlemaps';
 import * as _ from 'lodash';
+import * as moment from 'moment'
 declare var google: any;
 
 @Component({
@@ -179,12 +181,12 @@ export class ReviewStepComponent implements StepEventsListener {
             "currency": {
                 "currencyCode": this.getCustomerCurrency()
             },
-            "quantity": preProduct.quantity,
+            "quantity": this.convertToTons(preProduct) || preProduct.quantity,
             "product": {
                 "productId": preProduct.product.product.productId
             },
             "uom": {
-                "unitId": preProduct.product.unitOfMeasure.unitId
+                "unitId": 262 //preProduct.product.unitOfMeasure.unitId
             },
             "orderItemProfile": {
                 "additionalServices": this.makeAdditionalServices(preProduct)
@@ -246,11 +248,9 @@ export class ReviewStepComponent implements StepEventsListener {
     }
 
     private combineDateTime(preProduct): String {
-        const time = preProduct.time.split(':');
-        const newDateTime = new Date(preProduct.date);
+        const time = moment.utc(preProduct.time).local().format('HH:mm');
+        const newDateTime = moment.utc(preProduct.date).local();
 
-        newDateTime.setUTCHours(time[0]);
-        newDateTime.setUTCMinutes(time[1]);
         return newDateTime.toISOString();
     }
 
@@ -282,6 +282,18 @@ export class ReviewStepComponent implements StepEventsListener {
         }
 
         return ""
+    }
+
+    // Convert to tons quantity selected
+    convertToTons(product: PreProduct) {
+        let qty = product.quantity
+        if (product.unit === undefined) {
+            return qty
+        }
+
+        let factor = product.unit.numerator / product.unit.denominator;
+        let convertion = qty * factor;
+        return convertion || undefined;
     }
 
     // Map stuff

@@ -18,7 +18,7 @@ export class PreProduct {
     quantity: number = 1;
     newValue: number = 1;
     date: any = new Date();
-    time = "13:00";
+    time = new Date();
     unit: any;
     payment: any;
     contract: any;
@@ -61,7 +61,6 @@ export class PreProduct {
     }
 
     validations = {
-        date: { valid: false, mandatory: true, text: "Invalid date" },
         plant: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_plant') },
         contract: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_contract') },
         payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') },
@@ -252,33 +251,6 @@ export class PreProduct {
         });
     }
 
-    // date: yyyy-MM-dd
-    dateChanged(date) {
-        if (!this.isDateBeforeToday(date)) {
-            this.date = date;
-            this.validations.date.valid = true;
-        }
-        else {
-            this.validations.date.valid = false;
-        }
-    }
-
-    isDateBeforeToday(date) {
-        return new Date(date) < new Date();
-    }
-
-    defaultDateString() {
-        let d = new Date(),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-
-        if (month.length < 2) month = '0' + month;
-        if (day.length < 2) day = '0' + day;
-
-        return [year, month, day].join('-');
-    }
-
     fetchUnits() {
         this.loadings.units = true;
         this.disableds.units = true;
@@ -459,8 +431,11 @@ export class PreProduct {
         ).subscribe((response) => {
             this.availablePlants = response.json().plants;
             this.loadings.plants = false;
-            this.plant = undefined;
-            this.validations.plant.valid = false;
+
+            if (this.availablePlants.length === 1) { this.plant = this.availablePlants[0]; }
+            else { this.plant = undefined; }
+
+            this.plantChanged();
         }, error => {
             this.loadings.plants = false;
             this.plant = undefined;
