@@ -27,7 +27,7 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <input class="value" type="number" value="{{ product.quantity }}" [ngModel]="prodQuntity" (ngModelChange)="valuechange(product, $event)" min="1" max="{{ product.getMaximumCapacity() }}" />
+                                <input class="value" type="number" [ngModel]="product.quantity | number:'1.3-3'" (ngModelChange)="valuechange(product, $event)" min="0.001" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info" *ngIf="isMXCustomer() && product.maximumCapacity">
@@ -56,9 +56,12 @@
                             <label>{{ t.pt('views.specifications.request_date') }}</label>
                             <label for="date{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    <!-- {{ product?.date | date: 'shortDate' }} -->
-                                    <!-- <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" [min-date]="today" /> -->
-                                    <input type="date" min="{{ todayStr() }}" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event"/>
+                                    <owl-date-time [(ngModel)]="product.date"
+                                        [dateFormat]="'DD/MM/YYYY'" [min]="todayStr()"
+                                        [type]="'calendar'" [placeHolder]="'dd/mm/yyyy'" 
+                                        (ngModelChange)="product.date = $event"
+                                        [inputId]="'date' + index">
+                                    </owl-date-time>
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-calendar"></span></span>
@@ -69,9 +72,11 @@
                             <label>{{ t.pt('views.specifications.request_time') }}</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    <!-- <div class="time{{ index }}">{{ product?.time | date: 'HH:mm' }}</div>
-                                    <input id="time{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.time" ngui-datetime-picker time-only="true" right-side="true" [close-on-select]="false" hour="0" minute="0" /> -->
-                                    <input type="time" name="time{{ index }}" class="input-date" id="time{{ index }}" [ngModel]="product.time" (ngModelChange)="product.time = $event"/>
+                                    <owl-date-time [(ngModel)]="product.time"
+                                        (ngModelChange)="product.time = $event"
+                                        [type]="'timer'" [dateFormat]="'HH:mm'" [placeHolder]="'HH:mm'"
+                                        [inputId]="'time' + index">
+                                    </owl-date-time>
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-clock"></span></span>
@@ -173,7 +178,7 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <input class="value" type="number" value="{{ product.quantity }}" [ngModel]="prodQuntity" (ngModelChange)="valuechange(product, $event)" min="1" max="{{ product.getMaximumCapacity() }}" />
+                                <input class="value" type="number" [ngModel]="product.quantity | number:'1.3-3'" (ngModelChange)="valuechange(product, $event)" min="0.001" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info" *ngIf="UTILS.isMexicoCustomer() && product.maximumCapacity">
@@ -204,9 +209,12 @@
                             <label>{{ t.pt('views.specifications.request_date') }}</label>
                             <label for="date{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    <!-- {{ product?.date | date: 'shortDate' }} -->
-                                    <!-- <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" [min-date]="today" /> -->
-                                    <input type="date" min="{{ todayStr() }}" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event"/>
+                                    <owl-date-time [(ngModel)]="product.date"
+                                        [dateFormat]="'DD/MM/YYYY'" [min]="todayStr()"
+                                        [type]="'calendar'" [placeHolder]="'dd/mm/yyyy'" 
+                                        (ngModelChange)="product.date = $event"
+                                        [inputId]="'date' + index">
+                                    </owl-date-time>
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-calendar"></span></span>
@@ -217,9 +225,11 @@
                             <label>{{ t.pt('views.specifications.request_time') }}</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    <!-- <div class="time{{ index }}">{{ product?.time | date: 'HH:mm' }}</div>
-                                    <input id="time{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.time" ngui-datetime-picker time-only="true" right-side="true" [close-on-select]="false" hour="0" minute="0" /> -->
-                                    <input type="time" name="time{{ index }}" class="input-date" id="time{{ index }}" [ngModel]="product.time" (ngModelChange)="product.time = $event"/>
+                                    <owl-date-time [(ngModel)]="product.time"
+                                        (ngModelChange)="product.time = $event"
+                                        [type]="'timer'" [dateFormat]="'HH:mm'" [placeHolder]="'HH:mm'"
+                                        [inputId]="'time' + index">
+                                    </owl-date-time>
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-clock"></span></span>
@@ -338,7 +348,7 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <input class="value" type="number" value="{{ product.quantity }}" [ngModel]="prodQuntity" (ngModelChange)="valuechange(product, $event)" min="1" />
+                                <input class="value" type="number" [ngModel]="product.quantity | number:'1.3-3'" (ngModelChange)="valuechange(product, $event)" min="0.001" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                         </div>
@@ -364,9 +374,12 @@
                             <label>{{ t.pt('views.specifications.request_date') }}</label>
                             <label for="date{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    <!--  -->
-                                    <!-- <input id="date{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.date" ngui-datetime-picker date-only="true" /> -->
-                                    <input type="date" min="{{ todayStr() }}" name="date{{ index }}" class="input-date" id="date{{ index }}" [ngModel]="product.date | date:'yyyy-MM-dd'" (ngModelChange)="product.date = $event" />
+                                    <owl-date-time [(ngModel)]="product.date"
+                                        [dateFormat]="'DD/MM/YYYY'" [min]="todayStr()"
+                                        [type]="'calendar'" [placeHolder]="'dd/mm/yyyy'" 
+                                        (ngModelChange)="product.date = $event"
+                                        [inputId]="'date' + index">
+                                    </owl-date-time>
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-calendar"></span></span>
@@ -377,9 +390,11 @@
                             <label>{{ t.pt('views.specifications.request_time') }}</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
-                                    <!-- {{ product.time }} -->
-                                    <!-- <input id="time{{ index }}" class="behind clean-input" type="text" readonly [(ngModel)]="product.time" ngui-datetime-picker time-only="true" right-side="true" [close-on-select]="false" hour="0" minute="0" /> -->
-                                    <input type="time" name="time{{ index }}" class="input-date" id="time{{ index }}" [ngModel]="product.time" (ngModelChange)="product.time = $event"/>
+                                    <owl-date-time [(ngModel)]="product.time"
+                                        (ngModelChange)="product.time = $event"
+                                        [type]="'timer'" [dateFormat]="'HH:mm'" [placeHolder]="'HH:mm'"
+                                        [inputId]="'time' + index">
+                                    </owl-date-time>
                                 </span>
                                 <span class="mb-0">
                                     <span class="icon"><span class="cmx-icon-clock"></span></span>
@@ -465,7 +480,7 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group" *ngIf="product.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeDesc === 'Pump'">
+                <div class="group" *ngIf="product.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeId === 2">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         {{ t.pt('views.specifications.pump_capacity') }}
                     </label>
@@ -526,6 +541,7 @@
                     </div>
                 </div>
             </div>
+<<<<<<< HEAD
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <label class="additional-services">{{ t.pt('views.details.kicker') }}</label>
@@ -553,11 +569,18 @@
                 </div>
             </div>
             <div class="row" *ngIf="readyMixAdditionalServices?.lenght">
+=======
+            <div class="row" *ngIf="readyMixAdditionalServices && readyMixAdditionalServices.lenght">
+>>>>>>> development
                 <div class="col-md-12 mt-3">
                     <label class="additional-services">{{ t.pt('views.specifications.aditional_services') }}</label>
                 </div>
             </div>
+<<<<<<< HEAD
             <div class="row" *ngIf="readyMixAdditionalServices?.lenght">
+=======
+            <div class="row" *ngIf="readyMixAdditionalServices && readyMixAdditionalServices.lenght">
+>>>>>>> development
                 <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let i = index;">
                     <div class="group">
                         <div class="service">

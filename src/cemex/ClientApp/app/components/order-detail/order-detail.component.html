@@ -7,7 +7,7 @@
                 </div>
                 <div class="request-date align-self-center">
                     <span class="title">{{ t.pt('views.details.request_date') }}:</span>
-                    <span class="value">{{orderDetailData.requestedDateTime | date : "dd/MM/yyyy, hh:mm"}}</span>
+                    <span class="value">{{orderDetailData.createdDateTime | date : "dd/MM/yyyy, hh:mm"}}</span>
                 </div>
             </div>
         </div>
@@ -132,7 +132,7 @@
                                 <div class="col-md-3 col-xs-6">
                                     <div class="group">
                                         <div class="title">
-                                            {{ t.pt('views.details.request_date') }}
+                                            {{ t.pt('views.details.delivery_date') }}
                                         </div>
                                         <div class="value">
                                             {{itemData.requestedDateTime | date : "dd.MM.yyyy"}}
@@ -142,7 +142,7 @@
                                 <div class="col-md-3 col-xs-6">
                                     <div class="group">
                                         <div class="title">
-                                            {{ t.pt('views.details.request_time') }}
+                                            {{ t.pt('views.details.delivery_time') }}
                                         </div>
                                         <div class="value">
                                             {{itemData.requestedDateTime | date : "hh:mm"}}

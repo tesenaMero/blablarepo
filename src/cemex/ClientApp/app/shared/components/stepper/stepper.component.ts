@@ -33,7 +33,7 @@ export class StepperComponent implements AfterContentInit {
 
     nextAvailable: boolean = false;
     backAvailable: boolean = true;
-    isFirstStep: boolean = true;
+    //isFirstStep: boolean = true;
     overlay: boolean = false;
     moving: boolean = false;
 
@@ -48,10 +48,6 @@ export class StepperComponent implements AfterContentInit {
         if (activeSteps.length === 0) {
             this.selectStep(this.steps.first);
         }
-
-        let currentIndex = this.getActiveStepIndex();
-        if (currentIndex == 0) { this.isFirstStep = true; }
-        else { this.isFirstStep = false; }
 
         this.onRendered.emit();
     }
@@ -105,6 +101,16 @@ export class StepperComponent implements AfterContentInit {
         }
     }
 
+    goToLastStep() {
+        this.selectStep(this.steps.last)
+        this.steps.forEach((step) => {
+            if (step != this.steps.last) {
+                step.completed = true;
+                step.active = false;
+            }
+        });
+    }
+
     // If not index given, uncomplete current step
     uncomplete() {
         this.currentStep.completed = false;
@@ -122,6 +128,11 @@ export class StepperComponent implements AfterContentInit {
     private isLastStep() {
         let currentIndex = this.getActiveStepIndex();
         return currentIndex >= this.steps.length - 1;
+    }
+
+    private isFirstStep() {
+        let currentIndex = this.getActiveStepIndex();
+        return currentIndex == 0;
     }
 
     private animateNext(toIndex: number) {
@@ -159,7 +170,7 @@ export class StepperComponent implements AfterContentInit {
     selectStep(step: Step) {
         // Deactivate all steps except one
         let currentIndex = this.getActiveStepIndex();
-        this.steps.toArray().forEach((item, index) => {
+        this.steps.forEach((item, index) => {
             if (item != step) {
                 item.active = false
                 item.render = false;
@@ -174,9 +185,6 @@ export class StepperComponent implements AfterContentInit {
         step.active = true;
         step.render = true;
 
-        if (currentIndex == 0) { this.isFirstStep = true; }
-        else { this.isFirstStep = false; }
-
         if (!this.currentStep.completed)
             this.nextAvailable = false;
         else
@@ -185,6 +193,10 @@ export class StepperComponent implements AfterContentInit {
         // Show after dom rendered
         setTimeout(step.show.bind(step), 0);
         //step.show();
+    }
+
+    private fireShowEvent() {
+        
     }
 
     private getNextStep() {

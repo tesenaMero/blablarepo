@@ -49,7 +49,7 @@
                             {{ t.pt('views.checkout.request_time') }}
                         </div>
                         <div class="desc">
-                            {{ item?.time }}
+                            {{ item?.time | date:'shortTime' }}
                         </div>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mt-4" *ngIf="!UTIL.isUSACustomer()">
+                <div class="col-md-3 mt-4" *ngIf="!UTIL.isUSACustomer() && !UTIL.isCement()">
                     <div class="group">
                         <div class="title">
                             {{ t.pt('views.checkout.maximum_capacity') }}
@@ -97,7 +97,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 mt-4" *ngIf="UTIL.isDelivery()">
+                <div class="col-md-3 mt-4" *ngIf="UTIL.isDelivery() && !UTIL.isUSACustomer()">
                     <div class="group">
                         <div class="title">
                             {{ t.pt('views.checkout.pod') }}
@@ -108,7 +108,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mt-4">
+                <div class="col-md-3 mt-4" *ngIf="item?.maneuvering">
                     <div class="group">
                         <div class="title">
                             {{ t.pt('views.checkout.aditional_services') }}
@@ -187,7 +187,7 @@
                                     {{ t.pt('views.checkout.request_time') }}
                                 </div>
                                 <div class="desc">
-                                    {{ item?.time }}
+                                    {{ item?.time | date:'shortTime' }}
                                 </div>
                             </div>
                         </div>
@@ -357,7 +357,7 @@
                                     {{ t.pt('views.checkout.request_time') }}
                                 </div>
                                 <div class="desc">
-                                    {{ item?.time }}
+                                    {{ item?.time | date:'shortTime' }}
                                 </div>
                             </div>
                         </div>
@@ -515,7 +515,7 @@
                                     {{ t.pt('views.checkout.request_time') }}
                                 </div>
                                 <div class="desc">
-                                    {{ item?.time }}
+                                    {{ item?.time | date:'shortTime' }}
                                 </div>
                             </div>
                         </div>
@@ -541,7 +541,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 mt-4" *ngIf="!UTIL.isUSACustomer()">
+                        <div class="col-md-3 mt-4" *ngIf="!UTIL.isUSACustomer() && !UTIL.isCement()">
                             <div class="group">
                                 <div class="title">
                                     {{ t.pt('views.checkout.maximum_capacity') }}
@@ -563,7 +563,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3 mt-4" *ngIf="UTIL.isDelivery()">
+                        <div class="col-md-3 mt-4" *ngIf="UTIL.isDelivery() && !UTIL.isUSACustomer()">
                             <div class="group">
                                 <div class="title">
                                     {{ t.pt('views.checkout.pod') }}
@@ -574,7 +574,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 mt-4">
+                        <div class="col-md-3 mt-4" *ngIf="item?.maneuvering">
                             <div class="group">
                                 <div class="title">
                                     {{ t.pt('views.checkout.aditional_services') }}
