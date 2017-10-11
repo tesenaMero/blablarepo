@@ -77,6 +77,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     private readyMixAdditionalServices = [];
 
+    private kicker = false;
+
     static catalogs = [];
     get catalogs() {
         return SpecificationsStepComponent.catalogs;
@@ -474,13 +476,17 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     projectProfileChanged(preProduct: PreProduct, projectProfile) {
+        if (projectProfile !== "null") {
         // Prefill
         preProduct.projectProfile.profileId = projectProfile.profileId;
         preProduct.projectProfile.profileName = projectProfile.profileName;
 
         // Clone project object
         preProduct.projectProfile.project.projectProperties = JSON.parse(JSON.stringify(projectProfile.project.projectProperties));
+        this.kicker = preProduct.projectProfile.project.projectProperties.kicker;
+    } 
     }
+
 
     onChangeDischargeTime(preProduct, index) {
         const entry = this.catalogs['DCT'][index];
@@ -505,6 +511,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         preProduct.projectProfile.project.projectProperties.unloadType = {
             unloadTypeId: entry.entryId,
+            unloadTypeCode: entry.entryCode,
             unloadTypeDesc: entry.entryDesc
         };
     }
@@ -523,7 +530,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         preProduct.projectProfile.project.projectProperties.element = {
             elementId: entry.entryId,
-            elementDesc: entry.entryDesc
+            elementDesc: entry.entryDesc,
+            elementCode: entry.entryCode
         };
     }
 
@@ -552,6 +560,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
             const idx = this.additionalServices.indexOf(this.readyMixAdditionalServices[index]);
             preProduct.additionalServices.splice(idx, 1);
         }
+    }
+
+    onChangeKicker(preProduct, value: Boolean) {
+        preProduct.projectProfile.project.projectProperties.kicker = Boolean(value);
+        console.log(preProduct.projectProfile.project)
     }
 
     productChanged(preProduct: PreProduct) {

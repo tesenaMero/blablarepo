@@ -20,13 +20,15 @@
                     <label for="pp-discharge" class="">{{ t.pt('views.project.profile.dischare_time') }}</label>
                     <select (change)="onChangeDischargeTime($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
+                        <option [value]=null></option>
                         <option *ngFor="let entry of catalogs.DCT" [value]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
                 <div class="col-sm-6">
                     <label for="pp-transport" class="">{{ t.pt('views.project.profile.transport_method') }}</label>
-                    <select name="pp-transport" id="pp-transport" class="form-control">
-                        <option value="42" selected>Truck</option>
+                    <select (change)="onChangeTransportMethod($event.target.value)" name="pp-transport" id="pp-transport" class="form-control">
+                        <option value="" selected disabled hidden></option>
+                        <option *ngFor="let entry of catalogs.TPM" [value]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
             </div>
@@ -35,6 +37,7 @@
                     <label for="pp-discharge" class="">{{ t.pt('views.project.profile.unload_type') }}</label>
                     <select (change)="onChangeUnloadType($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
+                        <option [value]=null></option>
                         <option *ngFor="let entry of catalogs.ULT; let i = index" [attr.data-index]="i" [value]="i">{{entry.entryDesc}}</option>
                     </select>
                 </div>
@@ -51,13 +54,15 @@
                     <label for="pp-discharge" class="">{{ t.pt('views.project.profile.application') }}</label>
                     <select (change)="onChangeApplicationType($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option *ngFor="let entry of catalogs.ELM; let i = index" [attr.data-index]="i" [value]="i">{{entry.entryDesc}}</option>
-                    </select>
+                        <option [value]=null></option>
+                        <option *ngFor="let entry of catalogs.ELM" [value]="entry.entryId">{{entry.entryDesc}}</option> 
+                   </select>
                 </div>
                 <div class="col-sm-6">
                     <label for="pp-transport" class="">{{ t.pt('views.project.profile.spacing') }}</label>
                     <select (change)="onChangeSpacing($event.target.value)" name="pp-transport" id="pp-transport" class="form-control">
                         <option value="" selected disabled hidden></option>
+                        <option [value]=null></option>
                         <option *ngFor="let entry of catalogs.TPL" [value]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
@@ -67,7 +72,8 @@
                     <label for="pp-discharge" class="">{{ t.pt('views.project.profile.load_size') }}</label>
                     <select (change)="onChangeLoadSize($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option *ngFor="let entry of catalogs.LSC; let i = index" [attr.data-index]="i" [value]="i">{{entry.entryDesc}}</option>
+                        <option [value]=null></option>
+                        <option *ngFor="let entry of catalogs.LSC" [value]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
             </div>
@@ -81,7 +87,7 @@
                 </div> -->
                 <div class="col-sm-6">
                     <div class="center-kicker">
-                        <input [(ngModel)]="projectProfile.project.projectProperties.kicker" checked type="checkbox" id="kicker">
+                        <input (change)="onChangeKicker($event.target.checked)" type="checkbox" id="kicker">
                         <label for="kicker">
                             <svg class="icon-checkbox-active">
                                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>

@@ -172,6 +172,7 @@ export class ReviewStepComponent implements StepEventsListener {
 
     private makeItem(preProduct, index) {
         let _ = this.manager;
+        const projectProperties = preProduct.projectProfile.project.projectProperties;
         let baseItem = {
             "itemSeqNum": 10 * (index + 1),
             "purchaseOrder": _.purchaseOrder ? _.purchaseOrder : "",
@@ -187,9 +188,40 @@ export class ReviewStepComponent implements StepEventsListener {
                 "unitId": preProduct.product.unitOfMeasure.unitId
             },
             "orderItemProfile": {
-                "additionalServices": this.makeAdditionalServices(preProduct)
+                "additionalServices": this.makeAdditionalServices(preProduct),
+
             }
         }
+        if (Validations.isReadyMix()) {
+            baseItem.orderItemProfile["kicker"] = projectProperties.kicker
+            baseItem.orderItemProfile["loadSize"] = {
+                "loadSizeId": projectProperties.loadSize.loadSizeId
+            }
+            baseItem.orderItemProfile["element"] = {
+                "elementId": projectProperties.element.elementId
+            }
+            baseItem.orderItemProfile["timePerLoad"] = {
+                "timePerLoadId": projectProperties.timePerLoad.timePerLoadId
+            }
+            if (Validations.isMexicoCustomer()) {
+            baseItem.orderItemProfile["unloadType"] = {
+                "unloadTypeId": projectProperties.unloadType.unloadTypeId
+            }
+            if (projectProperties.unloadType.unloadTypeCode === 'PUMP') {
+            baseItem.orderItemProfile["pumpCapacityFrom"] = {
+                "pumpCapacityId": projectProperties.pumpCapacity.pumpCapacityId
+            }
+            baseItem.orderItemProfile["pumpCapacityTo"] = {
+                "pumpCapacityId": projectProperties.pumpCapacity.pumpCapacityId
+            }
+            }
+            baseItem.orderItemProfile["dischargeTime"] = {
+                "dischargeTimeId": projectProperties.dischargeTime.dischargeTimeId
+            }
+            }
+
+        }
+
 
         // Add payment if needed and any
         if (preProduct.payment) {
