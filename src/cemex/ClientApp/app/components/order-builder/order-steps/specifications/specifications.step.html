@@ -1,5 +1,5 @@
 <div class="products">
-    <!-- Cement Mexico Delivery -->
+    <!-- Cement Delivery -->
     <ng-container *ngIf="UTILS.isDelivery() && UTILS.isCement()">
         <div class=" product " [ngClass]="{ 'exit-animation': product.deleting, 'enter-animation': index> 0 }" *ngFor="let product of preProducts; let index = index;">
             <div class="row">
@@ -148,7 +148,7 @@
         </div>
     </ng-container>
 
-    <!-- Cement Mexico Pickup -->
+    <!-- Cement Pickup -->
     <ng-container *ngIf="UTILS.isPickup() && UTILS.isCement()">
         <div class="product" [ngClass]="{ 
             'exit-animation': product.deleting, 
@@ -295,7 +295,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-5 mt-3">
+                <div class="col-md-5 mt-3" *ngIf="!UTILS.isUSACustomer()">
                     <div class="group" [ngClass]="{ invisible: UTILS.isUSACustomer() }">
                         <label>Plant</label>
                         <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.loadings.plants }">
