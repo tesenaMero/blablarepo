@@ -249,6 +249,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                         topProducts.forEach((product) => {
                             // Validate if has product assigned
                             if (item.product && item.product.commercialCode === product.commercialCode) {
+                                item.setProduct(item.product, true);
                                 item.productChanged();
                                 this.onCompleted.emit(true);
                             }
@@ -298,6 +299,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                             topProducts.forEach((product) => {
                                 // Validate if has product assigned
                                 if (item.product && item.product.commercialCode === product.commercialCode) {
+                                    item.setProduct(item.product, true);
                                     item.productChanged();
                                     this.onCompleted.emit(true);
                                 }
@@ -321,7 +323,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 else {
                     this.fetchProducts(salesDocumentType)
                 }
-            });
+            });            
     }
 
     getAdditionalServices() {

@@ -69,6 +69,7 @@
                     confirmed:  orderDetailData.status.statusCode == 'CONF',
                     draft:      orderDetailData.status.statusDesc == 'Draft - Hdr',
                     draft:      orderDetailData.status.statusCode == 'DRFT',
+                    draft:      orderDetailData.status.statusCode == 'IPCO',
                     pending:    orderDetailData.status.statusCode == 'INPC',
                     pending:    orderDetailData.status.statusDesc == 'Pending',
                     blocked:    orderDetailData.status.statusCode == 'BLCK',
@@ -76,6 +77,7 @@
                     processed:  orderDetailData.status.statusDesc == 'In process - Hdr',
                     completed:  orderDetailData.status.statusCode == 'CMPO',
                     completed:  orderDetailData.status.statusDesc == 'Completed',
+                    completed:  orderDetailData.status.statusCode == 'COMP',
                     complete:   orderDetailData.status.statusDesc == 'Complete'
                 }">{{orderDetailData.status.statusDesc}}</span>
             </div>

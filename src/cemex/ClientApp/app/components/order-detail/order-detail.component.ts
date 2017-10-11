@@ -37,19 +37,20 @@ export class OrderDetailComponent {
             if (params['typeCode']) {
                 this.type = params['typeCode'];                
             }
-            if (this.orderCode && this.orderCode.length > 0) {
-                this.id = this.orderCode;             
-            }
-            if (this.orderCode) {
-                if (this.businessLine == 'RMX') {
-                    this.type = 'ZTRM';
-                }
-                else {
-                    if (this.businessLine == 'CEM') {
-                        this.type = 'ZTA';
-                    }
-                }
-            }
+            // Rene Changed logic: he remove ZTRM and ZTA
+            // if (this.orderCode && this.orderCode.length > 0) {
+            //     this.id = this.orderCode;             
+            // }
+            // if (this.orderCode) {
+            //     if (this.businessLine == 'RMX') {
+            //         this.type = 'ZTRM';
+            //     }
+            //     else {
+            //         if (this.businessLine == 'CEM') {
+            //             this.type = 'ZTA';
+            //         }
+            //     }
+            // }
         });        
 
         orderDetailApi.byIdType(this.id, this.type).subscribe((response) => {
