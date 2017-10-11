@@ -18,7 +18,7 @@ export class PreProduct {
     quantity: number = 1;
     newValue: number = 1;
     date: any = new Date();
-    time = "13:00";
+    time = new Date();
     unit: any;
     payment: any;
     contract: any;
@@ -61,7 +61,6 @@ export class PreProduct {
     }
 
     validations = {
-        date: { valid: false, mandatory: true, text: "Invalid date" },
         plant: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_plant') },
         contract: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_contract') },
         payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') },
@@ -250,21 +249,6 @@ export class PreProduct {
             this.contract = undefined;
             this.loadings.contracts = false;
         });
-    }
-
-    // date: yyyy-MM-dd
-    dateChanged(date) {
-        if (!this.isDateBeforeToday(date)) {
-            this.date = date;
-            this.validations.date.valid = true;
-        }
-        else {
-            this.validations.date.valid = false;
-        }
-    }
-
-    isDateBeforeToday(date) {
-        return new Date(date) < new Date();
     }
 
     fetchUnits() {

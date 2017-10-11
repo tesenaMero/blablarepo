@@ -97,7 +97,7 @@
                         {{ t.pt('views.review.request_time') }}
                     </div>
                     <div class="value">
-                        {{ item.time }}
+                        {{ item.time | date:'shortTime' }}
                     </div>
                 </div>
             </div>

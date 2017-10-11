@@ -12,6 +12,7 @@ import { PreProduct } from '../specifications/preproduct'
 
 import { } from '@types/googlemaps';
 import * as _ from 'lodash';
+import * as moment from 'moment'
 declare var google: any;
 
 @Component({
@@ -247,11 +248,9 @@ export class ReviewStepComponent implements StepEventsListener {
     }
 
     private combineDateTime(preProduct): String {
-        const time = preProduct.time.split(':');
-        const newDateTime = new Date(preProduct.date);
+        const time = moment.utc(preProduct.time).local().format('HH:mm');
+        const newDateTime = moment.utc(preProduct.date).local();
 
-        newDateTime.setUTCHours(time[0]);
-        newDateTime.setUTCMinutes(time[1]);
         return newDateTime.toISOString();
     }
 
