@@ -425,7 +425,7 @@
                                 <!-- Select project profile to prefill specifications -->
                                 {{ product?.projectProfile?.profileName }}
                                 <select [(ngModel)]="product.templateProfile" (ngModelChange)="projectProfileChanged(product, $event)" class="input behind">
-                                    <option value=null></option>
+                                    <option value="null"></option>
                                     <option *ngFor="let project of projectProfiles" [ngValue]="project">{{ project?.profileName }}</option>
                                 </select>
                                 </span>
@@ -541,7 +541,6 @@
                     </div>
                 </div>
             </div>
-<<<<<<< HEAD
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <label class="additional-services">{{ t.pt('views.details.kicker') }}</label>
@@ -568,19 +567,12 @@
                     </div>
                 </div>
             </div>
-            <div class="row" *ngIf="readyMixAdditionalServices?.lenght">
-=======
             <div class="row" *ngIf="readyMixAdditionalServices && readyMixAdditionalServices.lenght">
->>>>>>> development
                 <div class="col-md-12 mt-3">
                     <label class="additional-services">{{ t.pt('views.specifications.aditional_services') }}</label>
                 </div>
             </div>
-<<<<<<< HEAD
-            <div class="row" *ngIf="readyMixAdditionalServices?.lenght">
-=======
             <div class="row" *ngIf="readyMixAdditionalServices && readyMixAdditionalServices.lenght">
->>>>>>> development
                 <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let i = index;">
                     <div class="group">
                         <div class="service">
