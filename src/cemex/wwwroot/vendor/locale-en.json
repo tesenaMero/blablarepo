@@ -1090,7 +1090,9 @@
 	"views.specifications.delivery_mode": "Delivery Mode",
 	"views.specifications.delivery": "Delivery",
 	"views.specifications.pickup": "Pickup",
-	"views.specifications.add_product": "+ Add Product",
+	"views.specifications.add_product": "+ Add Product",	
+	"views.specifications.change": "Change",
+	"views.specifications.plant": "Plant",
 
 	"views.specifications.verify_products_selected": "Verify the product(s) selected",
 	"views.specifications.no_payment_jobsite": "No payment type available for this jobsite",
