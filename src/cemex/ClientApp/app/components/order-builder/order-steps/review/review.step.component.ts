@@ -193,6 +193,8 @@ export class ReviewStepComponent implements StepEventsListener {
             }
         }
 
+        Object.assign(baseItem.orderItemProfile, preProduct.projectProfile.project.projectProperties);
+
         // Add payment if needed and any
         if (preProduct.payment) {
             if (preProduct.payment.paymentTermId) {
