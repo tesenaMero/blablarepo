@@ -15,7 +15,7 @@
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode }} / {{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
-                            <span class="action" (click)="openProductSearch(product)">Change</span>
+                            <span class="action" (click)="openProductSearch(product)">{{ t.pt('views.specifications.change') }}</span>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
             <div class="row">
                 <div class="col-md-5 mt-3">
                     <div class="group">
-                        <label [ngClass]="{ loading: product.loadings.contracts }">Contract</label>
+                        <label [ngClass]="{ loading: product.loadings.contracts }">{{ t.pt('views.specifications.contract') }}</label>
                         <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.disableds.contracts }">
                             <span class=""><strong>{{ t.pt('views.specifications.contract') }} {{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
                             <span class="volume" *ngIf="!UTILS.isUSACustomer()">
@@ -166,7 +166,7 @@
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode }} / {{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
-                            <span class="action" (click)="openProductSearch(product)">Change</span>
+                            <span class="action" (click)="openProductSearch(product)">{{ t.pt('views.specifications.change') }}</span>
                         </div>
                     </div>
                 </div>
@@ -242,9 +242,9 @@
             <div class="row">
                 <div class="col-md-5 mt-3">
                     <div class="group">
-                        <label [ngClass]="{ loading: product.loadings.contracts }">Contract</label>
+                        <label [ngClass]="{ loading: product.loadings.contracts }">{{ t.pt('views.specifications.contract') }}</label>
                         <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.disableds.contracts }">
-                            <span class=""><strong>Contract {{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
+                            <span class=""><strong>{{ t.pt('views.specifications.contract') }}{{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
                             <span class="volume">
                                 {{ t.pt('views.specifications.remaining_volume') }}
                                 <strong *ngIf="product.contract?.salesDocument?.hasOwnProperty('volume')">{{ product.contract?.salesDocument?.volume?.total.quantity.amount }}</strong>
@@ -297,7 +297,7 @@
                 </div>
                 <div class="col-md-5 mt-3" *ngIf="!UTILS.isUSACustomer()">
                     <div class="group" [ngClass]="{ invisible: UTILS.isUSACustomer() }">
-                        <label>Plant</label>
+                        <label>{{ t.pt('views.specifications.plant') }}</label>
                         <div class="input contract dropdown flex-space-between" [ngClass]="{ disabled: product.loadings.plants }">
                             <span class="">
                                 {{ product?.plant?.plantDesc }}

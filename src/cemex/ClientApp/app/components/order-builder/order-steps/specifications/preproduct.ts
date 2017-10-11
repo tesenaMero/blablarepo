@@ -233,11 +233,19 @@ export class PreProduct {
             this.product.product.productId
         ).subscribe((result) => {
             let contracts = result.json().products;
-            this.availableContracts = contracts;
+            this.availableContracts = contracts;     
+            let contractsResult;
 
-            if (contracts.length > 0) {
+            if (contracts.length > 0) {    
+                if (this.contract){
+                    contractsResult = contracts.find((contract) => {
+                        return contract.salesDocument.salesDocumentCode == this.contract.salesDocument.salesDocumentCode;
+                    });
+                }
                 // Add no contract option
-                this.availableContracts.unshift(undefined);
+                if (!this.contract || !contractsResult) {
+                    this.availableContracts.unshift(undefined);                    
+                }
                 this.disableds.contracts = false;
             }
             else {
@@ -246,7 +254,9 @@ export class PreProduct {
             }
 
             // Set default contract
-            this.contract = undefined;
+            if (!contractsResult) {
+                this.contract = undefined;
+            }
             this.loadings.contracts = false;
         });
     }
