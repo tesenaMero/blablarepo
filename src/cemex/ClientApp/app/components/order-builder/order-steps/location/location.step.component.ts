@@ -54,6 +54,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     // Subs
     salesAdressSub: any;
     lockRequests: boolean = false;
+    validateSub: any;
+    shippingConditionMapSub: any;
 
     // Mapped data
     locations = [];
@@ -175,11 +177,34 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
         if (!advance) { return; }
 
-        // Validate purchase order
+        // Set PO validation sub
         if (this.validations.purchaseOrder.mandatory) {
-            this.dashboard.alertInfo(this.t.pt('views.common.validating'), 0);
-            this.purchaseOrderApi.validate(this.purchaseOrder, this.manager.productLine, this.location).subscribe((response) => {
-                let data = response.json();
+            this.validateSub = this.purchaseOrderApi.validate(
+                this.purchaseOrder,
+                this.manager.productLine,
+                this.location).map((response) => {
+                    return response.json()
+                });
+        }
+        else {
+            this.validateSub = Observable.empty().defaultIfEmpty();
+        }
+
+        // Set shippingcondition sub
+        const mode = this.manager.shippingCondition.shippingConditionCode;
+        const customer = this.customerService.currentCustomer().legalEntityId;
+        this.shippingConditionMapSub = this.shippingConditionApi.byCode(customer, mode).map((response) => {
+            let shipppingConditions = response.json().shippingConditions
+            if (shipppingConditions.length) {
+                this.manager.selectDeliveryType(shipppingConditions[0]);
+            }
+        });
+
+        this.dashboard.alertInfo(this.t.pt('views.common.validating'), 0);
+        Observable.forkJoin(this.shippingConditionMapSub, this.validateSub).subscribe((response) => {
+            if (this.validations.purchaseOrder.mandatory) {
+                let data: any = response[1];
+
                 if (data.messageType == "E") {
                     this.dashboard.alertError(data.messageText, 12000);
                     return;
@@ -193,12 +218,37 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                     this.dashboard.alertSuccess(data.messageText);
                     this.requestNext.emit();
                 }
-            });
+            }
+            else {
+                this.requestNext.emit();
+                this.dashboard.closeAlert();
+            }
+        });
 
-            return false;
-        }
+        // Validate purchase order
+        // if (this.validations.purchaseOrder.mandatory) {
+        //     this.dashboard.alertInfo(this.t.pt('views.common.validating'), 0);
+        //     this.purchaseOrderApi.validate(this.purchaseOrder, this.manager.productLine, this.location).subscribe((response) => {
+        //         let data = response.json();
+        //         if (data.messageType == "E") {
+        //             this.dashboard.alertError(data.messageText, 12000);
+        //             return;
+        //         }
+        //         else if (data.messageType == "S") {
+        //             this.dashboard.alertSuccess(data.messageText);
+        //             this.requestNext.emit();
+        //             return;
+        //         }
+        //         else {
+        //             this.dashboard.alertSuccess(data.messageText);
+        //             this.requestNext.emit();
+        //         }
+        //     });
 
-        return advance;
+        //     return false;
+        // }
+
+        return false;
     }
 
     // Replacing the object shippingCondition with the api one
@@ -219,7 +269,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.isCement = Validations.isCement();
 
         // Map shippingcondition
-        this.mapShippingCondition();
+        //this.mapShippingCondition();
 
         // Unlock
         this.lockRequests = false;
@@ -255,11 +305,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.shipmentApi.shipmentLocationTypes.subscribe(data => {
             if (data) { this.fetchJobsites(); }
         });
-
-        // if the user got the location step by pressign the back button
-        if (this.contact && this.contact.name && this.contact.phone) {
-            this.validations.contactPerson.valid = true;
-        }
     }
 
     loadMap() {
@@ -429,16 +474,16 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                     if (this.contacts.length > 0) {
                         this.contacts.forEach((contact, index) => {
                             contact.id = index;
-                            if(this.contact && this.contact.contactId === contact.contactId){
+                            if (this.contact && this.contact.contactId === contact.contactId) {
                                 this.contactsIndex = index;
                             }
                         });
                         if (this.contactsIndex) {
-                            this.contactChanged(this.contact);                            
+                            this.contactChanged(this.contact);
                         } else {
-                            this.contactChanged(undefined);                            
+                            this.contactChanged(undefined);
                         }
-                    }                    
+                    }
                     this.loadings.contacts = false;
                 }
             }));
@@ -513,6 +558,12 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     contactChanged(event: any) {
+        // if the user got the location step by pressign the back button
+         if (this.contact && this.contact.name && this.contact.phone) {
+            this.validations.contactPerson.valid = true;
+            return;
+        }
+
         if (!event) { this.validations.contactPerson.valid = false; return; }
 
         // If picked form dropdown: model will be []
