@@ -32,7 +32,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     private preProducts: Array<PreProduct> = this.manager.products;
 
     // Consts
-    private UTILS = Validations;
+    public UTILS = Validations;
 
     private loadings = {
         projectProfiles: true,
