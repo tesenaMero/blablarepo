@@ -253,10 +253,11 @@ export class ReviewStepComponent implements StepEventsListener {
     }
 
     private combineDateTime(preProduct): String {
-        const time = moment.utc(preProduct.time).local().format('HH:mm');
-        const newDateTime = moment.utc(preProduct.date).local();
+        const time = moment.utc(preProduct.time).local().format('HH:mm:ss');
+        const date = moment.utc(preProduct.date).local().format('YYYY-MM-DD');
+        const newDateTime = date + 'T' + time;
 
-        return newDateTime.toISOString();
+        return newDateTime;
     }
 
     private safeContactName() {
