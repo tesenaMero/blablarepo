@@ -17,6 +17,7 @@
                     {{ t.pt('views.review.pod') }}
                 </div>
                 <div class="description">
+                    {{manager.pointOfDelivery?.shipmentLocationDesc}} <br>
                     {{ manager.pointOfDelivery?.address?.streetName }} {{ manager.pointOfDelivery?.address?.settlementDesc }}, {{ manager.pointOfDelivery?.address?.regionDesc }}, {{ manager.pointOfDelivery?.address?.cityDesc }}, {{ manager.pointOfDelivery?.address?.postalCode
                     }}
                 </div>
@@ -56,7 +57,7 @@
 <div *ngFor="let item of manager.products" class="card-container row product">
     <div class="col-md-4 col-sm-12 left-container" style="overflow: hidden;text-overflow: ellipsis;">
         <div class="name">
-            {{ item?.product?.commercialDesc }}
+            {{ item?.product?.commercialCode }} /{{ item?.product?.commercialDesc }}
         </div>
     </div>
     <div class="col-md-8 right-container">
