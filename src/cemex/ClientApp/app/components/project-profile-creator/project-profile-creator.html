@@ -72,7 +72,7 @@
                     <label for="pp-discharge" class="">{{ t.pt('views.project.profile.load_size') }}</label>
                     <select (change)="onChangeLoadSize($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
-                        <option [value]="null></option>
+                        <option [value]="null"></option>
                         <option *ngFor="let entry of catalogs.LSC" [value]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
                 </div>
