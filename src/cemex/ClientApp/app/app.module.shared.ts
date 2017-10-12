@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { DateValueAccessorModule } from 'angular-date-value-accessor';
-import { CountlyService } from '@cemex-core/helpers-v1';
+import { CountlyService } from '@cemex-core/helpers-v1/dist';
 
 // Components
 import { AppComponent } from './components/app/app.component';

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CountlyService } from '@cemex-core/helpers-v1';
+import { CountlyService } from '@cemex-core/helpers-v1/dist';
 
 const Autobind = require('core-decorators').autobind;
 
