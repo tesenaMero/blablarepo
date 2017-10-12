@@ -20,6 +20,7 @@
         "@cemex-core/angular-services-v2": "^1.0.28",
         "@cemex-core/constants-v2": "^1.0.2",
         "@cemex-core/events-v1": "^1.0.9",
+        "@cemex-core/helpers-v1": "^1.0.5",
         "@cemex-core/types-v1": "^1.0.2",
         "@cemex-core/types-v2": "^1.0.2",
         "@cemex/cmx-shared-v1": "^1.0.7",
