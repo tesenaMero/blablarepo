@@ -39,8 +39,8 @@ export class OrdersComponent implements OnInit {
 
         this.t.localeData.subscribe(response => {         
             // if S and MX customer
-            if (userLegalEntity && userLegalEntity.countryCode.trim() === "US" || userLegalEntity.countryCode.trim() === "MX"){            
-                this.initUsaMXCustomerOrders();
+            if (userLegalEntity && userLegalEntity.countryCode.trim() === "US"){            
+                this.initUsaCustomerOrders();
             }   
             else{
                 this.initOrders();
@@ -62,8 +62,8 @@ export class OrdersComponent implements OnInit {
                     }
                 });              
                 // if Usa customer
-                if (userLegalEntity && userLegalEntity.countryCode.trim() === "US" || userLegalEntity.countryCode.trim() === "MX"){            
-                    this.initUsaMXCustomerOrders();
+                if (userLegalEntity && userLegalEntity.countryCode.trim() === "US"){            
+                    this.initUsaCustomerOrders();
                 }   
                 else{
                     this.initOrders();
@@ -86,10 +86,10 @@ export class OrdersComponent implements OnInit {
             { name: this.t.pt('views.table.location'), width: 25 },
             { name: this.t.pt('views.table.pon'), width: 15 },
             { name: this.t.pt('views.table.products'), width: 10 },
-            { name: this.t.pt('views.table.amount'), width: 10, sortable: false },
-            { name: this.t.pt('views.table.request_date'), width: 20 },
+            // { name: this.t.pt('views.table.amount'), width: 10, sortable: false },
+            // { name: this.t.pt('views.table.request_date'), width: 20 },
             { name: this.t.pt('views.table.status'), width: 18 },
-            { name: this.t.pt('views.table.total'), width: 13 },
+            // { name: this.t.pt('views.table.total'), width: 13 },
         ]
 
         this.orders.forEach((order) => {
@@ -99,16 +99,16 @@ export class OrdersComponent implements OnInit {
                 { inner: order.jobsite.jobsiteCode + " " + order.jobsite.jobsiteDesc, subtitle: true },
                 { inner: order.purchaseOrder, hideMobile: true },
                 { inner: "<i class='cmx-icon-track'></i>", hideMobile: true },
-                { inner: order.totalQuantity + " tons" },
-                { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY') },
+                // { inner: order.totalQuantity + " tons" },
+                // { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY') },
                 { inner: "<span class='status " + order.status.statusDesc.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
-                { inner: "$" + order.totalAmount, class: "roboto-bold" },
+                // { inner: "$" + order.totalAmount, class: "roboto-bold" },
                 // { inner: "<span class='status " + order.status.statusDesc.toLowerCase() + "'></span>" + order.status.statusDesc, hideDesktop: true },
             ]);
         });
     }
 
-    initUsaMXCustomerOrders() {
+    initUsaCustomerOrders() {
         this.columns = [
             { name: this.t.pt('views.table.order_no'), width: 15 },
             { name: this.t.pt('views.table.submitted'), width: 15 },
