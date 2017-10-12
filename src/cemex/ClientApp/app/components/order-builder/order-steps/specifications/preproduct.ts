@@ -233,11 +233,19 @@ export class PreProduct {
             this.product.product.productId
         ).subscribe((result) => {
             let contracts = result.json().products;
-            this.availableContracts = contracts;
+            this.availableContracts = contracts;     
+            let contractsResult;
 
-            if (contracts.length > 0) {
+            if (contracts.length > 0) {    
+                if (this.contract){
+                    contractsResult = contracts.find((contract) => {
+                        return contract.salesDocument.salesDocumentCode == this.contract.salesDocument.salesDocumentCode;
+                    });
+                }
                 // Add no contract option
-                this.availableContracts.unshift(undefined);
+                if (!this.contract || !contractsResult) {
+                    this.availableContracts.unshift(undefined);                    
+                }
                 this.disableds.contracts = false;
             }
             else {
@@ -246,7 +254,9 @@ export class PreProduct {
             }
 
             // Set default contract
-            this.contract = undefined;
+            if (!contractsResult) {
+                this.contract = undefined;
+            }
             this.loadings.contracts = false;
         });
     }
@@ -405,13 +415,15 @@ export class PreProduct {
 
     // TODO: define product lines 2 and 3
     fetchManeuvering() {
+        this.maneuveringAvailable = false;
         // Maneouvering additional service
         if (Validations.isDelivery() &&
             (this.product.product.productLine.productLineId === 2 || this.product.product.productLine.productLineId === 3)) {
 
             let area = this.manager.salesArea.find((a) => {
                 let id = this.product.product.productLine.productLineId;
-                return id === 2 ? a.salesArea.salesAreaId === 2 : a.salesArea.salesAreaId === 219;
+
+                return id === 2 ? a.salesArea.divisionCode === '02' : a.salesArea.divisionCode === '09';
             });
 
             // check if salesarea has maneouvering enabled
@@ -431,8 +443,11 @@ export class PreProduct {
         ).subscribe((response) => {
             this.availablePlants = response.json().plants;
             this.loadings.plants = false;
-            this.plant = undefined;
-            this.validations.plant.valid = false;
+
+            if (this.availablePlants.length === 1) { this.plant = this.availablePlants[0]; }
+            else { this.plant = undefined; }
+
+            this.plantChanged();
         }, error => {
             this.loadings.plants = false;
             this.plant = undefined;

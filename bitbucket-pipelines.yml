@@ -85,6 +85,9 @@ pipelines:
               - cf set-env order-taking-qav2 PATH "/bin:/usr/bin:/home/vcap/app/node/bin"
               - ls
               - cf push order-taking-qav2
+              - cf login -u $BMX_DEP_USER -p $BMX_DEP_PWD -o ORDERPROD-GBL-ORG -s QA2
+              - cf set-env ordersnproduct-qa2-0 PATH "/bin:/usr/bin:/home/vcap/app/node/bin"
+              - cf push ordersnproduct-qa2-0
     pre-dev:
       - step:
           script: # Modify the commands below to build your repository.
