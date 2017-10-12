@@ -81,7 +81,8 @@ export class PreProduct {
         // Available products init
         // -------------------------------------------------------
         if (SSC.availableProducts.length && !this.product) {
-            this.setProduct(SSC.availableProducts[0], shouldFetchContracts);
+            //this.setProduct(SSC.availableProducts[0], shouldFetchContracts);
+            this.setProduct(SSC.availableProducts[0]);
             this.loadings.products = false;
         }
         else {
