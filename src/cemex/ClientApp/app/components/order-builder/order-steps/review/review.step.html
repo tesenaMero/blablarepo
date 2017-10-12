@@ -17,6 +17,7 @@
                     {{ t.pt('views.review.pod') }}
                 </div>
                 <div class="description">
+                    {{manager.pointOfDelivery?.shipmentLocationDesc}} <br>
                     {{ manager.pointOfDelivery?.address?.streetName }} {{ manager.pointOfDelivery?.address?.settlementDesc }}, {{ manager.pointOfDelivery?.address?.regionDesc }}, {{ manager.pointOfDelivery?.address?.cityDesc }}, {{ manager.pointOfDelivery?.address?.postalCode
                     }}
                 </div>
