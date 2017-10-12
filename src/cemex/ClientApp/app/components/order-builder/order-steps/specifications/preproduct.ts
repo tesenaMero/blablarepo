@@ -130,6 +130,10 @@ export class PreProduct {
                 }
             }
         }
+
+        if (Validations.isReadyMix()) {
+            this.projectProfile.project.projectProperties.kicker = false;
+        }
     }
 
     setProduct(product: any, shouldFetchContracts?: boolean) {

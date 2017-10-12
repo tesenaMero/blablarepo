@@ -190,39 +190,10 @@ export class ReviewStepComponent implements StepEventsListener {
                 "unitId": 262 //preProduct.product.unitOfMeasure.unitId
             },
             "orderItemProfile": {
-                "additionalServices": this.makeAdditionalServices(preProduct),
-
+                "additionalServices": this.makeAdditionalServices(preProduct)
             }
         }
-        if (Validations.isReadyMix()) {
-            baseItem.orderItemProfile["kicker"] = projectProperties.kicker
-            baseItem.orderItemProfile["loadSize"] = {
-                "loadSizeId": projectProperties.loadSize.loadSizeId
-            }
-            baseItem.orderItemProfile["element"] = {
-                "elementId": projectProperties.element.elementId
-            }
-            baseItem.orderItemProfile["timePerLoad"] = {
-                "timePerLoadId": projectProperties.timePerLoad.timePerLoadId
-            }
-            if (Validations.isMexicoCustomer()) {
-                baseItem.orderItemProfile["unloadType"] = {
-                    "unloadTypeId": projectProperties.unloadType.unloadTypeId
-                }
-                if (projectProperties.unloadType.unloadTypeCode === 'PUMP') {
-                    baseItem.orderItemProfile["pumpCapacityFrom"] = {
-                        "pumpCapacityId": projectProperties.pumpCapacity.pumpCapacityId
-                    }
-                    baseItem.orderItemProfile["pumpCapacityTo"] = {
-                        "pumpCapacityId": projectProperties.pumpCapacity.pumpCapacityId
-                    }
-                }
-                baseItem.orderItemProfile["dischargeTime"] = {
-                    "dischargeTimeId": projectProperties.dischargeTime.dischargeTimeId
-                }
-            }
-
-        }
+         Object.assign(baseItem.orderItemProfile, preProduct.projectProfile.project.projectProperties);
 
 
         // Add payment if needed and any

@@ -77,8 +77,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     private readyMixAdditionalServices = [];
 
-    private kicker = false;
-
     static catalogs = [];
     get catalogs() {
         return SpecificationsStepComponent.catalogs;
@@ -502,7 +500,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         // Clone project object
         preProduct.projectProfile.project.projectProperties = JSON.parse(JSON.stringify(projectProfile.project.projectProperties));
-        this.kicker = preProduct.projectProfile.project.projectProperties.kicker;
     } 
     }
 
@@ -583,7 +580,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     onChangeKicker(preProduct, value: Boolean) {
         preProduct.projectProfile.project.projectProperties.kicker = Boolean(value);
-        console.log(preProduct.projectProfile.project)
+
     }
 
     productChanged(preProduct: PreProduct) {
