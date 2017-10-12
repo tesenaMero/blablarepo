@@ -174,6 +174,7 @@ export class ReviewStepComponent implements StepEventsListener {
 
     private makeItem(preProduct, index) {
         let _ = this.manager;
+        const projectProperties = preProduct.projectProfile.project.projectProperties;
         let baseItem = {
             "itemSeqNum": 10 * (index + 1),
             "purchaseOrder": _.purchaseOrder ? _.purchaseOrder : "",
@@ -181,17 +182,21 @@ export class ReviewStepComponent implements StepEventsListener {
             "currency": {
                 "currencyCode": this.getCustomerCurrency()
             },
-            "quantity": this.convertToTons(preProduct) || preProduct.quantity,
+            "quantity": preProduct.quantity,
             "product": {
                 "productId": preProduct.product.product.productId
             },
             "uom": {
-                "unitId": 262 //preProduct.product.unitOfMeasure.unitId
+                "unitId": preProduct.product.unitOfMeasure.unitId
             },
             "orderItemProfile": {
                 "additionalServices": this.makeAdditionalServices(preProduct)
             }
         }
+         Object.assign(baseItem.orderItemProfile, preProduct.projectProfile.project.projectProperties);
+
+
+        Object.assign(baseItem.orderItemProfile, preProduct.projectProfile.project.projectProperties);
 
         // Add payment if needed and any
         if (preProduct.payment) {
@@ -248,10 +253,11 @@ export class ReviewStepComponent implements StepEventsListener {
     }
 
     private combineDateTime(preProduct): String {
-        const time = moment.utc(preProduct.time).local().format('HH:mm');
-        const newDateTime = moment.utc(preProduct.date).local();
+        const time = moment.utc(preProduct.time).local().format('HH:mm:ss');
+        const date = moment.utc(preProduct.date).local().format('YYYY-MM-DD');
+        const newDateTime = date + 'T' + time;
 
-        return newDateTime.toISOString();
+        return newDateTime;
     }
 
     private safeContactName() {

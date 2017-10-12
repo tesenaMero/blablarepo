@@ -22,15 +22,11 @@ export class ProjectProfileCreatorComponent {
         profileName: '',
         project: {
             projectProperties: {
-                transportMethod: {
-                    transportMethodId: 2
-                },
-                kicker: true
+                kicker: false
             }
         }
     };
 
-    
 
     // CustomerService.currentCustomer().legalEntityId || 
     constructor(private CatalogApi: CatalogApi, private ProjectProfileApi: ProjectProfileApi, private CustomerService: CustomerService, private t: TranslationService) {
@@ -41,6 +37,8 @@ export class ProjectProfileCreatorComponent {
 
                 if ((customer.countryCode).trim() === 'MX') {
                     this.isMX = true;
+                } else {
+                    this.isMX = false;
                 }
 
                 let sub = this.CatalogApi.byProductLine(customerId, '0006').map((response) => response.json()).subscribe((response) => {
@@ -74,11 +72,23 @@ export class ProjectProfileCreatorComponent {
         this.canceled.emit();
     }
 
+    onChangeKicker(value: Boolean) {
+        this.projectProfile.project.projectProperties.kicker = Boolean(value);
+    }
+
     onChangeUnloadType(index) {
-        const entry = this.catalogs.ULT[index];
-        this.projectProfile.project.projectProperties.unloadType = { unloadTypeId: entry.entryId };
-        delete this.projectProfile.project.projectProperties.pumpCapacity;
-        this.isUnloadTypePump = entry.entryCode === 'Pump';
+        if (index === "null") {
+            delete this.projectProfile.project.projectProperties.unloadType;
+            if (this.isUnloadTypePump) {
+                delete this.projectProfile.project.projectProperties.pumpCapacity;
+                this.isUnloadTypePump = false;
+            }
+        } else {
+            const entry = this.catalogs.ULT[index];
+            this.projectProfile.project.projectProperties.unloadType = { unloadTypeId: entry.entryId };
+            delete this.projectProfile.project.projectProperties.pumpCapacity;
+            this.isUnloadTypePump = entry.entryCode === 'Pump';
+        }
     }
 
     onChangePumpCapacity(value) {
@@ -87,17 +97,37 @@ export class ProjectProfileCreatorComponent {
 
     onChangeDischargeTime(value) {
         this.projectProfile.project.projectProperties.dischargeTime = { dischargeTimeId: Number(value) };
+        if (value === "null") {
+            delete this.projectProfile.project.projectProperties.dischargeTime;
+        }
     }
 
     onChangeApplicationType(value) {
         this.projectProfile.project.projectProperties.element = { elementId: Number(value) };
+        if (value === "null") {
+            delete this.projectProfile.project.projectProperties.element;
+        }
     }
-    
+
     onChangeSpacing(value) {
         this.projectProfile.project.projectProperties.timePerLoad = { timePerLoadId: Number(value) };
+        if (value === "null") {
+            delete this.projectProfile.project.projectProperties.timePerLoad;
+        }
     }
 
     onChangeLoadSize(value) {
         this.projectProfile.project.projectProperties.loadSize = { loadSizeId: Number(value) };
+        if (value === "null") {
+            delete this.projectProfile.project.projectProperties.loadSize;
+        }
+    }
+
+    onChangeTransportMethod(value) {
+        this.projectProfile.project.projectProperties.transportMethod = { transportMethodId: Number(value) };
+        if (value === "null") {
+            delete this.projectProfile.project.projectProperties.transportMethod;
+
+        }
     }
 }

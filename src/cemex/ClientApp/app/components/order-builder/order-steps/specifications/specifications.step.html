@@ -10,9 +10,9 @@
                         </label>
                         <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && (!product.loadings.products) && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
                             <span class="selection">
-                                {{ product.product?.commercialCode }} / {{ product.product?.commercialDesc }}
+                                {{ product.product?.commercialCode | trimLeadingZeroes }} / {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
-                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode }} / {{ p?.commercialDesc }}</option>
+                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode | trimLeadingZeroes }} / {{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
                             <span class="action" (click)="openProductSearch(product)">{{ t.pt('views.specifications.change') }}</span>
@@ -27,7 +27,7 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <input class="value" type="number" [ngModel]="product.quantity | number:'1.3-3'" (ngModelChange)="valuechange(product, $event)" min="0.001" />
+                                <input class="value" [ngModel]="product.quantity | number:'1.0-3'" (ngModelChange)="valueChange(product, $event)" min="0.001" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info" *ngIf="isMXCustomer() && product.maximumCapacity">
@@ -68,7 +68,7 @@
                                 </span>
                             </label>
                         </div>
-                        <div class="group w50">
+                        <div class="group w50" *ngIf="UTILS.isBulkCement() || UTILS.isReadyMix()">
                             <label>{{ t.pt('views.specifications.request_time') }}</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
@@ -94,11 +94,11 @@
                             <span class=""><strong>{{ t.pt('views.specifications.contract') }} {{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
                             <span class="volume" *ngIf="!UTILS.isUSACustomer()">
                                 {{ t.pt('views.specifications.remaining_volume') }}
-                                <strong *ngIf="product.contract?.salesDocument?.hasOwnProperty('volume')">{{ product.contract?.salesDocument?.volume?.total.quantity.amount }}</strong>
+                                <strong *ngIf="product.contract?.salesDocument?.hasOwnProperty('volume')">{{ product.contract?.salesDocument?.volume?.balance != undefined  ? product.contract?.salesDocument?.volume?.balance?.quantity.amount : product.contract?.salesDocument?.volume?.total?.quantity.amount }}</strong>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
                             <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged(product)" class="input behind">
-                                <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">{{ t.pt('views.specifications.contract') }} {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  {{ t.pt('views.specifications.remaining_volume') }}  {{ contract?.salesDocument?.volume?.total.quantity.amount }} </option>
+                                <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">{{ t.pt('views.specifications.contract') }} {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  {{ t.pt('views.specifications.remaining_volume') }}  {{ contract?.salesDocument?.volume?.balance != undefined  ? contract?.salesDocument?.volume?.balance?.quantity.amount : contract?.salesDocument?.volume?.total?.quantity.amount }} </option>
                             </select>
                         </div>
                     </div>
@@ -161,9 +161,9 @@
                         </label>
                         <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && (!product.loadings.products) && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
                             <span class="selection">
-                                {{ product.product?.commercialCode }} / {{ product.product?.commercialDesc }}
+                                {{ product.product?.commercialCode | trimLeadingZeroes }} / {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
-                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode }} / {{ p?.commercialDesc }}</option>
+                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode | trimLeadingZeroes }} / {{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
                             <span class="action" (click)="openProductSearch(product)">{{ t.pt('views.specifications.change') }}</span>
@@ -178,7 +178,7 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <input class="value" type="number" [ngModel]="product.quantity | number:'1.3-3'" (ngModelChange)="valuechange(product, $event)" min="0.001" />
+                                <input class="value" [ngModel]="product.quantity | number:'1.0-3'" (ngModelChange)="valueChange(product, $event)" min="0.001" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                             <div class="info" *ngIf="UTILS.isMexicoCustomer() && product.maximumCapacity">
@@ -221,7 +221,7 @@
                                 </span>
                             </label>
                         </div>
-                        <div class="group w50">
+                        <div class="group w50" *ngIf="UTILS.isBulkCement() || UTILS.isReadyMix()">
                             <label>{{ t.pt('views.specifications.request_time') }}</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
@@ -247,11 +247,11 @@
                             <span class=""><strong>{{ t.pt('views.specifications.contract') }}{{ product.contract?.salesDocument?.salesDocumentCode }}</strong></span>
                             <span class="volume">
                                 {{ t.pt('views.specifications.remaining_volume') }}
-                                <strong *ngIf="product.contract?.salesDocument?.hasOwnProperty('volume')">{{ product.contract?.salesDocument?.volume?.total.quantity.amount }}</strong>
+                                <strong *ngIf="product.contract?.salesDocument?.hasOwnProperty('volume')">{{ product.contract?.salesDocument?.volume?.balance != undefined  ? product.contract?.salesDocument?.volume?.balance?.quantity.amount : product.contract?.salesDocument?.volume?.total?.quantity.amount }}</strong>
                             </span>
                             <span class="arrow cmx-icon-straight-arrow-down"></span>
                             <select [(ngModel)]="product.contract" (ngModelChange)="contractChanged(product)" class="input behind">
-                            <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">{{ t.pt('views.specifications.contract') }} {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  {{ t.pt('views.specifications.remaining_volume') }} {{ contract?.salesDocument?.volume?.total.quantity.amount }}
+                            <option *ngFor="let contract of product.availableContracts; let first = first;" [ngValue]="contract">{{ t.pt('views.specifications.contract') }} {{ contract?.salesDocument?.salesDocumentCode }} &nbsp;&nbsp;&nbsp;&nbsp;  {{ t.pt('views.specifications.remaining_volume') }} {{ contract?.salesDocument?.volume?.balance != undefined  ? contract?.salesDocument?.volume?.balance?.quantity.amount : contract?.salesDocument?.volume?.total?.quantity.amount }}
                             </option>
                         </select>
                         </div>
@@ -331,9 +331,9 @@
                         </label>
                         <div class="input product-selection dropdown" [ngClass]="{ disabled: product.disableds.products }">
                             <span class="selection">
-                                {{ product.product?.commercialCode }} / {{ product.product?.commercialDesc }}
+                                {{ product.product?.commercialCode | trimLeadingZeroes }} / {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
-                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode }} / {{ p?.commercialDesc }}</option>
+                                    <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode | trimLeadingZeroes }} / {{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
                             <!-- <span class="action">Change</span> -->
@@ -348,7 +348,7 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="qty(product, -1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <input class="value" type="number" [ngModel]="product.quantity | number:'1.3-3'" (ngModelChange)="valuechange(product, $event)" min="0.001" />
+                                <input class="value" [ngModel]="product.quantity | number:'1.0-3'" (ngModelChange)="valueChange(product, $event)" min="0.001" />
                                 <span (click)="qty(product, 1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
                         </div>
@@ -386,7 +386,7 @@
                                 </span>
                             </label>
                         </div>
-                        <div class="group w50">
+                        <div class="group w50" *ngIf="UTILS.isBulkCement() || UTILS.isReadyMix()">
                             <label>{{ t.pt('views.specifications.request_time') }}</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
@@ -425,6 +425,7 @@
                                 <!-- Select project profile to prefill specifications -->
                                 {{ product?.projectProfile?.profileName }}
                                 <select [(ngModel)]="product.templateProfile" (ngModelChange)="projectProfileChanged(product, $event)" class="input behind">
+                                    <option value="null"></option>
                                     <option *ngFor="let project of projectProfiles" [ngValue]="project">{{ project?.profileName }}</option>
                                 </select>
                                 </span>
@@ -434,7 +435,7 @@
                 </div>
             </div>
             <div class="d-flex flex-wrap rdymx-specs" [ngClass]="{ disabled: product.loadings.catalogs }">
-                <div class="group">
+                <div class="group" *ngIf="isMXCustomer()">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         {{ t.pt('views.specifications.discharge_time') }}
                     </label>
@@ -449,7 +450,7 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group">
+                <div class="group" *ngIf="isMXCustomer() && !UTILS.isReadyMix()">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         {{ t.pt('views.specifications.transport_method') }}
                     </label>
@@ -464,7 +465,7 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group">
+                <div class="group" *ngIf="isMXCustomer()">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         {{ t.pt('views.specifications.unload_type') }}
                     </label>
@@ -479,7 +480,7 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group" *ngIf="product.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeId === 2">
+                <div class="group" *ngIf="product.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeCode === 'Pump'">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         {{ t.pt('views.specifications.pump_capacity') }}
                     </label>
@@ -537,6 +538,32 @@
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mt-3">
+                    <label class="additional-services">{{ t.pt('views.details.kicker') }}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="group">
+                        <div class="center-kicker">
+                            <input (change)="onChangeKicker(product, $event.target.checked)" [ngModel]="product.projectProfile.project.projectProperties.kicker" type="checkbox" id="kicker">
+                            <label for="kicker">
+                            <svg class="icon-checkbox-active">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
+                            </svg>
+                            <svg class="icon-checkbox-static">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                            </svg>
+                            <svg class="icon-checkbox-hover">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                            </svg>
+                            <span class="lh-19">{{ t.pt('views.project.profile.kicker') }}</span>
+                        </label>
+                        </div>
                     </div>
                 </div>
             </div>
