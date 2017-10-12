@@ -283,6 +283,7 @@ export class PreProduct {
                 this.contract = this.availableContracts[0];
             }
 
+            this.contractChanged();
             this.loadings.contracts = false;
         });
     }
