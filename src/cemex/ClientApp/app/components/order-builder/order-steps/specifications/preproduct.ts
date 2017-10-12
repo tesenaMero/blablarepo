@@ -131,6 +131,10 @@ export class PreProduct {
                 }
             }
         }
+
+        if (Validations.isReadyMix()) {
+            this.projectProfile.project.projectProperties.kicker = false;
+        }
     }
 
     setProducts(products: any[]) {
@@ -524,8 +528,13 @@ export class PreProduct {
         if (this.contract) {
             const volume = _.get(this.contract, 'salesDocument.volume');
             if (volume) {
-                return _.get(volume, 'total.quantity.amount');
+                if (_.get(volume, 'balance.quantity.amount') !== undefined) {
+                    return _.get(volume, 'balance.quantity.amount');
+                } else {
+                    return _.get(volume, 'total.quantity.amount');
+                }
             }
+
         }
         return undefined;
     }

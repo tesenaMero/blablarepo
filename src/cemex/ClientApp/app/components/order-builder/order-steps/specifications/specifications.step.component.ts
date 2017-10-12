@@ -171,13 +171,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     this.dashboard,
                     this.t,
                     shouldFetchContracts);
-    
+
                 p.product = item.product;
                 p.quantity = item.quantity;
                 p.contract = item.contract || undefined;
                 p.payment = item.payment || undefined;
                 p.maximumCapacity = item.maximumCapacity || undefined;
-    
+
                 this.preProducts.push(p);
             });
         }
@@ -186,7 +186,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     onShowed() {
         // Transform recovered manager products as preproducts
         let restoredManager = CircularJSON.parse(localStorage.getItem('manager'));
-        if(restoredManager) {
+        if (restoredManager) {
             this.castProducts();
         }
 
@@ -245,7 +245,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.manager.shippingCondition).subscribe((result) => {
                 let topProducts = result.json().products;
                 SpecificationsStepComponent.availableProducts = topProducts;
-
+                
                 // Set defaults value
                 this.preProducts.forEach((item: PreProduct) => {
                     if (topProducts.length > 0) {
@@ -278,7 +278,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 if (result.json().totalCount > 0) {
                     let topProducts = result.json().products;
                     SpecificationsStepComponent.availableProducts = topProducts;
-
+                    
                     // Set defaults value
                     this.preProducts.forEach((item: PreProduct) => {
                         if (topProducts.length > 0) {
@@ -294,7 +294,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 else {
                     this.fetchProducts(salesDocumentType)
                 }
-            });            
+            });
     }
 
     getAdditionalServices() {
@@ -470,12 +470,14 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     projectProfileChanged(preProduct: PreProduct, projectProfile) {
-        // Prefill
-        preProduct.projectProfile.profileId = projectProfile.profileId;
-        preProduct.projectProfile.profileName = projectProfile.profileName;
+        if (projectProfile !== "null") {
+            // Prefill
+            preProduct.projectProfile.profileId = projectProfile.profileId;
+            preProduct.projectProfile.profileName = projectProfile.profileName;
 
-        // Clone project object
-        preProduct.projectProfile.project.projectProperties = JSON.parse(JSON.stringify(projectProfile.project.projectProperties));
+            // Clone project object
+            preProduct.projectProfile.project.projectProperties = JSON.parse(JSON.stringify(projectProfile.project.projectProperties));
+        }
     }
 
     onChangeDischargeTime(preProduct, index) {
@@ -501,6 +503,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         preProduct.projectProfile.project.projectProperties.unloadType = {
             unloadTypeId: entry.entryId,
+            unloadTypeCode: entry.entryCode,
             unloadTypeDesc: entry.entryDesc
         };
     }
@@ -519,7 +522,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         preProduct.projectProfile.project.projectProperties.element = {
             elementId: entry.entryId,
-            elementDesc: entry.entryDesc
+            elementDesc: entry.entryDesc,
+            elementCode: entry.entryCode
         };
     }
 
@@ -548,6 +552,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
             const idx = this.additionalServices.indexOf(this.readyMixAdditionalServices[index]);
             preProduct.additionalServices.splice(idx, 1);
         }
+    }
+
+    onChangeKicker(preProduct, value: Boolean) {
+        preProduct.projectProfile.project.projectProperties.kicker = Boolean(value);
+
     }
 
     productChanged(preProduct: PreProduct) {
@@ -706,7 +715,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
     }
 
-    valuechange(product: PreProduct, newValue: number) {
+    valueChange(product: PreProduct, newValue: number) {
         newValue = (Number(String(newValue).replace(/,/g , "")))
         if (isNaN(newValue)) {
             newValue = 0;
