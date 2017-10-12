@@ -245,7 +245,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.manager.shippingCondition).subscribe((result) => {
                 let topProducts = result.json().products;
                 SpecificationsStepComponent.availableProducts = topProducts;
-                
+
                 // Set defaults value
                 this.preProducts.forEach((item: PreProduct) => {
                     if (topProducts.length > 0) {
@@ -278,7 +278,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 if (result.json().totalCount > 0) {
                     let topProducts = result.json().products;
                     SpecificationsStepComponent.availableProducts = topProducts;
-                    
+
                     // Set defaults value
                     this.preProducts.forEach((item: PreProduct) => {
                         if (topProducts.length > 0) {
@@ -715,29 +715,36 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
     }
 
-    valueChange(product: PreProduct, newValue: number) {
-        newValue = (Number(String(newValue).replace(/,/g , "")))
+    valueChange(product: PreProduct, newValue) {
+        newValue = (Number(String(newValue).replace(/,/g, "")))
         if (isNaN(newValue)) {
             newValue = 0;
+            product.quantity = newValue;
+            return
         }
+        // product.quantityBad();
+        // if (newValue < 0 || newValue == null) {
+        //     return this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 10000);
+        // }
+        // let maxCapacitySalesArea = product.maximumCapacity;
+        // let conversion = product.convertToTons(newValue);
 
-        product.quantityBad();
-        if (newValue < 0 || newValue == null){       
-            return this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 10000);
-        }
-
-        let maxCapacitySalesArea = product.maximumCapacity;
-        let conversion = product.convertToTons(newValue);
-
-        if (conversion > maxCapacitySalesArea && Validations.isCement() && Validations.isDelivery()) {
-            product.quantityBad();
-            return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
-        }
-        else {
-            product.quantityGood();
-        }
-
+        // if (conversion > maxCapacitySalesArea && Validations.isCement() && Validations.isDelivery()) {
+        //     product.quantityBad();
+        //     return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
+        // } else {
+        //     product.quantityGood();
+        // }
         return product.quantity = newValue;
+    }
+
+    numberKey(event, value) {
+        let charCode = (event.which) ? event.which : event.keyCode;
+        if (charCode != 46 && charCode > 31
+            && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
     }
 
     todayStr() {
