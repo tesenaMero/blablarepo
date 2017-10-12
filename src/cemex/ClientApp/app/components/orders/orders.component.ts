@@ -34,6 +34,19 @@ export class OrdersComponent implements OnInit {
         //this.orderRequestConfiguration = OrdersService.ORDER_REQUEST_MAPPING;
         //this.totalPages = ordersService.getTotalPages();
 
+        // Get legal Entity and countryCode
+        let userLegalEntity = JSON.parse(sessionStorage.getItem('user_legal_entity'));  
+
+        this.t.localeData.subscribe(response => {         
+            // if S and MX customer
+            if (userLegalEntity && userLegalEntity.countryCode.trim() === "US"){            
+                this.initUsaCustomerOrders();
+            }   
+            else{
+                this.initOrders();
+            }
+        })
+
         this.isLoading = true;
         this.ordersApi.all().subscribe((response) => {
             if (response.status == 200) {
@@ -47,10 +60,9 @@ export class OrdersComponent implements OnInit {
                     
                     return true;
                     }
-                });
-                let countryCode = JSON.parse(sessionStorage.getItem('user_legal_entity'));                
+                });              
                 // if Usa customer
-                if (countryCode && countryCode.countryCode.trim() === "US"){            
+                if (userLegalEntity && userLegalEntity.countryCode.trim() === "US"){            
                     this.initUsaCustomerOrders();
                 }   
                 else{

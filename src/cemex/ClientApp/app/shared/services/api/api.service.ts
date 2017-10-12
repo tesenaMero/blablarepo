@@ -92,9 +92,9 @@ export class Api {
 
     public getLocale() {        
         let language = localStorage.getItem('language');
-        let countryCode = JSON.parse(sessionStorage.getItem('user_legal_entity'));
-        if (language && countryCode){            
-            this.acceptLanguage = language + '-' + countryCode.countryCode.trim();
+        let userLegalEntity = JSON.parse(sessionStorage.getItem('user_legal_entity'));
+        if (language && userLegalEntity){            
+            this.acceptLanguage = language + '-' + userLegalEntity.countryCode.trim();
         }
     }
 }
