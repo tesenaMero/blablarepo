@@ -39,10 +39,12 @@ export class OrdersComponent implements OnInit {
 
         this.t.localeData.subscribe(response => {         
             // if S and MX customer
-            if (userLegalEntity && userLegalEntity.countryCode.trim() === "US"){            
+            if (userLegalEntity && userLegalEntity.countryCode.trim() === "US") {     
+                this.cleanOrders();
                 this.initUsaCustomerOrders();
             }   
-            else{
+            else {
+                this.cleanOrders();
                 this.initOrders();
             }
         })
@@ -62,10 +64,10 @@ export class OrdersComponent implements OnInit {
                     }
                 });              
                 // if Usa customer
-                if (userLegalEntity && userLegalEntity.countryCode.trim() === "US"){            
+                if (userLegalEntity && userLegalEntity.countryCode.trim() === "US") { 
                     this.initUsaCustomerOrders();
                 }   
-                else{
+                else {
                     this.initOrders();
                 }
             }
@@ -76,6 +78,10 @@ export class OrdersComponent implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    cleanOrders() {
+        this.orders.splice(0, this.orders.length);
     }
 
     initOrders() {
