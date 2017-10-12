@@ -66,7 +66,7 @@ export class PreProduct {
         payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') },
         product: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_products_selected') },
         maxCapacity: { valid: true, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') },
-        contract_balance: { valid: true, mandatory: true, text: this.t.pt('views.specifications.contract_remaining_amount_overflow') },
+        contractBalance: { valid: true, mandatory: true, text: this.t.pt('views.specifications.contract_remaining_amount_overflow') },
         productQuatity : { valid: true, mandatory: true, text: this.t.pt('views.specifications.negative_amount') }
     }
 
@@ -207,27 +207,15 @@ export class PreProduct {
     }
 
     setQuantityValidation(valid: boolean) {
-        if (valid) {
-            this.validations.maxCapacity.valid = true;
-        } else {
-            this.validations.maxCapacity.valid = false;
-        }
+            this.validations.maxCapacity.valid = valid;
     }
 
     setContractBalanceValidation(valid: boolean) {
-        if (valid) {
-            this.validations.contract_balance.valid = true;
-        } else {
-            this.validations.contract_balance.valid = false;
-        }
+            this.validations.contractBalance.valid = valid;
     }
 
     setProductNegativeAmountValidation(valid: boolean) {
-        if (valid) {
-            this.validations.productQuatity.valid = true;
-        } else {
-            this.validations.productQuatity.valid = false;
-        }
+            this.validations.productQuatity.valid = valid;
     }
 
     plantChanged() {
