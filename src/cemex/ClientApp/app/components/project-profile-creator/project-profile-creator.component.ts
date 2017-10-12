@@ -28,7 +28,6 @@ export class ProjectProfileCreatorComponent {
     };
 
 
-
     // CustomerService.currentCustomer().legalEntityId || 
     constructor(private CatalogApi: CatalogApi, private ProjectProfileApi: ProjectProfileApi, private CustomerService: CustomerService, private t: TranslationService) {
         this.CustomerService.customerSubject.subscribe((customer) => {
@@ -78,17 +77,17 @@ export class ProjectProfileCreatorComponent {
     }
 
     onChangeUnloadType(index) {
-        if (index === "null" ) {
+        if (index === "null") {
             delete this.projectProfile.project.projectProperties.unloadType;
             if (this.isUnloadTypePump) {
-               delete this.projectProfile.project.projectProperties.pumpCapacity;
-               this.isUnloadTypePump = false; 
+                delete this.projectProfile.project.projectProperties.pumpCapacity;
+                this.isUnloadTypePump = false;
             }
         } else {
-        const entry = this.catalogs.ULT[index];
-        this.projectProfile.project.projectProperties.unloadType = { unloadTypeId: entry.entryId };
-        delete this.projectProfile.project.projectProperties.pumpCapacity;
-        this.isUnloadTypePump = entry.entryCode === 'Pump';
+            const entry = this.catalogs.ULT[index];
+            this.projectProfile.project.projectProperties.unloadType = { unloadTypeId: entry.entryId };
+            delete this.projectProfile.project.projectProperties.pumpCapacity;
+            this.isUnloadTypePump = entry.entryCode === 'Pump';
         }
     }
 
@@ -128,7 +127,7 @@ export class ProjectProfileCreatorComponent {
         this.projectProfile.project.projectProperties.transportMethod = { transportMethodId: Number(value) };
         if (value === "null") {
             delete this.projectProfile.project.projectProperties.transportMethod;
-        
-    }
+
+        }
     }
 }

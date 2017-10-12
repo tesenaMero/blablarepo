@@ -171,13 +171,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     this.dashboard,
                     this.t,
                     shouldFetchContracts);
-    
+
                 p.product = item.product;
                 p.quantity = item.quantity;
                 p.contract = item.contract || undefined;
                 p.payment = item.payment || undefined;
                 p.maximumCapacity = item.maximumCapacity || undefined;
-    
+
                 this.preProducts.push(p);
             });
         }
@@ -186,7 +186,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     onShowed() {
         // Transform recovered manager products as preproducts
         let restoredManager = CircularJSON.parse(localStorage.getItem('manager'));
-        if(restoredManager) {
+        if (restoredManager) {
             this.castProducts();
         }
 
@@ -323,7 +323,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 else {
                     this.fetchProducts(salesDocumentType)
                 }
-            });            
+            });
     }
 
     getAdditionalServices() {
@@ -494,15 +494,14 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     projectProfileChanged(preProduct: PreProduct, projectProfile) {
         if (projectProfile !== "null") {
-        // Prefill
-        preProduct.projectProfile.profileId = projectProfile.profileId;
-        preProduct.projectProfile.profileName = projectProfile.profileName;
+            // Prefill
+            preProduct.projectProfile.profileId = projectProfile.profileId;
+            preProduct.projectProfile.profileName = projectProfile.profileName;
 
-        // Clone project object
-        preProduct.projectProfile.project.projectProperties = JSON.parse(JSON.stringify(projectProfile.project.projectProperties));
-    } 
+            // Clone project object
+            preProduct.projectProfile.project.projectProperties = JSON.parse(JSON.stringify(projectProfile.project.projectProperties));
+        }
     }
-
 
     onChangeDischargeTime(preProduct, index) {
         const entry = this.catalogs['DCT'][index];
@@ -741,7 +740,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     valuechange(product: PreProduct, newValue: number) {
         product.quantityBad();
-        if(newValue < 0 || newValue == null){       
+        if (newValue < 0 || newValue == null) {
             return this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 10000);
         }
         let maxCapacitySalesArea = product.maximumCapacity;
