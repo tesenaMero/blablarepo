@@ -1,3 +1,4 @@
+import { TrimLeadingZeroesPipe } from './pipes/trim-leading-zeroes.pipe';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -32,7 +33,8 @@ import { OrderDetailCommentsComponent } from './components/order-detail/order-de
 import { OrderDetailLogsComponent } from './components/order-detail/order-detail-logs/order-detail-logs.component';
 import { SelectDropdownModule } from './shared/components/selectwithsearch/dropdown.module';
 import { CrossProductComponent } from './components/cross-product/crossProduct.component';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DateTimePickerModule } from './shared/components/ng-pick-datetime';
 // Pipes
 import {
     NoSpacePipe,
@@ -56,7 +58,6 @@ import { ModalComponent, ModalService } from './shared/components/modal';
 
 // Services
 import { WindowRef } from './shared/services/window-ref.service';
-import { NguiDatetimePickerModule } from './shared/components/datetimepicker';
 import { OrderRequestHelper } from './utils/order-request.helper';
 import { OrdersModel } from './shared/schema';
 import { SessionService, AuthGuard } from './shared/services/session.service';
@@ -114,6 +115,7 @@ export const sharedConfig: NgModule = {
         SumGroupProductPipe,
         DatePipe,
         UnitCodeMapperPipe,
+        TrimLeadingZeroesPipe,
 
         // Regular components
         OrdersTableComponent,
@@ -144,11 +146,12 @@ export const sharedConfig: NgModule = {
         ModalComponent,
     ],
     imports: [
-        NguiDatetimePickerModule,
         SelectDropdownModule,
         FlexLayoutModule,
         CmxCoreCommonModule,
         CmxSharedModule,
+        DateTimePickerModule,
+        BrowserAnimationsModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full'},
             { path: 'ordersnproduct', redirectTo: 'app', pathMatch: 'prefix'},

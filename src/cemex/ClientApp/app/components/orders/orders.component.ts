@@ -74,10 +74,10 @@ export class OrdersComponent implements OnInit {
             { name: this.t.pt('views.table.location'), width: 25 },
             { name: this.t.pt('views.table.pon'), width: 15 },
             { name: this.t.pt('views.table.products'), width: 10 },
-            { name: this.t.pt('views.table.amount'), width: 10, sortable: false },
-            { name: this.t.pt('views.table.request_date'), width: 20 },
+            // { name: this.t.pt('views.table.amount'), width: 10, sortable: false },
+            // { name: this.t.pt('views.table.request_date'), width: 20 },
             { name: this.t.pt('views.table.status'), width: 18 },
-            { name: this.t.pt('views.table.total'), width: 13 },
+            // { name: this.t.pt('views.table.total'), width: 13 },
         ]
 
         this.orders.forEach((order) => {
@@ -87,10 +87,10 @@ export class OrdersComponent implements OnInit {
                 { inner: order.jobsite.jobsiteCode + " " + order.jobsite.jobsiteDesc, subtitle: true },
                 { inner: order.purchaseOrder, hideMobile: true },
                 { inner: "<i class='cmx-icon-track'></i>", hideMobile: true },
-                { inner: order.totalQuantity + " tons" },
-                { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY') },
+                // { inner: order.totalQuantity + " tons" },
+                // { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY') },
                 { inner: "<span class='status " + order.status.statusDesc.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
-                { inner: "$" + order.totalAmount, class: "roboto-bold" },
+                // { inner: "$" + order.totalAmount, class: "roboto-bold" },
                 // { inner: "<span class='status " + order.status.statusDesc.toLowerCase() + "'></span>" + order.status.statusDesc, hideDesktop: true },
             ]);
         });
@@ -110,12 +110,12 @@ export class OrdersComponent implements OnInit {
         this.orders.forEach((order) => {
             this.rows.push([
                 { inner: this.getOrderCode(order), class: "order-id", title: true, click: () => this.goToDetail(order) },
-                { inner: moment.utc(order.updatedDateTime).local().format('DD/MM/YYYY'), hideMobile: true },
+                { inner: moment.utc(order.createdDateTime).local().format('DD/MM/YYYY'), hideMobile: true },
                 { inner: order.jobsite.jobsiteCode + " " + order.jobsite.jobsiteDesc, subtitle: true },
                 { inner: order.purchaseOrder, hideMobile: true },
                 { inner: "<i class='cmx-icon-track'></i>", hideMobile: true },
                 { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY') },
-                { inner: "<span class='status " + order.status.statusDesc.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
+                { inner: "<span class='status " + order.status.statusCode.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
             ]);
         });
     }
@@ -124,9 +124,9 @@ export class OrdersComponent implements OnInit {
         this.router.navigate(['/ordersnproduct/app/order-detail'], {
             queryParams: {
                 orderId: order.orderId ? order.orderId : null,
-                typeCode: order.orderType ? order.orderType.orderTypeCode : null,
                 orderCode: order.orderCode ? order.orderCode : null,
-                businessLine: order.orderCode ? order.salesArea.businessLine.businessLineCode : null
+                businessLine: order.salesArea ? order.salesArea.businessLine.businessLineCode : null,
+                country: order.salesArea.countryCode ? order.salesArea.countryCode : null
             }
         });
     }

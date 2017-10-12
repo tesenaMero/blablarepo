@@ -8,9 +8,11 @@ import { CustomerService } from '../../../../shared/services/customer.service';
 import { DraftsService } from '../../../../shared/services/api/drafts.service';
 import { Validations } from '../../../../utils/validations';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
+import { PreProduct } from '../specifications/preproduct'
 
 import { } from '@types/googlemaps';
 import * as _ from 'lodash';
+import * as moment from 'moment'
 declare var google: any;
 
 @Component({
@@ -172,6 +174,7 @@ export class ReviewStepComponent implements StepEventsListener {
 
     private makeItem(preProduct, index) {
         let _ = this.manager;
+        const projectProperties = preProduct.projectProfile.project.projectProperties;
         let baseItem = {
             "itemSeqNum": 10 * (index + 1),
             "purchaseOrder": _.purchaseOrder ? _.purchaseOrder : "",
@@ -190,6 +193,10 @@ export class ReviewStepComponent implements StepEventsListener {
                 "additionalServices": this.makeAdditionalServices(preProduct)
             }
         }
+         Object.assign(baseItem.orderItemProfile, preProduct.projectProfile.project.projectProperties);
+
+
+        Object.assign(baseItem.orderItemProfile, preProduct.projectProfile.project.projectProperties);
 
         // Add payment if needed and any
         if (preProduct.payment) {
@@ -246,12 +253,11 @@ export class ReviewStepComponent implements StepEventsListener {
     }
 
     private combineDateTime(preProduct): String {
-        const time = preProduct.time.split(':');
-        const newDateTime = new Date(preProduct.date);
+        const time = moment.utc(preProduct.time).local().format('HH:mm:ss');
+        const date = moment.utc(preProduct.date).local().format('YYYY-MM-DD');
+        const newDateTime = date + 'T' + time;
 
-        newDateTime.setUTCHours(time[0]);
-        newDateTime.setUTCMinutes(time[1]);
-        return newDateTime.toISOString();
+        return newDateTime;
     }
 
     private safeContactName() {
@@ -282,6 +288,18 @@ export class ReviewStepComponent implements StepEventsListener {
         }
 
         return ""
+    }
+
+    // Convert to tons quantity selected
+    convertToTons(product: PreProduct) {
+        let qty = product.quantity
+        if (product.unit === undefined) {
+            return qty
+        }
+
+        let factor = product.unit.numerator / product.unit.denominator;
+        let convertion = qty * factor;
+        return convertion || undefined;
     }
 
     // Map stuff

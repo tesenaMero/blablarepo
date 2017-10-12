@@ -18,7 +18,7 @@ export class PreProduct {
     quantity: number = 1;
     newValue: number = 1;
     date: any = new Date();
-    time = "13:00";
+    time = new Date();
     unit: any;
     payment: any;
     contract: any;
@@ -65,7 +65,7 @@ export class PreProduct {
         contract: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_contract') },
         payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') },
         product: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_products_selected') },
-        maxCapacity: { valid: false, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') }
+        maxCapacity: { valid: true, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') },
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean, private templateProduct?: any) {
@@ -81,7 +81,8 @@ export class PreProduct {
         // Available products init
         // -------------------------------------------------------
         if (SSC.availableProducts.length && !this.product) {
-            this.setProduct(SSC.availableProducts[0], shouldFetchContracts);
+            //this.setProduct(SSC.availableProducts[0], shouldFetchContracts);
+            this.setProduct(SSC.availableProducts[0]);
             this.loadings.products = false;
         }
         else {
@@ -130,6 +131,27 @@ export class PreProduct {
                 }
             }
         }
+
+        if (Validations.isReadyMix()) {
+            this.projectProfile.project.projectProperties.kicker = false;
+        }
+    }
+
+    setProducts(products: any[]) {
+        if (products.length && this.product) {
+            // Try to preselect product
+            let matchedProduct = products.find(item => {
+                return item.commercialCode == this.product.commercialCode
+            });
+
+            this.setProduct(matchedProduct);
+        }
+        else if (products.length) {
+            this.setProduct(products[0]);
+        }
+        else {
+            this.setProduct(undefined);
+        }
     }
 
     setProduct(product: any, shouldFetchContracts?: boolean) {
@@ -137,13 +159,10 @@ export class PreProduct {
         if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
 
         this.product = product;
-        //this.productChanged(shouldFetchContracts);
+        this.productChanged(shouldFetchContracts);
     }
 
     productChanged(shouldFetchContracts?: boolean) {
-        if (this.product) { this.validations.product.valid = true; }
-        else { this.validations.product.valid = false; }
-
         // Optionals
         if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
 
@@ -156,7 +175,13 @@ export class PreProduct {
             this.loadings.products = false;
             this.loadings.contracts = false;
             this.loadings.units = false;
+
+            this.validations.product.valid = false;
             return;
+        }
+        else {
+            this.validations.product.valid = true;
+            this.loadings.products = false;
         }
 
         if (shouldFetchContracts) {
@@ -182,8 +207,12 @@ export class PreProduct {
             this.fetchUnitsFromContract();
 
             // If should get payment terms from contract
-            if (this.contract.salesDocument.paymentTerm) {
+            if (this.contract.salesDocument.paymentTerm && this.contract.salesDocument.paymentTerm.checkPaymentTerm == true) {
                 this.getContractPaymentTerm(this.contract.salesDocument.paymentTerm.paymentTermId);
+            }
+            else {
+                // Reset available payments
+                this.availablePayments = SpecificationsStepComponent.availablePayments;
             }
         }
         else {
@@ -192,6 +221,7 @@ export class PreProduct {
 
             // Reset available payments
             this.availablePayments = SpecificationsStepComponent.availablePayments;
+            this.payment = SpecificationsStepComponent.availablePayments[0];
         }
 
         // TODO:
@@ -199,11 +229,11 @@ export class PreProduct {
         // this.quantity = 1;
     }
 
-    quantityGood(){
+    quantityGood() {
         this.validations.maxCapacity.valid = true;
     }
 
-    quantityBad(){
+    quantityBad() {
         this.validations.maxCapacity.valid = false;
     }
 
@@ -225,25 +255,51 @@ export class PreProduct {
             this.manager.jobsite,
             SALES_DOCUMENT_TYPE,
             this.manager.productLine,
-            this.manager.shippingCondition,
-            this.product.product.productId
+            this.product.product.productId,
+            this.getShippingCondition()
         ).subscribe((result) => {
             let contracts = result.json().products;
+
+            // Set contracts and add default
             this.availableContracts = contracts;
+            this.availableContracts.unshift(undefined);
 
-            if (contracts.length > 0) {
-                // Add no contract option
-                this.availableContracts.unshift(undefined);
-
-                // Set default contract
-                this.contract = undefined;
-
+            if (this.availableContracts.length > 0) {
                 this.disableds.contracts = false;
-            }
-            else { this.disableds.contracts = true; } // Disable it if no contracts
 
+                let matchContract = undefined;
+                if (this.contract) {
+                    // Try to match
+                    try {
+                        matchContract = this.availableContracts.find((item) => {
+                            return item.salesDocument.salesDocumentCode == this.contract.salesDocument.salesDocumentCode
+                        });
+                    }
+                    catch (ex) {
+                        matchContract = undefined;
+                    }
+                }
+                
+                this.contract = matchContract
+            }
+            else {
+                // Disable it if no contracts
+                this.disableds.contracts = true;
+                this.contract = this.availableContracts[0];
+            }
+
+            this.contractChanged();
             this.loadings.contracts = false;
         });
+    }
+
+    getShippingCondition() {
+        if (Validations.isUSACustomer() && Validations.isPickup()) {
+            return undefined;
+        }
+        else {
+            return this.manager.shippingCondition
+        }
     }
 
     fetchUnits() {
@@ -259,6 +315,7 @@ export class PreProduct {
             this.productsApi.units(this.product.product.productId).map((result) => {
                 let units = result.json().productUnitConversions;
                 this.availableUnits = units;
+                this.product.availableUnits = units;
 
                 if (units.length > 0) {
                     this.disableds.units = false;
@@ -315,6 +372,7 @@ export class PreProduct {
 
     fetchUnitsFromContract() {
         if (this.contract.unitOfMeasure) {
+            // Fetch base unit and units from contracts and preselect
             this.forkUnitsFromContracts();
         }
         else {
@@ -323,7 +381,9 @@ export class PreProduct {
             this.disableds.quantity = true;
             this.productsApi.units(this.contract.salesDocument.salesDocumentId).subscribe((result) => {
                 let units = result.json().productUnitConversions;
-                this.availableUnits = units;
+                if (units) { this.availableUnits = units; }
+                else { this.availableUnits = this.product.availableUnits; }
+
                 if (units.length) {
                     this.unit = units[0];
                     this.disableds.units = false;
@@ -347,7 +407,8 @@ export class PreProduct {
         Observable.forkJoin(
             this.productsApi.units(this.contract.salesDocument.salesDocumentId).map((result) => {
                 let units = result.json().productUnitConversions;
-                this.availableUnits = units;
+                if (units.length) { this.availableUnits = units; }
+                else { this.availableUnits = this.product.availableUnits; }
             }),
             this.productsApi.unitByUnitOfMeasure(this.contract.unitOfMeasure).map((result) => {
                 this.contract.unitOfMeasure = result.json();
@@ -374,17 +435,20 @@ export class PreProduct {
             if (matchingUnit) {
                 this.unit = matchingUnit;
                 this.disableds.units = true;
+                this.disableds.quantity = false;
             }
             else {
                 // Preselect first one and let the user change it
                 if (this.availableUnits.length) {
                     this.unit = this.availableUnits[0];
+                    this.disableds.quantity = false;
                 }
                 // No units available so disable it
                 else {
                     this.dashboard.alertError("No units available for this contract", 8000);
                     this.unit = undefined;
                     this.disableds.units = true;
+                    this.disableds.quantity = true;
                 }
             }
         });
@@ -392,13 +456,15 @@ export class PreProduct {
 
     // TODO: define product lines 2 and 3
     fetchManeuvering() {
+        this.maneuveringAvailable = false;
         // Maneouvering additional service
         if (Validations.isDelivery() &&
             (this.product.product.productLine.productLineId === 2 || this.product.product.productLine.productLineId === 3)) {
 
             let area = this.manager.salesArea.find((a) => {
                 let id = this.product.product.productLine.productLineId;
-                return id === 2 ? a.salesArea.salesAreaId === 2 : a.salesArea.salesAreaId === 219;
+
+                return id === 2 ? a.salesArea.divisionCode === '02' : a.salesArea.divisionCode === '09';
             });
 
             // check if salesarea has maneouvering enabled
@@ -414,12 +480,17 @@ export class PreProduct {
         this.plantApi.byCountryCodeAndRegionCode(
             countryCode.trim(),
             this.manager.jobsite.address.regionCode,
-            this.product.productId
+            this.product.product.productId
         ).subscribe((response) => {
-            this.availablePlants = response.json().plants;
-            this.loadings.plants = false;
-            this.plant = undefined;
-            this.validations.plant.valid = false;
+            if (response.status == 200) {
+                this.availablePlants = response.json().plants;
+                this.loadings.plants = false;
+
+                if (this.availablePlants.length === 1) { this.plant = this.availablePlants[0]; }
+                else { this.plant = undefined; }
+
+                this.plantChanged();
+            }
         }, error => {
             this.loadings.plants = false;
             this.plant = undefined;
@@ -457,8 +528,13 @@ export class PreProduct {
         if (this.contract) {
             const volume = _.get(this.contract, 'salesDocument.volume');
             if (volume) {
-                return _.get(volume, 'total.quantity.amount');
+                if (_.get(volume, 'balance.quantity.amount') !== undefined) {
+                    return _.get(volume, 'balance.quantity.amount');
+                } else {
+                    return _.get(volume, 'total.quantity.amount');
+                }
             }
+
         }
         return undefined;
     }
@@ -497,7 +573,7 @@ export class PreProduct {
             this.validations.payment.mandatory = false;
         }
 
-        if(Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery()){
+        if (Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery()) {
             this.validations.maxCapacity.mandatory = true;
         }
 

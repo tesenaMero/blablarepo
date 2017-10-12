@@ -28,7 +28,7 @@ export class NewOrderComponent implements OnInit, OnDestroy {
         });
     }
 
-    ngOnInit() { }
+    ngOnInit() {}
 
     ngOnDestroy() {
         this.manager.resetOrder();

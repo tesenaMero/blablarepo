@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { GoogleMapsHelper } from '../../../../utils/googlemaps.helper'
-import { Step, StepEventsListener, _Step } from '../../../../shared/components/stepper/'
+import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from "../../../../shared/components/selectwithsearch/";
 import { ShipmentLocationApi, PurchaseOrderApi, ShippingConditionApi } from '../../../../shared/services/api';
@@ -54,6 +54,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     // Subs
     salesAdressSub: any;
     lockRequests: boolean = false;
+    validateSub: any;
+    shippingConditionMapSub: any;
 
     // Mapped data
     locations = [];
@@ -128,13 +130,13 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     private UTILS: any;
 
-    constructor( 
-        @Inject(Step) private step: Step, 
-        private manager: CreateOrderService, 
-        private shipmentApi: ShipmentLocationApi, 
-        private customerService: CustomerService, 
-        private purchaseOrderApi: PurchaseOrderApi, 
-        private dashboard: DashboardService, 
+    constructor(
+        @Inject(Step) private step: Step,
+        private manager: CreateOrderService,
+        private shipmentApi: ShipmentLocationApi,
+        private customerService: CustomerService,
+        private purchaseOrderApi: PurchaseOrderApi,
+        private dashboard: DashboardService,
         private shippingConditionApi: ShippingConditionApi,
         private t: TranslationService) {
 
@@ -175,11 +177,34 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
         if (!advance) { return; }
 
-        // Validate purchase order
+        // Set PO validation sub
         if (this.validations.purchaseOrder.mandatory) {
-            this.dashboard.alertInfo(this.t.pt('views.common.validating'), 0);
-            this.purchaseOrderApi.validate(this.purchaseOrder, this.manager.productLine, this.location).subscribe((response) => {
-                let data = response.json();
+            this.validateSub = this.purchaseOrderApi.validate(
+                this.purchaseOrder,
+                this.manager.productLine,
+                this.location).map((response) => {
+                    return response.json()
+                });
+        }
+        else {
+            this.validateSub = Observable.empty().defaultIfEmpty();
+        }
+
+        // Set shippingcondition sub
+        const mode = this.manager.shippingCondition.shippingConditionCode;
+        const customer = this.customerService.currentCustomer().legalEntityId;
+        this.shippingConditionMapSub = this.shippingConditionApi.byCode(customer, mode).map((response) => {
+            let shipppingConditions = response.json().shippingConditions
+            if (shipppingConditions.length) {
+                this.manager.selectDeliveryType(shipppingConditions[0]);
+            }
+        });
+
+        this.dashboard.alertInfo(this.t.pt('views.common.validating'), 0);
+        Observable.forkJoin(this.shippingConditionMapSub, this.validateSub).subscribe((response) => {
+            if (this.validations.purchaseOrder.mandatory) {
+                let data: any = response[1];
+
                 if (data.messageType == "E") {
                     this.dashboard.alertError(data.messageText, 12000);
                     return;
@@ -193,12 +218,37 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                     this.dashboard.alertSuccess(data.messageText);
                     this.requestNext.emit();
                 }
-            });
+            }
+            else {
+                this.requestNext.emit();
+                this.dashboard.closeAlert();
+            }
+        });
 
-            return false;
-        }
+        // Validate purchase order
+        // if (this.validations.purchaseOrder.mandatory) {
+        //     this.dashboard.alertInfo(this.t.pt('views.common.validating'), 0);
+        //     this.purchaseOrderApi.validate(this.purchaseOrder, this.manager.productLine, this.location).subscribe((response) => {
+        //         let data = response.json();
+        //         if (data.messageType == "E") {
+        //             this.dashboard.alertError(data.messageText, 12000);
+        //             return;
+        //         }
+        //         else if (data.messageType == "S") {
+        //             this.dashboard.alertSuccess(data.messageText);
+        //             this.requestNext.emit();
+        //             return;
+        //         }
+        //         else {
+        //             this.dashboard.alertSuccess(data.messageText);
+        //             this.requestNext.emit();
+        //         }
+        //     });
 
-        return advance;
+        //     return false;
+        // }
+
+        return false;
     }
 
     // Replacing the object shippingCondition with the api one
@@ -219,7 +269,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.isCement = Validations.isCement();
 
         // Map shippingcondition
-        this.mapShippingCondition();
+        //this.mapShippingCondition();
 
         // Unlock
         this.lockRequests = false;
@@ -255,11 +305,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.shipmentApi.shipmentLocationTypes.subscribe(data => {
             if (data) { this.fetchJobsites(); }
         });
-
-        // if the user got the location step by pressign the back button
-        if(this.contact && this.contact.name && this.contact.phone) {
-            this.validations.contactPerson.valid = true;
-        }
     }
 
     loadMap() {
@@ -285,7 +330,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     fetchJobsites() {
-        this.shipmentApi.all(this.manager.productLine).subscribe((response) => {
+        this.shipmentApi.all(this.manager.productLine, Validations.isReadyMix()).subscribe((response) => {
             this.locations = response.json().shipmentLocations;
             this.locations.forEach((location, index) => {
                 location.id = index;
@@ -333,30 +378,30 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
         // Make salesarea call, dont fetch yet
         let salesAreaSub = this.shipmentApi.salesAreas(this.location, this.manager.productLine)
-        .map((salesAreas) => {
-            if (salesAreas.json().jobsiteSalesAreas.length > 0) {
-                let salesArea = salesAreas.json().jobsiteSalesAreas;
-                this.manager.salesArea = salesArea;
+            .map((salesAreas) => {
+                if (salesAreas.json().jobsiteSalesAreas.length > 0) {
+                    let salesArea = salesAreas.json().jobsiteSalesAreas;
+                    this.manager.salesArea = salesArea;
 
-                // If its not pickup then all we need to be fetched is sales areas.
-                // If its pickup we need to wait for address object to be fetched
-                if (!Validations.isPickup()) {
-                    this.onCompleted.emit(true);
-                }
-
-                let shouldValidatePurchaseOrder = false;
-                salesArea.forEach((item) => {
-                    if (item.purchaseOrderValidation) {
-                        shouldValidatePurchaseOrder = true;
-                        return;
+                    // If its not pickup then all we need to be fetched is sales areas.
+                    // If its pickup we need to wait for address object to be fetched
+                    if (!Validations.isPickup()) {
+                        this.onCompleted.emit(true);
                     }
-                });
 
-                this.location.purchaseOrderValidation = shouldValidatePurchaseOrder;
-                this.validations.purchaseOrder.mandatory = shouldValidatePurchaseOrder;
-            }
-            this.loadings.purchaseOrder = false;
-        });
+                    let shouldValidatePurchaseOrder = false;
+                    salesArea.forEach((item) => {
+                        if (item.purchaseOrderValidation) {
+                            shouldValidatePurchaseOrder = true;
+                            return;
+                        }
+                    });
+
+                    this.location.purchaseOrderValidation = shouldValidatePurchaseOrder;
+                    this.validations.purchaseOrder.mandatory = shouldValidatePurchaseOrder;
+                }
+                this.loadings.purchaseOrder = false;
+            });
 
         //  Make address, dont fetch yet
         let addressSub = this.shipmentApi.address(this.location).map((address) => {
@@ -366,22 +411,32 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         // Fork join address + sales areas (fetch)
         this.salesAdressSub = Observable.forkJoin(salesAreaSub, addressSub).subscribe((response) => {
             this.onCompleted.emit(true);
-            
-            // Fetch geo
-            this.shipmentApi.geo(this.location.address).subscribe((geo) => {
-                if (geo && geo.json && Number(geo.json().latitude) != 0 && Number(geo.json().longitude) != 0 ) {
-                    this.location.geo = geo.json();
-                    console.log("jobsite geo", this.location.geo)
-                    this.cleanJobsiteMarker();
-                    this.jobsiteMarker = this.makeJobsiteMarker(this.positionFromJobsiteGeo(geo.json()));
-                    this.addMarkerToMap(this.jobsiteMarker);
-                    this.loadings.map = false;
-                }
-                else if (this.location.address && this.location.address.streetName) {
-                    let address = this.location.address.streetName;
-                    this.geoFromAddress(address);
-                }
-            });
+
+            const hasGeoLink = this.location.address &&
+                this.location.address.geoPlace &&
+                this.location.address.geoPlace.links &&
+                this.location.address.geoPlace.links.self || undefined
+
+            if (!hasGeoLink) {
+                let address = this.location.address.streetName;
+                this.geoFromAddress(address);
+            }
+            else {
+                // Fetch geo
+                this.shipmentApi.geo(this.location.address).subscribe((geo) => {
+                    if (geo && geo.json && Number(geo.json().latitude) != 0 && Number(geo.json().longitude) != 0) {
+                        this.location.geo = geo.json();
+                        this.cleanJobsiteMarker();
+                        this.jobsiteMarker = this.makeJobsiteMarker(this.positionFromJobsiteGeo(geo.json()));
+                        this.addMarkerToMap(this.jobsiteMarker);
+                        this.loadings.map = false;
+                    }
+                    else if (this.location.address && this.location.address.streetName) {
+                        let address = this.location.address.streetName;
+                        this.geoFromAddress(address);
+                    }
+                });
+            }
         });
 
         // Fetch pods
@@ -399,13 +454,13 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 }
                 else {
                     this.pods.forEach((pod, index) => {
-                        if (this.pod.shipmentLocationId === pod.shipmentLocationId){
+                        if (this.pod.shipmentLocationId === pod.shipmentLocationId) {
                             this.podsIndex = index;
                             this.podChanged(this.pods[index]);
                         }
                     });
                 }
-            }         
+            }
 
             this.loadings.pods = false;
         });
@@ -414,15 +469,20 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             // Fetch contacts
             this.shipmentApi.contacts(this.location).subscribe((response => {
                 this.contacts = response.json().contacts;
+                this.contactsIndex = undefined;
                 if (this.contacts) {
-                    this.contacts.forEach((contact, index) => {
-                        contact.id = index;
-                        contact.name = contact.name;
-                    });
-                    
                     if (this.contacts.length > 0) {
-                        this.contactsIndex = undefined;
-                        this.contactChanged(undefined);
+                        this.contacts.forEach((contact, index) => {
+                            contact.id = index;
+                            if (this.contact && this.contact.contactId === contact.contactId) {
+                                this.contactsIndex = index;
+                            }
+                        });
+                        if (this.contactsIndex) {
+                            this.contactChanged(this.contact);
+                        } else {
+                            this.contactChanged(undefined);
+                        }
                     }
                     this.loadings.contacts = false;
                 }
@@ -437,11 +497,13 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 let position = results[0].geometry.location;
                 if (position) {
                     this.cleanJobsiteMarker();
-                    console.log("position", position)
                     this.jobsiteMarker = this.makeJobsiteMarker(position);
                     this.addMarkerToMap(this.jobsiteMarker);
                     this.loadings.map = false;
                 }
+            }
+            else {
+                this.loadings.map = false;
             }
         });
     }
@@ -470,7 +532,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             .subscribe((geo) => {
                 if (geo.json && Number(geo.json().latitude) != 0 && Number(geo.json().longitude) != 0) {
                     this.pod.geo = geo.json();
-                    console.log("pod geo", this.pod.geo)
                     this.cleanJobsiteMarker();
                     this.jobsiteMarker = this.makeJobsiteMarker(this.positionFromJobsiteGeo(geo.json()));
                     this.addMarkerToMap(this.jobsiteMarker);
@@ -478,7 +539,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 }
                 else if (this.pod.address && this.pod.address.streetName) {
                     let address = this.pod.address.streetName;
-                    console.log("pod address", address)
                     this.geoFromAddress(address);
                 }
             });
@@ -498,6 +558,12 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     contactChanged(event: any) {
+        // if the user got the location step by pressign the back button
+         if (this.contact && this.contact.name && this.contact.phone) {
+            this.validations.contactPerson.valid = true;
+            return;
+        }
+
         if (!event) { this.validations.contactPerson.valid = false; return; }
 
         // If picked form dropdown: model will be []
