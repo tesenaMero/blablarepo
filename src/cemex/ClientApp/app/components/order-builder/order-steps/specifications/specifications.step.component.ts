@@ -234,7 +234,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         // If locked (stepper is moving most likely) then dont do the call 
         if (this.lockRequests) { return; }
-
         this.productsSub = this.productsApi.top(
             this.manager.jobsite,
             salesDocumentType.salesDocumentTypeId,
@@ -247,9 +246,19 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 this.preProducts.forEach((item: PreProduct) => {
                     item.loadings.products = false;
                     if (topProducts.length > 0) {
-                        item.setProduct(topProducts[0])
-                        item.productChanged();
-                        this.onCompleted.emit(true);
+                        topProducts.forEach((product) => {
+                            // Validate if has product assigned
+                            if (item.product && item.product.commercialCode === product.commercialCode) {
+                                item.setProduct(item.product, true);
+                                item.productChanged();
+                                this.onCompleted.emit(true);
+                            }
+                        });
+                        if (!item.product) {
+                            item.setProduct(topProducts[0])
+                            item.productChanged();
+                            this.onCompleted.emit(true);
+                        }
                     }
                     else {
                         item.setProduct(undefined);
@@ -287,9 +296,19 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     this.preProducts.forEach((item: PreProduct) => {
                         item.loadings.products = false;
                         if (topProducts.length > 0) {
-                            item.setProduct(topProducts[0])
-                            item.productChanged();
-                            this.onCompleted.emit(true);
+                            topProducts.forEach((product) => {
+                                // Validate if has product assigned
+                                if (item.product && item.product.commercialCode === product.commercialCode) {
+                                    item.setProduct(item.product, true);
+                                    item.productChanged();
+                                    this.onCompleted.emit(true);
+                                }
+                            });
+                            if (!item.product) {
+                                item.setProduct(topProducts[0])
+                                item.productChanged();
+                                this.onCompleted.emit(true);
+                            }
                         }
                         else {
                             item.setProduct(undefined);
@@ -304,7 +323,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 else {
                     this.fetchProducts(salesDocumentType)
                 }
-            });
+            });            
     }
 
     getAdditionalServices() {

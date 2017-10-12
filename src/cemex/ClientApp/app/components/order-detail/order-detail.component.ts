@@ -12,11 +12,14 @@ import { TranslationService } from '@cemex-core/angular-services-v2/dist';
     ]
 })
 export class OrderDetailComponent {   
+    //parameters
     orderDetailData: any;
     id: any;
     type: string;
     orderCode: string;
+    country: string;
     businessLine: string;
+
     private sub: any;
     pod: any;
     jobsite: any;
@@ -25,30 +28,30 @@ export class OrderDetailComponent {
 
     constructor(private orderDetailApi: OrderDetailApi, private route: ActivatedRoute, private t: TranslationService) {
         this.sub = this.route.queryParams.subscribe(params => {
-            if (params['orderId']) {
+            if (params['orderId'] !== null) {
                 this.id = params['orderId'];
-            }
-            if (params['orderCode']) {
+            }        
+            if (params['orderCode'] !== null) {
                 this.orderCode = params['orderCode'];                
             }
-            if (params['businessLine']) {
+            if (params['country'] !== null) {
+                this.country = params['country'];                
+            }    
+            if (params['businessLine'] !== null) {
                 this.businessLine = params['businessLine'];                
             }
-            if (params['typeCode']) {
-                this.type = params['typeCode'];                
-            }
-            if (this.orderCode && this.orderCode.length > 0) {
-                this.id = this.orderCode;             
-            }
-            if (this.orderCode) {
-                if (this.businessLine == 'RMX') {
-                    this.type = 'ZTRM';
+
+            // New Logic
+            if (this.orderCode && this.orderCode.length > 0) {                
+                if (this.country && this.businessLine && this.country.trim() == "MX" && this.businessLine == "CEM"){
+                    this.type = 'ZTA';
                 }
                 else {
-                    if (this.businessLine == 'CEM') {
-                        this.type = 'ZTA';
-                    }
-                }
+                    this.type = 'SLS';
+                }    
+            }
+            else {
+                this.type = 'REQ';
             }
         });        
 

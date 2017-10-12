@@ -18,7 +18,7 @@ export class PreProduct {
     quantity: number = 1;
     newValue: number = 1;
     date: any = new Date();
-    time = "13:00";
+    time = new Date();
     unit: any;
     payment: any;
     contract: any;
@@ -240,10 +240,19 @@ export class PreProduct {
             this.product.product.productId
         ).subscribe((result) => {
             let contracts = result.json().products;
-            this.availableContracts = contracts;
-            if (contracts.length > 0) {
+            this.availableContracts = contracts;     
+            let contractsResult;
+
+            if (contracts.length > 0) {    
+                if (this.contract){
+                    contractsResult = contracts.find((contract) => {
+                        return contract.salesDocument.salesDocumentCode == this.contract.salesDocument.salesDocumentCode;
+                    });
+                }
                 // Add no contract option
-                this.availableContracts.unshift(undefined);
+                if (!this.contract || !contractsResult) {
+                    this.availableContracts.unshift(undefined);                    
+                }
                 this.disableds.contracts = false;
             }
             else {
@@ -252,7 +261,9 @@ export class PreProduct {
             }
 
             // Set default contract
-            this.contract = undefined;
+            if (!contractsResult) {
+                this.contract = undefined;
+            }
             this.loadings.contracts = false;
         });
     }
@@ -413,13 +424,15 @@ export class PreProduct {
 
     // TODO: define product lines 2 and 3
     fetchManeuvering() {
+        this.maneuveringAvailable = false;
         // Maneouvering additional service
         if (Validations.isDelivery() &&
             (this.product.product.productLine.productLineId === 2 || this.product.product.productLine.productLineId === 3)) {
 
             let area = this.manager.salesArea.find((a) => {
                 let id = this.product.product.productLine.productLineId;
-                return id === 2 ? a.salesArea.salesAreaId === 2 : a.salesArea.salesAreaId === 219;
+
+                return id === 2 ? a.salesArea.divisionCode === '02' : a.salesArea.divisionCode === '09';
             });
 
             // check if salesarea has maneouvering enabled
@@ -435,12 +448,15 @@ export class PreProduct {
         this.plantApi.byCountryCodeAndRegionCode(
             countryCode.trim(),
             this.manager.jobsite.address.regionCode,
-            this.product.productId
+            this.product.product.productId
         ).subscribe((response) => {
             this.availablePlants = response.json().plants;
             this.loadings.plants = false;
-            this.plant = undefined;
-            this.validations.plant.valid = false;
+
+            if (this.availablePlants.length === 1) { this.plant = this.availablePlants[0]; }
+            else { this.plant = undefined; }
+
+            this.plantChanged();
         }, error => {
             this.loadings.plants = false;
             this.plant = undefined;
@@ -518,7 +534,7 @@ export class PreProduct {
             this.validations.payment.mandatory = false;
         }
 
-        if(Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery()){
+        if (Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery()) {
             this.validations.maxCapacity.mandatory = true;
         }
 
