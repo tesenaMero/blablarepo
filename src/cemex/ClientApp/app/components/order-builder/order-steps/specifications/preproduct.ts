@@ -237,18 +237,18 @@ export class PreProduct {
             this.product.product.productId
         ).subscribe((result) => {
             let contracts = result.json().products;
-            this.availableContracts = contracts;     
+            this.availableContracts = contracts;
             let contractsResult;
 
-            if (contracts.length > 0) {    
-                if (this.contract){
+            if (contracts.length > 0) {
+                if (this.contract) {
                     contractsResult = contracts.find((contract) => {
                         return contract.salesDocument.salesDocumentCode == this.contract.salesDocument.salesDocumentCode;
                     });
                 }
                 // Add no contract option
                 if (!this.contract || !contractsResult) {
-                    this.availableContracts.unshift(undefined);                    
+                    this.availableContracts.unshift(undefined);
                 }
                 this.disableds.contracts = false;
             }
@@ -489,8 +489,13 @@ export class PreProduct {
         if (this.contract) {
             const volume = _.get(this.contract, 'salesDocument.volume');
             if (volume) {
-                return _.get(volume, 'total.quantity.amount');
+                if (_.get(volume, 'balance.quantity.amount') !== undefined) {
+                    return _.get(volume, 'balance.quantity.amount');
+                } else {
+                    return _.get(volume, 'total.quantity.amount');
+                }
             }
+
         }
         return undefined;
     }
