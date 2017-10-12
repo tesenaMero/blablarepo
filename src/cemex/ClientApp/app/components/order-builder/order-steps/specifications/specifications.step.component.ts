@@ -337,6 +337,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
             if (Validations.isUSACustomer()) {
                 if (credit) {
                     this.preProducts.forEach((item: PreProduct) => {
+                        paymentTerms.push(credit);
+                        SpecificationsStepComponent.availablePayments = paymentTerms;
+
                         item.payment = credit;
                         item.paymentChanged();
                     })
@@ -357,6 +360,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
                                 item.paymentChanged();
                             })
                         }
+
+                        paymentTerms.push(credit);
+                        SpecificationsStepComponent.availablePayments = paymentTerms;
                     });
                 }
                 return;
