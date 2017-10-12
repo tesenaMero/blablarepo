@@ -45,6 +45,7 @@ export class OrderDetailComponent {
             if (this.orderCode && this.orderCode.length > 0) {                
                 if (this.country && this.businessLine && this.country.trim() == "MX" && this.businessLine == "CEM"){
                     this.type = 'ZTA';
+                    this.id = this.orderCode; 
                 }
                 else {
                     this.type = 'SLS';
