@@ -68,7 +68,7 @@
                                 </span>
                             </label>
                         </div>
-                        <div class="group w50">
+                        <div class="group w50" *ngIf="UTILS.isBulkCement() || UTILS.isReadyMix()" >
                             <label>{{ t.pt('views.specifications.request_time') }}</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
@@ -221,7 +221,7 @@
                                 </span>
                             </label>
                         </div>
-                        <div class="group w50">
+                        <div class="group w50" *ngIf="UTILS.isBulkCement() || UTILS.isReadyMix()" >
                             <label>{{ t.pt('views.specifications.request_time') }}</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
@@ -386,7 +386,7 @@
                                 </span>
                             </label>
                         </div>
-                        <div class="group w50">
+                        <div class="group w50" *ngIf="UTILS.isBulkCement() || UTILS.isReadyMix()">
                             <label>{{ t.pt('views.specifications.request_time') }}</label>
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">

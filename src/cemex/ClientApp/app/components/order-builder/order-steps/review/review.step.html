@@ -91,7 +91,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-2 col-xs-6">
+            <div class="col-md-2 col-xs-6" *ngIf="UTIL.isBulkCement() || UTIL.isReadyMix()">
                 <div class="group">
                     <div class="title">
                         {{ t.pt('views.review.request_time') }}
