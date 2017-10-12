@@ -248,33 +248,16 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
                 // Set defaults value
                 this.preProducts.forEach((item: PreProduct) => {
-                    item.loadings.products = false;
                     if (topProducts.length > 0) {
-                        topProducts.forEach((product) => {
-                            // Validate if has product assigned
-                            if (item.product && item.product.commercialCode === product.commercialCode) {
-                                item.setProduct(item.product, true);
-                                item.productChanged();
-                                this.onCompleted.emit(true);
-                            }
-                        });
-                        if (!item.product) {
-                            item.setProduct(topProducts[0])
-                            item.productChanged();
-                            this.onCompleted.emit(true);
-                        }
+                        item.setProducts(topProducts);
                     }
-                    else {
-                        item.setProduct(undefined);
-                        item.productChanged();
-                        this.onCompleted.emit(false);
-                    }
+
+                    this.onCompleted.emit(true);
 
                     // Enable product selection anyways
                     item.disableds.products = false;
                 });
-            }
-            );
+            });
     }
 
     fetchProductsReadyMix(salesDocumentType: any) {
@@ -298,27 +281,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
                     // Set defaults value
                     this.preProducts.forEach((item: PreProduct) => {
-                        item.loadings.products = false;
                         if (topProducts.length > 0) {
-                            topProducts.forEach((product) => {
-                                // Validate if has product assigned
-                                if (item.product && item.product.commercialCode === product.commercialCode) {
-                                    item.setProduct(item.product, true);
-                                    item.productChanged();
-                                    this.onCompleted.emit(true);
-                                }
-                            });
-                            if (!item.product) {
-                                item.setProduct(topProducts[0])
-                                item.productChanged();
-                                this.onCompleted.emit(true);
-                            }
+                            item.setProducts(topProducts);
                         }
-                        else {
-                            item.setProduct(undefined);
-                            item.productChanged();
-                            this.onCompleted.emit(false);
-                        }
+
+                        this.onCompleted.emit(true);
 
                         // Enable product selection anyways
                         item.disableds.products = false;

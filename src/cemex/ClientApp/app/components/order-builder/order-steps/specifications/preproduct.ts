@@ -132,6 +132,23 @@ export class PreProduct {
         }
     }
 
+    setProducts(products: any[]) {
+        if (products.length && this.product) {
+            // Try to preselect product
+            let matchedProduct = products.find(item => {
+                return item.commercialCode == this.product.commercialCode
+            });
+
+            this.setProduct(matchedProduct);
+        }
+        else if (products.length) {
+            this.setProduct(products[0]);
+        }
+        else {
+            this.setProduct(undefined);
+        }
+    }
+
     setProduct(product: any, shouldFetchContracts?: boolean) {
         // Optionals
         if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
@@ -141,9 +158,6 @@ export class PreProduct {
     }
 
     productChanged(shouldFetchContracts?: boolean) {
-        if (this.product) { this.validations.product.valid = true; }
-        else { this.validations.product.valid = false; }
-
         // Optionals
         if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
 
@@ -156,7 +170,13 @@ export class PreProduct {
             this.loadings.products = false;
             this.loadings.contracts = false;
             this.loadings.units = false;
+
+            this.validations.product.valid = false;
             return;
+        }
+        else {
+            this.validations.product.valid = true;
+            this.loadings.products = false;
         }
 
         if (shouldFetchContracts) {
@@ -196,6 +216,7 @@ export class PreProduct {
 
             // Reset available payments
             this.availablePayments = SpecificationsStepComponent.availablePayments;
+            this.payment = SpecificationsStepComponent.availablePayments[0];
         }
 
         // TODO:
@@ -233,30 +254,35 @@ export class PreProduct {
             this.getShippingCondition()
         ).subscribe((result) => {
             let contracts = result.json().products;
-            this.availableContracts = contracts;     
-            let contractsResult;
 
-            if (contracts.length > 0) {    
-                if (this.contract){
-                    contractsResult = contracts.find((contract) => {
-                        return contract.salesDocument.salesDocumentCode == this.contract.salesDocument.salesDocumentCode;
-                    });
-                }
-                // Add no contract option
-                if (!this.contract || !contractsResult) {
-                    this.availableContracts.unshift(undefined);                  
-                }
+            // Set contracts and add default
+            this.availableContracts = contracts;
+            this.availableContracts.unshift(undefined);
+
+            if (this.availableContracts.length > 0) {
                 this.disableds.contracts = false;
+
+                let matchContract = undefined;
+                if (this.contract) {
+                    // Try to match
+                    try {
+                        matchContract = this.availableContracts.find((item) => {
+                            return item.salesDocument.salesDocumentCode == this.contract.salesDocument.salesDocumentCode
+                        });
+                    }
+                    catch (ex) {
+                        matchContract = undefined;
+                    }
+                }
+                
+                this.contract = matchContract
             }
             else {
                 // Disable it if no contracts
                 this.disableds.contracts = true;
+                this.contract = this.availableContracts[0];
             }
 
-            // Set default contract
-            if (!contractsResult) {
-                this.contract = undefined;
-            }
             this.loadings.contracts = false;
         });
     }
@@ -453,10 +479,10 @@ export class PreProduct {
             if (response.status == 200) {
                 this.availablePlants = response.json().plants;
                 this.loadings.plants = false;
-    
+
                 if (this.availablePlants.length === 1) { this.plant = this.availablePlants[0]; }
                 else { this.plant = undefined; }
-    
+
                 this.plantChanged();
             }
         }, error => {
