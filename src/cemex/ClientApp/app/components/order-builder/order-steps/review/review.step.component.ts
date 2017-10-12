@@ -181,12 +181,12 @@ export class ReviewStepComponent implements StepEventsListener {
             "currency": {
                 "currencyCode": this.getCustomerCurrency()
             },
-            "quantity": this.convertToTons(preProduct) || preProduct.quantity,
+            "quantity": preProduct.quantity,
             "product": {
                 "productId": preProduct.product.product.productId
             },
             "uom": {
-                "unitId": 262 //preProduct.product.unitOfMeasure.unitId
+                "unitId": preProduct.product.unitOfMeasure.unitId
             },
             "orderItemProfile": {
                 "additionalServices": this.makeAdditionalServices(preProduct)
