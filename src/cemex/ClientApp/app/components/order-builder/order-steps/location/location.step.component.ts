@@ -305,11 +305,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         this.shipmentApi.shipmentLocationTypes.subscribe(data => {
             if (data) { this.fetchJobsites(); }
         });
-
-        // if the user got the location step by pressign the back button
-        if (this.contact && this.contact.name && this.contact.phone) {
-            this.validations.contactPerson.valid = true;
-        }
     }
 
     loadMap() {
@@ -563,6 +558,12 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     contactChanged(event: any) {
+        // if the user got the location step by pressign the back button
+         if (this.contact && this.contact.name && this.contact.phone) {
+            this.validations.contactPerson.valid = true;
+            return;
+        }
+
         if (!event) { this.validations.contactPerson.valid = false; return; }
 
         // If picked form dropdown: model will be []
