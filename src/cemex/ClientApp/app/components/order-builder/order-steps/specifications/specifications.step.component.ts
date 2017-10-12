@@ -707,19 +707,27 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     valuechange(product: PreProduct, newValue: number) {
+        newValue = (Number(String(newValue).replace(/,/g , "")))
+        if (isNaN(newValue)) {
+            newValue = 0;
+        }
+
         product.quantityBad();
-        if(newValue < 0 || newValue == null){       
+        if (newValue < 0 || newValue == null){       
             return this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 10000);
         }
+
         let maxCapacitySalesArea = product.maximumCapacity;
         let conversion = product.convertToTons(newValue);
 
         if (conversion > maxCapacitySalesArea && Validations.isCement() && Validations.isDelivery()) {
             product.quantityBad();
             return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
-        } else {
+        }
+        else {
             product.quantityGood();
         }
+
         return product.quantity = newValue;
     }
 
