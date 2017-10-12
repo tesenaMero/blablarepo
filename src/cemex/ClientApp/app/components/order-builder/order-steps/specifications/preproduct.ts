@@ -131,6 +131,10 @@ export class PreProduct {
                 }
             }
         }
+
+        if (Validations.isReadyMix()) {
+            this.projectProfile.project.projectProperties.kicker = false;
+        }
     }
 
     setProducts(products: any[]) {

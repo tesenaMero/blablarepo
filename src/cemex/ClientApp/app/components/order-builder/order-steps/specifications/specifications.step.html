@@ -425,6 +425,7 @@
                                 <!-- Select project profile to prefill specifications -->
                                 {{ product?.projectProfile?.profileName }}
                                 <select [(ngModel)]="product.templateProfile" (ngModelChange)="projectProfileChanged(product, $event)" class="input behind">
+                                    <option value="null"></option>
                                     <option *ngFor="let project of projectProfiles" [ngValue]="project">{{ project?.profileName }}</option>
                                 </select>
                                 </span>
@@ -434,7 +435,7 @@
                 </div>
             </div>
             <div class="d-flex flex-wrap rdymx-specs" [ngClass]="{ disabled: product.loadings.catalogs }">
-                <div class="group">
+                <div class="group" *ngIf="isMXCustomer()">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         {{ t.pt('views.specifications.discharge_time') }}
                     </label>
@@ -449,7 +450,7 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group">
+                <div class="group" *ngIf="isMXCustomer()">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         {{ t.pt('views.specifications.transport_method') }}
                     </label>
@@ -464,7 +465,7 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group">
+                <div class="group" *ngIf="isMXCustomer()">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         {{ t.pt('views.specifications.unload_type') }}
                     </label>
@@ -479,7 +480,7 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
-                <div class="group" *ngIf="product.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeId === 2">
+                <div class="group" *ngIf="product.projectProfile?.project?.projectProperties?.unloadType?.unloadTypeCode === 'Pump'">
                     <label [ngClass]="{ loadings: product.loadings.catalogs }">
                         {{ t.pt('views.specifications.pump_capacity') }}
                     </label>
@@ -537,6 +538,32 @@
                             </select>
                         </span>
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mt-3">
+                    <label class="additional-services">{{ t.pt('views.details.kicker') }}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="group">
+                    <div class="center-kicker">
+                        <input (change)="onChangeKicker(product, $event.target.checked)" [ngModel]="product.projectProfile.project.projectProperties.kicker" type="checkbox" id="kicker">
+                        <label for="kicker">
+                            <svg class="icon-checkbox-active">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
+                            </svg>
+                            <svg class="icon-checkbox-static">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                            </svg>
+                            <svg class="icon-checkbox-hover">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox"></use>
+                            </svg>
+                            <span class="lh-19">{{ t.pt('views.project.profile.kicker') }}</span>
+                        </label>
+                    </div>
                     </div>
                 </div>
             </div>

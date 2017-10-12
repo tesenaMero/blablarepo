@@ -174,6 +174,7 @@ export class ReviewStepComponent implements StepEventsListener {
 
     private makeItem(preProduct, index) {
         let _ = this.manager;
+        const projectProperties = preProduct.projectProfile.project.projectProperties;
         let baseItem = {
             "itemSeqNum": 10 * (index + 1),
             "purchaseOrder": _.purchaseOrder ? _.purchaseOrder : "",
@@ -192,6 +193,8 @@ export class ReviewStepComponent implements StepEventsListener {
                 "additionalServices": this.makeAdditionalServices(preProduct)
             }
         }
+         Object.assign(baseItem.orderItemProfile, preProduct.projectProfile.project.projectProperties);
+
 
         Object.assign(baseItem.orderItemProfile, preProduct.projectProfile.project.projectProperties);
 
