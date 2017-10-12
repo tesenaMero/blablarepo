@@ -182,12 +182,12 @@ export class ReviewStepComponent implements StepEventsListener {
             "currency": {
                 "currencyCode": this.getCustomerCurrency()
             },
-            "quantity": this.convertToTons(preProduct) || preProduct.quantity,
+            "quantity": preProduct.quantity,
             "product": {
                 "productId": preProduct.product.product.productId
             },
             "uom": {
-                "unitId": 262 //preProduct.product.unitOfMeasure.unitId
+                "unitId": preProduct.product.unitOfMeasure.unitId
             },
             "orderItemProfile": {
                 "additionalServices": this.makeAdditionalServices(preProduct)
@@ -195,6 +195,8 @@ export class ReviewStepComponent implements StepEventsListener {
         }
          Object.assign(baseItem.orderItemProfile, preProduct.projectProfile.project.projectProperties);
 
+
+        Object.assign(baseItem.orderItemProfile, preProduct.projectProfile.project.projectProperties);
 
         // Add payment if needed and any
         if (preProduct.payment) {

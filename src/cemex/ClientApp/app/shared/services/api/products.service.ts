@@ -18,8 +18,14 @@ export class ProductsApi {
         }
     }
 
-    fetchContracts(jobsite, salesDocumentTypeId, productLine, shippingCondition, productId): Observable<Response> {
-        return this.api.get(`/v2/mm/myproducts?productId=${productId}&salesDocumentTypeId=${salesDocumentTypeId}&shippingConditionId=${shippingCondition.shippingConditionId}&shipmentLocationId=${jobsite.shipmentLocationId}.2`);
+    fetchContracts(jobsite, salesDocumentTypeId, productLine, productId, shippingCondition): Observable<Response> {
+        let url = `/v2/mm/myproducts?productId=${productId}&salesDocumentTypeId=${salesDocumentTypeId}&shipmentLocationId=${jobsite.shipmentLocationId}.2`;
+
+        if (shippingCondition != undefined) {
+            url += `&shippingConditionId=${shippingCondition.shippingConditionId}`
+        }
+
+        return this.api.get(url);
     }
 
     byProductColorAndSalesDocumentAndPlant(shipmentLocation, salesDocumentTypeId, productColorId, productLineId: number, plantId? ): Observable<Response> {

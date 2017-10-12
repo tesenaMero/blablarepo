@@ -29,7 +29,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     today: Date;
 
     // One box one preProduct
-    private preProducts: Array<PreProduct> = [];
+    private preProducts: Array<PreProduct> = this.manager.products;
 
     // Consts
     private UTILS = Validations;
@@ -157,7 +157,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return true;
     }
 
-    // TODO: fix this shit daniel cmon
+    // TODO: Recover the orders in other way
     castProducts() {
         const shouldFetchContracts = !(Validations.isReadyMix() && SpecificationsStepComponent.globalContract);
         if (this.manager && this.manager.products) {
@@ -194,6 +194,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.onCompleted.emit(false);
         this.lockRequests = false;
 
+        // Add a pre product by default
+        // Init products if needed
+        if (!this.preProducts) {
+            this.preProducts = [];
+        }
+        if (this.preProducts.length <= 0) { this.add(); }
+
         // Define validations for each preproduct already added
         // Set loadings state
         this.preProducts.forEach((item: PreProduct) => {
@@ -201,9 +208,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
             item.loadings.products = true;
             item.disableds.products = true;
         });
-
-        // Add a pre product by default
-        if (this.preProducts.length <= 0) { this.add(); }
 
         const customer = this.customerService.currentCustomer();
         const productLineId = this.manager.productLine.productLineId;
@@ -244,33 +248,16 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
                 // Set defaults value
                 this.preProducts.forEach((item: PreProduct) => {
-                    item.loadings.products = false;
                     if (topProducts.length > 0) {
-                        topProducts.forEach((product) => {
-                            // Validate if has product assigned
-                            if (item.product && item.product.commercialCode === product.commercialCode) {
-                                item.setProduct(item.product, true);
-                                item.productChanged();
-                                this.onCompleted.emit(true);
-                            }
-                        });
-                        if (!item.product) {
-                            item.setProduct(topProducts[0])
-                            item.productChanged();
-                            this.onCompleted.emit(true);
-                        }
+                        item.setProducts(topProducts);
                     }
-                    else {
-                        item.setProduct(undefined);
-                        item.productChanged();
-                        this.onCompleted.emit(false);
-                    }
+
+                    this.onCompleted.emit(true);
 
                     // Enable product selection anyways
                     item.disableds.products = false;
                 });
-            }
-            );
+            });
     }
 
     fetchProductsReadyMix(salesDocumentType: any) {
@@ -294,27 +281,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
                     // Set defaults value
                     this.preProducts.forEach((item: PreProduct) => {
-                        item.loadings.products = false;
                         if (topProducts.length > 0) {
-                            topProducts.forEach((product) => {
-                                // Validate if has product assigned
-                                if (item.product && item.product.commercialCode === product.commercialCode) {
-                                    item.setProduct(item.product, true);
-                                    item.productChanged();
-                                    this.onCompleted.emit(true);
-                                }
-                            });
-                            if (!item.product) {
-                                item.setProduct(topProducts[0])
-                                item.productChanged();
-                                this.onCompleted.emit(true);
-                            }
+                            item.setProducts(topProducts);
                         }
-                        else {
-                            item.setProduct(undefined);
-                            item.productChanged();
-                            this.onCompleted.emit(false);
-                        }
+
+                        this.onCompleted.emit(true);
 
                         // Enable product selection anyways
                         item.disableds.products = false;
@@ -366,6 +337,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
             if (Validations.isUSACustomer()) {
                 if (credit) {
                     this.preProducts.forEach((item: PreProduct) => {
+                        paymentTerms.push(credit);
+                        SpecificationsStepComponent.availablePayments = paymentTerms;
+
                         item.payment = credit;
                         item.paymentChanged();
                     })
@@ -386,6 +360,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
                                 item.paymentChanged();
                             })
                         }
+
+                        paymentTerms.push(credit);
+                        SpecificationsStepComponent.availablePayments = paymentTerms;
                     });
                 }
                 return;
