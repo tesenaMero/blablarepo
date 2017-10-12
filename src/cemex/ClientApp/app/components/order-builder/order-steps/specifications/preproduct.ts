@@ -229,8 +229,8 @@ export class PreProduct {
             this.manager.jobsite,
             SALES_DOCUMENT_TYPE,
             this.manager.productLine,
-            this.manager.shippingCondition,
-            this.product.product.productId
+            this.product.product.productId,
+            this.getShippingCondition()
         ).subscribe((result) => {
             let contracts = result.json().products;
             this.availableContracts = contracts;     
@@ -244,7 +244,7 @@ export class PreProduct {
                 }
                 // Add no contract option
                 if (!this.contract || !contractsResult) {
-                    this.availableContracts.unshift(undefined);                    
+                    this.availableContracts.unshift(undefined);                  
                 }
                 this.disableds.contracts = false;
             }
@@ -259,6 +259,15 @@ export class PreProduct {
             }
             this.loadings.contracts = false;
         });
+    }
+
+    getShippingCondition() {
+        if (Validations.isUSACustomer() && Validations.isPickup()) {
+            return undefined;
+        }
+        else {
+            return this.manager.shippingCondition
+        }
     }
 
     fetchUnits() {
@@ -441,13 +450,15 @@ export class PreProduct {
             this.manager.jobsite.address.regionCode,
             this.product.product.productId
         ).subscribe((response) => {
-            this.availablePlants = response.json().plants;
-            this.loadings.plants = false;
-
-            if (this.availablePlants.length === 1) { this.plant = this.availablePlants[0]; }
-            else { this.plant = undefined; }
-
-            this.plantChanged();
+            if (response.status == 200) {
+                this.availablePlants = response.json().plants;
+                this.loadings.plants = false;
+    
+                if (this.availablePlants.length === 1) { this.plant = this.availablePlants[0]; }
+                else { this.plant = undefined; }
+    
+                this.plantChanged();
+            }
         }, error => {
             this.loadings.plants = false;
             this.plant = undefined;
