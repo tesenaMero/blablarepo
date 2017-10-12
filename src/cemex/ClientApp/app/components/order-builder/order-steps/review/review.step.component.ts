@@ -186,7 +186,7 @@ export class ReviewStepComponent implements StepEventsListener {
                 "productId": preProduct.product.product.productId
             },
             "uom": {
-                "unitId": 262 //preProduct.product.unitOfMeasure.unitId
+                "unitId": preProduct.product.unitOfMeasure.unitId
             },
             "orderItemProfile": {
                 "additionalServices": this.makeAdditionalServices(preProduct)
