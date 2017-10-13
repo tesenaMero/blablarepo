@@ -725,11 +725,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     valueChange(product: PreProduct, newValue) {
-        console.log(product.quantity, newValue)
         newValue = (Number(String(newValue).replace(/,/g, "")))
         if (isNaN(newValue)) {
-            newValue = 1;
-            product.quantity = newValue;
+            product.quantity = 1;
             return
         }
         // product.quantityBad();

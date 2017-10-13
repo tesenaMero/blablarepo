@@ -1,30 +1,44 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Http, Headers, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 import { WindowRef } from '../window-ref.service';
 import { Broadcaster } from '@cemex-core/events-v1/dist';
+import { CustomerService } from '../../../shared/services/customer.service';
 
 const d = new Date();
 const sessionId = btoa(d.toISOString().replace(/-/g, '').replace(/:/g, '').replace('Z', '').replace('T', ''));
 
 @Injectable()
-export class Api {
+export class Api implements OnDestroy {
+    // HTTP
     public apiRoot = (<any>global)['API_HOST_FULL'] || 'https://api.us2.apiconnect.ibmcloud.com/cnx-gbl-org-development/dev';
     public clientId = (<any>global)['CLIENT_ID'] || 'dd2ee55f-c93c-4c1b-b852-58c18cc7c277';
     public appId = 'DCMWebTool_App';
     public acceptLanguage = 'en-US';
     private jwt = null;
-    private authorization = null;    
+    private authorization = null;
 
-    constructor(private _http: Http, private winRef: WindowRef, private eventBroadcaster: Broadcaster) {
+    private sub: Subscription;
+    private currentCustomer: any;
+
+    constructor(private _http: Http, private winRef: WindowRef, private eventBroadcaster: Broadcaster, private customerService: CustomerService) {
         if (this.apiRoot.slice(-1) == "/") {
             this.apiRoot = this.apiRoot.slice(0, -1);
         }
-        // OnChange Legal entity
-        this.eventBroadcaster.on<string>(Broadcaster.DCM_LEGAL_ENTITY_CHANGE)
-            .subscribe((response) => {
+
+        this.sub = this.customerService.customerSubject.subscribe((customer) => {
+            if (customer && customer != this.currentCustomer) {
+                this.currentCustomer = customer;
                 this.getLocale();
-            });
+            }
+        });
+
+        // OnChange Legal entity
+        // this.eventBroadcaster.on<string>(Broadcaster.DCM_LEGAL_ENTITY_CHANGE)
+        // .subscribe((response) => {
+        //     this.getLocale();
+        // });
     }
 
     public get(url: string, options: RequestOptionsArgs = {}): Observable<Response> {
@@ -90,11 +104,15 @@ export class Api {
         this.jwt = null;
     }
 
-    public getLocale() {        
-        let language = localStorage.getItem('language');
-        let userLegalEntity = JSON.parse(sessionStorage.getItem('user_legal_entity'));
-        if (language && userLegalEntity){            
-            this.acceptLanguage = language + '-' + userLegalEntity.countryCode.trim();
+    public getLocale() {  
+        const language = localStorage.getItem('language');
+        const countryCode = this.currentCustomer.countryCode.trim();
+        if (language && countryCode) {            
+            this.acceptLanguage = language + '-' + countryCode;
         }
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 }
