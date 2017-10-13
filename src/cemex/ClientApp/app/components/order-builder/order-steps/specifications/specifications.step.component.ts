@@ -567,8 +567,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     }
 
-    productChanged(preProduct: PreProduct, p) {
-        console.log(p)
+    productChanged(preProduct: PreProduct) {
         const readymixCase = Validations.isReadyMix() && SpecificationsStepComponent.globalContract;
         preProduct.productChanged();
     }
@@ -669,8 +668,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         const isDelivery = Validations.isDelivery();
         let conversion = product.convertToTons(newValue);
         //---------------------------------------------------------- CONVERSION NEEDS TO BE FINISHED than remove this condition
-        if(conversion === undefined) {
-            conversion=newValue;
+        if (conversion === undefined) {
+            conversion = newValue;
         }
         //general validation for negative values
         if (newValue <= 0 || isNaN(newValue)) {
@@ -731,30 +730,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
             return product.quantity = newValue;
         }
 
-    }
-
-    valueChange(product: PreProduct, newValue) {
-        console.log(product.quantity, newValue)
-        newValue = (Number(String(newValue).replace(/,/g, "")))
-        if (isNaN(newValue)) {
-            newValue = 1;
-            product.quantity = newValue;
-            return
-        }
-        // product.quantityBad();
-        // if (newValue < 0 || newValue == null) {
-        //     return this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 10000);
-        // }
-        // let maxCapacitySalesArea = product.maximumCapacity;
-        // let conversion = product.convertToTons(newValue);
-
-        // if (conversion > maxCapacitySalesArea && Validations.isCement() && Validations.isDelivery()) {
-        //     product.quantityBad();
-        //     return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
-        // } else {
-        //     product.quantityGood();
-        // }
-        return product.quantity = newValue;
     }
 
     numberKey(event, value) {
