@@ -23,6 +23,9 @@ export class OrdersComponent implements OnInit {
     totalPages: any;
     customer: any;
 
+    countryCode: string;
+    language: string;
+
     columns: any[] = [];
     rows: any[] = [];
 
@@ -35,17 +38,20 @@ export class OrdersComponent implements OnInit {
         //this.totalPages = ordersService.getTotalPages();
 
         // Get legal Entity and countryCode
-        let userLegalEntity = JSON.parse(sessionStorage.getItem('user_legal_entity'));  
-
-        this.t.localeData.subscribe(response => {         
-            // if S and MX customer
-            if (userLegalEntity && userLegalEntity.countryCode.trim() === "US") {     
-                this.cleanOrders();
-                this.initUsaCustomerOrders();
-            }   
-            else {
-                this.cleanOrders();
-                this.initOrders();
+        let userLegalEntity = JSON.parse(sessionStorage.getItem('user_legal_entity'));
+        this.countryCode = userLegalEntity.countryCode.trim();
+        
+        this.t.localeData.subscribe(response => {    
+            if (this.isChangingLanguage(response.lang)) {
+                // if USA customer
+                if (this.countryCode && this.countryCode === "US") {     
+                    this.cleanOrders();
+                    this.initUsaCustomerOrders();
+                }   
+                else {
+                    this.cleanOrders();
+                    this.initOrders();
+                }
             }
         })
 
@@ -64,7 +70,7 @@ export class OrdersComponent implements OnInit {
                     }
                 });              
                 // if Usa customer
-                if (userLegalEntity && userLegalEntity.countryCode.trim() === "US") { 
+                if (this.countryCode && this.countryCode == "US") { 
                     this.initUsaCustomerOrders();
                 }   
                 else {
@@ -82,6 +88,14 @@ export class OrdersComponent implements OnInit {
 
     cleanOrders() {
         this.orders.splice(0, this.orders.length);
+    }
+
+    isChangingLanguage(newLanguage: string): boolean{
+        if (this.language != newLanguage) {
+            this.language = newLanguage;
+            return true
+        }
+        return false;
     }
 
     initOrders() {
