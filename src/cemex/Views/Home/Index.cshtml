@@ -26,6 +26,7 @@
 <script src="~/ordersnproduct/dist/vendor.js" asp-append-version="true"></script>
 <script src="~/ordersnproduct/dist/bootstrap.bundle.js" asp-append-version="true"></script>
 <script src="~/ordersnproduct/dist/dls/dls.bundle.js" asp-append-version="true"></script>
+<script type='text/javascript' src='https://cdn.jsdelivr.net/countly-sdk-web/latest/countly.min.js'></script>
 @section scripts {
     <script>
         window.API_HOST = '@ViewData["API_HOST"]';
@@ -36,5 +37,4 @@
         window.CLIENT_ID = '@ViewData["CLIENT_ID"]';
     </script>
     <script src="~/ordersnproduct/dist/main-client.js" asp-append-version="true"></script>
-    <script type='text/javascript' src='https://cdn.jsdelivr.net/countly-sdk-web/latest/countly.min.js'></script>
 }
