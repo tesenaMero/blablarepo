@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
@@ -10,13 +10,14 @@ import { CustomerService } from '../../shared/services/customer.service';
 import { OrdersApi } from '../../shared/services/api/orders.service';
 import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
 import * as moment from 'moment'
+import { Subscription } from 'rxjs/Subscription'
 
 @Component({
     selector: 'page-orders',
     templateUrl: './orders.html',
     styleUrls: ['./orders.scss']
 })
-export class OrdersComponent implements OnInit {
+export class OrdersComponent implements OnDestroy {
     orders: any = [];
 
     isLoading: any;
@@ -28,6 +29,8 @@ export class OrdersComponent implements OnInit {
 
     columns: any[] = [];
     rows: any[] = [];
+
+    sub: Subscription;
 
     public orderRequestConfiguration: OrderRequestTableComponentConfiguration;
 
@@ -41,7 +44,9 @@ export class OrdersComponent implements OnInit {
         let userLegalEntity = JSON.parse(sessionStorage.getItem('user_legal_entity'));
         this.countryCode = userLegalEntity.countryCode.trim();
         
-        this.t.localeData.subscribe(response => {    
+        this.sub = this.t.localeData.subscribe(response => {   
+            
+            console.trace("tracking lang");
             if (this.isChangingLanguage(response.lang)) {
                 // if USA customer
                 if (this.countryCode && this.countryCode === "US") {     
@@ -83,7 +88,8 @@ export class OrdersComponent implements OnInit {
         });
     }
 
-    ngOnInit() {
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 
     cleanOrders() {
