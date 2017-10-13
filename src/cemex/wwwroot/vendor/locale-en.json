@@ -38,12 +38,15 @@
 	"views.global.lbl_roles": "Roles",
 	"views.global.lbl_temporaryPassword": "Temporary Password",
 	"views.header.lbl_language": "Language",
-	"views.header.lbl_logout": "Log Out.",
+	"views.header.lbl_logout": "Log Out",
+	"views.global.usLabel" : "USA",
+	"views.global.mxLabel" : "Mexico",
 	"views.dashboard.welcomeDCM": "Welcome to CEMEX Go",
 	"views.dashboard.myApps": "My Applications",
 	"views.dashboard.noApps": "You do not have access to any apps yet.",
 	"views.dashboard.noAppsRequest": "Request access to apps you want by clicking on 'Request Permissions' button, or contact your admin.",
 	"views.dashboard.btnRequestPermissions": "Request Permissions",
+	"forms.placeholder.userName": "Enter username.",
 	"forms.placeholder.name": "Enter first name.",
 	"forms.placeholder.clientNumber": "Enter client number.",
 	"forms.placeholder.lastName": "Enter last name.",
@@ -63,7 +66,7 @@
 	"views.header.english": "English",
 	"views.header.logout": "Log Out.",
 	"views.login.error": "The user or password you entered are incorrect. Please try again.",
-	"views.login.title": "Welcome!",
+	"views.login.title": "Welcome",
 	"views.login.username": "Username",
 	"views.login.password": "Password",
 	"views.login.username_placeholder": "Enter your username.",
@@ -971,14 +974,19 @@
 	"views.common.requesting_code": "Order placed successfully, requesting order code...",
 	"views.common.error_placing": "Error placing order",
 	"views.common.validating": "Validating...",
+
 	"views.cart.no_draft_order": "no draft order ID",
-	"views.project.profile.application": "Application",
+
+	"views.project.profile.application": "Aplication",
 	"views.project.profile.spacing": "Spacing",
 	"views.project.profile.load_size": "Load Size",
 	"views.project.profile.saving": "Saving...",
 	"views.project.profile.confirm": "Confirm",
+
 	"views.cross.placed": "Order placed successfully, requesting order code...",
+
 	"views.builder.proceed_cash": "Proceed with to cash orders payment",
+
 	"views.checkout.recovering_prices": "Recovering prices",
 	"views.checkout.prices_error": "Prices error",
 	"views.checkout.prices_recovered": "Prices recovered successfully",
@@ -1003,6 +1011,7 @@
 	"views.checkout.total_price": "Total Price",
 	"views.checkout.subtotal": "Subtotal",
 	"views.checkout.taxes": "Taxes",
+
 	"views.location.find_jobsite": "Find jobsite",
 	"views.location.no_jobsite": "No jobsite found",
 	"views.location.select_existing_jobsite": "Select from existing jobsite",
@@ -1019,12 +1028,15 @@
 	"views.location.select_contact": "Please select contact",
 	"views.location.special_instr": "Special instructions",
 	"views.location.address_short": "Address cannot be that short.",
+
 	"views.mode.delivery": "Delivery",
 	"views.mode.or": "or",
 	"views.mode.pickup": "Pickup",
+
 	"views.product.selection.select_product": "Select a Product",
 	"views.product.selection.no_product_line": "No product lines found for this customer",
 	"views.product.selection.cement_package_multi": "Cement Package Multiproducts",
+
 	"views.review.saving_draft": "Saving draft...",
 	"views.review.draft_saved": "Draft saved!",
 	"views.review.draft_no_saved": "Couldn't save the draft",
@@ -1058,8 +1070,9 @@
 	"views.review.load_size": "Load Size",
 	"views.review.spacing": "Spacing",
 	"views.review.kicker": "Kicker",
-	"views.specifications.negative_amount": "Amount should be higher than 0",
-	"views.specifications.contract_remaining_amount_overflow": "Contract remaining amount reached",
+
+	"views.specifications.negative_amount" : "Amount should be higher than 0",
+	"views.specifications.contract_remaining_amount_overflow" : "Contract remaining amount reached",
 	"views.specifications.verify_unit": "Verify unit section",
 	"views.specifications.verify_plant": "Verify plant section",
 	"views.specifications.verify_contract": "Verify contract section",
