@@ -14,6 +14,7 @@ import { PreProduct } from './preproduct'
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 import * as _ from 'lodash';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 let CircularJSON = require('circular-json');
 
 @Component({
@@ -28,11 +29,18 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     today: Date;
 
+    public quanitityMask = createNumberMask({
+        prefix: '',
+        allowDecimal: true,
+        allowLeadingZeroes: true,
+        decimalLimit: 3,
+    });
+
     // One box one preProduct
-    private preProducts: Array<PreProduct> = [];
+    private preProducts: Array<PreProduct> = this.manager.products;
 
     // Consts
-    private UTILS = Validations;
+    public UTILS = Validations;
 
     private loadings = {
         projectProfiles: true,
@@ -157,7 +165,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return true;
     }
 
-    // TODO: fix this shit daniel cmon
+    // TODO: Recover the orders in other way
     castProducts() {
         const shouldFetchContracts = !(Validations.isReadyMix() && SpecificationsStepComponent.globalContract);
         if (this.manager && this.manager.products) {
@@ -194,6 +202,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.onCompleted.emit(false);
         this.lockRequests = false;
 
+        // Add a pre product by default
+        // Init products if needed
+        if (!this.preProducts) {
+            this.preProducts = [];
+        }
+        if (this.preProducts.length <= 0) { this.add(); }
+
         // Define validations for each preproduct already added
         // Set loadings state
         this.preProducts.forEach((item: PreProduct) => {
@@ -201,9 +216,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
             item.loadings.products = true;
             item.disableds.products = true;
         });
-
-        // Add a pre product by default
-        if (this.preProducts.length <= 0) { this.add(); }
 
         const customer = this.customerService.currentCustomer();
         const productLineId = this.manager.productLine.productLineId;
@@ -244,33 +256,16 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
                 // Set defaults value
                 this.preProducts.forEach((item: PreProduct) => {
-                    item.loadings.products = false;
                     if (topProducts.length > 0) {
-                        topProducts.forEach((product) => {
-                            // Validate if has product assigned
-                            if (item.product && item.product.commercialCode === product.commercialCode) {
-                                item.setProduct(item.product, true);
-                                item.productChanged();
-                                this.onCompleted.emit(true);
-                            }
-                        });
-                        if (!item.product) {
-                            item.setProduct(topProducts[0])
-                            item.productChanged();
-                            this.onCompleted.emit(true);
-                        }
+                        item.setProducts(topProducts);
                     }
-                    else {
-                        item.setProduct(undefined);
-                        item.productChanged();
-                        this.onCompleted.emit(false);
-                    }
+
+                    this.onCompleted.emit(true);
 
                     // Enable product selection anyways
                     item.disableds.products = false;
                 });
-            }
-            );
+            });
     }
 
     fetchProductsReadyMix(salesDocumentType: any) {
@@ -294,27 +289,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
                     // Set defaults value
                     this.preProducts.forEach((item: PreProduct) => {
-                        item.loadings.products = false;
                         if (topProducts.length > 0) {
-                            topProducts.forEach((product) => {
-                                // Validate if has product assigned
-                                if (item.product && item.product.commercialCode === product.commercialCode) {
-                                    item.setProduct(item.product, true);
-                                    item.productChanged();
-                                    this.onCompleted.emit(true);
-                                }
-                            });
-                            if (!item.product) {
-                                item.setProduct(topProducts[0])
-                                item.productChanged();
-                                this.onCompleted.emit(true);
-                            }
+                            item.setProducts(topProducts);
                         }
-                        else {
-                            item.setProduct(undefined);
-                            item.productChanged();
-                            this.onCompleted.emit(false);
-                        }
+
+                        this.onCompleted.emit(true);
 
                         // Enable product selection anyways
                         item.disableds.products = false;
@@ -323,7 +302,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 else {
                     this.fetchProducts(salesDocumentType)
                 }
-            });            
+            });
     }
 
     getAdditionalServices() {
@@ -366,6 +345,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
             if (Validations.isUSACustomer()) {
                 if (credit) {
                     this.preProducts.forEach((item: PreProduct) => {
+                        paymentTerms.push(credit);
+                        SpecificationsStepComponent.availablePayments = paymentTerms;
+
                         item.payment = credit;
                         item.paymentChanged();
                     })
@@ -386,6 +368,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
                                 item.paymentChanged();
                             })
                         }
+
+                        paymentTerms.push(credit);
+                        SpecificationsStepComponent.availablePayments = paymentTerms;
                     });
                 }
                 return;
@@ -493,12 +478,14 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     projectProfileChanged(preProduct: PreProduct, projectProfile) {
-        // Prefill
-        preProduct.projectProfile.profileId = projectProfile.profileId;
-        preProduct.projectProfile.profileName = projectProfile.profileName;
+        if (projectProfile !== "null") {
+            // Prefill
+            preProduct.projectProfile.profileId = projectProfile.profileId;
+            preProduct.projectProfile.profileName = projectProfile.profileName;
 
-        // Clone project object
-        preProduct.projectProfile.project.projectProperties = JSON.parse(JSON.stringify(projectProfile.project.projectProperties));
+            // Clone project object
+            preProduct.projectProfile.project.projectProperties = JSON.parse(JSON.stringify(projectProfile.project.projectProperties));
+        }
     }
 
     onChangeDischargeTime(preProduct, index) {
@@ -524,6 +511,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         preProduct.projectProfile.project.projectProperties.unloadType = {
             unloadTypeId: entry.entryId,
+            unloadTypeCode: entry.entryCode,
             unloadTypeDesc: entry.entryDesc
         };
     }
@@ -542,7 +530,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         preProduct.projectProfile.project.projectProperties.element = {
             elementId: entry.entryId,
-            elementDesc: entry.entryDesc
+            elementDesc: entry.entryDesc,
+            elementCode: entry.entryCode
         };
     }
 
@@ -573,7 +562,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
     }
 
-    productChanged(preProduct: PreProduct) {
+    onChangeKicker(preProduct, value: Boolean) {
+        preProduct.projectProfile.project.projectProperties.kicker = Boolean(value);
+
+    }
+
+    productChanged(preProduct: PreProduct, p) {
+        console.log(p)
         const readymixCase = Validations.isReadyMix() && SpecificationsStepComponent.globalContract;
         preProduct.productChanged();
     }
@@ -664,27 +659,30 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }, 400);
     }
 
-    changeQty(product: PreProduct, newValue: any) {
+    changeQty(product: PreProduct, newValue) {
+        newValue = (Number(String(newValue).replace(/,/g, "")))
         //inicialize
-        product.setProductNegativeAmountValidation(true);
         product.setContractBalanceValidation(true);
         product.setQuantityValidation(true);
         let contractBalance = product.getContractBalance();
         let maxCapacitySalesArea = product.maximumCapacity;
         const isDelivery = Validations.isDelivery();
         let conversion = product.convertToTons(newValue);
-        //general validation for negative values
-        if (newValue <= 0 || newValue === null) {
-            product.setProductNegativeAmountValidation(false);
-            this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 3000);
-            return product.quantity = newValue;
+        //---------------------------------------------------------- CONVERSION NEEDS TO BE FINISHED than remove this condition
+        if(conversion === undefined) {
+            conversion=newValue;
         }
-        //country dependent - no US quantity validation      
-        if (this.isMXCustomer) {
+        //general validation for negative values
+        if (newValue <= 0 || isNaN(newValue)) {
+            this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 3000);
+            return product.quantity = 1;
+        }
+        //country dependent - no US quantity validation  
+
+        if (this.isMXCustomer()) {
             //contract remaining amount validation
             if (contractBalance) {
-                //---------------------------------------------------------- CONVERSION NEEDS TO BE FINISHED than remove this condition
-                if ((newValue > contractBalance) || (conversion > contractBalance)) {
+                if (conversion > contractBalance) {
                     product.setContractBalanceValidation(false);
                     this.dashboard.alertError(this.t.pt('views.specifications.contract_remaining_amount_overflow'), 3000);
                     return product.quantity = newValue;
@@ -693,9 +691,11 @@ export class SpecificationsStepComponent implements StepEventsListener {
             //delivery mode only
             if (isDelivery) {
                 //only cement
-                if ((Validations.isBulkCement() || Validations.isCementBag())) {
+                let isCementBag = Validations.isProductCementBag(product);
+                let isCementBulk = Validations.isProductCementBulk(product);
+                if ((isCementBulk || isCementBag)) {
                     //jobsite max capacity area
-                    if ((newValue <= maxCapacitySalesArea) || (conversion <= maxCapacitySalesArea)) {
+                    if (conversion <= maxCapacitySalesArea) {
                         product.setQuantityValidation(true);
                         return product.quantity = newValue;
                     }
@@ -720,9 +720,50 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
         //no US validation
         else {
-            product.setQuantityValidation(true);
+            if (contractBalance) {
+                if (conversion > contractBalance) {
+                    product.setContractBalanceValidation(false);
+                    this.dashboard.alertError(this.t.pt('views.specifications.contract_remaining_amount_overflow'), 3000);
+                    return product.quantity = newValue;
+                }
+            }
+
             return product.quantity = newValue;
         }
+
+    }
+
+    valueChange(product: PreProduct, newValue) {
+        console.log(product.quantity, newValue)
+        newValue = (Number(String(newValue).replace(/,/g, "")))
+        if (isNaN(newValue)) {
+            newValue = 1;
+            product.quantity = newValue;
+            return
+        }
+        // product.quantityBad();
+        // if (newValue < 0 || newValue == null) {
+        //     return this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 10000);
+        // }
+        // let maxCapacitySalesArea = product.maximumCapacity;
+        // let conversion = product.convertToTons(newValue);
+
+        // if (conversion > maxCapacitySalesArea && Validations.isCement() && Validations.isDelivery()) {
+        //     product.quantityBad();
+        //     return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
+        // } else {
+        //     product.quantityGood();
+        // }
+        return product.quantity = newValue;
+    }
+
+    numberKey(event, value) {
+        let charCode = (event.which) ? event.which : event.keyCode;
+        if (charCode != 46 && charCode > 31
+            && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
     }
 
     todayStr() {

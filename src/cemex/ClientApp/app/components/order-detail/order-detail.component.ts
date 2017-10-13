@@ -3,6 +3,8 @@ import { OrderDetailApi } from '../../shared/services/api/order-detail.service';
 import { ActivatedRoute } from '@angular/router';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
+import * as moment from 'moment'
+
 @Component({
     selector: 'order-detail-page',
     templateUrl: './order-detail.component.html',
@@ -45,6 +47,7 @@ export class OrderDetailComponent {
             if (this.orderCode && this.orderCode.length > 0) {                
                 if (this.country && this.businessLine && this.country.trim() == "MX" && this.businessLine == "CEM"){
                     this.type = 'ZTA';
+                    this.id = this.orderCode; 
                 }
                 else {
                     this.type = 'SLS';
@@ -100,5 +103,9 @@ export class OrderDetailComponent {
         orderDetailApi.shipmentLocationsStreet(street).subscribe((response) => {
             this.streetPOD = response.json();
         });
+    }
+
+    showRequestTime(time){
+       return moment.utc(time).local().format('DD/MM/YYYY, HH:mm A');
     }
 }

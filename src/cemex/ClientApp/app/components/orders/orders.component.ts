@@ -23,6 +23,9 @@ export class OrdersComponent implements OnInit {
     totalPages: any;
     customer: any;
 
+    countryCode: string;
+    language: string;
+
     columns: any[] = [];
     rows: any[] = [];
 
@@ -33,6 +36,24 @@ export class OrdersComponent implements OnInit {
         //this.isLoading = ordersService.isLoading();
         //this.orderRequestConfiguration = OrdersService.ORDER_REQUEST_MAPPING;
         //this.totalPages = ordersService.getTotalPages();
+
+        // Get legal Entity and countryCode
+        let userLegalEntity = JSON.parse(sessionStorage.getItem('user_legal_entity'));
+        this.countryCode = userLegalEntity.countryCode.trim();
+        
+        this.t.localeData.subscribe(response => {    
+            if (this.isChangingLanguage(response.lang)) {
+                // if USA customer
+                if (this.countryCode && this.countryCode === "US") {     
+                    this.cleanOrders();
+                    this.initUsaCustomerOrders();
+                }   
+                else {
+                    this.cleanOrders();
+                    this.initOrders();
+                }
+            }
+        })
 
         this.isLoading = true;
         this.ordersApi.all().subscribe((response) => {
@@ -47,13 +68,12 @@ export class OrdersComponent implements OnInit {
                     
                     return true;
                     }
-                });
-                let countryCode = JSON.parse(sessionStorage.getItem('user_legal_entity'));                
+                });              
                 // if Usa customer
-                if (countryCode && countryCode.countryCode.trim() === "US"){            
+                if (this.countryCode && this.countryCode == "US") { 
                     this.initUsaCustomerOrders();
                 }   
-                else{
+                else {
                     this.initOrders();
                 }
             }
@@ -66,6 +86,18 @@ export class OrdersComponent implements OnInit {
     ngOnInit() {
     }
 
+    cleanOrders() {
+        this.orders.splice(0, this.orders.length);
+    }
+
+    isChangingLanguage(newLanguage: string): boolean{
+        if (this.language != newLanguage) {
+            this.language = newLanguage;
+            return true
+        }
+        return false;
+    }
+
     initOrders() {
         this.columns = [
             //{ inner: '<i class="star cmx-icon-favourite-active" aria-hidden="true"></i>', width: 5 },
@@ -75,7 +107,7 @@ export class OrdersComponent implements OnInit {
             { name: this.t.pt('views.table.pon'), width: 15 },
             { name: this.t.pt('views.table.products'), width: 10 },
             // { name: this.t.pt('views.table.amount'), width: 10, sortable: false },
-            { name: this.t.pt('views.table.request_date'), width: 20 },
+            // { name: this.t.pt('views.table.request_date'), width: 20 },
             { name: this.t.pt('views.table.status'), width: 18 },
             // { name: this.t.pt('views.table.total'), width: 13 },
         ]
@@ -88,7 +120,7 @@ export class OrdersComponent implements OnInit {
                 { inner: order.purchaseOrder, hideMobile: true },
                 { inner: "<i class='cmx-icon-track'></i>", hideMobile: true },
                 // { inner: order.totalQuantity + " tons" },
-                { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY') },
+                // { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY') },
                 { inner: "<span class='status " + order.status.statusDesc.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
                 // { inner: "$" + order.totalAmount, class: "roboto-bold" },
                 // { inner: "<span class='status " + order.status.statusDesc.toLowerCase() + "'></span>" + order.status.statusDesc, hideDesktop: true },

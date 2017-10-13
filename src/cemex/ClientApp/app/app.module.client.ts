@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { sharedConfig } from './app.module.shared';
+import { TextMaskModule } from 'angular2-text-mask';
 
 @NgModule({
     bootstrap: sharedConfig.bootstrap,
@@ -10,6 +11,7 @@ import { sharedConfig } from './app.module.shared';
     imports: [
         BrowserModule,
         FormsModule,
+        TextMaskModule,
         HttpModule,
         ...sharedConfig.imports
     ],
