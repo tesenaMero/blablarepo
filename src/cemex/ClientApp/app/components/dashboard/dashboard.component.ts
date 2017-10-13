@@ -26,10 +26,8 @@ export class DashboardComponent implements OnInit {
     };
 
     private customers: any[];
-    langSelected: string = 'en';
 
     constructor(
-        private t: TranslationService,
         private session: SessionService,
         private createOrderService: CreateOrderService,
         private router: Router,
@@ -45,17 +43,6 @@ export class DashboardComponent implements OnInit {
         this.shipmentLocationApi.fetchShipmentLocationTypes();
         this.salesDocumentService.fetchSalesDocuments();
         this.dashboard.alertSubject.subscribe((alert) => this.handleAlert(alert));
-        this.initLanguage();
-    }
-
-    private initLanguage() {
-        this.changeLanguage(localStorage.getItem('Language') || 'en');
-    }
-
-    private changeLanguage(lang: any) {
-        this.t.lang(lang);
-        this.langSelected = lang;
-        localStorage.setItem('Language', lang);
     }
 
     private handleAlert(alert: any) {
