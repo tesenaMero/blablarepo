@@ -80,6 +80,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         selectionLimit: 1,
         autoUnselect: true,
         closeOnSelect: true,
+        containerClasses: 'location-dropdown'
     };
 
     contactsSettings: IMultiSelectSettings = {
