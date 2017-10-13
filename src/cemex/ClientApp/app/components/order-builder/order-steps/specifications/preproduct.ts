@@ -15,8 +15,7 @@ export class PreProduct {
 
     // Props
     maneuvering: boolean = false;
-    quantity: number = 1;
-    newValue: number = 1;
+    quantity = 1;
     date: any = new Date();
     time = new Date();
     unit: any;
@@ -598,6 +597,14 @@ export class PreProduct {
         // Validate unit
         if (!this.unit) {
             this.dashboard.alertError(this.t.pt('views.specifications.verify_unit'));
+            return false;
+        }
+
+        // Validate quantity
+        const q = Number(this.quantity)
+        console.log(this.quantity, q);
+        if (!q || q <= 0) {
+            this.dashboard.alertError("Verify quantity");
             return false;
         }
 

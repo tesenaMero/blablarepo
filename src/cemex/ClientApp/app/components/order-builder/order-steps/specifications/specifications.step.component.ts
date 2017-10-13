@@ -14,6 +14,7 @@ import { PreProduct } from './preproduct'
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 import * as _ from 'lodash';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 let CircularJSON = require('circular-json');
 
 @Component({
@@ -27,6 +28,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
     @Output() onCompleted = new EventEmitter<any>();
 
     today: Date;
+
+    public quanitityMask = createNumberMask({
+        prefix: '',
+        allowDecimal: true,
+        allowLeadingZeroes: true,
+        decimalLimit: 3,
+    });
 
     // One box one preProduct
     private preProducts: Array<PreProduct> = this.manager.products;
@@ -716,9 +724,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     valueChange(product: PreProduct, newValue) {
+        console.log(product.quantity, newValue)
         newValue = (Number(String(newValue).replace(/,/g, "")))
         if (isNaN(newValue)) {
-            newValue = 0;
+            newValue = 1;
             product.quantity = newValue;
             return
         }
