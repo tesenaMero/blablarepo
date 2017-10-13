@@ -26,7 +26,6 @@ export class DashboardComponent implements OnInit {
     };
 
     private customers: any[];
-    // langSelected: string;
 
     constructor(
         private session: SessionService,

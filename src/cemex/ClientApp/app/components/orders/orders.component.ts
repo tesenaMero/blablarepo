@@ -44,9 +44,8 @@ export class OrdersComponent implements OnDestroy {
         let userLegalEntity = JSON.parse(sessionStorage.getItem('user_legal_entity'));
         this.countryCode = userLegalEntity.countryCode.trim();
         
-        this.sub = this.t.localeData.subscribe(response => {   
+        this.sub = this.t.localeData.subscribe(response => { 
             
-            console.trace("tracking lang");
             if (this.isChangingLanguage(response.lang)) {
                 // if USA customer
                 if (this.countryCode && this.countryCode === "US") {     
