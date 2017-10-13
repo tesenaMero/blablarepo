@@ -609,7 +609,6 @@ export class PreProduct {
 
         // Validate quantity
         const q = Number(this.quantity)
-        console.log(this.quantity, q);
         if (!q || q <= 0) {
             this.dashboard.alertError("Verify quantity");
             return false;

@@ -376,6 +376,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 return;
             }
 
+            // Mexico
             // If theres no cash, fetch it manually
             if (!cash) {
                 let customerId = this.customerService.currentCustomer().legalEntityId;
@@ -427,7 +428,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     item.disableds.payments = false;
                 }
                 else if (paymentTerms.length > 0) {
-                    item.payment = undefined;
+                    item.payment = credit || paymentTerms[0];
                     item.disableds.payments = false;
                 }
                 else {
