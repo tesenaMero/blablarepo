@@ -193,9 +193,7 @@ export class ReviewStepComponent implements StepEventsListener {
                 "additionalServices": this.makeAdditionalServices(preProduct)
             }
         }
-         Object.assign(baseItem.orderItemProfile, preProduct.projectProfile.project.projectProperties);
-
-
+        
         Object.assign(baseItem.orderItemProfile, preProduct.projectProfile.project.projectProperties);
 
         // Add payment if needed and any
