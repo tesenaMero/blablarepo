@@ -209,12 +209,12 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                     return;
                 }
                 else if (data.messageType == "S") {
-                    this.dashboard.alertSuccess(data.messageText);
+                    this.dashboard.alertSuccess(data.messageText, 6000);
                     this.requestNext.emit();
                     return;
                 }
                 else {
-                    this.dashboard.alertSuccess(data.messageText);
+                    this.dashboard.alertSuccess(data.messageText, 6000);
                     this.requestNext.emit();
                 }
             }
