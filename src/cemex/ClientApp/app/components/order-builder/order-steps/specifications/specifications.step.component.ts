@@ -15,6 +15,7 @@ import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 import * as _ from 'lodash';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+import { Subscription } from 'rxjs/Subscription';
 let CircularJSON = require('circular-json');
 
 @Component({
@@ -28,6 +29,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     @Output() onCompleted = new EventEmitter<any>();
 
     today: Date;
+    sub: Subscription;
 
     public quanitityMask = createNumberMask({
         prefix: '',
@@ -116,7 +118,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.searchProductService.fetchProductColors(this.manager.productLine.productLineId);
         this.modal.open('search-product');
 
-        this.searchProductService.searchedProduct.subscribe(product => {
+        this.sub = this.searchProductService.searchedProduct.subscribe(product => {
             if (product) {
                 let filteredProducts = SpecificationsStepComponent.availableProducts.filter((availableProducts) => {
                     return availableProducts.commercialCode === product.commercialCode;
@@ -136,6 +138,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     closeProductSearch() {
+        this.sub.unsubscribe();
         this.modal.close('search-product');
     }
 
