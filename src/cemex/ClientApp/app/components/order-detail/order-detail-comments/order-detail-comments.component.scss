@@ -1,34 +1,44 @@
 .cards {
-    .card {
-        border: 0px;
-        padding-top: 21px;
-        padding-left: 23px;
-        padding-right: 23px;
-        padding-bottom: 27px;
-        margin-bottom: 10px;
-        &:first-child {
-            margin-top: 27px;
-        }
-        &:nth-child(even) {
-            border: 1px solid #DFDFDF !important;
-            background-color: transparent;
-        }
-        >.comment-text {
-            margin-top: 18px;
-            font-size: 13px;
-            color: #5C5C5C;
-        }
-        .from {
-            .name {
-                color: #020028;
-                font-size: 12px;
-            }
-            .date {
-                color: #5C5C5C;
-                font-size: 12px;
-            }
-        }
+    padding: 20px 0;
+}
+
+.from {
+    .name {
+        color: #020028;
+        font-size: 12px;
+        border-right: 1px solid #ccc;
+        font-weight: bold;
     }
+    .date {
+        color: #5C5C5C;
+        font-size: 12px;
+    }
+}
+
+.comment-history-item {
+    background: #ffffff;
+    margin-top: 10px;
+    padding: 20px;
+    &:first-child {
+        margin-top: 0;
+    }
+    >.comment-text {
+        margin-top: 18px;
+        font-size: 13px;
+        color: #767676;
+    }
+}
+
+.add-comment-head {
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 18px;
+    margin: 0 0 15px;
+}
+
+textarea {
+    height: 100px;
+    margin-bottom: 16px;
 }
 
 .transparent-input {
@@ -47,13 +57,6 @@
 
 .send-comment {
     position: relative;
-
-    .submit-btn {
-        position: absolute;
-        top: 5px;
-        right: 0;
-
-    }
 }
 
 .card {
