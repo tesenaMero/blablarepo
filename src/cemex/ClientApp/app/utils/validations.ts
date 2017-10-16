@@ -66,4 +66,9 @@ export class Validations {
         else if (Validations.isPickup()) { return true; }
         else { return false; }
     }
+
+    static isCementBagMultriproduct() {
+        return _.get(this.manager, 'productLine.productLineId') === "2,3";
+    }
+
 }
