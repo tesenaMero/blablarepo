@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Inject, EventEmitter, Output } from '@angular/core';
-import { ProductsApi, Api } from '../../../../shared/services/api'
+import { Component, Inject, EventEmitter, Output } from '@angular/core';
+import { ProductsApi } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.service';
@@ -9,11 +9,9 @@ import { SearchProductService } from '../../../../shared/services/product-search
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { Validations } from '../../../../utils/validations';
 import { ModalService } from '../../../../shared/components/modal'
-import { Observable } from 'rxjs/Observable';
 import { PreProduct } from './preproduct'
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
-import * as _ from 'lodash';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import { Subscription } from 'rxjs/Subscription';
 let CircularJSON = require('circular-json');
@@ -25,7 +23,6 @@ let CircularJSON = require('circular-json');
     host: { 'class': 'w-100' }
 })
 export class SpecificationsStepComponent implements StepEventsListener {
-    @Output() initializeProductColorsEmitter = new EventEmitter<any>();
     @Output() onCompleted = new EventEmitter<any>();
 
     today: Date;
@@ -47,7 +44,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     private loadings = {
         projectProfiles: true,
         catalog: true
-    }
+    };
 
     // Global
     // Only usd for readymix
@@ -99,7 +96,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private ProjectProfileApi: ProjectProfileApi,
         private catalogApi: CatalogApi,
         private customerService: CustomerService,
-        private contractsApi: ContractsApi,
         private paymentTermsApi: PaymentTermsApi,
         private plantApi: PlantApi,
         private searchProductService: SearchProductService,
