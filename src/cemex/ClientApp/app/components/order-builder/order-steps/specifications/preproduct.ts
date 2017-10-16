@@ -1,3 +1,4 @@
+import { SalesDocumentApi } from './../../../../shared/services/api/sales-documents.service';
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { ProjectProfileApi, PlantApi, ContractsApi, ProductsApi, PaymentTermsApi } from '../../../../shared/services/api';
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
@@ -206,7 +207,8 @@ export class PreProduct {
             this.fetchUnitsFromContract();
 
             // If should get payment terms from contract
-            if (this.contract.salesDocument.paymentTerm && this.contract.salesDocument.paymentTerm.checkPaymentTerm == true) {
+            if (this.contract.salesDocument.paymentTerm) {
+                this.validations.payment.mandatory = this.contract.salesDocument.paymentTerm.checkPaymentTerm;
                 this.getContractPaymentTerm(this.contract.salesDocument.paymentTerm.paymentTermId);
             }
             else {
@@ -271,14 +273,14 @@ export class PreProduct {
                     // Try to match
                     try {
                         matchContract = this.availableContracts.find((item) => {
-                            return item.salesDocument.salesDocumentCode == this.contract.salesDocument.salesDocumentCode
+                            return item && item.salesDocument && item.salesDocument.salesDocumentCode == this.contract.salesDocument.salesDocumentCode
                         });
                     }
                     catch (ex) {
                         matchContract = undefined;
                     }
                 }
-                
+
                 this.contract = matchContract
             }
             else {
@@ -349,23 +351,39 @@ export class PreProduct {
         this.disableds.payments = true;
         this.paymentTermsApi.getJobsiteById(termId).subscribe((result) => {
             const contractPaymentTerm = result.json().paymentTerms;
-            this.availablePayments = contractPaymentTerm;
+            if (contractPaymentTerm && contractPaymentTerm.lenght) {
+                this.availablePayments = contractPaymentTerm;
 
-            if (this.availablePayments.length === 1) {
-                this.payment = this.availablePayments[0];
-                this.disableds.payments = false;
-            }
-            else if (this.availablePayments.length > 1) {
-                this.payment = undefined;
-                this.disableds.payments = false;
+                if (this.availablePayments.length === 1) {
+                    this.payment = this.availablePayments[0];
+                    this.disableds.payments = true;
+                }
+                else if (this.availablePayments.length > 1) {
+                    // Preselect credit
+                    let credit = this.availablePayments.find((term: any) => {
+                        return term.paymentTermType.paymentTermTypeCode === 'CREDIT';
+                    });
+
+                    if (credit) {
+                        this.payment = credit;
+                    }
+                    else {
+                        this.payment = this.availablePayments[0]
+                    }
+
+                    this.disableds.payments = false;
+                }
+                else {
+                    this.payment = undefined;
+                    this.disableds.payments = true;
+                }
             }
             else {
-                this.payment = undefined;
-                this.disableds.payments = true;
+                this.disableds.payments = false;
             }
-
-            this.loadings.payments = false;
+            
             this.paymentChanged();
+            this.loadings.payments = false;
         })
     }
 
@@ -380,6 +398,7 @@ export class PreProduct {
             this.disableds.quantity = true;
             this.productsApi.units(this.contract.salesDocument.salesDocumentId).subscribe((result) => {
                 let units = result.json().productUnitConversions;
+                
                 if (units) { this.availableUnits = units; }
                 else { this.availableUnits = this.product.availableUnits; }
 
@@ -602,7 +621,6 @@ export class PreProduct {
 
         // Validate quantity
         const q = Number(this.quantity)
-        console.log(this.quantity, q);
         if (!q || q <= 0) {
             this.dashboard.alertError("Verify quantity");
             return false;

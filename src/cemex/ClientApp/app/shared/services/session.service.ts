@@ -37,6 +37,7 @@ export class SessionService {
 
     private processDataFromLogin(data: any): void {
         sessionStorage.setItem('access_token', data.oauth2.access_token);
+        sessionStorage.setItem('refresh_token', data.oauth2.refresh_token);
         sessionStorage.setItem('jwt', data.jwt);
         sessionStorage.setItem('user_profile', JSON.stringify(data.profile));
         sessionStorage.setItem('user_customer', JSON.stringify(data.customer));

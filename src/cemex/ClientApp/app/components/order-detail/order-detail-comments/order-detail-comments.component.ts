@@ -13,36 +13,48 @@ export class OrderDetailCommentsComponent {
     error: string | null = null;
     newMessage: string = '';
     isSending: boolean = false;
+    postBtn: string = 'Post a comment';
+    private id: number;
 
     @Input() set orderItemId(orderItemId) {
         this.error = null;
-        this.isLoading = true;
-
-        // this.OrdersApi.getComments(orderItemId, 10, 1)
-        // .map(response => response.json())
-        // .subscribe(response => {
-        //     this.comments.next(response.comments);
-        //     this.isLoading = false;
-        // }, err => {
-        //     this.isLoading = false;
-        //     this.error = "Failed fetching comments";
-        // });
+        this.id = orderItemId;
+        this.getComments(orderItemId);
     }
 
     constructor(private OrdersApi: OrdersApi) {
 
     }
 
+    getComments(id) {
+        this.isLoading = true;
+        this.OrdersApi.getComments(id, 10, 1)
+        .map(response => response.json())
+        .subscribe(response => {
+            const comments = response ? response.comments : [];
+            this.comments = comments;
+            this.isLoading = false;
+        }, err => {
+            this.isLoading = false;
+            this.error = "Failed fetching comments";
+        });
+    }
+
     onSubmit() {
         if (this.newMessage) {
             this.isSending = true;
-            this.OrdersApi.sendComment(this.orderItemId, this.newMessage)
+            this.postBtn = 'Posting';
+            this.OrdersApi.sendComment(this.id, this.newMessage)
             .map(response => response.json())
             .subscribe(response => {
                 // SUCCESS NOTIFY
+                this.newMessage = '';
                 this.isSending = false;
+                this.postBtn = 'Post a comment';
+                this.getComments(this.id);
             }, err => {
                 // ERROR NOTIFY
+                this.postBtn = 'Post a comment';
                 this.isSending = false;
             });
         }

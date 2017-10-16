@@ -250,17 +250,28 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 let topProducts = result.json().products;
                 SpecificationsStepComponent.availableProducts = topProducts;
 
-                // Set defaults value
-                this.preProducts.forEach((item: PreProduct) => {
-                    if (topProducts.length > 0) {
+                if (topProducts.length > 0) {
+                    // Set defaults value
+                    this.preProducts.forEach((item: PreProduct) => {
                         item.setProducts(topProducts);
-                    }
+
+                        // Enable product selection anyways
+                        item.disableds.products = false;
+                    });
 
                     this.onCompleted.emit(true);
+                }
+                else {
+                    this.preProducts.forEach((item: PreProduct) => {
+                        // Enable product selection anyways
+                        item.disableds.products = true;
+                        item.loadings.products = false;
+                        item.loadings.contracts = false;
+                        item.loadings.units = false;
+                    });
 
-                    // Enable product selection anyways
-                    item.disableds.products = false;
-                });
+                    this.onCompleted.emit(false);
+                }
             });
     }
 
@@ -372,6 +383,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 return;
             }
 
+            // Mexico
             // If theres no cash, fetch it manually
             if (!cash) {
                 let customerId = this.customerService.currentCustomer().legalEntityId;
@@ -423,7 +435,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     item.disableds.payments = false;
                 }
                 else if (paymentTerms.length > 0) {
-                    item.payment = undefined;
+                    item.payment = credit || paymentTerms[0];
                     item.disableds.payments = false;
                 }
                 else {
@@ -720,11 +732,9 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     valueChange(product: PreProduct, newValue) {
-        console.log(product.quantity, newValue)
         newValue = (Number(String(newValue).replace(/,/g, "")))
         if (isNaN(newValue)) {
-            newValue = 1;
-            product.quantity = newValue;
+            product.quantity = 1;
             return
         }
         // product.quantityBad();

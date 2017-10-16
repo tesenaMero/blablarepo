@@ -59,11 +59,15 @@ export class CrossProductComponent implements OnInit {
             // console.log('data example recieved !!!! ', this.encDecJsonObjService.decodeJson("LS1RZmQxWFg5QkRNMW9qSTBsV2J0OTJRdlJuSXNJU04xWURNd0FETXdBVE9pb2pJbFIyYkRSbmJsMVdkajlHWmlzM1c2SXljMDVXWnRWM1l2Um1Jc0FqT2lRbmIxOVdiQlJuYmwxV2VoQlZaajVXWTJSV1lpd2lJaW9qSWxObWJsSlhabVZtVTA1V1p0bFhZd0pDTHdBVE42SUNkdVYzYnRGa2NsUm1jdkpDTGlJRE14UVRNd1VqTndBakk2SVNaazkyUXlWV2VoQm5Jc0lpTXdFRE54QVROMkFETWlvaklsUjJiRFZHZHBObFl2cG1Jc0lDTzBJek0yRURNMUFETWlvaklsUjJiREpYWnQ5R2R6VjNZaXdpSXdnVE0zSWlPaVVHWnZOVWV1RkdjdDkyWWlzM1c2SVNZMEZHWml3aUkwSlhZajF5WnVsR2N3OUdhekppT2ljM2JvTjFiVTVXWmxKM1l6SkNMaW9GTXpVakw0RWpPd1VqT3lFRFYyRVRMNUFUTDNFRE15SWlPaVVHZGhSbUlzSXljMDVXWnRsWFl3MXljbE5XYXZabmJwSmlPaUFIY0JWMll5VjNiekp5ZQ--"))
             //console.log('data recieved -> ', jObj);
 
-            if (!this.checkPayment(jObj)) {
-                this.router.navigate(['/ordersnproduct/app/new']); 
-            }
-            else {
-                this.flowCementMX(jObj);
+            if (jObj.data[0].orderWithoutDocuments) {
+                this.flowCementMX(jObj, true);
+            } else {
+                if (!this.checkPayment(jObj)) {
+                    this.router.navigate(['/ordersnproduct/app/new']); 
+                }
+                else {
+                    this.flowCementMX(jObj);
+                }
             }
         });
     }
@@ -75,8 +79,8 @@ export class CrossProductComponent implements OnInit {
         }, 1000);
     }
 
-    flowCementMX(jObj) {
-        let data = {
+    flowCementMX(jObj, orderWithoutDocuments: boolean = false) {
+        let data = orderWithoutDocuments ? {} : {
             documents: jObj.data[0].documents
         }
 
