@@ -565,7 +565,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     onChangeKicker(preProduct, value: Boolean) {
         preProduct.projectProfile.project.projectProperties.kicker = Boolean(value);
-
     }
 
     productChanged(preProduct: PreProduct) {
