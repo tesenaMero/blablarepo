@@ -137,7 +137,7 @@
                                             {{ t.pt('views.details.delivery_date') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.requestedDateTime | date : "dd/MM/yyyy"}}
+                                            {{showRegionDate(itemData.requestedDateTime)}}
                                         </div>
                                     </div>
                                 </div>
@@ -147,7 +147,7 @@
                                             {{ t.pt('views.details.delivery_time') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.requestedDateTime | date : "HH:mm"}}
+                                            {{itemData.requestedDateTime | date : "shortTime"}}
                                         </div>
                                     </div>
                                 </div>

@@ -28,7 +28,12 @@ export class OrderDetailComponent {
     streetJob: any;
     streetPOD: any;
 
+    countryCode: string;
+
     constructor(private orderDetailApi: OrderDetailApi, private route: ActivatedRoute, private t: TranslationService) {
+        let userLegalEntity = JSON.parse(sessionStorage.getItem('user_legal_entity'));
+        this.countryCode = userLegalEntity.countryCode.trim();
+
         this.sub = this.route.queryParams.subscribe(params => {
             if (params['orderId'] !== null) {
                 this.id = params['orderId'];
@@ -107,5 +112,13 @@ export class OrderDetailComponent {
 
     showRequestTime(time){
        return moment.utc(time).local().format('DD/MM/YYYY, HH:mm A');
+    }
+
+    showRegionDate(date){
+        if(this.countryCode === 'MX'){
+            return moment.utc(date).local().format('DD/MM/YYYY');
+        } else {
+            return moment.utc(date).local().format('MM/DD/YYYY');
+        }
     }
 }
