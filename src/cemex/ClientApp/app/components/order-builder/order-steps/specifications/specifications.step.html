@@ -550,8 +550,8 @@
                 <div class="col-sm-6">
                     <div class="group">
                         <div class="center-kicker">
-                            <input (change)="onChangeKicker(product, $event.target.checked)" [ngModel]="product.projectProfile.project.projectProperties.kicker" type="checkbox" id="kicker">
-                            <label for="kicker">
+                            <input (change)="onChangeKicker(product, $event.target.checked)" [ngModel]="product.projectProfile.project.projectProperties.kicker" type="checkbox" id="kicker{{index}}">
+                            <label for="kicker{{index}}">
                             <svg class="icon-checkbox-active">
                                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
                             </svg>
