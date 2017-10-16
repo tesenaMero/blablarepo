@@ -39,21 +39,23 @@ export class OrdersComponent implements OnInit {
 
         // Get legal Entity and countryCode
         let userLegalEntity = JSON.parse(sessionStorage.getItem('user_legal_entity'));
-        this.countryCode = userLegalEntity.countryCode.trim();
-        
-        this.t.localeData.subscribe(response => {    
+        if (userLegalEntity) {
+            this.countryCode = userLegalEntity.countryCode.trim();
+        }
+
+        this.t.localeData.subscribe(response => {
             if (this.isChangingLanguage(response.lang)) {
                 // if USA customer
-                if (this.countryCode && this.countryCode === "US") {     
+                if (this.countryCode && this.countryCode === "US") {
                     this.cleanOrders();
                     this.initUsaCustomerOrders();
-                }   
+                }
                 else {
                     this.cleanOrders();
                     this.initOrders();
                 }
             }
-        })
+        });
 
         this.isLoading = true;
         this.ordersApi.all().subscribe((response) => {
@@ -65,14 +67,14 @@ export class OrdersComponent implements OnInit {
                     if (item.status) {
                         if (item.status.statusDesc)
                             return item.status.statusCode != "DRFT";
-                    
+
                     return true;
                     }
-                });              
+                });
                 // if Usa customer
-                if (this.countryCode && this.countryCode == "US") { 
+                if (this.countryCode && this.countryCode == "US") {
                     this.initUsaCustomerOrders();
-                }   
+                }
                 else {
                     this.initOrders();
                 }

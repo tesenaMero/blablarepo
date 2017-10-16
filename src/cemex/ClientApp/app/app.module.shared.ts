@@ -95,6 +95,7 @@ import { EncodeDecodeJsonObjService } from './shared/services/encodeDecodeJsonOb
 import { CmxSharedModule } from '@cemex/cmx-shared-v1/dist'
 import { CmxCoreCommonModule } from '@cemex-core/angular-services-v2/dist';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { FilterOutOldContractsPipe } from './pipes/filter-out-old-contracts.pipe';
 
 export const sharedConfig: NgModule = {
     bootstrap: [AppComponent],
@@ -118,6 +119,7 @@ export const sharedConfig: NgModule = {
         DatePipe,
         UnitCodeMapperPipe,
         TrimLeadingZeroesPipe,
+        FilterOutOldContractsPipe,
 
         // Regular components
         OrdersTableComponent,
