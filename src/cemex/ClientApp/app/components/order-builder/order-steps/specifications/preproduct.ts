@@ -271,7 +271,7 @@ export class PreProduct {
                 if (this.contract) {
                     // Try to match
                     try {
-                        matchContract = this.availableContracts.find((item, index) => {
+                        matchContract = this.availableContracts.find((item) => {
                             return item && item.salesDocument && item.salesDocument.salesDocumentCode == this.contract.salesDocument.salesDocumentCode;
                         });
                     }
