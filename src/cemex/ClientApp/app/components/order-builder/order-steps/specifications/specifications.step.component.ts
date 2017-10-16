@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Inject, EventEmitter, Output } from '@angular/core';
-import { ProductsApi, Api } from '../../../../shared/services/api'
+import { Component, Inject, EventEmitter, Output } from '@angular/core';
+import { ProductsApi } from '../../../../shared/services/api'
 import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
 import { PaymentTermsApi } from '../../../../shared/services/api/payment-terms.service';
@@ -9,12 +9,11 @@ import { SearchProductService } from '../../../../shared/services/product-search
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 import { Validations } from '../../../../utils/validations';
 import { ModalService } from '../../../../shared/components/modal'
-import { Observable } from 'rxjs/Observable';
 import { PreProduct } from './preproduct'
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
-import * as _ from 'lodash';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+import { Subscription } from 'rxjs/Subscription';
 let CircularJSON = require('circular-json');
 
 @Component({
@@ -24,10 +23,10 @@ let CircularJSON = require('circular-json');
     host: { 'class': 'w-100' }
 })
 export class SpecificationsStepComponent implements StepEventsListener {
-    @Output() initializeProductColorsEmitter = new EventEmitter<any>();
     @Output() onCompleted = new EventEmitter<any>();
 
     today: Date;
+    sub: Subscription;
 
     public quanitityMask = createNumberMask({
         prefix: '',
@@ -45,7 +44,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     private loadings = {
         projectProfiles: true,
         catalog: true
-    }
+    };
 
     // Global
     // Only usd for readymix
@@ -97,7 +96,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         private ProjectProfileApi: ProjectProfileApi,
         private catalogApi: CatalogApi,
         private customerService: CustomerService,
-        private contractsApi: ContractsApi,
         private paymentTermsApi: PaymentTermsApi,
         private plantApi: PlantApi,
         private searchProductService: SearchProductService,
@@ -116,7 +114,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.searchProductService.fetchProductColors(this.manager.productLine.productLineId);
         this.modal.open('search-product');
 
-        this.searchProductService.searchedProduct.subscribe(product => {
+        this.sub = this.searchProductService.searchedProduct.subscribe(product => {
             if (product) {
                 let filteredProducts = SpecificationsStepComponent.availableProducts.filter((availableProducts) => {
                     return availableProducts.commercialCode === product.commercialCode;
@@ -136,6 +134,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     closeProductSearch() {
+        this.sub.unsubscribe();
         this.modal.close('search-product');
     }
 
@@ -254,17 +253,28 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 let topProducts = result.json().products;
                 SpecificationsStepComponent.availableProducts = topProducts;
 
-                // Set defaults value
-                this.preProducts.forEach((item: PreProduct) => {
-                    if (topProducts.length > 0) {
+                if (topProducts.length > 0) {
+                    // Set defaults value
+                    this.preProducts.forEach((item: PreProduct) => {
                         item.setProducts(topProducts);
-                    }
+
+                        // Enable product selection anyways
+                        item.disableds.products = false;
+                    });
 
                     this.onCompleted.emit(true);
+                }
+                else {
+                    this.preProducts.forEach((item: PreProduct) => {
+                        // Enable product selection anyways
+                        item.disableds.products = true;
+                        item.loadings.products = false;
+                        item.loadings.contracts = false;
+                        item.loadings.units = false;
+                    });
 
-                    // Enable product selection anyways
-                    item.disableds.products = false;
-                });
+                    this.onCompleted.emit(false);
+                }
             });
     }
 
@@ -565,7 +575,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     onChangeKicker(preProduct, value: Boolean) {
         preProduct.projectProfile.project.projectProperties.kicker = Boolean(value);
-
     }
 
     productChanged(preProduct: PreProduct) {
@@ -659,91 +668,78 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }, 400);
     }
 
-    qty(product: PreProduct, toAdd: number) {
-        if (this.isMXCustomer() && !Validations.isReadyMix()) {
-            product.quantityGood();
-            if (product.quantity <= 1 && toAdd < 0) { return; }
-            const isDelivery = Validations.isDelivery();
-            let conversion = product.convertToTons(product.quantity + toAdd);
-
-            let newQty = product.quantity + toAdd;
-            let contractBalance = product.getContractBalance(); //remaining of contract
-            let maxCapacitySalesArea = product.maximumCapacity;
-
-            if (contractBalance === undefined) {
-                if (isDelivery) {
-                    if ((Validations.isBulkCement() || Validations.isCementBag()) && (conversion <= maxCapacitySalesArea)) {
-                        product.quantityGood();
-                        return product.quantity = newQty;
-                    }
-                    else {
-                        if (conversion <= maxCapacitySalesArea) {
-                            product.quantityGood();
-                            return product.quantity = newQty;
-                        }
-                    }
-                }
-                else {
-                    if (conversion <= maxCapacitySalesArea) {
-                        product.quantityGood();
-                        return product.quantity = newQty;
-                    }
-                }
-            }
-            else {
-                // TODO: Fix case when conversion is undefined
-                if (conversion > contractBalance) {
-                    return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
-                }
-                else if (!isDelivery) {
-                    if (conversion <= maxCapacitySalesArea) {
-                        product.quantityGood();
-                        return product.quantity = newQty;
-                    }
-                }
-                else {
-                    if ((conversion <= maxCapacitySalesArea)) {
-                        product.quantityGood();
-                        return product.quantity = newQty;
-                    }
-                }
-            }
-            if (conversion <= maxCapacitySalesArea) {
-                product.quantityGood();
-                return product.quantity = newQty;
-            }
-
-            return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
-        }
-        else {
-            product.quantityGood();
-            if (product.quantity <= 1 && toAdd < 0) { return; }
-            if (product.quantity >= Number.MAX_SAFE_INTEGER && toAdd > 0) { return; }
-            product.quantity += toAdd;
-            product.quantityGood();
-        }
-    }
-
-    valueChange(product: PreProduct, newValue) {
+    changeQty(product: PreProduct, newValue) {
         newValue = (Number(String(newValue).replace(/,/g, "")))
-        if (isNaN(newValue)) {
-            product.quantity = 1;
-            return
+        //inicialize
+        product.setContractBalanceValidation(true);
+        product.setQuantityValidation(true);
+        let contractBalance = product.getContractBalance();
+        let maxCapacitySalesArea = product.maximumCapacity;
+        const isDelivery = Validations.isDelivery();
+        let conversion = product.convertToTons(newValue);
+        //---------------------------------------------------------- CONVERSION NEEDS TO BE FINISHED than remove this condition
+        if (conversion === undefined) {
+            conversion = newValue;
         }
-        // product.quantityBad();
-        // if (newValue < 0 || newValue == null) {
-        //     return this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 10000);
-        // }
-        // let maxCapacitySalesArea = product.maximumCapacity;
-        // let conversion = product.convertToTons(newValue);
+        //general validation for negative values
+        if (newValue <= 0 || isNaN(newValue)) {
+            this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 3000);
+            return product.quantity = 1;
+        }
+        //country dependent - no US quantity validation  
 
-        // if (conversion > maxCapacitySalesArea && Validations.isCement() && Validations.isDelivery()) {
-        //     product.quantityBad();
-        //     return this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 10000);
-        // } else {
-        //     product.quantityGood();
-        // }
-        return product.quantity = newValue;
+        if (this.isMXCustomer()) {
+            //contract remaining amount validation
+            if (contractBalance) {
+                if (conversion > contractBalance) {
+                    product.setContractBalanceValidation(false);
+                    this.dashboard.alertError(this.t.pt('views.specifications.contract_remaining_amount_overflow'), 3000);
+                    return product.quantity = newValue;
+                }
+            }
+            //delivery mode only
+            if (isDelivery) {
+                //only cement
+                let isCementBag = Validations.isProductCementBag(product);
+                let isCementBulk = Validations.isProductCementBulk(product);
+                if ((isCementBulk || isCementBag)) {
+                    //jobsite max capacity area
+                    if (conversion <= maxCapacitySalesArea) {
+                        product.setQuantityValidation(true);
+                        return product.quantity = newValue;
+                    }
+                    // error on capacity overflow
+                    else {
+                        this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 3000);
+                        product.setQuantityValidation(false);
+                        return product.quantity = newValue;
+                    }
+                }
+                //no ready mix, multiproducts, aggregates
+                else {
+                    product.setQuantityValidation(true);
+                    return product.quantity = newValue;
+                }
+            }
+            //no pickup validation
+            else {
+                product.setQuantityValidation(true);
+                return product.quantity = newValue;
+            }
+        }
+        //no US validation
+        else {
+            if (contractBalance) {
+                if (conversion > contractBalance) {
+                    product.setContractBalanceValidation(false);
+                    this.dashboard.alertError(this.t.pt('views.specifications.contract_remaining_amount_overflow'), 3000);
+                    return product.quantity = newValue;
+                }
+            }
+
+            return product.quantity = newValue;
+        }
+
     }
 
     numberKey(event, value) {

@@ -44,20 +44,19 @@ export class OrdersComponent implements OnDestroy {
         let userLegalEntity = JSON.parse(sessionStorage.getItem('user_legal_entity'));
         this.countryCode = userLegalEntity.countryCode.trim();
         
-        this.sub = this.t.localeData.subscribe(response => { 
-            
+        this.sub = this.t.localeData.subscribe(response => {
             if (this.isChangingLanguage(response.lang)) {
                 // if USA customer
-                if (this.countryCode && this.countryCode === "US") {     
+                if (this.countryCode && this.countryCode === "US") {
                     this.cleanOrders();
                     this.initUsaCustomerOrders();
-                }   
+                }
                 else {
                     this.cleanOrders();
                     this.initOrders();
                 }
             }
-        })
+        });
 
         this.isLoading = true;
         this.ordersApi.all().subscribe((response) => {
@@ -69,14 +68,14 @@ export class OrdersComponent implements OnDestroy {
                     if (item.status) {
                         if (item.status.statusDesc)
                             return item.status.statusCode != "DRFT";
-                    
+
                     return true;
                     }
-                });              
+                });
                 // if Usa customer
-                if (this.countryCode && this.countryCode == "US") { 
+                if (this.countryCode && this.countryCode == "US") {
                     this.initUsaCustomerOrders();
-                }   
+                }
                 else {
                     this.initOrders();
                 }
@@ -120,7 +119,7 @@ export class OrdersComponent implements OnDestroy {
         this.orders.forEach((order) => {
             this.rows.push([
                 { inner: this.getOrderCode(order), class: "order-id", title: true, click: () => this.goToDetail(order) },
-                { inner: moment.utc(order.updatedDateTime).local().format('DD/MM/YYYY'), hideMobile: true },
+                { inner: this.dateFormat(order.updatedDateTime), hideMobile: true },
                 { inner: order.jobsite.jobsiteCode + " " + order.jobsite.jobsiteDesc, subtitle: true },
                 { inner: order.purchaseOrder, hideMobile: true },
                 { inner: "<i class='cmx-icon-track'></i>", hideMobile: true },
@@ -147,11 +146,11 @@ export class OrdersComponent implements OnDestroy {
         this.orders.forEach((order) => {
             this.rows.push([
                 { inner: this.getOrderCode(order), class: "order-id", title: true, click: () => this.goToDetail(order) },
-                { inner: moment.utc(order.createdDateTime).local().format('DD/MM/YYYY'), hideMobile: true },
+                { inner: moment.utc().local().format('DD/MM/YYYY HH:mm'), hideMobile: true },
                 { inner: order.jobsite.jobsiteCode + " " + order.jobsite.jobsiteDesc, subtitle: true },
                 { inner: order.purchaseOrder, hideMobile: true },
                 { inner: "<i class='cmx-icon-track'></i>", hideMobile: true },
-                { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY') },
+                { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY HH:mm') },
                 { inner: "<span class='status " + order.status.statusCode.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
             ]);
         });
@@ -177,6 +176,15 @@ export class OrdersComponent implements OnDestroy {
         z = z || '0';
         n = n + '';
         return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+    }
+
+    dateFormat(time){
+        if(this.countryCode === "MX"){
+            return moment.utc(time).local().format('DD/MM/YYYY')
+        } else {
+            return moment.utc(time).local().format('MM/DD/YYYY')
+        }
+        
     }
 
     orderResquestClicked() {
