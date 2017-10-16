@@ -1,5 +1,4 @@
 import 'rxjs/add/operator/takeUntil';
-import 'rxjs/add/operator/takeUntil';
 import { DoCheck, ElementRef, EventEmitter, IterableDiffers, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormBuilder, FormControl, Validator } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
