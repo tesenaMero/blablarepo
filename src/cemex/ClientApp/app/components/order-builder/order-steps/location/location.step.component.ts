@@ -166,7 +166,10 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
         let advance = true;
         for (let key in this.validations) {
+            console.log(key)
             if (this.validations[key].mandatory) {
+                console.log(this.validations[key].mandatory)
+                console.log(this.validations[key].valid)
                 if (!this.validations[key].valid) {
                     this.validations[key].showError = true;
                     advance = false;
@@ -288,6 +291,10 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         if (Validations.isUSACustomer()) { return false; }
         else if (Validations.isPickup()) { return false; }
         else { return true; }
+    }
+
+    cancelContact() {
+        this.validations.contactPerson.valid = false;
     }
 
     fetchJobsites() {
@@ -520,6 +527,39 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     contactChanged(event: any) {
         // if the user got the location step by pressign the back button
+    if (event === undefined) {
+        
+        if(this.contact) {
+        this.validations.contactPerson.valid = true;
+        this.validations.contactPerson.showError = false;
+        return
+        } else {
+        this.validations.contactPerson.valid = false;
+        return
+        }
+   }
+    console.log(event)
+
+        if (event.constructor === Object) {
+        this.contact = event;
+        this.manager.selectContact(this.contact);
+        console.log(this.contact)
+        this.validations.contactPerson.valid = true;
+        this.validations.contactPerson.showError = false;
+        }
+        else {
+        this.contact = this.contacts[event[0]];
+        this.manager.selectContact(this.contact);
+        console.log(this.contact)
+        this.validations.contactPerson.valid = true;
+        this.validations.contactPerson.showError = false;
+        }
+
+        
+    }
+
+    contactChanged2(event: any) {
+        // if the user got the location step by pressign the back button
          if (this.contact && this.contact.name && this.contact.phone) {
             this.validations.contactPerson.valid = true;
             return;
@@ -533,6 +573,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.contact = contact;
             this.validations.contactPerson.showError = false;
             if (contact) {
+                console.log(2)
                 this.validations.contactPerson.valid = true;
                 this.manager.selectContact(this.contact);
             }
@@ -542,6 +583,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             if (event.phone.length > 0 && event.name.length > 0) {
                 this.contact = event;
                 this.validations.contactPerson.showError = false;
+                console.log(3)
                 this.validations.contactPerson.valid = true;
                 this.manager.selectContact(this.contact);
             }
