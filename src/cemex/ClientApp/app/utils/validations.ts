@@ -64,8 +64,8 @@ export class Validations {
         return product.product.product.productLine.productLineId === this.PRODUCT_LINES.MultiProduct
     }
 
-    static isCementBagMultriproduct(product) {
-        return product.product.product.productLine.productLineId == "2,3";
+    static isCementBagMultriproduct() {
+        return _.get(this.manager, 'productLine.productLineId') === "2,3";
     }
 
     // TODO: Replace Id with code in enum
@@ -86,10 +86,6 @@ export class Validations {
         if (Validations.isUSACustomer()) { return true; }
         else if (Validations.isPickup()) { return true; }
         else { return false; }
-    }
-
-    static isCementBagMultriproduct() {
-        return _.get(this.manager, 'productLine.productLineId') === "2,3";
     }
 
 }

@@ -259,7 +259,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     onShowed() {
         this.onCompleted.emit(false);
-
         this.isCement = Validations.isCement();
 
         // Unlock
@@ -329,10 +328,13 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     fetchJobsites() {
         this.shipmentApi.all(this.manager.productLine, Validations.isReadyMix()).subscribe((response) => {
             this.locations = response.json().shipmentLocations;
+
+            // TODO replace this with normal component
             this.locations.forEach((location, index) => {
                 location.id = index;
                 location.name = location.shipmentLocationCode + ' ' + location.shipmentLocationDesc;
-            })
+            });
+
             if (this.location) {
                 this.jobsiteChanged(this.location);
             }
@@ -462,7 +464,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.loadings.pods = false;
         });
 
-        if (!this.isCement) {
+        if (!Validations.isCement()) {
             // Fetch contacts
             this.shipmentApi.contacts(this.location).subscribe((response => {
                 this.contacts = response.json().contacts;
