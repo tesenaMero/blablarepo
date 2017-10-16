@@ -25,7 +25,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     private location: any;
     private contact: any;
     private pod: any;
-    private catalogOptions: Object = {};
 
     private purchaseOrder: string = "";
     private specialInstructions: string = "";
@@ -126,7 +125,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     private geocoder: any;
     private infoWindow: any;
     private jobsiteMarker: any;
-
     private customer: any;
 
     private UTILS: any;
@@ -226,51 +224,13 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             }
         });
 
-        // Validate purchase order
-        // if (this.validations.purchaseOrder.mandatory) {
-        //     this.dashboard.alertInfo(this.t.pt('views.common.validating'), 0);
-        //     this.purchaseOrderApi.validate(this.purchaseOrder, this.manager.productLine, this.location).subscribe((response) => {
-        //         let data = response.json();
-        //         if (data.messageType == "E") {
-        //             this.dashboard.alertError(data.messageText, 12000);
-        //             return;
-        //         }
-        //         else if (data.messageType == "S") {
-        //             this.dashboard.alertSuccess(data.messageText);
-        //             this.requestNext.emit();
-        //             return;
-        //         }
-        //         else {
-        //             this.dashboard.alertSuccess(data.messageText);
-        //             this.requestNext.emit();
-        //         }
-        //     });
-
-        //     return false;
-        // }
-
         return false;
-    }
-
-    // Replacing the object shippingCondition with the api one
-    mapShippingCondition() {
-        const mode = this.manager.shippingCondition.shippingConditionCode;
-        const customer = this.customerService.currentCustomer().legalEntityId;
-        this.shippingConditionApi.byCode(customer, mode).subscribe((response) => {
-            let shipppingConditions = response.json().shippingConditions
-            if (shipppingConditions.length) {
-                this.manager.selectDeliveryType(shipppingConditions[0]);
-            }
-        });
     }
 
     onShowed() {
         this.onCompleted.emit(true);
 
         this.isCement = Validations.isCement();
-
-        // Map shippingcondition
-        //this.mapShippingCondition();
 
         // Unlock
         this.lockRequests = false;
@@ -335,7 +295,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.locations = response.json().shipmentLocations;
             this.locations.forEach((location, index) => {
                 location.id = index;
-                location.name = location.shipmentLocationDesc + ' (' + location.shipmentLocationCode + ')';
+                location.name = location.shipmentLocationCode + ' ' + location.shipmentLocationDesc;
             })
             if (this.location) {
                 this.jobsiteChanged(this.location);
@@ -445,7 +405,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.pods = response.json().shipmentLocations;
             this.pods.forEach((pod, index) => {
                 pod.id = index;
-                pod.name = pod.shipmentLocationDesc + ' (' + pod.shipmentLocationCode + ')';
+                pod.name = pod.shipmentLocationCode + ' ' + pod.shipmentLocationDesc;
             });
 
             if (this.pods.length > 0) {

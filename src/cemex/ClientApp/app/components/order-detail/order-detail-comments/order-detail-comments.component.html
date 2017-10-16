@@ -1,26 +1,23 @@
-<div *ngIf="isLoading">
-    <div class="card">
+<div class="cards">
+    <div class="comment-history-item" *ngIf="isLoading">
         <p>Loading...</p>
     </div>
-</div>
-<div *ngIf="!isLoading && comments.length == 0">
-    <div class="card">
+    <div class="comment-history-item" *ngIf="!isLoading && comments.length == 0">
         <p>No comments found</p>
     </div>
-</div>
-<div class="cards" *ngIf="!isLoading && comments.length > 0">
-    <div class="card" *ngFor="let comment of comments">
+    <div class="comment-history-item" *ngFor="let comment of comments">
         <div class="row justify-content-start from">
-            <div class="name col-auto"><strong *ngIf="!comment.isCustomer">CEMEX</strong> {{comment.fullName}}</div>
+            <div class="name col-auto"><strong *ngIf="!comment.isCustomer">CEMEX</strong>{{comment.user.userFullName}}</div>
             <div class="divider"></div>
-            <div class="date col-auto">{{comment.createdDateTime}}</div>
+            <div class="date col-auto">{{comment.createdDateTime | date:'dd.MM.yyyy'}}</div>
         </div>
         <div class="comment-text">
             <p>{{comment.commentDesc}}</p>
         </div>
     </div>
 </div>
+<h2 class="add-comment-head">Add Comment</h2>
 <form (ngSubmit)="onSubmit()" class="send-comment">
-    <input type="text" class="form-control transparent-input" placeholder="Start Typing Here" [value]="newMessage" (input)="newMessage = $event.target.value" />
-    <cemex-action-button title="send" color="ornage" isLink="true" class="submit-btn"></cemex-action-button>
+    <textarea class="form-control" placeholder="Start Typing Here" [value]="newMessage" (input)="newMessage = $event.target.value"></textarea>
+    <cemex-action-button [isDisabled]="isSending || !newMessage.length" [title]="postBtn" class="submit-btn"></cemex-action-button>
 </form>

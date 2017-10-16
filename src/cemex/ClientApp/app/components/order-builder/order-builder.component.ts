@@ -238,7 +238,8 @@ export class OrderBuilderComponent implements OnDestroy {
             screenToShow: "cash-sales",
             credentials: {
                 token: sessionStorage.getItem('access_token'),
-                jwt: sessionStorage.getItem('jwt')
+                jwt: sessionStorage.getItem('jwt'),
+                refresh_token: JSON.parse(sessionStorage.getItem('refresh_token'))
             },
             data: data
         }

@@ -44,6 +44,14 @@
                     {{ manager?.contact?.phone }} {{ manager?.contact?.email }}
                 </div>
             </div>
+            <div class="item">
+                <div class="title">
+                    Special Instructions
+                </div>
+                <div class="description">
+                    {{ manager?.instructions }}
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-md-7 col-sm-12">
@@ -88,7 +96,7 @@
                         {{ t.pt('views.review.request_date') }}
                     </div>
                     <div class="value">
-                        {{ item.date | date:'dd.MM.yyyy' }}
+                        {{ item.date | date:'dd/MM/yyyy' }}
                     </div>
                 </div>
             </div>
