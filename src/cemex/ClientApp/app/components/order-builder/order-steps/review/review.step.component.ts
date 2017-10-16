@@ -74,7 +74,7 @@ export class ReviewStepComponent implements StepEventsListener {
             GoogleMapsHelper.lazyLoadMap("summary-map", (map) => {
                 this.isMapLoaded = true;
                 this.map = map;
-                map.setOptions({ zoom: 14, center: { lat: 25.6487281, lng: -100.4431818 } });
+                map.setOptions({ zoom: 2, center: { lat: 25.6487281, lng: -100.4431818 } });
                 this.geocoder = new google.maps.Geocoder();
                 this.loadMarkersInMap();
             });
@@ -318,6 +318,7 @@ export class ReviewStepComponent implements StepEventsListener {
     addMarkerToMap(marker: google.maps.Marker) {
         marker.setMap(this.map);
         this.map.setCenter(marker.getPosition());
+        this.map.setZoom(14);
     }
 
     cleanJobsiteMarker() {

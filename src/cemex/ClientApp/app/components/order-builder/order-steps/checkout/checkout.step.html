@@ -181,7 +181,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-1" *ngIf="!UTIL.isCementBagMultriproduct()">
                             <div class="group">
                                 <div class="title">
                                     {{ t.pt('views.checkout.request_time') }}

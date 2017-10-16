@@ -66,6 +66,7 @@ export class PreProduct {
         payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') },
         product: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_products_selected') },
         maxCapacity: { valid: true, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') },
+        contractBalance: { valid: true, mandatory: true, text: this.t.pt('views.specifications.contract_remaining_amount_overflow') },
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean, private templateProduct?: any) {
@@ -165,7 +166,6 @@ export class PreProduct {
     productChanged(shouldFetchContracts?: boolean) {
         // Optionals
         if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
-
         if (!this.product) {
             // Disable stuff and remove loadings
             this.disableds.products = true;
@@ -207,18 +207,24 @@ export class PreProduct {
             this.fetchUnitsFromContract();
 
             // If should get payment terms from contract
-            if (this.contract.salesDocument.paymentTerm && this.contract.salesDocument.paymentTerm.checkPaymentTerm == true) {
+            if (this.contract.salesDocument.paymentTerm) {
+                this.validations.payment.mandatory = this.contract.salesDocument.paymentTerm.checkPaymentTerm;
                 this.getContractPaymentTerm(this.contract.salesDocument.paymentTerm.paymentTermId);
-            }
-            else {
+            }  else {
                 // Reset available payments
                 this.availablePayments = SpecificationsStepComponent.availablePayments;
+            }
+            if (Validations.isReadyMix()) {
+                this.disableds.quantity = false;
+            }
+            if (this.quantity > this.getContractBalance()) {
+                this.setContractBalanceValidation(false);
             }
         }
         else {
             this.validations.contract.valid = false;
             this.fetchUnits();
-
+            this.setContractBalanceValidation(true);
             // Reset available payments
             this.availablePayments = SpecificationsStepComponent.availablePayments;
             this.payment = SpecificationsStepComponent.availablePayments[0];
@@ -229,12 +235,12 @@ export class PreProduct {
         // this.quantity = 1;
     }
 
-    quantityGood() {
-        this.validations.maxCapacity.valid = true;
+    setQuantityValidation(valid: boolean) {
+            this.validations.maxCapacity.valid = valid;
     }
 
-    quantityBad() {
-        this.validations.maxCapacity.valid = false;
+    setContractBalanceValidation(valid: boolean) {
+            this.validations.contractBalance.valid = valid;
     }
 
     plantChanged() {
@@ -272,14 +278,14 @@ export class PreProduct {
                     // Try to match
                     try {
                         matchContract = this.availableContracts.find((item) => {
-                            return item && item.salesDocument && item.salesDocument.salesDocumentCode == this.contract.salesDocument.salesDocumentCode;
+                            return item && item.salesDocument && item.salesDocument.salesDocumentCode == this.contract.salesDocument.salesDocumentCode
                         });
                     }
                     catch (ex) {
                         matchContract = undefined;
                     }
                 }
-                
+
                 this.contract = matchContract
             }
             else {
@@ -319,7 +325,9 @@ export class PreProduct {
 
                 if (units.length > 0) {
                     this.disableds.units = false;
-                    this.disableds.quantity = false;
+                    if (!Validations.isReadyMix()) {
+                        this.disableds.quantity = false;
+                    }
                     this.unit = units[0];
                 }
                 else {
@@ -350,23 +358,39 @@ export class PreProduct {
         this.disableds.payments = true;
         this.paymentTermsApi.getJobsiteById(termId).subscribe((result) => {
             const contractPaymentTerm = result.json().paymentTerms;
-            this.availablePayments = contractPaymentTerm;
+            if (contractPaymentTerm && contractPaymentTerm.lenght) {
+                this.availablePayments = contractPaymentTerm;
 
-            if (this.availablePayments.length === 1) {
-                this.payment = this.availablePayments[0];
-                this.disableds.payments = false;
-            }
-            else if (this.availablePayments.length > 1) {
-                this.payment = undefined;
-                this.disableds.payments = false;
+                if (this.availablePayments.length === 1) {
+                    this.payment = this.availablePayments[0];
+                    this.disableds.payments = true;
+                }
+                else if (this.availablePayments.length > 1) {
+                    // Preselect credit
+                    let credit = this.availablePayments.find((term: any) => {
+                        return term.paymentTermType.paymentTermTypeCode === 'CREDIT';
+                    });
+
+                    if (credit) {
+                        this.payment = credit;
+                    }
+                    else {
+                        this.payment = this.availablePayments[0]
+                    }
+
+                    this.disableds.payments = false;
+                }
+                else {
+                    this.payment = undefined;
+                    this.disableds.payments = true;
+                }
             }
             else {
-                this.payment = undefined;
-                this.disableds.payments = true;
+                this.disableds.payments = false;
             }
-
-            this.loadings.payments = false;
+            
             this.paymentChanged();
+            this.loadings.payments = false;
         })
     }
 
@@ -381,6 +405,7 @@ export class PreProduct {
             this.disableds.quantity = true;
             this.productsApi.units(this.contract.salesDocument.salesDocumentId).subscribe((result) => {
                 let units = result.json().productUnitConversions;
+                
                 if (units) { this.availableUnits = units; }
                 else { this.availableUnits = this.product.availableUnits; }
 
@@ -405,9 +430,9 @@ export class PreProduct {
 
         // Fetch parallel units from contract + contract base unit
         Observable.forkJoin(
-            this.productsApi.units(this.contract.salesDocument.salesDocumentId).map((result) => {
-                let units = result.json().productUnitConversions;
-                if (units.length) { this.availableUnits = units; }
+            this.productsApi.unit(this.product).map((result) => {
+                let unit = result.json();
+                if (unit) { this.availableUnits = [unit]; }
                 else { this.availableUnits = this.product.availableUnits; }
             }),
             this.productsApi.unitByUnitOfMeasure(this.contract.unitOfMeasure).map((result) => {

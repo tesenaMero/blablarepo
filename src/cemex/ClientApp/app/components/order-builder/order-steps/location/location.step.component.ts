@@ -156,107 +156,125 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     canAdvance() {
+        // Set validations state
+        // ---------------------------
         // Validate purchase order
-        if (this.purchaseOrder.length > 0) {
-            this.validations.purchaseOrder.valid = true;
-        }
-        else {
-            this.validations.purchaseOrder.valid = false;
-        }
+        this.validations.purchaseOrder.valid = this.isValidPurchaseOrder();
 
-        let advance = true;
+        // Contact validation
+        this.validations.contactPerson.valid = this.isValidContact();
+
+        // Check validations
+        // and show error message if needed
+        // --------------------------
+        let advance = this.isValidationsOk();
+        if (!advance) { return; }
+
+        // Prepare observables
+        // -------------------------
+        // If PO need validation send it to API,
+        this.validateSub = this.makeValidationSub();
+
+        // Set shippingcondition sub
+        this.shippingConditionMapSub = this.makeShippingConditionSub();
+
+        this.dashboard.alertInfo(this.t.pt('views.common.validating'), 0);
+
+        // Run both at the same time
+        // Wait for both to finish
+        Observable.forkJoin(this.shippingConditionMapSub, this.validateSub).subscribe((response) => {
+            if (this.allGoodCanGo(response)) {
+                this.requestNext.emit();
+            }
+        });
+
+        // Do not let him advance. Wait for forkjoin above to decide
+        return false;
+    }
+
+    // Before next validations
+    // Validate purchase order
+    isValidPurchaseOrder(): boolean {
+        return this.purchaseOrder.length > 0;
+    }
+
+    isValidContact(): boolean {
+        return this.manager.contact != undefined && this.manager.contact != null;
+    }
+
+    isValidationsOk(): boolean {
         for (let key in this.validations) {
             if (this.validations[key].mandatory) {
                 if (!this.validations[key].valid) {
                     this.validations[key].showError = true;
-                    advance = false;
+                    return false;
                 }
             }
         }
 
-        if (!advance) { return; }
+        return true;
+    }
 
-        // Set PO validation sub
+    makeValidationSub(): any {
+        let sub = Observable.empty().defaultIfEmpty();
         if (this.validations.purchaseOrder.mandatory) {
-            this.validateSub = this.purchaseOrderApi.validate(
-                this.purchaseOrder,
+            sub = this.purchaseOrderApi.validate(this.purchaseOrder,
                 this.manager.productLine,
                 this.location).map((response) => {
                     return response.json()
                 });
         }
-        else {
-            this.validateSub = Observable.empty().defaultIfEmpty();
-        }
 
-        // Set shippingcondition sub
+        return sub
+    }
+
+    makeShippingConditionSub(): any {
         const mode = this.manager.shippingCondition.shippingConditionCode;
         const customer = this.customerService.currentCustomer().legalEntityId;
-        this.shippingConditionMapSub = this.shippingConditionApi.byCode(customer, mode).map((response) => {
+        return this.shippingConditionApi.byCode(customer, mode).map((response) => {
             let shipppingConditions = response.json().shippingConditions
             if (shipppingConditions.length) {
                 this.manager.selectDeliveryType(shipppingConditions[0]);
             }
         });
+    }
 
-        this.dashboard.alertInfo(this.t.pt('views.common.validating'), 0);
-        Observable.forkJoin(this.shippingConditionMapSub, this.validateSub).subscribe((response) => {
-            if (this.validations.purchaseOrder.mandatory) {
-                let data: any = response[1];
-
-                if (data.messageType == "E") {
-                    this.dashboard.alertError(data.messageText, 12000);
-                    return;
-                }
-                else if (data.messageType == "S") {
-                    this.dashboard.alertSuccess(data.messageText);
-                    this.requestNext.emit();
-                    return;
-                }
-                else {
-                    this.dashboard.alertSuccess(data.messageText);
-                    this.requestNext.emit();
-                }
+    allGoodCanGo(response): boolean {
+        if (this.validations.purchaseOrder.mandatory) {
+            const data: any = response[1];
+            if (data.messageType == "S") {
+                this.dashboard.alertSuccess(data.messageText, 6000);
+                return true;
             }
             else {
-                this.requestNext.emit();
-                this.dashboard.closeAlert();
+                this.dashboard.alertError(data.messageText, 12000);
+                return false;
             }
-        });
-
-        return false;
+        }
+        else {
+            this.dashboard.closeAlert();
+            return true
+        }
     }
 
     onShowed() {
-        this.onCompleted.emit(true);
-
+        this.onCompleted.emit(false);
         this.isCement = Validations.isCement();
 
         // Unlock
         this.lockRequests = false;
 
         // Reset validations
-        this.resetValidations();
         this.defineValidations();
 
-        this.onCompleted.emit(false);
-        this.loadings.locations = true;
-
-        this.podsIndex = undefined;
-        this.loadings.pods = true;
-
+        // TODO change this
         this.contactsIndex = undefined;
-        this.loadings.contacts = true;
+        this.podsIndex = undefined;
+
+        this.allLoadings(true);
 
         // PODS
-        if (!this.shouldShowPOD()) {
-            this.hiddens.pods = true;
-            // Remove pod from manager
-            this.manager.pointOfDelivery = undefined;
-        }
-        else {
-            this.hiddens.pods = false;
-        }
+        this.initPODs()
 
         // Make sure div is rendered before loading the map
         //setTimeout(this.loadMap.bind(this), 0)
@@ -268,12 +286,29 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         });
     }
 
+    // Init stuff
+    private allLoadings(value: boolean) {
+        this.loadings.locations = value;
+        this.loadings.pods = value;
+        this.loadings.contacts = value;
+    }
+
+    private initPODs() {
+        if (!this.shouldShowPOD()) {
+            this.hiddens.pods = true;
+            this.manager.pointOfDelivery = undefined; // Remove pod from manager
+        }
+        else {
+            this.hiddens.pods = false;
+        }
+    }
+
     loadMap() {
         if (!this.isMapLoaded) {
             GoogleMapsHelper.lazyLoadMap("jobsite-selection-map", (map) => {
                 this.isMapLoaded = true;
                 this.map = map;
-                map.setOptions({ zoom: 14, center: { lat: 50.077626, lng: 14.424686 } });
+                map.setOptions({ zoom: 2, center: { lat: 50.077626, lng: 14.424686 } });
                 google.maps.event.trigger(this.map, "resize");
                 this.geocoder = new google.maps.Geocoder();
             });
@@ -297,10 +332,13 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     fetchJobsites() {
         this.shipmentApi.all(this.manager.productLine, Validations.isReadyMix()).subscribe((response) => {
             this.locations = response.json().shipmentLocations;
+
+            // TODO replace this with normal component
             this.locations.forEach((location, index) => {
                 location.id = index;
                 location.name = location.shipmentLocationCode + ' ' + location.shipmentLocationDesc;
-            })
+            });
+
             if (this.location) {
                 this.jobsiteChanged(this.location);
             }
@@ -430,7 +468,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.loadings.pods = false;
         });
 
-        if (!this.isCement) {
+        if (!Validations.isCement()) {
             // Fetch contacts
             this.shipmentApi.contacts(this.location).subscribe((response => {
                 this.contacts = response.json().contacts;
@@ -573,20 +611,20 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     defineValidations() {
+        this.resetValidations();
+
         // Contacts mandatory for delivery only
-        if (Validations.isDelivery() && !this.isCement) {
-            this.validations.contactPerson.mandatory = true;
-        }
+        if (Validations.isDelivery() && Validations.isReadyMix()) { this.validations.contactPerson.mandatory = true; }
+
         // MX POD mandatory
-        if (Validations.isMexicoCustomer() && Validations.isDelivery()) {
-            this.validations.pod.mandatory = true;
-        }
+        if (Validations.isMexicoCustomer() && Validations.isDelivery()) { this.validations.pod.mandatory = true; }
+
         // Purchase order
         if (Validations.isUSACustomer()) {
             this.validations.purchaseOrder.mandatory = false;
         }
         else if (Validations.isMexicoCustomer()) {
-            if (this.manager.productLine.productLineId == 6) {
+            if (Validations.isReadyMix()) {
                 this.validations.purchaseOrder.mandatory = false;
             }
             else {
@@ -612,6 +650,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     addMarkerToMap(marker: google.maps.Marker) {
         marker.setMap(this.map);
         this.map.setCenter(marker.getPosition());
+        this.map.setZoom(14);
     }
 
     cleanJobsiteMarker() {
