@@ -273,7 +273,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             GoogleMapsHelper.lazyLoadMap("jobsite-selection-map", (map) => {
                 this.isMapLoaded = true;
                 this.map = map;
-                map.setOptions({ zoom: 14, center: { lat: 50.077626, lng: 14.424686 } });
+                map.setOptions({ zoom: 2, center: { lat: 50.077626, lng: 14.424686 } });
                 google.maps.event.trigger(this.map, "resize");
                 this.geocoder = new google.maps.Geocoder();
             });
@@ -616,6 +616,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     addMarkerToMap(marker: google.maps.Marker) {
         marker.setMap(this.map);
         this.map.setCenter(marker.getPosition());
+        this.map.setZoom(14);
     }
 
     cleanJobsiteMarker() {
