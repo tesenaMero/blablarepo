@@ -10,7 +10,7 @@ import { ModalService } from './modal.service';
     template: `
     <div class="modal fade" data-backdrop="static" data-keyboard="false" id="{{id}}-modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
+            <div class="modal-content" *ngIf="render">
                 <div class="">
                     <ng-content></ng-content>
                 </div>
@@ -28,6 +28,7 @@ export class ModalComponent implements OnInit, OnDestroy {
     @ViewChild('modalCloser') closer: any;
     
     private element: JQuery;
+    private render: boolean = false; // To render content only when opened
 
     constructor(private modalService: ModalService, private el: ElementRef) {
         this.element = $(el.nativeElement);
@@ -66,15 +67,14 @@ export class ModalComponent implements OnInit, OnDestroy {
     // open modal
     open(): void {
         this.opener.nativeElement.click();
+        this.render = true;
         $("#app-content").addClass("blur");
-        //this.element.show();
-        //$('body').addClass('modal-open');
     }
 
     // close modal
     close(): void {
         this.closer.nativeElement.click();
-        $("#app-content").removeClass("blur");
-        //$('body').removeClass('modal-open');
+        this.render = false;
+        $("#app-content").removeClass("blur");        
     }
 }

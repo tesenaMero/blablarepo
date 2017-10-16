@@ -222,6 +222,12 @@ var MultiselectDropdown = (function() {
     MultiselectDropdown.prototype.cancel = function(e) {
         this.settings.addingOption = false;
     };
+    MultiselectDropdown.prototype.onlyNumberKey = function(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 43 && charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    };
     MultiselectDropdown.prototype.manualInputChanged = function(e) {
         this.onModelChange(this.manualInput)
     };
@@ -421,7 +427,7 @@ MultiselectDropdown.decorators = [{
             </span>
             <span>
                 <label>Phone number:</label>
-                <input (keyup)="manualInputChanged()" [(ngModel)]="manualInput.phone" type="text" name="Contact number" id="contact-phone" />
+                <input (keypress)="onlyNumberKey($event)" (keyup)="manualInputChanged()" [(ngModel)]="manualInput.phone" type="text" name="Contact number" id="contact-phone" />
             </span>
         </div>
         <div class="button-ghost button-cancel" *ngIf="settings.addingOption" (click)="cancel()">Cancel</div>
