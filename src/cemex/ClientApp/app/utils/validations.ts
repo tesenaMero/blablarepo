@@ -10,7 +10,8 @@ export class Validations {
     static PRODUCT_LINES = {
         Readymix: 6,
         CementBulk: 1,
-        CementBag: 2
+        CementBag: 2,
+        MultiProduct: 3
     }
 
     static manager: any;
@@ -45,6 +46,19 @@ export class Validations {
 
     static isCementBag() {
         return _.get(this.manager, 'productLine.productLineId') === this.PRODUCT_LINES.CementBag
+    }
+
+    static isProductCementBag(product) {
+        return product.product.product.productLine.productLineId === this.PRODUCT_LINES.CementBag
+    }
+    static isProductCementBulk(product) {
+        return product.product.product.productLine.productLineId === this.PRODUCT_LINES.CementBulk
+    }
+    static isProductReadyMix(product) {
+        return product.product.product.productLine.productLineId === this.PRODUCT_LINES.Readymix
+    }
+    static isProductMultiproduct(product) {
+        return product.product.product.productLine.productLineId === this.PRODUCT_LINES.MultiProduct
     }
 
     // TODO: Replace Id with code in enum

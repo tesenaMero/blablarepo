@@ -66,6 +66,7 @@ export class PreProduct {
         payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') },
         product: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_products_selected') },
         maxCapacity: { valid: true, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') },
+        contractBalance: { valid: true, mandatory: true, text: this.t.pt('views.specifications.contract_remaining_amount_overflow') },
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean, private templateProduct?: any) {
@@ -165,7 +166,6 @@ export class PreProduct {
     productChanged(shouldFetchContracts?: boolean) {
         // Optionals
         if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
-
         if (!this.product) {
             // Disable stuff and remove loadings
             this.disableds.products = true;
@@ -210,16 +210,21 @@ export class PreProduct {
             if (this.contract.salesDocument.paymentTerm) {
                 this.validations.payment.mandatory = this.contract.salesDocument.paymentTerm.checkPaymentTerm;
                 this.getContractPaymentTerm(this.contract.salesDocument.paymentTerm.paymentTermId);
-            }
-            else {
+            }  else {
                 // Reset available payments
                 this.availablePayments = SpecificationsStepComponent.availablePayments;
+            }
+            if (Validations.isReadyMix()) {
+                this.disableds.quantity = false;
+            }
+            if (this.quantity > this.getContractBalance()) {
+                this.setContractBalanceValidation(false);
             }
         }
         else {
             this.validations.contract.valid = false;
             this.fetchUnits();
-
+            this.setContractBalanceValidation(true);
             // Reset available payments
             this.availablePayments = SpecificationsStepComponent.availablePayments;
             this.payment = SpecificationsStepComponent.availablePayments[0];
@@ -230,12 +235,12 @@ export class PreProduct {
         // this.quantity = 1;
     }
 
-    quantityGood() {
-        this.validations.maxCapacity.valid = true;
+    setQuantityValidation(valid: boolean) {
+            this.validations.maxCapacity.valid = valid;
     }
 
-    quantityBad() {
-        this.validations.maxCapacity.valid = false;
+    setContractBalanceValidation(valid: boolean) {
+            this.validations.contractBalance.valid = valid;
     }
 
     plantChanged() {
@@ -320,7 +325,9 @@ export class PreProduct {
 
                 if (units.length > 0) {
                     this.disableds.units = false;
-                    this.disableds.quantity = false;
+                    if (!Validations.isReadyMix()) {
+                        this.disableds.quantity = false;
+                    }
                     this.unit = units[0];
                 }
                 else {
