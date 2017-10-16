@@ -295,7 +295,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.locations = response.json().shipmentLocations;
             this.locations.forEach((location, index) => {
                 location.id = index;
-                location.name = location.shipmentLocationDesc + ' (' + location.shipmentLocationCode + ')';
+                location.name = location.shipmentLocationCode + ' ' + location.shipmentLocationDesc;
             })
             if (this.location) {
                 this.jobsiteChanged(this.location);
@@ -405,7 +405,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.pods = response.json().shipmentLocations;
             this.pods.forEach((pod, index) => {
                 pod.id = index;
-                pod.name = pod.shipmentLocationDesc + ' (' + pod.shipmentLocationCode + ')';
+                pod.name = pod.shipmentLocationCode + ' ' + pod.shipmentLocationDesc;
             });
 
             if (this.pods.length > 0) {
