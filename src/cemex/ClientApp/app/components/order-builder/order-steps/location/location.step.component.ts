@@ -164,6 +164,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.validations.purchaseOrder.valid = false;
         }
 
+        // Contact validation
+        if (this.manager.contact) {
+            this.validations.contactPerson.valid = true;
+        }
+
         let advance = true;
         for (let key in this.validations) {
             if (this.validations[key].mandatory) {
@@ -520,9 +525,8 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     contactChanged(event: any) {
         // if the user got the location step by pressign the back button
-         if (this.contact && this.contact.name && this.contact.phone) {
+        if (this.contact && this.contact.name && this.contact.phone) {
             this.validations.contactPerson.valid = true;
-            return;
         }
 
         if (!event) { this.validations.contactPerson.valid = false; return; }

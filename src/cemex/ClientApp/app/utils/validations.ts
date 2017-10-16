@@ -51,14 +51,21 @@ export class Validations {
     static isProductCementBag(product) {
         return product.product.product.productLine.productLineId === this.PRODUCT_LINES.CementBag
     }
+
     static isProductCementBulk(product) {
         return product.product.product.productLine.productLineId === this.PRODUCT_LINES.CementBulk
     }
+
     static isProductReadyMix(product) {
         return product.product.product.productLine.productLineId === this.PRODUCT_LINES.Readymix
     }
+
     static isProductMultiproduct(product) {
         return product.product.product.productLine.productLineId === this.PRODUCT_LINES.MultiProduct
+    }
+
+    static isCementBagMultriproduct(product) {
+        return product.product.product.productLine.productLineId == "2,3";
     }
 
     // TODO: Replace Id with code in enum
