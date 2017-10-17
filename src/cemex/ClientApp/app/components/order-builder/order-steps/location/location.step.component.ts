@@ -578,7 +578,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.manager.selectContact(this.contact);
             this.validations.contactPerson.showError = false;
         }
-        else if (event.length > 0) {
+        else if (event.length > 0 && event.constructor === Array) {
             this.contact = this.contacts[event[0]];
             this.manager.selectContact(this.contact);
             this.validations.contactPerson.showError = false;
