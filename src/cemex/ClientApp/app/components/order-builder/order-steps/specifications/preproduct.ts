@@ -430,7 +430,7 @@ export class PreProduct {
 
         // Fetch parallel units from contract + contract base unit
         Observable.forkJoin(
-            this.productsApi.units(this.contract.salesDocument.salesDocumentId).map((result) => {
+            this.productsApi.units(this.product.product.productId).map((result) => {
                 let units = result.json().productUnitConversions;
                 if (units.length) { this.availableUnits = units; }
                 else { this.availableUnits = this.product.availableUnits; }
