@@ -5,6 +5,7 @@ import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { DashboardService } from '../../shared/services/dashboard.service'
 
 import * as moment from 'moment'
+import { Validations } from '../../utils/validations';
 
 @Component({
     selector: 'order-detail-page',
@@ -22,6 +23,7 @@ export class OrderDetailComponent {
     orderCode: string;
     country: string;
     businessLine: string;
+    UTILS = Validations;
 
     private sub: any;
     pod: any;
