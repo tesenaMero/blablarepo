@@ -167,7 +167,7 @@
                                     {{ t.pt('views.checkout.unit') }}
                                 </div>
                                 <div class="desc">
-                                    {{ item?.unit?.alternativeUnit.unitDesc }}
+                                    {{ item?.unit?.alternativeUnit?.unitCode | unitCodeMapper }}
                                 </div>
                             </div>
                         </div>
@@ -337,7 +337,7 @@
                                     {{ t.pt('views.checkout.unit') }}
                                 </div>
                                 <div class="desc">
-                                    {{ item?.unit?.alternativeUnit.unitDesc }}
+                                    {{ item?.unit?.alternativeUnit?.unitCode | unitCodeMapper }}
                                 </div>
                             </div>
                         </div>
