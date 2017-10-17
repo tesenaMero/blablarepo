@@ -893,7 +893,7 @@
 	"views.details.request_time": "Requested time",
 	"views.details.product_id": "Product ID",
 	"views.details.contract": "Contract",
-	"views.details.discharge_time": "Unloading Time",
+	"views.details.discharge_time": "Discharge Time",
 	"views.details.transport_method": "Transport Method",
 	"views.details.unload_type": "Unload Type",
 	"views.details.delivery_mode": "Delivery mode",

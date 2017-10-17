@@ -179,7 +179,17 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-3 col-xs-6" *ngIf="itemData?.orderItemProfile?.dischargeTime">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile?.unloadType">
+                                    <div class="group">
+                                        <div class="title">
+                                            {{ t.pt('views.details.unload_type') }}
+                                        </div>
+                                        <div class="value">
+                                            {{itemData.orderItemProfile.unloadType.unloadTypeDesc}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile?.dischargeTime">
                                     <div class="group">
                                         <div class="title">
                                             {{ t.pt('views.details.discharge_time') }}
@@ -189,23 +199,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-xs-6" *ngIf="itemData.transportMethod">
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.orderItemProfile?.transportMethod">
                                     <div class="group">
                                         <div class="title">
                                             {{ t.pt('views.details.transport_method') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.transportMethod.transportMethodDesc}}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-xs-6" *ngIf="itemData.unloadType">
-                                    <div class="group">
-                                        <div class="title">
-                                            {{ t.pt('views.details.unload_type') }}
-                                        </div>
-                                        <div class="value">
-                                            {{itemData.unloadType.unloadTypeDesc}}
+                                            {{itemData.orderItemProfile.transportMethod.transportMethodDesc}}
                                         </div>
                                     </div>
                                 </div>
@@ -224,20 +224,10 @@
                                 <div class="col-md-3 col-xs-6" *ngIf="itemData?.orderItemProfile?.pumpCapacity">
                                     <div class="group">
                                         <div class="title">
-                                            {{ t.pt('views.details.pump_capacity_min') }}
+                                            {{ t.pt('views.project.profile.pump_capacity') }}
                                         </div>
                                         <div class="value">
                                             {{itemData.orderItemProfile.pumpCapacity.pumpCapacityDesc}}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-xs-6" *ngIf="itemData?.orderItemProfile?.timePerLoad">
-                                    <div class="group">
-                                        <div class="title">
-                                            {{ t.pt('views.details.pump_capacity_max') }}
-                                        </div>
-                                        <div class="value">
-                                            {{ itemData?.orderItemProfile?.timePerLoad?.timePerLoadDesc }}
                                         </div>
                                     </div>
                                 </div>
