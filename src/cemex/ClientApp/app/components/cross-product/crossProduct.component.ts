@@ -80,15 +80,12 @@ export class CrossProductComponent implements OnInit {
     }
 
     flowCementMX(jObj, orderWithoutDocuments: boolean = false) {
-        let data = orderWithoutDocuments ? {} : {
+        let data = orderWithoutDocuments ? '' : {
             documents: jObj.data[0].documents
         }
-        const createOrder = orderWithoutDocuments ? 
-                            this.drafts.createOrder(jObj.data[0].orderID) : 
-                            this.drafts.createOrder(jObj.data[0].orderID, data);
 
         this.dashboard.alertInfo(this.t.pt('views.common.placing'), 0);
-        createOrder
+        this.drafts.createOrder(jObj.data[0].orderID, data)
             .flatMap((response) => {
                 this.dashboard.alertSuccess(this.t.pt('views.common.placed'), 0);
                 return this.drafts.validateRequestId(response.json().id);
