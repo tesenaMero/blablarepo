@@ -10,6 +10,8 @@ import { Validations } from '../../../../utils/validations';
 import { Observable } from 'rxjs/Observable';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
+declare var google: any;
+
 @Component({
     selector: 'location-step',
     templateUrl: './location.step.html',

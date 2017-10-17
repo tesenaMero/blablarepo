@@ -210,7 +210,7 @@ export class PreProduct {
             if (this.contract.salesDocument.paymentTerm) {
                 this.validations.payment.mandatory = this.contract.salesDocument.paymentTerm.checkPaymentTerm;
                 this.getContractPaymentTerm(this.contract.salesDocument.paymentTerm.paymentTermId);
-            }  else {
+            } else {
                 // Reset available payments
                 this.availablePayments = SpecificationsStepComponent.availablePayments;
             }
@@ -236,11 +236,11 @@ export class PreProduct {
     }
 
     setQuantityValidation(valid: boolean) {
-            this.validations.maxCapacity.valid = valid;
+        this.validations.maxCapacity.valid = valid;
     }
 
     setContractBalanceValidation(valid: boolean) {
-            this.validations.contractBalance.valid = valid;
+        this.validations.contractBalance.valid = valid;
     }
 
     plantChanged() {
@@ -388,7 +388,7 @@ export class PreProduct {
             else {
                 this.disableds.payments = false;
             }
-            
+
             this.paymentChanged();
             this.loadings.payments = false;
         })
@@ -405,7 +405,7 @@ export class PreProduct {
             this.disableds.quantity = true;
             this.productsApi.units(this.contract.salesDocument.salesDocumentId).subscribe((result) => {
                 let units = result.json().productUnitConversions;
-                
+
                 if (units) { this.availableUnits = units; }
                 else { this.availableUnits = this.product.availableUnits; }
 
@@ -430,9 +430,9 @@ export class PreProduct {
 
         // Fetch parallel units from contract + contract base unit
         Observable.forkJoin(
-            this.productsApi.unit(this.product).map((result) => {
-                let unit = result.json();
-                if (unit) { this.availableUnits = [unit]; }
+            this.productsApi.units(this.contract.salesDocument.salesDocumentId).map((result) => {
+                let units = result.json().productUnitConversions;
+                if (units.length) { this.availableUnits = units; }
                 else { this.availableUnits = this.product.availableUnits; }
             }),
             this.productsApi.unitByUnitOfMeasure(this.contract.unitOfMeasure).map((result) => {
@@ -606,6 +606,10 @@ export class PreProduct {
 
     shouldHidePayment() {
         return Validations.isUSACustomer() || Validations.isReadyMix();
+    }
+
+    shouldVerifyQuantity() {
+        return this.contract && this.contract.salesDocument && this.contract.salesDocument.hasBalance
     }
 
     isValid(): boolean {
