@@ -65,14 +65,14 @@ export class OrdersComponent implements OnDestroy {
 
                 // Filter drafts
                 this.orders = orders.filter((item) => {
-                    if (item.status) {
-                        if (item.status.statusDesc)
-                            return item.status.statusCode != "DRFT";
+                    if (item.status && item.status.statusDesc) {
+                        return item.status.statusCode != "DRFT";
+                    }
 
                     return true;
-                    }
                 });
-                // if Usa customer
+
+                // if USA customer
                 if (this.countryCode && this.countryCode == "US") {
                     this.initUsaCustomerOrders();
                 }
