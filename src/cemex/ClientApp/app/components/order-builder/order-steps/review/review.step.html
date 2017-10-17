@@ -65,7 +65,7 @@
 <div *ngFor="let item of manager.products" class="card-container row product">
     <div class="col-md-4 col-sm-12 left-container" style="overflow: hidden;text-overflow: ellipsis;">
         <div class="name">
-            {{ item?.product?.commercialCode }} /{{ item?.product?.commercialDesc }}
+            {{ item?.product?.commercialCode | trimLeadingZeroes }} /{{ item?.product?.commercialDesc }}
         </div>
     </div>
     <div class="col-md-8 right-container">

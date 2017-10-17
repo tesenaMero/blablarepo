@@ -3,7 +3,7 @@
         <div class="col-md-7">
             <div class="d-flex align-content-start flex-wrap mb-3">
                 <div class="title-container">
-                    <h1>{{ t.pt('views.details.order') }} #{{orderDetailData.orderId}}</h1>
+                    <h1>{{ t.pt('views.details.order') }} #<span *ngIf="orderDetailData.orderCode">{{orderDetailData.orderCode}}</span><span *ngIf="!orderDetailData.orderCode">{{orderDetailData.orderId}}</span></h1>
                 </div>
                 <div class="request-date align-self-center">
                     <span class="title">{{ t.pt('views.details.request_date') }}:</span>
@@ -163,7 +163,7 @@
                                             {{ t.pt('views.details.product_id') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.product.productCode}}
+                                            {{itemData.product.productCode | trimLeadingZeroes}}
                                         </div>
                                     </div>
                                 </div>
