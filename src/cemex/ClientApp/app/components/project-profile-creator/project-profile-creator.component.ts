@@ -74,7 +74,6 @@ export class ProjectProfileCreatorComponent {
 
     onChangeKicker(value: Boolean) {
         this.projectProfile.project.projectProperties.kicker = Boolean(value);
-        console.log(this.projectProfile.project.projectProperties.kicker)
     }
 
     onChangeUnloadType(index) {
