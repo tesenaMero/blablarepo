@@ -83,9 +83,12 @@ export class CrossProductComponent implements OnInit {
         let data = orderWithoutDocuments ? {} : {
             documents: jObj.data[0].documents
         }
+        const createOrder = orderWithoutDocuments ? 
+                            this.drafts.createOrder(jObj.data[0].orderID) : 
+                            this.drafts.createOrder(jObj.data[0].orderID, data);
 
         this.dashboard.alertInfo(this.t.pt('views.common.placing'), 0);
-        this.drafts.createOrder(jObj.data[0].orderID, data)
+        createOrder
             .flatMap((response) => {
                 this.dashboard.alertSuccess(this.t.pt('views.common.placed'), 0);
                 return this.drafts.validateRequestId(response.json().id);
