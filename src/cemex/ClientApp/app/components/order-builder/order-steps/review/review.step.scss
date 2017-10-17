@@ -1,11 +1,11 @@
 @import "~bootstrap/scss/bootstrap-grid.scss";
 #summary-map {
-    min-height: 352px;
     height: 100%;
 }
 
 .details-container {
     padding: 28px 40px;
+    min-height: 320px;
     @include media-breakpoint-down(sm) {
         padding: 28px 15px;
     }
@@ -96,6 +96,7 @@
                 font-size: 14px;
                 line-height: 19px;
                 word-wrap: break-word;
+                text-transform: capitalize;
             }
             &.flex-6 {
                 min-width: 115px + 115px;

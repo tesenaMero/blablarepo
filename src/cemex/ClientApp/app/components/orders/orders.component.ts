@@ -19,98 +19,88 @@ import { getOrderType, buisnessLIneCodes } from '../../shared/models/order-reque
     styleUrls: ['./orders.scss']
 })
 export class OrdersComponent implements OnDestroy {
-    orders: any = [];
-
+    // Table
     isLoading: any;
+    orders: any = [];
+    columns: any[] = [];
+    rows: any[] = [];
     totalPages: any;
-    customer: any;
 
+    // Lang
     countryCode: string;
     language: string;
 
-    columns: any[] = [];
-    rows: any[] = [];
-
+    // Subs
     sub: Subscription;
 
     public orderRequestConfiguration: OrderRequestTableComponentConfiguration;
 
     constructor(
-        private ordersService: OrdersService, 
-        private t: TranslationService, 
-        private ping: PingSalesOrderApi, 
-        private dash: DashboardService, 
-        private router: Router, 
-        private customerService: CustomerService, 
-        private ordersApi: OrdersApi, 
-        private encDecJsonObjService: EncodeDecodeJsonObjService,
-        // private validations: Validations,
-    ) {
-        //this.orders = ordersService.getOrders();
-        //this.isLoading = ordersService.isLoading();
-        //this.orderRequestConfiguration = OrdersService.ORDER_REQUEST_MAPPING;
-        //this.totalPages = ordersService.getTotalPages();
+        private ordersService: OrdersService,
+        private t: TranslationService,
+        private ping: PingSalesOrderApi,
+        private dash: DashboardService,
+        private router: Router,
+        private customerService: CustomerService,
+        private ordersApi: OrdersApi,
+        private encDecJsonObjService: EncodeDecodeJsonObjService) {
 
-        // Get legal Entity and countryCode
-        let userLegalEntity = JSON.parse(sessionStorage.getItem('user_legal_entity'));
-        this.countryCode = userLegalEntity.countryCode.trim();
-        
-        this.sub = this.t.localeData.subscribe(response => {
-            if (this.isChangingLanguage(response.lang)) {
-                // if USA customer
-                if (this.countryCode && this.countryCode === "US") {
-                    this.cleanOrders();
-                    this.initUsaCustomerOrders();
-                }
-                else {
-                    this.cleanOrders();
-                    this.initOrders();
-                }
+        this.isLoading = true;
+
+        // Listen to customer change
+        this.customerService.customerSubject.subscribe((customer) => {
+            if (customer) {
+                this.countryCode = customer.countryCode.trim() || "US";
+                this.fetchOrders();
             }
         });
 
-        this.isLoading = true;
+        // Listen to language change
+        this.sub = this.t.localeData.subscribe(response => {
+            // If its different from the already selected language
+            if (this.language != response.lang) {
+                this.language = response.lang;
+                this.fetchOrders();
+            }
+        });
+    }
+
+    initOrders(orders: any[]) {
+        // Filter drafts
+        this.cleanArray(this.orders);
+        this.setOrders(orders);
+
+        if (this.countryCode && this.countryCode === "US") {
+            this.fillUsaCustomerOrders();
+        }
+        else {
+            this.fillOrders();
+        }
+    }
+
+    cleanArray(arr: any[]) {
+        arr.splice(0, arr.length);
+    }
+
+    setOrders(orders: any[]) {
+        this.orders = orders.filter((item) => {
+            if (item.status && item.status.statusDesc) {
+                return item.status.statusCode != "DRFT";
+            }
+            return true;
+        });
+    }
+
+    fetchOrders() {
         this.ordersApi.all().subscribe((response) => {
             if (response.status == 200) {
                 let orders: any[] = response.json().orders;
-
-                // Filter drafts
-                this.orders = orders.filter((item) => {
-                    if (item.status && item.status.statusDesc) {
-                        return item.status.statusCode != "DRFT";
-                    }
-
-                    return true;
-                });
-
-                // if USA customer
-                if (this.countryCode && this.countryCode == "US") {
-                    this.initUsaCustomerOrders();
-                }
-                else {
-                    this.initOrders();
-                }
+                this.initOrders(orders);
             }
             this.isLoading = false;
         }, error => {
             this.isLoading = false;
         });
-    }
-
-    ngOnDestroy() {
-        this.sub.unsubscribe();
-    }
-
-    cleanOrders() {
-        this.orders.splice(0, this.orders.length);
-    }
-
-    isChangingLanguage(newLanguage: string): boolean{
-        if (this.language != newLanguage) {
-            this.language = newLanguage;
-            return true
-        }
-        return false;
     }
 
     getOrderIcon(order) {
@@ -128,7 +118,12 @@ export class OrdersComponent implements OnDestroy {
         }
     }
 
-    initOrders() {
+    fillOrders() {
+        this.cleanArray(this.columns);
+        this.cleanArray(this.rows);
+        this.isLoading = true;
+        
+        // Fill columns 
         this.columns = [
             //{ inner: '<i class="star cmx-icon-favourite-active" aria-hidden="true"></i>', width: 5 },
             { name: this.t.pt('views.table.order_no'), width: 15 },
@@ -142,6 +137,7 @@ export class OrdersComponent implements OnDestroy {
             // { name: this.t.pt('views.table.total'), width: 13 },
         ]
 
+        // Fill rows
         this.orders.forEach((order) => {
             this.rows.push([
                 { inner: this.getOrderCode(order), class: "order-id", title: true, click: () => this.goToDetail(order) },
@@ -149,16 +145,16 @@ export class OrdersComponent implements OnDestroy {
                 { inner: order.jobsite.jobsiteCode + " " + order.jobsite.jobsiteDesc, subtitle: true },
                 { inner: order.purchaseOrder, hideMobile: true },
                 { inner: this.getOrderIcon(order), hideMobile: true },
-                // { inner: order.totalQuantity + " tons" },
-                // { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY') },
                 { inner: "<span class='status " + order.status.statusCode.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
-                // { inner: "$" + order.totalAmount, class: "roboto-bold" },
-                // { inner: "<span class='status " + order.status.statusCode.toLowerCase() + "'></span>" + order.status.statusDesc, hideDesktop: true },
             ]);
         });
     }
 
-    initUsaCustomerOrders() {
+    fillUsaCustomerOrders() {
+        this.cleanArray(this.columns);
+        this.cleanArray(this.rows);
+        this.isLoading = true;
+
         this.columns = [
             { name: this.t.pt('views.table.order_no'), width: 15 },
             { name: this.t.pt('views.table.submitted'), width: 15 },
@@ -172,11 +168,11 @@ export class OrdersComponent implements OnDestroy {
         this.orders.forEach((order) => {
             this.rows.push([
                 { inner: this.getOrderCode(order), class: "order-id", title: true, click: () => this.goToDetail(order) },
-                { inner: moment.utc().local().format('DD/MM/YYYY HH:mm'), hideMobile: true },
+                { inner: this.dateFormat(order.updatedDateTime), hideMobile: true },
                 { inner: order.jobsite.jobsiteCode + " " + order.jobsite.jobsiteDesc, subtitle: true },
                 { inner: order.purchaseOrder, hideMobile: true },
                 { inner: this.getOrderIcon(order), hideMobile: true },
-                { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY HH:mm') },
+                { inner: this.dateFormat(order.requestedDateTime) },
                 { inner: "<span class='status " + order.status.statusCode.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
             ]);
         });
@@ -204,20 +200,19 @@ export class OrdersComponent implements OnDestroy {
         return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
     }
 
-    dateFormat(time){
-        if(this.countryCode === "MX"){
+    dateFormat(time) {
+        if (this.countryCode === "MX") {
             return moment.utc(time).local().format('DD/MM/YYYY')
         } else {
             return moment.utc(time).local().format('MM/DD/YYYY')
         }
-        
     }
 
     orderResquestClicked() {
         // Set customer
-        this.customer = this.customerService.currentCustomer();
+        const customer = this.customerService.currentCustomer();
         // Only for MX validate BD conexion
-        if (this.customer.countryCode.trim() === 'MX') {
+        if (customer.countryCode.trim() === 'MX') {
             this.dash.alertInfo(this.t.pt('views.common.validating_connection'), 0);
             this.ping.validatePingSalesOrder().subscribe((response) => {
                 if (response.json().success === 'Y') {
@@ -235,6 +230,10 @@ export class OrdersComponent implements OnDestroy {
         else {
             this.router.navigate(['/ordersnproduct/app/new']);
         }
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 }
 

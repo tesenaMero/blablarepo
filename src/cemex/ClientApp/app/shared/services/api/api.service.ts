@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { WindowRef } from '../window-ref.service';
 import { Broadcaster } from '@cemex-core/events-v1/dist';
 import { CustomerService } from '../../../shared/services/customer.service';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 const d = new Date();
 const sessionId = btoa(d.toISOString().replace(/-/g, '').replace(/:/g, '').replace('Z', '').replace('T', ''));
@@ -15,30 +16,28 @@ export class Api implements OnDestroy {
     public apiRoot = (<any>global)['API_HOST_FULL'] || 'https://api.us2.apiconnect.ibmcloud.com/cnx-gbl-org-development/dev';
     public clientId = (<any>global)['CLIENT_ID'] || 'dd2ee55f-c93c-4c1b-b852-58c18cc7c277';
     public appId = 'DCMWebTool_App';
-    public acceptLanguage = 'en-US';
+    private lang = "en";
+    private countryCode = "US";
     private jwt = null;
     private authorization = null;
-
     private sub: Subscription;
     private currentCustomer: any;
 
-    constructor(private _http: Http, private winRef: WindowRef, private eventBroadcaster: Broadcaster, private customerService: CustomerService) {
+    constructor(private _http: Http, private winRef: WindowRef, private eventBroadcaster: Broadcaster, private customerService: CustomerService, private t: TranslationService) {
         if (this.apiRoot.slice(-1) == "/") {
             this.apiRoot = this.apiRoot.slice(0, -1);
         }
 
-        this.sub = this.customerService.customerSubject.subscribe((customer) => {
+        this.customerService.customerSubject.subscribe((customer) => {
             if (customer && customer != this.currentCustomer) {
                 this.currentCustomer = customer;
-                this.getLocale();
+                this.setCountryCode(customer.countryCode.trim());
             }
         });
 
-        // OnChange Legal entity
-        // this.eventBroadcaster.on<string>(Broadcaster.DCM_LEGAL_ENTITY_CHANGE)
-        // .subscribe((response) => {
-        //     this.getLocale();
-        // });
+        this.t.localeData.subscribe(lang => {
+            this.setLang(lang.lang);
+        });
     }
 
     public get(url: string, options: RequestOptionsArgs = {}): Observable<Response> {
@@ -71,7 +70,7 @@ export class Api implements OnDestroy {
     private getHeaders(): any {
         let headers = new Headers();
         headers.append('Content-type', 'application/json');
-        headers.append('Accept-Language', this.acceptLanguage);
+        headers.append('Accept-Language', this.getAcceptedLanguage());
         headers.append('App-Code', this.appId);
         headers.append('x-ibm-client-id', this.clientId);
 
@@ -90,10 +89,6 @@ export class Api implements OnDestroy {
         return headers;
     }
 
-    public setAcceptLanguage(language: string) {
-        this.acceptLanguage = language;
-    }
-
     public setToken(accessToken: string, jwt: string): void {
         this.authorization = accessToken;
         this.jwt = jwt;
@@ -104,12 +99,22 @@ export class Api implements OnDestroy {
         this.jwt = null;
     }
 
-    public getLocale() {  
-        const language = localStorage.getItem('language');
-        const countryCode = this.currentCustomer.countryCode.trim();
-        if (language && countryCode) {            
-            this.acceptLanguage = language + '-' + countryCode;
-        }
+    public getAcceptedLanguage() {
+        return this.lang + '-' + this.countryCode   
+    }
+
+    private setLang(lang) {
+        this.lang = lang;
+        //this.countryCode = this.countryCodeFromLang(lang);
+    }
+
+    private countryCodeFromLang(lang) {
+        if (lang == "es") { return "MX"; }
+        else { return "US"; }
+    }
+
+    private setCountryCode(countryCode) {
+        this.countryCode = countryCode;
     }
 
     ngOnDestroy() {
