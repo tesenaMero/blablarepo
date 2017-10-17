@@ -33,7 +33,7 @@
                     {{ manager?.purchaseOrder }}
                 </div>
             </div>
-            <div class="item">
+            <div class="item" *ngIf="!UTIL.isCement() && !isMexicoCustomer()">
                 <div class="title">
                     {{ t.pt('views.review.contact') }}
                 </div>
