@@ -562,6 +562,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     contactChanged(event: any) {
         // if the user got the location step by pressign the back button
+        console.log(event)
         if (event === undefined) {
 
             if (this.contact) {
@@ -574,13 +575,13 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             }
         }
 
-        if (event.constructor === Object) {
+        if (event.constructor === Object && event.phone.length > 0 && event.name.length > 0) {
             this.contact = event;
             this.manager.selectContact(this.contact);
             this.validations.contactPerson.valid = true;
             this.validations.contactPerson.showError = false;
         }
-        else {
+        else if (event.length > 0) {
             this.contact = this.contacts[event[0]];
             this.manager.selectContact(this.contact);
             this.validations.contactPerson.valid = true;
