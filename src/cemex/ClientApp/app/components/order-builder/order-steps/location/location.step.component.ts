@@ -339,8 +339,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 location.name = location.shipmentLocationCode + ' ' + location.shipmentLocationDesc;
             });
 
-            if (this.location) {
-                this.jobsiteChanged(this.location);
+            if (this.manager.jobsite === undefined && this.location) { // Reset Jobsite and purchase order
+                this.resetJobAndPO();
+            }
+            if (this.manager.jobsite) {
+                this.jobsiteChanged(this.manager.jobsite);
             }
             else if (this.locations.length === 1) {
                 this.jobsiteChanged(this.locations[0]);
@@ -659,6 +662,12 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     cleanJobsiteMarker() {
         if (this.jobsiteMarker)
             this.jobsiteMarker.setMap(null);
+    }
+
+    resetJobAndPO() {
+        this.location = undefined;
+        this.locationIndex = undefined;
+        this.purchaseOrder = "";
     }
 
     // showJobsiteInfo(plant: any, marker: any) {

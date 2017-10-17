@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 
 import { OrderRequest as OrderRequestType } from '../types';
 
-const buisnessLIneCodes = {
+export const buisnessLIneCodes = {
     rmx: 'RMX',
     cem: 'CEM',
     aggr: 'AGR'
@@ -48,18 +48,23 @@ export class OrderRequest {
     }
 
     isReadyMix() {
-        return this.orderRequest.businessLine === buisnessLIneCodes.rmx;
+        return isReadyMix(this.orderRequest);
     }
 
     isCement() {
-        return this.orderRequest.businessLine === buisnessLIneCodes.cem;
+        return isCement(this.orderRequest);
     }
 
     isAggregates() {
-        return this.orderRequest.businessLine === buisnessLIneCodes.aggr;
+        return isAggregates(this.orderRequest);
     }
 
     setFavorite(favorite) {
         this.orderRequest.isFavorite = favorite;
     }
 }
+
+export const isReadyMix = order => _.get(order, 'salesArea.businessLine.businessLineCode') === buisnessLIneCodes.rmx;
+export const isCement = order => _.get(order, 'salesArea.businessLine.businessLineCode') === buisnessLIneCodes.cem;
+export const isAggregates = order => _.get(order, 'salesArea.businessLine.businessLineCode') === buisnessLIneCodes.aggr;
+export const getOrderType = order => _.get(order, 'salesArea.businessLine.businessLineCode');

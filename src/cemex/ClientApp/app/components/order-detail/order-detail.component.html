@@ -3,7 +3,7 @@
         <div class="col-md-7">
             <div class="d-flex align-content-start flex-wrap mb-3">
                 <div class="title-container">
-                    <h1>{{ t.pt('views.details.order') }} #<span *ngIf="orderDetailData.orderCode">{{orderDetailData.orderCode}}</span><span *ngIf="!orderDetailData.orderCode">{{orderDetailData.orderId}}</span></h1>
+                    <h1>{{ t.pt('views.details.order') }} #{{ orderCode || orderDetailData.orderId }}</h1>
                 </div>
                 <div class="request-date align-self-center">
                     <span class="title">{{ t.pt('views.details.request_date') }}:</span>
@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="location" *ngIf="orderDetailData">
         <div class="row">
             <div class="col-md-5">
@@ -26,10 +26,10 @@
                         {{ t.pt('views.details.location') }}:
                     </div>
                     <div class="desc">
-                        {{orderDetailData.jobsite.jobsiteDesc}}
+                        {{ orderDetailData.jobsite.jobsiteDesc }}
                     </div>
                     <div class="detail" *ngIf="streetJob">
-                        {{streetJob.domicileNum}} {{streetJob.streetName}}, {{streetJob.cityDesc}}, {{streetJob.regionDesc}}, {{streetJob.postalCode}}
+                        {{ streetJob.domicileNum }} {{ streetJob.streetName }}, {{ streetJob.cityDesc }}, {{ streetJob.regionDesc }}, {{ streetJob.postalCode }}
                     </div>
                 </div>
             </div>
@@ -39,55 +39,39 @@
                         {{ t.pt('views.details.pod') }}:
                     </div>
                     <div class="desc">
-                        {{orderDetailData.pointOfDelivery.pointOfDeliveryDesc}}
+                        {{ orderDetailData.pointOfDelivery.pointOfDeliveryDesc }}
                     </div>
                     <div class="detail" *ngIf="streetPOD">
-                        {{streetPOD.domicileNum}} {{streetPOD.streetName}}, {{streetPOD.cityDesc}}, {{streetPOD.regionDesc}}, {{streetPOD.postalCode}}
+                        {{ streetPOD.domicileNum }} {{streetPOD.streetName }}, {{ streetPOD.cityDesc }}, {{ streetPOD.regionDesc }}, {{ streetPOD.postalCode }}
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="info">
                     <span class="title">{{ t.pt('views.details.submitted') }}:</span>
-                    <span class="value">{{orderDetailData.createdDateTime | date : "dd/MM/yyyy"}}</span>
+                    <span class="value">{{ orderDetailData.createdDateTime | date : "dd/MM/yyyy" }}</span>
                 </div>
                 <div class="info">
                     <span class="title">{{ t.pt('views.details.submitted_by') }}:</span>
-                    <span class="value">{{orderDetailData.customer.customerDesc}}</span>
+                    <span class="value">{{ orderDetailData.customer.customerDesc }}</span>
                 </div>
                 <div class="info">
                     <span class="title">{{ t.pt('views.details.purchase_order') }}:</span>
-                    <span class="value">{{orderDetailData.purchaseOrder}}</span>
+                    <span class="value">{{ orderDetailData.purchaseOrder }}</span>
                 </div>
                 <div class="info">
-                        <span class="title">{{ t.pt('views.project.profile.special_instr') }}:</span>
-                        <span class="value">{{orderDetailData.instructions}}</span>
-                    </div>
+                    <span class="title">{{ t.pt('views.project.profile.special_instr') }}:</span>
+                    <span class="value">{{ orderDetailData.instructions }}</span>
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12 info">
-                <span class="value status" [ngClass]="{
-                    canceled:   orderDetailData.status.statusDesc == 'Canceled - Hdr',
-                    canceled:   orderDetailData.status.statusDesc == 'Canceled',
-                    confirmed:  orderDetailData.status.statusCode == 'CONF',
-                    draft:      orderDetailData.status.statusDesc == 'Draft - Hdr',
-                    draft:      orderDetailData.status.statusCode == 'DRFT',
-                    draft:      orderDetailData.status.statusCode == 'IPCO',
-                    pending:    orderDetailData.status.statusCode == 'INPC',
-                    pending:    orderDetailData.status.statusDesc == 'Pending',
-                    blocked:    orderDetailData.status.statusCode == 'BLCK',
-                    holded:     orderDetailData.status.statusDesc == 'Holded - Hdr',
-                    processed:  orderDetailData.status.statusDesc == 'In process - Hdr',
-                    completed:  orderDetailData.status.statusCode == 'CMPO',
-                    completed:  orderDetailData.status.statusDesc == 'Completed',
-                    completed:  orderDetailData.status.statusCode == 'COMP',
-                    complete:   orderDetailData.status.statusDesc == 'Complete'
-                }">{{orderDetailData.status.statusDesc}}</span>
+                <span class="value status {{ orderDetailData.status.statusCode | lowercase }}">{{ orderDetailData.status.statusDesc }}</span>
             </div>
         </div>
     </div>
-    
+
     <div class="nav-tab-container" *ngIf="orderDetailData">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
@@ -96,12 +80,12 @@
             <!-- <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#action-log" role="tab">Action log</a>
             </li> -->
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#comments" role="tab">Comments</a>
-            </li>
+            </li> -->
         </ul>
     </div>
-    
+
     <!-- Tab panes -->
     <div class="tab-content" *ngIf="orderDetailData">
         <div class="tab-pane fade show active" id="products" role="tabpanel">
@@ -110,7 +94,7 @@
                     <div class="row">
                         <div class="col-md-4 col-sm-12 left-container">
                             <div class="name">
-                                {{itemData.product.productDesc}}
+                                {{ itemData.product.productDesc }}
                             </div>
                         </div>
                         <div class="col-md-8 right-container">
@@ -121,7 +105,7 @@
                                             {{ t.pt('views.details.quantity') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.quantity}}
+                                            {{ itemData.quantity }}
                                         </div>
                                     </div>
                                 </div>
@@ -141,7 +125,7 @@
                                             {{ t.pt('views.details.delivery_date') }}
                                         </div>
                                         <div class="value">
-                                            {{showRegionDate(itemData.requestedDateTime)}}
+                                            {{ showRegionDate(itemData.requestedDateTime) }}
                                         </div>
                                     </div>
                                 </div>
@@ -151,7 +135,7 @@
                                             {{ t.pt('views.details.delivery_time') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.requestedDateTime | date : "shortTime"}}
+                                            {{ itemData.requestedDateTime | date : "shortTime" }}
                                         </div>
                                     </div>
                                 </div>
@@ -173,7 +157,7 @@
                                             {{ t.pt('views.details.contract') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.agreementItem.agreement.agreementCode}}
+                                            {{ itemData.agreementItem.agreement.agreementCode }}
                                         </div>
                                     </div>
                                 </div>
@@ -185,7 +169,7 @@
                                             {{ t.pt('views.details.discharge_time') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.orderItemProfile.dischargeTime?.timePerDischargeDesc}}
+                                            {{ itemData.orderItemProfile.dischargeTime?.timePerDischargeDesc }}
                                         </div>
                                     </div>
                                 </div>
@@ -195,7 +179,7 @@
                                             {{ t.pt('views.details.transport_method') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.transportMethod.transportMethodDesc}}
+                                            {{ itemData.transportMethod.transportMethodDesc }}
                                         </div>
                                     </div>
                                 </div>
@@ -205,7 +189,7 @@
                                             {{ t.pt('views.details.unload_type') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.unloadType.unloadTypeDesc}}
+                                            {{ itemData.unloadType.unloadTypeDesc }}
                                         </div>
                                     </div>
                                 </div>
@@ -215,7 +199,7 @@
                                             {{ t.pt('views.details.delivery_mode') }}
                                         </div>
                                         <div class="value">
-                                            {{orderDetailData.shippingCondition.shippingConditionDesc}}
+                                            {{ orderDetailData.shippingCondition.shippingConditionDesc }}
                                         </div>
                                     </div>
                                 </div>
@@ -227,7 +211,7 @@
                                             {{ t.pt('views.details.pump_capacity_min') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.orderItemProfile.pumpCapacity.pumpCapacityDesc}}
+                                            {{ itemData.orderItemProfile.pumpCapacity.pumpCapacityDesc }}
                                         </div>
                                     </div>
                                 </div>
@@ -247,7 +231,7 @@
                                             {{ t.pt('views.details.application') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.orderItemProfile.element.elementDesc}}
+                                            {{ itemData.orderItemProfile.element.elementDesc }}
                                         </div>
                                     </div>
                                 </div>
@@ -257,7 +241,7 @@
                                             {{ t.pt('views.details.kicker') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.orderItemProfile.kicker}}
+                                            {{ itemData.orderItemProfile.kicker }}
                                         </div>
                                     </div>
                                 </div>
@@ -279,7 +263,7 @@
                                             {{ t.pt('views.details.spacing') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.orderItemProfile.timePerLoad.timePerLoadDesc}}
+                                            {{ itemData.orderItemProfile.timePerLoad.timePerLoadDesc }}
                                         </div>
                                     </div>
                                 </div>
@@ -291,7 +275,7 @@
                                             {{ t.pt('views.details.addition_serv') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.orderItemProfile.additionalServices[0].additionalServiceDesc}}
+                                            {{ itemData.orderItemProfile.additionalServices[0].additionalServiceDesc }}
                                         </div>
                                     </div>
                                 </div>
@@ -304,8 +288,8 @@
         <div class="tab-pane fade" id="action-log" role="tabpanel">
             <order-detail-logs [orderItemId]="id"></order-detail-logs>
         </div>
-        <div class="tab-pane fade" id="comments" role="tabpanel">
+        <!-- <div class="tab-pane fade" id="comments" role="tabpanel">
             <order-detail-comments [orderItemId]="id"></order-detail-comments>
-        </div>
+        </div> -->
     </div>
 </div>
