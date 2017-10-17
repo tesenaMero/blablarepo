@@ -984,7 +984,7 @@
     "views.specifications.discharge_time": "Tiempo de descarga",
     "views.specifications.transport_method": "Metodo de transporte",
     "views.specifications.unload_type": "Tipo de descarga",
-    "views.specifications.pump_capacity": "Capacidad de bomba",
+    "views.specifications.pump_capacity": "Tamaño de Bomba",
     "views.specifications.application": "Aplicacion",
     "views.specifications.load_size": "Tamaño de carga",
     "views.specifications.spacing": "Spaciado",

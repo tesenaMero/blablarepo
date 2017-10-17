@@ -595,6 +595,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
     }
 
+    isAdditionalServiceSaved(preProduct: PreProduct, serviceCode: string) {
+        const foundService = preProduct.additionalServices.find(service => {
+            return service.entryCode === serviceCode
+        });
+        return !!foundService;
+    }
+
     onChangeKicker(preProduct, value: Boolean) {
         preProduct.projectProfile.project.projectProperties.kicker = Boolean(value);
     }

@@ -328,7 +328,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     }
 
     cancelContact() {
-        this.validations.contactPerson.valid = false;
+        this.manager.contact = undefined;
     }
 
     fetchJobsites() {
@@ -570,11 +570,10 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         if (event === undefined) {
 
             if (this.contact) {
-                this.validations.contactPerson.valid = true;
                 this.validations.contactPerson.showError = false;
                 return
             } else {
-                this.validations.contactPerson.valid = false;
+                this.manager.contact = undefined;
                 return
             }
         }
@@ -582,16 +581,14 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         if (event.constructor === Object && event.phone.length > 0 && event.name.length > 0) {
             this.contact = event;
             this.manager.selectContact(this.contact);
-            this.validations.contactPerson.valid = true;
             this.validations.contactPerson.showError = false;
         }
-        else if (event.length > 0) {
+        else if (event.length > 0 && event.constructor === Array) {
             this.contact = this.contacts[event[0]];
             this.manager.selectContact(this.contact);
-            this.validations.contactPerson.valid = true;
             this.validations.contactPerson.showError = false;
         } else {
-            this.validations.contactPerson.valid = false;
+            this.manager.contact = undefined;
             this.validations.contactPerson.showError = true;
         }
 
