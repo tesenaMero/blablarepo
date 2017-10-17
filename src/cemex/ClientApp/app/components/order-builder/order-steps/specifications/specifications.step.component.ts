@@ -324,14 +324,23 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
     }
 
-    getPaymentTerms() {
-        // Set payment loading state
-        this.preProducts.forEach((item: PreProduct) => {
-            item.loadings.payments = true;
-            item.disableds.payments = true;
+getPaymentTermIdBySalesArea(): any
+{
+    let paymentTermIds = '';
+    if (this.manager.salesArea.length > 1) {
+        this.manager.salesArea.map((area: any) => {
+            if (area) {
+                if (area.salesArea.divisionCode == '02' && area.paymentTerm) {
+                    paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
+                }
+            }
         });
 
-        let paymentTermIds = '';
+        if (this.manager.salesArea.length > 0 && paymentTermIds === '') {
+            paymentTermIds = this.manager.salesArea[0].paymentTerm;
+        }
+
+    } else {
         this.manager.salesArea.map((area: any) => {
             if (area) {
                 if (area.paymentTerm) {
@@ -339,6 +348,20 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 }
             }
         });
+    }
+
+    return paymentTermIds
+}
+
+
+    getPaymentTerms() {
+        // Set payment loading state
+        this.preProducts.forEach((item: PreProduct) => {
+            item.loadings.payments = true;
+            item.disableds.payments = true;
+        });
+
+        let paymentTermIds = this.getPaymentTermIdBySalesArea();
 
         this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
             let paymentTerms = result.json().paymentTerms;

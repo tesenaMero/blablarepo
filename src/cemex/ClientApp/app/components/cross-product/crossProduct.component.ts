@@ -80,7 +80,7 @@ export class CrossProductComponent implements OnInit {
     }
 
     flowCementMX(jObj, orderWithoutDocuments: boolean = false) {
-        let data = orderWithoutDocuments ? {} : {
+        let data = orderWithoutDocuments ? '' : {
             documents: jObj.data[0].documents
         }
 

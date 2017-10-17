@@ -125,9 +125,9 @@ export class OrdersComponent implements OnDestroy {
                 { inner: "<i class='cmx-icon-track'></i>", hideMobile: true },
                 // { inner: order.totalQuantity + " tons" },
                 // { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY') },
-                { inner: "<span class='status " + order.status.statusDesc.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
+                { inner: "<span class='status " + order.status.statusCode.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
                 // { inner: "$" + order.totalAmount, class: "roboto-bold" },
-                // { inner: "<span class='status " + order.status.statusDesc.toLowerCase() + "'></span>" + order.status.statusDesc, hideDesktop: true },
+                // { inner: "<span class='status " + order.status.statusCode.toLowerCase() + "'></span>" + order.status.statusDesc, hideDesktop: true },
             ]);
         });
     }

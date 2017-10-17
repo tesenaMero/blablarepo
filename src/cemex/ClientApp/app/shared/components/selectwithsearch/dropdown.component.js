@@ -22,6 +22,8 @@ var MultiselectDropdown = (function() {
         this.dropdownOpened = new EventEmitter();
         this.onAdded = new EventEmitter();
         this.onRemoved = new EventEmitter();
+        this.onCancel = new EventEmitter();
+        this.onDeselect = new EventEmitter();
         this.onLazyLoad = new EventEmitter();
         this.onFilter = this.filterControl.valueChanges;
         this.destroyed$ = new Subject();
@@ -220,7 +222,14 @@ var MultiselectDropdown = (function() {
         this.settings.addingOption = true;
     };
     MultiselectDropdown.prototype.cancel = function(e) {
+        this.onCancel.emit();
         this.settings.addingOption = false;
+    };
+    MultiselectDropdown.prototype.onlyNumberKey = function(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 43 && charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
     };
     MultiselectDropdown.prototype.manualInputChanged = function(e) {
         this.onModelChange(this.manualInput)
@@ -239,6 +248,7 @@ var MultiselectDropdown = (function() {
             }
             var index = this.model.indexOf(option.id);
             if (index > -1) {
+                this.onDeselect.emit()
                 if ((this.settings.minSelectionLimit === undefined) || (this.numSelected > this.settings.minSelectionLimit)) {
                     this.model.splice(index, 1);
                     this.onRemoved.emit(option.id);
@@ -258,7 +268,7 @@ var MultiselectDropdown = (function() {
                     this.onAdded.emit(option.id);
                     if (option.parentId) {
                         var children = this.options.filter(function(child) { return child.id !== option.id && child.parentId == option.parentId; });
-                        if (children.every(function(child) { return _this.model.indexOf(child.id) > -1; })) {
+                        if (children.every(function(child) { return _this.model.indexOf(child.id) > -1; })) {    
                             this.model.push(option.parentId);
                             this.onAdded.emit(option.parentId);
                         }
@@ -421,7 +431,7 @@ MultiselectDropdown.decorators = [{
             </span>
             <span>
                 <label>Phone number:</label>
-                <input (keyup)="manualInputChanged()" [(ngModel)]="manualInput.phone" type="text" name="Contact number" id="contact-phone" />
+                <input (keypress)="onlyNumberKey($event)" (keyup)="manualInputChanged()" [(ngModel)]="manualInput.phone" type="text" name="Contact number" id="contact-phone" />
             </span>
         </div>
         <div class="button-ghost button-cancel" *ngIf="settings.addingOption" (click)="cancel()">Cancel</div>
@@ -449,6 +459,8 @@ MultiselectDropdown.propDecorators = {
     'dropdownClosed': [{ type: Output }, ],
     'dropdownOpened': [{ type: Output }, ],
     'onAdded': [{ type: Output }, ],
+    'onCancel': [{ type: Output }, ],
+    'onDeselect': [{ type: Output }, ],
     'onRemoved': [{ type: Output }, ],
     'onLazyLoad': [{ type: Output }, ],
     'onFilter': [{ type: Output }, ],
