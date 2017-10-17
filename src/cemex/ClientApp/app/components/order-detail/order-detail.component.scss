@@ -114,24 +114,24 @@
                 margin-right: 4px;
                 border-radius: 2px;
             }
-            &.confirmed:before,
-            &.complete:before {
+            &.comp:before,
+            &.conf:before {
                 background: #77cb38;
             }
-            &.canceled:before {
+            &.cncl:before {
                 background: #D6D6D6;
             }
-            &.draft:before {
+            &.drft:before {
                 background: #D6D6D6;
             }
-            &.pending:before {
+            &.pend:before {
                 background: #FBB03B;
             }
-            &.blocked:before {
+            &.blck:before {
                 background: #EE3D42;
             }
-            &.completed:before,
-            &.processed:before {
+            &.ohld:before,
+            &.ipco:before {
                 background: #3FA9F5;
             }
         }

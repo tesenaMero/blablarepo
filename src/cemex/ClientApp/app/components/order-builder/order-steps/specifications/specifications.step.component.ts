@@ -324,34 +324,33 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
     }
 
-getPaymentTermIdBySalesArea(): any
-{
-    let paymentTermIds = '';
-    if (this.manager.salesArea.length > 1) {
-        this.manager.salesArea.map((area: any) => {
-            if (area) {
-                if (area.salesArea.divisionCode == '02' && area.paymentTerm) {
-                    paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
+    getPaymentTermIdBySalesArea(): any {
+        let paymentTermIds = '';
+        if (this.manager.salesArea.length > 1) {
+            this.manager.salesArea.map((area: any) => {
+                if (area) {
+                    if (area.salesArea.divisionCode == '02' && area.paymentTerm) {
+                        paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
+                    }
                 }
-            }
-        });
+            });
 
-        if (this.manager.salesArea.length > 0 && paymentTermIds === '') {
-            paymentTermIds = this.manager.salesArea[0].paymentTerm;
+            if (this.manager.salesArea.length > 0 && paymentTermIds === '') {
+                paymentTermIds = this.manager.salesArea[0].paymentTerm;
+            }
+
+        } else {
+            this.manager.salesArea.map((area: any) => {
+                if (area) {
+                    if (area.paymentTerm) {
+                        paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
+                    }
+                }
+            });
         }
 
-    } else {
-        this.manager.salesArea.map((area: any) => {
-            if (area) {
-                if (area.paymentTerm) {
-                    paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
-                }
-            }
-        });
+        return paymentTermIds
     }
-
-    return paymentTermIds
-}
 
 
     getPaymentTerms() {

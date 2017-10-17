@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { OrderDetailApi } from '../../shared/services/api/order-detail.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
+import { DashboardService } from '../../shared/services/dashboard.service'
 
 import * as moment from 'moment'
 
@@ -30,7 +31,7 @@ export class OrderDetailComponent {
 
     countryCode: string;
 
-    constructor(private orderDetailApi: OrderDetailApi, private route: ActivatedRoute, private t: TranslationService) {
+    constructor(private orderDetailApi: OrderDetailApi, private route: ActivatedRoute, private t: TranslationService, private dashboard: DashboardService, private router: Router) {
         let userLegalEntity = JSON.parse(sessionStorage.getItem('user_legal_entity'));
         this.countryCode = userLegalEntity.countryCode.trim();
 
@@ -67,45 +68,47 @@ export class OrderDetailComponent {
             this.orderDetailData = response.json();
             const parent = this.orderDetailData;
             if (this.orderDetailData.salesArea.countryCode.trim() == "MX") { //Point Of Delivery
-                this.getJobsite(orderDetailApi);
-                this.getPod(orderDetailApi);
+                this.getJobsite();
+                this.getPod();
             }
             else {
                 if (this.orderDetailData.salesArea.countryCode.trim() == "US") { //Jobsite
                     // console.log("In US Job");
-                    this.getJobsite(orderDetailApi); 
+                    this.getJobsite(); 
                 }
-            }            
-        });         
-    }
-    ngOnDestroy() {
-        this.sub.unsubscribe();
-    }  
-    getJobsite(orderDetailApi) {
-        orderDetailApi.shipmentLocationsJob(this.orderDetailData.jobsite.jobsiteId).subscribe((response) => {
+            }
+        }, error => {
+            this.dashboard.alertError("Couldn't retrieve the order");
+            this.router.navigate(['/ordersnproduct/app/orders']);
+        });
+    } 
+
+    getJobsite() {
+        this.orderDetailApi.shipmentLocationsJob(this.orderDetailData.jobsite.jobsiteId).subscribe((response) => {
             this.jobsite = response.json();
             if (this.jobsite.shipmentLocations.length > 0) {
-                this.getStreetJobsite(orderDetailApi ,this.jobsite.shipmentLocations[this.jobsite.shipmentLocations.length-1].address.addressId);
+                this.getStreetJobsite(this.jobsite.shipmentLocations[this.jobsite.shipmentLocations.length-1].address.addressId);
             }
-            
-            
-        });          
+        });
     }
-    getPod(orderDetailApi) {
-        orderDetailApi.shipmentLocationsPOD(this.orderDetailData.pointOfDelivery.pointOfDeliveryId).subscribe((response) => {
+
+    getPod() {
+        this.orderDetailApi.shipmentLocationsPOD(this.orderDetailData.pointOfDelivery.pointOfDeliveryId).subscribe((response) => {
             this.pod = response.json();
             if (this.pod.shipmentLocations.length > 0) {
-                this.getStreetPOD(orderDetailApi ,this.pod.shipmentLocations[this.pod.shipmentLocations.length-1].address.addressId);
+                this.getStreetPOD(this.pod.shipmentLocations[this.pod.shipmentLocations.length-1].address.addressId);
             }
         });          
-    }    
-    getStreetJobsite(orderDetailApi, street) {
-        orderDetailApi.shipmentLocationsStreet(street).subscribe((response) => {
+    }
+
+    getStreetJobsite(street) {
+        this.orderDetailApi.shipmentLocationsStreet(street).subscribe((response) => {
             this.streetJob = response.json();
         });
-    }    
-    getStreetPOD(orderDetailApi, street) {
-        orderDetailApi.shipmentLocationsStreet(street).subscribe((response) => {
+    }
+
+    getStreetPOD(street) {
+        this.orderDetailApi.shipmentLocationsStreet(street).subscribe((response) => {
             this.streetPOD = response.json();
         });
     }
@@ -120,5 +123,9 @@ export class OrderDetailComponent {
         } else {
             return moment.utc(date).local().format('MM/DD/YYYY');
         }
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 }

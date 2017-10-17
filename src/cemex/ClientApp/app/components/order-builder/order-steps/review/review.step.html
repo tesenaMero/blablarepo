@@ -17,9 +17,8 @@
                     {{ t.pt('views.review.pod') }}
                 </div>
                 <div class="description">
-                    {{manager.pointOfDelivery?.shipmentLocationDesc}} <br>
-                    {{ manager.pointOfDelivery?.address?.streetName }} {{ manager.pointOfDelivery?.address?.settlementDesc }}, {{ manager.pointOfDelivery?.address?.regionDesc }}, {{ manager.pointOfDelivery?.address?.cityDesc }}, {{ manager.pointOfDelivery?.address?.postalCode
-                    }}
+                    {{manager.pointOfDelivery?.shipmentLocationDesc}} <br> {{ manager.pointOfDelivery?.address?.streetName }} {{ manager.pointOfDelivery?.address?.settlementDesc }}, {{ manager.pointOfDelivery?.address?.regionDesc }}, {{ manager.pointOfDelivery?.address?.cityDesc
+                    }}, {{ manager.pointOfDelivery?.address?.postalCode }}
                 </div>
                 <!-- <div class="details invisible">
                     N: 50°46’ 23.92” E: 14°07’ 18.85”
@@ -33,7 +32,7 @@
                     {{ manager?.purchaseOrder }}
                 </div>
             </div>
-            <div class="item" *ngIf="!UTIL.isCement() && !isMexicoCustomer()">
+            <div class="item" *ngIf="!UTIL.isCement() && UTIL.isMexicoCustomer()">
                 <div class="title">
                     {{ t.pt('views.review.contact') }}
                 </div>
