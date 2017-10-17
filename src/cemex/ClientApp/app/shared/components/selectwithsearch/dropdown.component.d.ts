@@ -21,6 +21,8 @@ export declare class MultiselectDropdown implements OnInit, OnChanges, DoCheck, 
     onAdded: EventEmitter<{}>;
     onRemoved: EventEmitter<{}>;
     onLazyLoad: EventEmitter<{}>;
+    onCancel: EventEmitter<{}>;
+    onDeselect: EventEmitter<{}>;
     onFilter: Observable<string>;
     onClick(target: HTMLElement): void;
     destroyed$: Subject<any>;

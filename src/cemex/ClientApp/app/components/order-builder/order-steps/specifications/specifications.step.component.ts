@@ -324,6 +324,35 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
     }
 
+    getPaymentTermIdBySalesArea(): any {
+        let paymentTermIds = '';
+        if (this.manager.salesArea.length > 1) {
+            this.manager.salesArea.map((area: any) => {
+                if (area) {
+                    if (area.salesArea.divisionCode == '02' && area.paymentTerm) {
+                        paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
+                    }
+                }
+            });
+
+            if (this.manager.salesArea.length > 0 && paymentTermIds === '') {
+                paymentTermIds = this.manager.salesArea[0].paymentTerm;
+            }
+
+        } else {
+            this.manager.salesArea.map((area: any) => {
+                if (area) {
+                    if (area.paymentTerm) {
+                        paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
+                    }
+                }
+            });
+        }
+
+        return paymentTermIds
+    }
+
+
     getPaymentTerms() {
         // Set payment loading state
         this.preProducts.forEach((item: PreProduct) => {
@@ -331,14 +360,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             item.disableds.payments = true;
         });
 
-        let paymentTermIds = '';
-        this.manager.salesArea.map((area: any) => {
-            if (area) {
-                if (area.paymentTerm) {
-                    paymentTermIds = paymentTermIds + area.paymentTerm.paymentTermId + ',';
-                }
-            }
-        });
+        let paymentTermIds = this.getPaymentTermIdBySalesArea();
 
         this.paymentTermsApi.getJobsitePaymentTerms(paymentTermIds).subscribe((result) => {
             let paymentTerms = result.json().paymentTerms;
@@ -668,12 +690,28 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }, 400);
     }
 
+    // TODO: Refactor this method
     changeQty(product: PreProduct, newValue) {
+        this.dashboard.closeAlert();
         newValue = (Number(String(newValue).replace(/,/g, "")))
+
+        // general validation for negative values
+        if (newValue <= 0 || isNaN(newValue)) {
+            this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 3000);
+            return product.quantity = 0;
+        }
+        
         //inicialize
         product.setContractBalanceValidation(true);
         product.setQuantityValidation(true);
         let contractBalance = product.getContractBalance();
+
+        // If contract selected and should not be
+        if (product.contract && !product.shouldVerifyQuantity()) {
+            product.quantity = newValue;
+            return;
+        }
+
         let maxCapacitySalesArea = product.maximumCapacity;
         const isDelivery = Validations.isDelivery();
         let conversion = product.convertToTons(newValue);
@@ -681,11 +719,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         if (conversion === undefined) {
             conversion = newValue;
         }
-        //general validation for negative values
-        if (newValue <= 0 || isNaN(newValue)) {
-            this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 3000);
-            return product.quantity = 1;
-        }
+
         //country dependent - no US quantity validation  
 
         if (this.isMXCustomer()) {
@@ -703,7 +737,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 let isCementBag = Validations.isProductCementBag(product);
                 let isCementBulk = Validations.isProductCementBulk(product);
                 if ((isCementBulk || isCementBag)) {
-                    //jobsite max capacity area
+                    // jobsite max capacity area
                     if (conversion <= maxCapacitySalesArea) {
                         product.setQuantityValidation(true);
                         return product.quantity = newValue;
@@ -715,19 +749,19 @@ export class SpecificationsStepComponent implements StepEventsListener {
                         return product.quantity = newValue;
                     }
                 }
-                //no ready mix, multiproducts, aggregates
+                // No ready mix, multiproducts, aggregates
                 else {
                     product.setQuantityValidation(true);
                     return product.quantity = newValue;
                 }
             }
-            //no pickup validation
+            // No pickup validation
             else {
                 product.setQuantityValidation(true);
                 return product.quantity = newValue;
             }
         }
-        //no US validation
+        // No US validation
         else {
             if (contractBalance) {
                 if (conversion > contractBalance) {

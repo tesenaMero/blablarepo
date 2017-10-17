@@ -10,6 +10,8 @@ import { Validations } from '../../../../utils/validations';
 import { Observable } from 'rxjs/Observable';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
+declare var google: any;
+
 @Component({
     selector: 'location-step',
     templateUrl: './location.step.html',
@@ -325,6 +327,10 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         else { return true; }
     }
 
+    cancelContact() {
+        this.validations.contactPerson.valid = false;
+    }
+
     fetchJobsites() {
         this.shipmentApi.all(this.manager.productLine, Validations.isReadyMix()).subscribe((response) => {
             this.locations = response.json().shipmentLocations;
@@ -335,8 +341,11 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
                 location.name = location.shipmentLocationCode + ' ' + location.shipmentLocationDesc;
             });
 
-            if (this.location) {
-                this.jobsiteChanged(this.location);
+            if (this.manager.jobsite === undefined && this.location) { // Reset Jobsite and purchase order
+                this.resetJobAndPO();
+            }
+            if (this.manager.jobsite) {
+                this.jobsiteChanged(this.manager.jobsite);
             }
             else if (this.locations.length === 1) {
                 this.jobsiteChanged(this.locations[0]);
@@ -558,39 +567,35 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     contactChanged(event: any) {
         // if the user got the location step by pressign the back button
-        if (this.contact && this.contact.name && this.contact.phone) {
-            this.validations.contactPerson.valid = true;
-        }
+        if (event === undefined) {
 
-        if (!event) { this.validations.contactPerson.valid = false; return; }
-
-        // If picked form dropdown: model will be []
-        if (event.constructor === Array && event.length > 0) {
-            let contact = this.contacts[event[0]];
-            this.contact = contact;
-            this.validations.contactPerson.showError = false;
-            if (contact) {
+            if (this.contact) {
                 this.validations.contactPerson.valid = true;
-                this.manager.selectContact(this.contact);
-            }
-        }
-        // If manually wrote
-        else if ((!!event) && (event.constructor === Object)) {
-            if (event.phone.length > 0 && event.name.length > 0) {
-                this.contact = event;
                 this.validations.contactPerson.showError = false;
-                this.validations.contactPerson.valid = true;
-                this.manager.selectContact(this.contact);
-            }
-            else {
+                return
+            } else {
                 this.validations.contactPerson.valid = false;
-                return;
+                return
             }
         }
-        else {
-            this.validations.contactPerson.valid = false;
-            return;
+
+        if (event.constructor === Object && event.phone.length > 0 && event.name.length > 0) {
+            this.contact = event;
+            this.manager.selectContact(this.contact);
+            this.validations.contactPerson.valid = true;
+            this.validations.contactPerson.showError = false;
         }
+        else if (event.length > 0) {
+            this.contact = this.contacts[event[0]];
+            this.manager.selectContact(this.contact);
+            this.validations.contactPerson.valid = true;
+            this.validations.contactPerson.showError = false;
+        } else {
+            this.validations.contactPerson.valid = false;
+            this.validations.contactPerson.showError = true;
+        }
+
+
     }
 
     hasMandatories(): boolean {
@@ -659,6 +664,12 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
     cleanJobsiteMarker() {
         if (this.jobsiteMarker)
             this.jobsiteMarker.setMap(null);
+    }
+
+    resetJobAndPO() {
+        this.location = undefined;
+        this.locationIndex = undefined;
+        this.purchaseOrder = "";
     }
 
     // showJobsiteInfo(plant: any, marker: any) {

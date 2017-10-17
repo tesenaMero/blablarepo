@@ -72,7 +72,8 @@ export class CreateOrderService {
         user?: types.User,
         items?: types.Items,
         loads?: types.Loads,
-        products?: any
+        products?: any,
+        productLine?: any
     ) {
         this.orderId = orderId;
         this.orderCode = orderCode;
@@ -96,6 +97,7 @@ export class CreateOrderService {
         this.items = items;
         this.loads = loads;
         this.products = products;
+        this.productLine = productLine;
     }
 
     /**

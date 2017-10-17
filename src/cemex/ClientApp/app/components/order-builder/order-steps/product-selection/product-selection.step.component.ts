@@ -90,7 +90,10 @@ export class ProductSelectionStepComponent implements StepEventsListener {
         return { productLineDesc: newName, productLineId: a.productLineId + "," + b.productLineId }
     }
 
-    select(productLine: any) {
+    select(productLine: any) {        
+        if (this.orderManager.productLine && this.orderManager.productLine.productLineId != productLine.productLineId ) { // Clean manager
+            this.orderManager.resetOrder();
+        }
         this.productLine = productLine;
         this.orderManager.selectProductLine(productLine);
 
