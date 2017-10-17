@@ -1,11 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { ProductLineApi } from '../../../../shared/services/api'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
-import { DeliveryMode } from '../../../../models/delivery.model'
-import { CustomerService } from '../../../../shared/services/customer.service'
+import { DeliveryMode } from '../../../../models/delivery.model';
 import { Validations } from '../../../../utils/validations';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
-import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
+import { Step, StepEventsListener } from '../../../../shared/components/stepper/';
 
 @Component({
     selector: 'product-selection-step',
@@ -22,10 +21,9 @@ export class ProductSelectionStepComponent implements StepEventsListener {
     productLine: any;
 
     constructor(
-        @Inject(Step) private step: Step,
+        private step: Step,
         private api: ProductLineApi, 
-        private orderManager: CreateOrderService, 
-        private customerService: CustomerService, 
+        private orderManager: CreateOrderService,
         private t: TranslationService) {
 
         // Interface
@@ -50,7 +48,7 @@ export class ProductSelectionStepComponent implements StepEventsListener {
             let productLines = response.json().productLines;
 
             let bagCement = this.getBagCement(productLines);
-            let multiproduct = this.getMultiproduct(productLines)
+            let multiproduct = this.getMultiproduct(productLines);
 
             if (!Validations.isMexicoCustomer()) {
                 multiproduct && productLines.splice(productLines.indexOf(multiproduct), 1);
