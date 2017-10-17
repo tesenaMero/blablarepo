@@ -562,7 +562,6 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
 
     contactChanged(event: any) {
         // if the user got the location step by pressign the back button
-        console.log(event)
         if (event === undefined) {
 
             if (this.contact) {
