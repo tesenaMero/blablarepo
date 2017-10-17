@@ -18,6 +18,7 @@ export class ProjectProfilesComponent {
     columns = [];
     rows = [];
     isMX: boolean = false;
+    createProfileOpened = false
 
     private loading = true;
 
@@ -46,9 +47,11 @@ export class ProjectProfilesComponent {
 
     closeModal(id: string) {
         this.modalService.close(id);
+        this.createProfileOpened = false
     }
 
     openModal(id?: string) {
+        this.createProfileOpened = true
         this.modalService.open(id);
     }
 
