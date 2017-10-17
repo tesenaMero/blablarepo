@@ -11,6 +11,7 @@ import { OrdersApi } from '../../shared/services/api/orders.service';
 import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
 import * as moment from 'moment'
 import { Subscription } from 'rxjs/Subscription'
+import { getOrderType, buisnessLIneCodes } from '../../shared/models/order-request';
 
 @Component({
     selector: 'page-orders',
@@ -34,7 +35,17 @@ export class OrdersComponent implements OnDestroy {
 
     public orderRequestConfiguration: OrderRequestTableComponentConfiguration;
 
-    constructor(private ordersService: OrdersService, private t: TranslationService, private ping: PingSalesOrderApi, private dash: DashboardService, private router: Router, private customerService: CustomerService, private ordersApi: OrdersApi, private encDecJsonObjService: EncodeDecodeJsonObjService) {
+    constructor(
+        private ordersService: OrdersService, 
+        private t: TranslationService, 
+        private ping: PingSalesOrderApi, 
+        private dash: DashboardService, 
+        private router: Router, 
+        private customerService: CustomerService, 
+        private ordersApi: OrdersApi, 
+        private encDecJsonObjService: EncodeDecodeJsonObjService,
+        // private validations: Validations,
+    ) {
         //this.orders = ordersService.getOrders();
         //this.isLoading = ordersService.isLoading();
         //this.orderRequestConfiguration = OrdersService.ORDER_REQUEST_MAPPING;
@@ -102,6 +113,21 @@ export class OrdersComponent implements OnDestroy {
         return false;
     }
 
+    getOrderIcon(order) {
+        const orderType = getOrderType(order);
+
+        switch (orderType) {
+            case buisnessLIneCodes.rmx:
+                return '<i class="cmx-icon-ready-mix"></i>';
+            case buisnessLIneCodes.cem:
+                return '<i class="cmx-icon-bag-cement"></i>';
+            case buisnessLIneCodes.aggr:
+                return '<i class="cmx-icon-aggregates"></i>';
+            default:
+                return '';
+        }
+    }
+
     initOrders() {
         this.columns = [
             //{ inner: '<i class="star cmx-icon-favourite-active" aria-hidden="true"></i>', width: 5 },
@@ -122,7 +148,7 @@ export class OrdersComponent implements OnDestroy {
                 { inner: this.dateFormat(order.updatedDateTime), hideMobile: true },
                 { inner: order.jobsite.jobsiteCode + " " + order.jobsite.jobsiteDesc, subtitle: true },
                 { inner: order.purchaseOrder, hideMobile: true },
-                { inner: "<i class='cmx-icon-track'></i>", hideMobile: true },
+                { inner: this.getOrderIcon(order), hideMobile: true },
                 // { inner: order.totalQuantity + " tons" },
                 // { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY') },
                 { inner: "<span class='status " + order.status.statusCode.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
@@ -149,7 +175,7 @@ export class OrdersComponent implements OnDestroy {
                 { inner: moment.utc().local().format('DD/MM/YYYY HH:mm'), hideMobile: true },
                 { inner: order.jobsite.jobsiteCode + " " + order.jobsite.jobsiteDesc, subtitle: true },
                 { inner: order.purchaseOrder, hideMobile: true },
-                { inner: "<i class='cmx-icon-track'></i>", hideMobile: true },
+                { inner: this.getOrderIcon(order), hideMobile: true },
                 { inner: moment.utc(order.requestedDateTime).local().format('DD/MM/YYYY HH:mm') },
                 { inner: "<span class='status " + order.status.statusCode.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
             ]);

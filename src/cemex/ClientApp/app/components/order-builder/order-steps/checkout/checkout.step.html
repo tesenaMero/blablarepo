@@ -9,7 +9,7 @@
                             {{ t.pt('views.checkout.product_description') }}
                         </div>
                         <div class="desc bold">
-                            {{ item?.product?.commercialCode }} / {{ item?.product?.commercialDesc }}
+                            {{ item?.product?.commercialCode | trimLeadingZeroes }} / {{ item?.product?.commercialDesc }}
                         </div>
                     </div>
                 </div>
@@ -147,7 +147,7 @@
                                     {{ t.pt('views.checkout.product_description') }}
                                 </div>
                                 <div class="desc bold">
-                                    {{ item?.product?.commercialCode }} / {{ item?.product?.commercialDesc }}
+                                    {{ item?.product?.commercialCode | trimLeadingZeroes }} / {{ item?.product?.commercialDesc }}
                                 </div>
                             </div>
                         </div>
@@ -317,7 +317,7 @@
                                     {{ t.pt('views.checkout.product_description') }}
                                 </div>
                                 <div class="desc bold">
-                                    {{ item?.product?.commercialCode }} / {{ item?.product?.commercialDesc }}
+                                    {{ item?.product?.commercialCode | trimLeadingZeroes }} / {{ item?.product?.commercialDesc }}
                                 </div>
                             </div>
                         </div>
@@ -475,7 +475,7 @@
                                     {{ t.pt('views.checkout.product_description') }}
                                 </div>
                                 <div class="desc bold">
-                                    {{ item?.product?.commercialCode }} / {{ item?.product?.commercialDesc }}
+                                    {{ item?.product?.commercialCode | trimLeadingZeroes }} / {{ item?.product?.commercialDesc }}
                                 </div>
                             </div>
                         </div>

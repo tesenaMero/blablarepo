@@ -147,7 +147,7 @@
                                             {{ t.pt('views.details.product_id') }}
                                         </div>
                                         <div class="value">
-                                            {{itemData.product.productCode}}
+                                            {{itemData.product.productCode | trimLeadingZeroes}}
                                         </div>
                                     </div>
                                 </div>

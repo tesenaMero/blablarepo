@@ -51,10 +51,10 @@
                         <td data-title="Submitted by">{{order.orderRequest.orderRequestedBy}}</td>
                         <td data-title="Items">{{order.orderRequest.orderRequestItems.length}}</td>
                         <td data-title="Products" class="products">
-                            <i *ngIf="order.isReadyMix()" class="cmx-icon-driver" aria-hidden="true"></i>
+                            <i *ngIf="order.isReadyMix()" class="cmx-icon-ready-mix" aria-hidden="true"></i>
                             <!-- TODO add cement packed/bagged icons -->
-                            <i *ngIf="order.isCement()" class="cmx-icon-track" aria-hidden="true"></i>
-                            <i *ngIf="order.isAggregates()" class="cmx-icon-user-profile" aria-hidden="true"></i>
+                            <i *ngIf="order.isCement()" class="cmx-icon-bag-cement" aria-hidden="true"></i>
+                            <i *ngIf="order.isAggregates()" class="cmx-icon-aggregates" aria-hidden="true"></i>
                         </td>
                         <td data-title="Status"><span class="status in-progress"></span>{{order.orderRequest.orderRequestStatus.statusDesc}}</td>
                         <!-- TODO numberal parser -->
