@@ -321,7 +321,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 this.catalogs[catalog.catalogCode] = catalog.entries;
             });
             this.readyMixAdditionalServices = this.catalogs['ASC'];
-            console.log(this.readyMixAdditionalServices)
         });
     }
 
@@ -590,9 +589,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
     changeAditionalService(preProduct: PreProduct, target, index) {
         if (target.checked) {
             preProduct.additionalServices.push(this.readyMixAdditionalServices[index]);
-            console.log(this.additionalServices)
-            this.readyMixAdditionalServices
-            console.log(preProduct.additionalServices)
         } else {
             const idx = this.additionalServices.indexOf(this.readyMixAdditionalServices[index]);
             preProduct.additionalServices.splice(idx, 1);
