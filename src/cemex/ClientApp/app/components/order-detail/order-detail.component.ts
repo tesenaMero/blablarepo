@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 import * as moment from 'moment'
+import { Validations } from '../../utils/validations';
 
 @Component({
     selector: 'order-detail-page',
@@ -21,6 +22,7 @@ export class OrderDetailComponent {
     orderCode: string;
     country: string;
     businessLine: string;
+    UTILS = Validations;
 
     private sub: any;
     pod: any;

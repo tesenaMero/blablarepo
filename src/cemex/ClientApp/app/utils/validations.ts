@@ -57,7 +57,7 @@ export class Validations {
     }
 
     static isProductReadyMix(product) {
-        return product.product.product.productLine.productLineId === this.PRODUCT_LINES.Readymix
+        return product.product.productType.productTypeId === this.PRODUCT_LINES.Readymix
     }
 
     static isProductMultiproduct(product) {
