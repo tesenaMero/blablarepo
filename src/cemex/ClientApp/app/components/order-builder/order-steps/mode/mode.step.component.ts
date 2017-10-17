@@ -38,6 +38,9 @@ export class ModeStepComponent implements StepEventsListener {
     }
 
     selectMode(mode: DeliveryMode) {
+        // if (this.manager.shippingCondition && this.manager.shippingCondition.shippingConditionCode != mode ) { // Clean manager
+        //     this.manager.resetOrder();
+        // }
         this.manager.selectDeliveryType({ shippingConditionCode: mode });
         this.onCompleted.emit(mode);
     }
