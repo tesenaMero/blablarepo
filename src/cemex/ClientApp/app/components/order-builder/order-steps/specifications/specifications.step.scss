@@ -94,7 +94,7 @@
                 //padding: 0;
                 .value {
                     //margin: 10px 0;
-                    width: 100%;
+                    width: 60%;
                     text-align: center;
                     border-left: 1px solid #D7D7D7;
                     border-right: 1px solid #D7D7D7;
@@ -103,8 +103,9 @@
                     &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
                         -webkit-appearance: none !important;
                         margin: 0 !important;
-                        -moz-appearance:textfield !important;
+                        -moz-appearance: extfield !important;
                     }
+                    -moz-appearance: textfield;
                 }
                 .control {
                     color: #3FA9F5;
