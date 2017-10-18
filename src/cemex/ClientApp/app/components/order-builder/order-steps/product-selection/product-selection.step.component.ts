@@ -1,11 +1,12 @@
-import { Component, OnInit, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { ProductLineApi } from '../../../../shared/services/api'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
-import { DeliveryMode } from '../../../../models/delivery.model'
-import { CustomerService } from '../../../../shared/services/customer.service'
+import { DeliveryMode } from '../../../../models/delivery.model';
 import { Validations } from '../../../../utils/validations';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
-import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
+import { Step, StepEventsListener } from '../../../../shared/components/stepper/';
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'product-selection-step',
@@ -15,63 +16,84 @@ import { Step, StepEventsListener } from '../../../../shared/components/stepper/
 })
 export class ProductSelectionStepComponent implements StepEventsListener {
     @Output() onCompleted = new EventEmitter<any>();
-    private loading = true;
-    private MODE = DeliveryMode;
-
-    productLines = [];
-    productLine: any;
+    private productLines: any[] = [];
+    private language: string = undefined;
+    private loading: boolean = true;
+    private semaphoreLock: boolean = false;
 
     constructor(
-        @Inject(Step) private step: Step,
-        private api: ProductLineApi, 
-        private orderManager: CreateOrderService, 
-        private customerService: CustomerService, 
+        private step: Step,
+        private productLineApi: ProductLineApi, 
+        private manager: CreateOrderService,
         private t: TranslationService) {
 
         // Interface
         this.step.setEventsListener(this);
-            
-        // Init product lines from api
-        this.initProductLines();
+
+        // Fetch product lines if not locked
+        this.fetchProductLines();
+
+        // Listen to lang change
+        this.t.localeData.subscribe((response) => {
+            // If its different from the already selected language
+            if (this.language != response.lang) {
+                this.language = response.lang;
+                // Fetch product lines if not locked
+                this.fetchProductLines();
+            }
+        })
     }
 
     onShowed() {
-        if (this.productLine) {
-            this.onCompleted.emit(this.productLine);
+        if (this.manager && this.manager.productLine) {
+            this.onCompleted.emit(this.manager.productLine);
         }
         else {
             this.onCompleted.emit(false);
         }
     }
 
-    initProductLines() {
+    fetchProductLines() {
+        if (this.semaphoreLock) { return; }
+
         this.loading = true;
-        this.api.all().subscribe((response) => {
+        this.semaphoreLock = true;
+        this.productLineApi.all().subscribe((response) => {
             let productLines = response.json().productLines;
+            const bagCement = this.getBagCement(productLines);
+            const multiproduct = this.getMultiproduct(productLines)
 
-            let bagCement = this.getBagCement(productLines);
-            let multiproduct = this.getMultiproduct(productLines)
+            this.initProductLines(productLines, bagCement, multiproduct);
 
-            if (!Validations.isMexicoCustomer()) {
-                multiproduct && productLines.splice(productLines.indexOf(multiproduct), 1);
-            }
-            else if (bagCement && multiproduct) {
-                bagCement && productLines.splice(productLines.indexOf(bagCement), 1);
-                multiproduct && productLines.splice(productLines.indexOf(multiproduct), 1);
-                
-                let cementPackageMultiproducts = this.joinProductLines(bagCement,
-                    multiproduct,
-                    this.t.pt('views.product.selection.cement_package_multi')
-                );
-                
-                productLines.push(cementPackageMultiproducts);
-            }
-
-            this.productLines = productLines;
             this.loading = false;
+            this.semaphoreLock = false;
         }, error => {
             this.loading = false;
+            this.semaphoreLock = false;
         });
+    }
+
+    initProductLines(productLines: any[], bagCement: any, multiproduct: any) {
+        if (!Validations.isMexicoCustomer()) {
+            // Remove multiproduct in mexico
+            multiproduct && this.removeItem(multiproduct, productLines);
+        }
+        else if (bagCement && multiproduct) {
+            bagCement && this.removeItem(bagCement, productLines);
+            multiproduct && this.removeItem(multiproduct, productLines);
+
+            const packageMultiproductName = this.t.pt('views.product.selection.cement_package_multi');
+            const cementPackageMultiproducts = this.joinProductLines(bagCement, multiproduct, packageMultiproductName);
+
+            // Add new product line manually
+            productLines.push(cementPackageMultiproducts);
+        }
+
+        this.productLines = productLines;
+    }
+
+    removeItem(item, arr: any[]) {
+        arr.splice(arr.indexOf(item), 1);
     }
 
     shouldHide(productLine: any): boolean {
@@ -87,19 +109,23 @@ export class ProductSelectionStepComponent implements StepEventsListener {
     }
 
     joinProductLines(a, b, newName) {
-        return { productLineDesc: newName, productLineId: a.productLineId + "," + b.productLineId }
+        return {
+            productLineDesc: newName,
+            productLineId: a.productLineId + "," + b.productLineId,
+            productLineCode: "002,003" // Verify this with ignacio
+        }
     }
 
-    select(productLine: any) {        
-        if (this.orderManager.productLine && this.orderManager.productLine.productLineId != productLine.productLineId ) { // Clean manager
-            this.orderManager.resetOrder();
+    select(productLine: any) {
+        if (this.manager.productLine && this.manager.productLine.productLineCode != productLine.productLineCode) {
+            this.manager.resetOrder();
         }
-        this.productLine = productLine;
-        this.orderManager.selectProductLine(productLine);
+        
+        this.manager.selectProductLine(productLine);
 
         // Readymix case and Bulk Cement
         if (Validations.isReadyMix() || this.isBulkCementUSA()) {
-            this.orderManager.shippingCondition = { shippingConditionCode: this.MODE.Delivery };
+            this.manager.shippingCondition = { shippingConditionCode: DeliveryMode.Delivery };
         }
 
         this.onCompleted.emit(productLine);
@@ -109,7 +135,7 @@ export class ProductSelectionStepComponent implements StepEventsListener {
         return Validations.isBulkCement() && Validations.isUSACustomer();
     }
 
-    isSelected(product: any) {
-        return this.productLine == product;
+    isSelected(productLine: any) {
+        return _.get(this.manager, 'productLine.productLineCode') === _.get(productLine, 'productLineCode');
     }
 }

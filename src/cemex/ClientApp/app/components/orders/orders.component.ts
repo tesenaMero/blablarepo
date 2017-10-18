@@ -21,6 +21,8 @@ import { getOrderType, buisnessLIneCodes } from '../../shared/models/order-reque
 export class OrdersComponent implements OnDestroy {
     // Table
     isLoading: any;
+    lock: boolean = false;
+
     orders: any = [];
     columns: any[] = [];
     rows: any[] = [];
@@ -92,14 +94,20 @@ export class OrdersComponent implements OnDestroy {
     }
 
     fetchOrders() {
+        if (this.lock) { return; }
+
+        this.lock = true;
         this.ordersApi.all().subscribe((response) => {
             if (response.status == 200) {
                 let orders: any[] = response.json().orders;
                 this.initOrders(orders);
             }
+
             this.isLoading = false;
+            this.lock = false;
         }, error => {
             this.isLoading = false;
+            this.lock = false;
         });
     }
 
