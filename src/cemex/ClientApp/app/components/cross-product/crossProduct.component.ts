@@ -87,7 +87,7 @@ export class CrossProductComponent implements OnInit {
         this.dashboard.alertTranslateInfo('views.common.placing', 0);
         this.drafts.createOrder(jObj.data[0].orderID, data)
             .flatMap((response) => {
-                this.dashboard.alertSuccess(this.t.pt('views.common.placed'), 0);
+                this.dashboard.alertTranslateSuccess('views.common.placed', 0);
                 return this.drafts.validateRequestId(response.json().id);
             })
             .subscribe((response) => {
