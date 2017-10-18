@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
-
 import { OrdersService } from '../../shared/services/orders.service';
 import { PingSalesOrderApi } from '../../shared/services/api/ping-sales-order.service';
 import { OrderRequestTableComponentConfiguration } from '../../utils/order-request.helper';
@@ -9,9 +8,10 @@ import { DashboardService } from '../../shared/services/dashboard.service';
 import { CustomerService } from '../../shared/services/customer.service';
 import { OrdersApi } from '../../shared/services/api/orders.service';
 import { EncodeDecodeJsonObjService } from '../../shared/services/encodeDecodeJsonObj.service';
-import * as moment from 'moment'
 import { Subscription } from 'rxjs/Subscription'
+
 import { getOrderType, buisnessLIneCodes } from '../../shared/models/order-request';
+import * as moment from 'moment'
 
 @Component({
     selector: 'page-orders',
@@ -221,19 +221,19 @@ export class OrdersComponent implements OnDestroy {
         const customer = this.customerService.currentCustomer();
         // Only for MX validate BD conexion
         if (customer.countryCode.trim() === 'MX') {
-            this.dash.alertInfo(this.t.pt('views.common.validating_connection'), 0);
+            this.dash.alertTranslateInfo('views.common.validating_connection', 0);
             this.ping.validatePingSalesOrder().subscribe((response) => {
                 if (response.json().success === 'Y') {
                     this.router.navigate(['/ordersnproduct/app/new']);
                     this.dash.closeAlert();
                 }
                 else {
-                    this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
+                    this.dash.alertTranslateError('views.common.ping_unsuccessful');
                 }
             },
-                error => {
-                    this.dash.alertError(this.t.pt('views.common.ping_unsuccessful'));
-                });
+            error => {
+                this.dash.alertTranslateError('views.common.ping_unsuccessful');
+            });
         }
         else {
             this.router.navigate(['/ordersnproduct/app/new']);

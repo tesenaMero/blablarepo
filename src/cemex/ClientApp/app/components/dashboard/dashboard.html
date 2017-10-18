@@ -4,7 +4,8 @@
 
 <div id="layout" class="content">
     <div class="alert-bar {{ alertClass(alert) }}" [ngClass]="{ open: showAlert }">
-        <p>{{ alert.text }}</p>
+        <p *ngIf="!alert.translation">{{ alert.text }}</p>
+        <p *ngIf="alert.translation">{{ t.pt(alert.text) }}</p>
         <span (click)="closeAlert()" class="close">
             <svg class="icon-close-black">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-close"></use>
