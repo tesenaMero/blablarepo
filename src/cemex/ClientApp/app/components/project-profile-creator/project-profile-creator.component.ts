@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { CatalogApi, ProjectProfileApi } from '../../shared/services/api';
 import { CustomerService } from '../../shared/services/customer.service';
@@ -11,6 +11,7 @@ import { CustomerService } from '../../shared/services/customer.service';
 export class ProjectProfileCreatorComponent {
     @Output() canceled = new EventEmitter<any>();
     @Output() confirmed = new EventEmitter<any>();
+    @Input() viewMode;
 
     public isMX: boolean = false;
     private postingTheOrder: boolean;
@@ -18,6 +19,8 @@ export class ProjectProfileCreatorComponent {
     private loadingCatalog: boolean;
     private isUnloadTypePump: boolean;
     private catalogs: any = {};
+
+    @Input()
     private projectProfile: any = {
         profileName: '',
         project: {
