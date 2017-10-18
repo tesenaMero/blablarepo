@@ -183,6 +183,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.shippingSource?.shippingSourceDesc">
+                                    <div class="group">
+                                        <div class="title">
+                                            Shipping Source
+                                        </div>
+                                        <div class="value">
+                                            {{ itemData.shippingSource?.shippingSourceDesc }}
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-md-3 col-xs-6" *ngIf="!UTILS.isProductReadyMix(itemData) && itemData.orderItemProfile?.transportMethod">
                                     <div class="group">
                                         <div class="title">
@@ -200,16 +210,6 @@
                                         </div>
                                         <div class="value">
                                             {{ orderDetailData.shippingCondition.shippingConditionDesc }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-xs-6" *ngIf="itemData.shippingSource?.shippingSourceDesc">
-                                    <div class="group">
-                                        <div class="title">
-                                            Shipping Source
-                                        </div>
-                                        <div class="value">
-                                            {{ itemData.shippingSource?.shippingSourceDesc }}
                                         </div>
                                     </div>
                                 </div>
