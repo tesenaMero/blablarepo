@@ -100,10 +100,14 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
 
     // Readymix only
     calculatePrices() {
+        this.prices.subtotal = 0;
+        this.prices.taxes = 0;
+        this.prices.total = 0;
+
         this.manager.products.forEach(item => {
-            this.prices.subtotal = (item.contract.unitaryPrice.net * item.quantity);
-            this.prices.taxes = (item.contract.unitaryPrice.tax * item.quantity);
-            this.prices.total = (item.contract.unitaryPrice.net * item.quantity) + (item.contract.unitaryPrice.tax * item.quantity);
+            this.prices.subtotal += (item.contract.unitaryPrice.net * item.quantity);
+            this.prices.taxes += (item.contract.unitaryPrice.tax * item.quantity);
+            this.prices.total += (item.contract.unitaryPrice.net * item.quantity) + (item.contract.unitaryPrice.tax * item.quantity);
         });
     }
 
