@@ -22,7 +22,6 @@ export class PreProduct {
     unit: any;
     payment: any;
     contract: any;
-    maxCapacity: any;
     product: any;
     productBaseUnit: any;
     plant: any;
@@ -65,7 +64,7 @@ export class PreProduct {
         contract: { valid: false, mandatory: true, text: 'views.specifications.verify_contract' },
         payment: { valid: false, mandatory: true, text: 'views.specifications.verify_payment' },
         product: { valid: false, mandatory: true, text: 'views.specifications.verify_products_selected' },
-        maxCapacity: { valid: true, mandatory: true, text: 'views.specifications.maximum_capacity_reached' },
+        maxCapacity: { valid: true, mandatory: false, text: 'views.specifications.maximum_capacity_reached' },
         contractBalance: { valid: true, mandatory: true, text: 'views.specifications.contract_remaining_amount_overflow' },
     }
 
@@ -524,13 +523,24 @@ export class PreProduct {
     }
 
     // Convert to tons quantity selected
-    convertToTons(qty): any {
+    convertToTons(qty?): any {
+        if (qty === undefined) { qty = this.quantity; }
         if (this.unit === undefined) {
             return qty;
         }
 
         let factor = this.unit.numerator / this.unit.denominator;
         let convertion = qty * factor;
+        return convertion || undefined;
+    }
+
+    tons(): any {
+        if (this.unit === undefined) {
+            return this.quantity;
+        }
+
+        let factor = this.unit.numerator / this.unit.denominator;
+        let convertion = this.quantity * factor;
         return convertion || undefined;
     }
 
@@ -613,6 +623,14 @@ export class PreProduct {
     }
 
     isValid(): boolean {
+        // Validate contract balance
+        if (!this.shouldVerifyQuantity()) {
+            this.validations.contractBalance.mandatory = false;
+        }
+        else {
+            this.validations.contractBalance.valid = this.isQtyValid();
+        }
+
         let valid = true;
         for (let key in this.validations) {
             if (this.validations[key].mandatory) {
@@ -630,13 +648,94 @@ export class PreProduct {
             return false;
         }
 
+        return valid
+    }
+
+    isQtyValid(): boolean {
         // Validate quantity
+        if (this.isQtyZeroOrNan()) { return false; }
+
+        if (Validations.isMexicoCustomer()) {
+            return this.isValidQtyMX();
+        }
+        else {
+            return this.isValidQtyUSA();
+        }
+    }
+
+    isValidQtyMX(): boolean {
+        // No contract case
+        if (!this.contract) { return this.isValidQtyNoContractCase(); }
+
+        // Has contract case
+        else { return this.isValidQtyContractCase(); }
+    }
+
+    isValidQtyUSA(): boolean {
+        const balance = this.getContractBalance();
+        if (balance) {
+            if (this.tons() > balance) {
+                this.dashboard.alertTranslateError('views.specifications.contract_remaining_amount_overflow', 3000);
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
+    }
+
+    isQtyZeroOrNan() {
         const q = Number(this.quantity)
         if (!q || q <= 0) {
             this.dashboard.alertError("Verify quantity");
             return false;
         }
+    }
 
-        return valid
+    isValidQtyNoContractCase(): boolean {
+        if (Validations.isDelivery()) {
+            return this.isValidNoContractDeliveryCase();
+        }
+        else {
+            return true;
+        }
+    }
+
+    isValidQtyContractCase(): boolean {
+        const balance = this.getContractBalance();
+        if (balance) {
+            if (this.tons() <= balance) {
+                this.isValidQtyNoContractCase();
+            }
+            else {
+                this.dashboard.alertError("Quantity requested is greater than quantity remaining in the contract");
+                return false;
+            }
+        }
+        else {
+            this.isValidQtyNoContractCase();
+        }
+    }
+
+    isValidNoContractDeliveryCase(): boolean {
+        if (Validations.isCementBag() || Validations.isBulkCement()) {
+            // No maximum capacity defined (API error probably)
+            if (this.maximumCapacity === undefined) {
+                this.dashboard.alertError("There is no maximum capacity defined for this jobsite");
+                return false;
+            }
+
+            // This quanity in tons <= jobsite max capacity
+            if (this.tons() <= this.maximumCapacity) {
+                return true;
+            }
+            else {
+                this.dashboard.alertError("Quanitity requested is greater than Jobsite's Max Capacity");
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
     }
 }

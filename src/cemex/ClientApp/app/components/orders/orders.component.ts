@@ -149,11 +149,11 @@ export class OrdersComponent implements OnDestroy {
         this.orders.forEach((order) => {
             this.rows.push([
                 { inner: this.getOrderCode(order), class: "order-id", title: true, click: () => this.goToDetail(order) },
-                { inner: this.dateFormat(order.updatedDateTime), hideMobile: true },
+                { inner: this.dateFormat(order.updatedDateTime) },
                 { inner: order.jobsite.jobsiteCode + " " + order.jobsite.jobsiteDesc, subtitle: true },
-                { inner: order.purchaseOrder, hideMobile: true },
-                { inner: this.getOrderIcon(order), hideMobile: true },
-                { inner: "<span class='status " + order.status.statusCode.toLowerCase() + "'></span>" + order.status.statusDesc, hideMobile: false },
+                { inner: order.purchaseOrder },
+                { inner: this.getOrderIcon(order) },
+                { inner: "<span class='status " + order.status.statusCode.toLowerCase() + "'></span>" + order.status.statusDesc },
             ]);
         });
     }

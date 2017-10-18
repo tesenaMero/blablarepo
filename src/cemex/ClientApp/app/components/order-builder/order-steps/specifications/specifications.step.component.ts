@@ -707,24 +707,25 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.dashboard.alertTranslateError('views.specifications.negative_amount', 3000);
             return product.quantity = 0;
         }
-        
-        //inicialize
-        product.setContractBalanceValidation(true);
-        product.setQuantityValidation(true);
-        let contractBalance = product.getContractBalance();
 
         // If contract selected and should not be
         if (product.contract && !product.shouldVerifyQuantity()) {
             product.quantity = newValue;
             return;
         }
+        
+        //inicialize
+        product.setContractBalanceValidation(true);
+        product.setQuantityValidation(true);
 
+        let contractBalance = product.getContractBalance();
         let maxCapacitySalesArea = product.maximumCapacity;
-        const isDelivery = Validations.isDelivery();
         let conversion = product.convertToTons(newValue);
+
         //---------------------------------------------------------- CONVERSION NEEDS TO BE FINISHED than remove this condition
         if (conversion === undefined) {
-            conversion = newValue;
+            return product.quantity = newValue;
+            //conversion = newValue;
         }
 
         //country dependent - no US quantity validation  
@@ -739,7 +740,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 }
             }
             //delivery mode only
-            if (isDelivery) {
+            if (Validations.isDelivery()) {
                 //only cement
                 let isCementBag = Validations.isProductCementBag(product);
                 let isCementBulk = Validations.isProductCementBulk(product);
