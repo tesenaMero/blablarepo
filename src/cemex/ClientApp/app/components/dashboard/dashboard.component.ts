@@ -5,8 +5,8 @@ import { CreateOrderService } from '../../shared/services/create-order.service';
 import { DashboardService } from '../../shared/services/dashboard.service'
 import { CustomerService } from '../../shared/services/customer.service'
 import { SalesDocumentApi, ShipmentLocationApi } from '../../shared/services/api';
-import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { CmxSidebarComponent } from '@cemex/cmx-sidebar-v1/dist';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 @Component({
     selector: 'app-dashboard',
@@ -22,7 +22,8 @@ export class DashboardComponent implements OnInit {
     private alertTimeout: any;
     private alert = {
         text: "",
-        type: "info"
+        type: "info",
+        translation: false
     };
 
     private customers: any[];
@@ -34,7 +35,8 @@ export class DashboardComponent implements OnInit {
         private shipmentLocationApi: ShipmentLocationApi,
         private dashboard: DashboardService,
         private customerService: CustomerService,
-        private salesDocumentService: SalesDocumentApi
+        private salesDocumentService: SalesDocumentApi,
+        private t: TranslationService
     ) { }
 
     ngOnInit() {
@@ -47,8 +49,9 @@ export class DashboardComponent implements OnInit {
 
     private handleAlert(alert: any) {
         if (alert == null) { this.closeAlert(); return; }
-
+        
         this.showAlert = false;
+        this.alert.translation = alert.translation;
         this.alert.text = alert.text;
         this.alert.type = alert.type;
         setTimeout(() => { this.showAlert = true }, 0);

@@ -61,12 +61,12 @@ export class PreProduct {
     }
 
     validations = {
-        plant: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_plant') },
-        contract: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_contract') },
-        payment: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_payment') },
-        product: { valid: false, mandatory: true, text: this.t.pt('views.specifications.verify_products_selected') },
-        maxCapacity: { valid: true, mandatory: true, text: this.t.pt('views.specifications.maximum_capacity_reached') },
-        contractBalance: { valid: true, mandatory: true, text: this.t.pt('views.specifications.contract_remaining_amount_overflow') },
+        plant: { valid: false, mandatory: true, text: 'views.specifications.verify_plant' },
+        contract: { valid: false, mandatory: true, text: 'views.specifications.verify_contract' },
+        payment: { valid: false, mandatory: true, text: 'views.specifications.verify_payment' },
+        product: { valid: false, mandatory: true, text: 'views.specifications.verify_products_selected' },
+        maxCapacity: { valid: true, mandatory: true, text: 'views.specifications.maximum_capacity_reached' },
+        contractBalance: { valid: true, mandatory: true, text: 'views.specifications.contract_remaining_amount_overflow' },
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean, private templateProduct?: any) {
@@ -618,7 +618,7 @@ export class PreProduct {
             if (this.validations[key].mandatory) {
                 if (!this.validations[key].valid) {
                     this.validations[key].showError = true;
-                    this.dashboard.alertError(this.validations[key].text);
+                    this.dashboard.alertTranslateError(this.validations[key].text);
                     return false;
                 }
             }
@@ -626,7 +626,7 @@ export class PreProduct {
 
         // Validate unit
         if (!this.unit) {
-            this.dashboard.alertError(this.t.pt('views.specifications.verify_unit'));
+            this.dashboard.alertTranslateError('views.specifications.verify_unit');
             return false;
         }
 

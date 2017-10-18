@@ -84,10 +84,10 @@ export class CrossProductComponent implements OnInit {
             documents: jObj.data[0].documents
         }
 
-        this.dashboard.alertInfo(this.t.pt('views.common.placing'), 0);
+        this.dashboard.alertTranslateInfo('views.common.placing', 0);
         this.drafts.createOrder(jObj.data[0].orderID, data)
             .flatMap((response) => {
-                this.dashboard.alertSuccess(this.t.pt('views.common.placed'), 0);
+                this.dashboard.alertTranslateSuccess('views.common.placed', 0);
                 return this.drafts.validateRequestId(response.json().id);
             })
             .subscribe((response) => {
@@ -96,7 +96,7 @@ export class CrossProductComponent implements OnInit {
                 this.modalService.open('success-order');
                 localStorage.removeItem('manager');
             }, error => {
-                this.dashboard.alertError(this.t.pt('views.common.error_placing'), 10000);
+                this.dashboard.alertTranslateError('views.common.error_placing', 10000);
             })
     }
 
