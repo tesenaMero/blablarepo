@@ -17,19 +17,14 @@ import * as _ from 'lodash';
 })
 export class ProductSelectionStepComponent implements StepEventsListener {
     @Output() onCompleted = new EventEmitter<any>();
-    private MODE = DeliveryMode;
-
-    private productLines = [];
-    private productLine: any;
-
-    private language: string;
-    
-    private loading = true;
+    private productLines: any[] = [];
+    private language: string = undefined;
+    private loading: boolean = true;
     private semaphoreLock: boolean = false;
 
     constructor(
         @Inject(Step) private step: Step,
-        private api: ProductLineApi,
+        private productLineApi: ProductLineApi,
         private manager: CreateOrderService,
         private customerService: CustomerService,
         private t: TranslationService) {
@@ -52,8 +47,8 @@ export class ProductSelectionStepComponent implements StepEventsListener {
     }
 
     onShowed() {
-        if (this.productLine) {
-            this.onCompleted.emit(this.productLine);
+        if (this.manager && this.manager.productLine) {
+            this.onCompleted.emit(this.manager.productLine);
         }
         else {
             this.onCompleted.emit(false);
@@ -65,7 +60,7 @@ export class ProductSelectionStepComponent implements StepEventsListener {
 
         this.loading = true;
         this.semaphoreLock = true;
-        this.api.all().subscribe((response) => {
+        this.productLineApi.all().subscribe((response) => {
             let productLines = response.json().productLines;
             const bagCement = this.getBagCement(productLines);
             const multiproduct = this.getMultiproduct(productLines)
@@ -116,19 +111,23 @@ export class ProductSelectionStepComponent implements StepEventsListener {
     }
 
     joinProductLines(a, b, newName) {
-        return { productLineDesc: newName, productLineId: a.productLineId + "," + b.productLineId }
+        return {
+            productLineDesc: newName,
+            productLineId: a.productLineId + "," + b.productLineId,
+            productLineCode: "002,003" // Verify this with ignacio
+        }
     }
 
     select(productLine: any) {
-        if (this.manager.productLine && this.manager.productLine.productLineId != productLine.productLineId) { // Clean manager
+        if (this.manager.productLine && this.manager.productLine.productLineCode != productLine.productLineCode) {
             this.manager.resetOrder();
         }
-        this.productLine = productLine;
+        
         this.manager.selectProductLine(productLine);
 
         // Readymix case and Bulk Cement
         if (Validations.isReadyMix() || this.isBulkCementUSA()) {
-            this.manager.shippingCondition = { shippingConditionCode: this.MODE.Delivery };
+            this.manager.shippingCondition = { shippingConditionCode: DeliveryMode.Delivery };
         }
 
         this.onCompleted.emit(productLine);
