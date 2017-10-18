@@ -17,10 +17,10 @@
                     </span>
                 </label>
                 <i class="ic" [ngClass]="{
-                    'cmx-icon-ready-mix': product.productLineId === 6,
-                    'cmx-icon-bag-cement': product.productLineId === 2,
-                    'cmx-icon-bulk-cement': product.productLineId === 1,
-                    'cmx-icon-multi-products': product.productLineId === 3
+                    'cmx-icon-ready-mix': product.productLineCode === '0006',
+                    'cmx-icon-bag-cement': product.productLineCode === '0002',
+                    'cmx-icon-bulk-cement': product.productLineCode === '0001',
+                    'cmx-icon-multi-products': product.productLineCode === '0003'
                 }"></i>
                 <span class="desc">{{ product.productLineDesc }}</span>
             </div>
