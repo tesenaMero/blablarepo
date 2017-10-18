@@ -266,7 +266,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 }
                 else {
                     this.preProducts.forEach((item: PreProduct) => {
-                        // Enable product selection anyways
+                        item.product = undefined;
                         item.disableds.products = true;
                         item.loadings.products = false;
                         item.loadings.contracts = false;
