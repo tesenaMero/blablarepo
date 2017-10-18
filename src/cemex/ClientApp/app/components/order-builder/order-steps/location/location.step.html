@@ -4,7 +4,7 @@
             <div class="first-container">
                 <div class="row align-items-center mb-21px" [ngClass]="{ error: validations.jobsite.showError }">
                     <div class="col-md-4 col-sm-12 select-label">
-                        <label for="jobsite-select" class="select-label required">{{ t.pt('views.location.select_existing_jobsite') }}</label>
+                        <label class="select-label required">{{ t.pt('views.location.select_existing_jobsite') }}</label>
                     </div>
                     <div class="col-md-8 col-sm-12" [ngClass]="{ disabled: loadings.locations }">
                         <ss-multiselect-dropdown [options]="locations" required [texts]="jobsiteTexts" [settings]="dropDownSettings" [(ngModel)]="locationIndex" (ngModelChange)="jobsiteChanged(locations[$event[0]])"></ss-multiselect-dropdown>
@@ -13,7 +13,7 @@
                 </div>
                 <div class="row align-items-center" *ngIf="!hiddens.pods" [ngClass]="{ disabled: loadings.pods, error: validations.pod.showError }">
                     <div class="col-md-4 col-sm-12 select-label">
-                        <label for="pod-select" class="select-label" [ngClass]="{ required: validations.pod.mandatory }">{{ t.pt('views.location.select_existing_pod') }}</label>
+                        <label class="select-label" [ngClass]="{ required: validations.pod.mandatory }">{{ t.pt('views.location.select_existing_pod') }}</label>
                     </div>
                     <div class="col-md-8 col-sm-12" [ngClass]="{ disabled: loadings.pods }">
                         <ss-multiselect-dropdown [options]="pods" [texts]="podsTexts" [settings]="dropDownSettings " [(ngModel)]="podsIndex" (ngModelChange)="podChanged(pods[$event[0]])"></ss-multiselect-dropdown>
@@ -33,7 +33,7 @@
                 </div>
                 <div class="row align-items-center mb-21px" *ngIf="!isCement" [ngClass]="{ error: validations.contactPerson.showError }">
                     <div class="col-md-4 col-sm-12 select-label">
-                        <label for="conctact-select" [ngClass]="{ required: validations.contactPerson.mandatory }" class="select-label">{{ t.pt('views.location.contact_person') }}</label>
+                        <label [ngClass]="{ required: validations.contactPerson.mandatory }" class="select-label">{{ t.pt('views.location.contact_person') }}</label>
                     </div>
                     <div class="col-md-8 col-sm-12 " [ngClass]="{ disabled: loadings.contacts }">
                         <ss-multiselect-dropdown [options]="contacts" [texts]="contactsTexts" (onDeselect)="cancelContact()" (onCancel)="cancelContact()" [settings]="contactsSettings" [(ngModel)]="contactsIndex" (onManualInput)="manualContact($event)" (ngModelChange)="contactChanged($event)"></ss-multiselect-dropdown>

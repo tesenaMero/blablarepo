@@ -1,11 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { ProductLineApi } from '../../../../shared/services/api'
 import { CreateOrderService } from '../../../../shared/services/create-order.service';
-import { DeliveryMode } from '../../../../models/delivery.model'
-import { CustomerService } from '../../../../shared/services/customer.service'
+import { DeliveryMode } from '../../../../models/delivery.model';
 import { Validations } from '../../../../utils/validations';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
-import { Step, StepEventsListener } from '../../../../shared/components/stepper/'
+import { Step, StepEventsListener } from '../../../../shared/components/stepper/';
 
 import * as _ from 'lodash';
 
@@ -23,10 +22,9 @@ export class ProductSelectionStepComponent implements StepEventsListener {
     private semaphoreLock: boolean = false;
 
     constructor(
-        @Inject(Step) private step: Step,
-        private productLineApi: ProductLineApi,
+        private step: Step,
+        private productLineApi: ProductLineApi, 
         private manager: CreateOrderService,
-        private customerService: CustomerService,
         private t: TranslationService) {
 
         // Interface
