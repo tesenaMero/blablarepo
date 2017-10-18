@@ -1,4 +1,3 @@
 [submodule "src/cemex/submodules/dls"]
 	path = src/cemex/submodules/dls
 	url = https://bitbucket.org/cemex/dlsdraft.git
-	branch = development
