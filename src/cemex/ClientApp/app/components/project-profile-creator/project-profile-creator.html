@@ -6,10 +6,10 @@
 <div class="container-layout">
     <ng-container *ngIf="!finishedOrder && !loadingCatalog">
         <div class="title">
-            {{ t.pt('views.project.profile.new') }}
+            {{ viewMode ? projectProfile.profileName : t.pt('views.project.profile.new') }}
         </div>
         <div class="form-container">
-            <div class="row">
+            <div class="row" *ngIf="!viewMode">
                 <div class="col-md-12 col-sm-12">
                     <label for="pp-name" class="">{{ t.pt('views.project.profile.name') }}</label>
                     <input [(ngModel)]="projectProfile.profileName" type="text" class="form-control " id="pp-name" name="pp-name" value="">
@@ -18,62 +18,90 @@
             <div class="row" *ngIf="isMX">
                 <div class="col-sm-6">
                     <label for="pp-discharge" class="">{{ t.pt('views.project.profile.dischare_time') }}</label>
-                    <select (change)="onChangeDischargeTime($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
+                    <select *ngIf="!viewMode" (change)="onChangeDischargeTime($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
                         <option [value]="null"></option>
                         <option *ngFor="let entry of catalogs.DCT" [value]="entry.entryId">{{entry.entryDesc}}</option>
                     </select>
+
+                    <select *ngIf="viewMode" class="form-control" disabled="true">
+                        <option selected>{{projectProfile.project.projectProperties.dischargeTime?.timePerDischargeDesc}}</option>
+                    </select>
                 </div>
                 <div class="col-sm-6">
                     <label for="pp-transport" class="">{{ t.pt('views.project.profile.transport_method') }}</label>
-                    <select (change)="onChangeTransportMethod($event.target.value)" name="pp-transport" id="pp-transport" class="form-control">
+                    <select *ngIf="!viewMode" (change)="onChangeTransportMethod($event.target.value)" name="pp-transport" id="pp-transport" class="form-control">
                         <option value="" selected disabled hidden></option>
                         <option *ngFor="let entry of catalogs.TPM" [value]="entry.entryId">{{entry.entryDesc}}</option>
+                    </select>
+
+                    <select *ngIf="viewMode" class="form-control" disabled="true">
+                        <option selected>{{projectProfile.project.projectProperties.transportMethod?.transportMethodDesc}}</option>
                     </select>
                 </div>
             </div>
             <div class="row" *ngIf="isMX">
                 <div class="col-sm-6">
                     <label for="pp-discharge" class="">{{ t.pt('views.project.profile.unload_type') }}</label>
-                    <select (change)="onChangeUnloadType($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
+                    <select *ngIf="!viewMode" (change)="onChangeUnloadType($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
                         <option [value]="null"></option>
                         <option *ngFor="let entry of catalogs.ULT; let i = index" [attr.data-index]="i" [value]="i">{{entry.entryDesc}}</option>
                     </select>
+
+                    <select *ngIf="viewMode" class="form-control" disabled="true">
+                        <option selected>{{projectProfile.project.projectProperties.unloadType?.unloadTypeDesc}}</option>
+                    </select>
                 </div>
-                <div *ngIf="isUnloadTypePump" class="col-sm-6">
+                <div *ngIf="isUnloadTypePump || !!projectProfile.project.projectProperties.pumpCapacity" class="col-sm-6">
                     <label for="pp-transport" class="">{{ t.pt('views.project.profile.pump_capacity') }}</label>
-                    <select (change)="onChangePumpCapacity($event.target.value)" name="pp-transport" id="pp-transport" class="form-control">
+                    <select *ngIf="!viewMode" (change)="onChangePumpCapacity($event.target.value)" name="pp-transport" id="pp-transport" class="form-control">
                         <option value="" selected disabled hidden></option>
                         <option *ngFor="let entry of catalogs.PCC" [value]="entry.entryId">{{entry.entryDesc}}</option>
+                    </select>
+
+                    <select *ngIf="viewMode" class="form-control" disabled="true">
+                        <option selected>{{projectProfile.project.projectProperties.pumpCapacity?.pumpCapacityDesc}}</option>
                     </select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
                     <label for="pp-discharge" class="">{{ t.pt('views.project.profile.application') }}</label>
-                    <select (change)="onChangeApplicationType($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
+                    <select *ngIf="!viewMode" (change)="onChangeApplicationType($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
                         <option [value]="null"></option>
                         <option *ngFor="let entry of catalogs.ELM" [value]="entry.entryId">{{entry.entryDesc}}</option> 
                    </select>
+
+                   <select *ngIf="viewMode" class="form-control" disabled="true">
+                        <option selected>{{projectProfile.project.projectProperties.element?.elementDesc}}</option>
+                    </select>
                 </div>
                 <div class="col-sm-6">
                     <label for="pp-transport" class="">{{ t.pt('views.project.profile.spacing') }}</label>
-                    <select (change)="onChangeSpacing($event.target.value)" name="pp-transport" id="pp-transport" class="form-control">
+                    <select *ngIf="!viewMode" (change)="onChangeSpacing($event.target.value)" name="pp-transport" id="pp-transport" class="form-control">
                         <option value="" selected disabled hidden></option>
                         <option [value]="null"></option>
                         <option *ngFor="let entry of catalogs.TPL" [value]="entry.entryId">{{entry.entryDesc}}</option>
+                    </select>
+
+                    <select *ngIf="viewMode" class="form-control" disabled="true">
+                        <option selected>{{projectProfile.project.projectProperties.timePerLoad?.timePerLoadDesc}}</option>
                     </select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
                     <label for="pp-discharge" class="">{{ t.pt('views.project.profile.load_size') }}</label>
-                    <select (change)="onChangeLoadSize($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
+                    <select *ngIf="!viewMode" (change)="onChangeLoadSize($event.target.value)" name="pp-discharge" id="pp-discharge" class="form-control">
                         <option value="" selected disabled hidden></option>
                         <option [value]="null"></option>
                         <option *ngFor="let entry of catalogs.LSC" [value]="entry.entryId">{{entry.entryDesc}}</option>
+                    </select>
+
+                    <select *ngIf="viewMode" class="form-control" disabled="true">
+                        <option selected>{{projectProfile.project.projectProperties.loadSize?.loadSizeDesc}}</option>
                     </select>
                 </div>
             </div>
@@ -87,7 +115,7 @@
                 </div> -->
                 <div class="col-sm-6">
                     <div class="center-kicker">
-                        <input (change)="onChangeKicker($event.target.checked)" type="checkbox" id="kicker">
+                        <input (change)="onChangeKicker($event.target.checked)" type="checkbox" id="kicker" [checked]="projectProfile.project.projectProperties.kicker" [disabled]="!!viewMode">
                         <label for="kicker">
                             <svg class="icon-checkbox-active">
                                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
@@ -154,7 +182,7 @@
                 </label>
             </div>
         </div> -->
-        <div class="row actions text-right">
+        <div class="row actions text-right" *ngIf="!viewMode">
             <div class="col">
                 <button (click)="cancel()" data-dismiss="modal" class="button-ghost mb-2">{{ t.pt('views.common.cancel') }}</button>
                 <button [disabled]="postingTheOrder" (click)="confirm()" data-dismiss="modal" class="button bright-green">{{ postingTheOrder ? t.pt('views.project.profile.saving'): t.pt('views.common.confirm') }}</button>

@@ -23,6 +23,7 @@ export class ProjectProfilesComponent {
     private loading = true;
     private deletingProjectProfile: boolean = false;
     private deleteProjectProfileId;
+    private projectProfile;
 
     constructor(private ppService: ProjectProfileApi, private sanitizer: DomSanitizer, private t: TranslationService, private CustomerService: CustomerService, private modalService: ModalService) {
         this.CustomerService.customerSubject.subscribe((customer) => {
@@ -88,7 +89,10 @@ export class ProjectProfilesComponent {
         this.rows = profiles.map((profile) => {
             const projectProperties = profile.project.projectProperties;
             return [
-                { inner: profile.profileName },
+                { inner: profile.profileName, class: "action-button", click: (item) => {
+                    this.projectProfile = profile;
+                    this.openModal('pp-view');
+                }},
                 { inner: projectProperties.element ? profile.project.projectProperties.element.elementCode : "--" },
                 { inner: projectProperties.timePerLoad ? profile.project.projectProperties.timePerLoad.timePerLoadDesc : "--" },
                 { inner: projectProperties.loadSize ? profile.project.projectProperties.loadSize.loadSizeDesc : "--" },
@@ -96,7 +100,7 @@ export class ProjectProfilesComponent {
                 {
                     inner: "DELETE", class: "action-button", click: (item) => {
                         this.deleteProjectProfileId = profile.profileId;
-                        this.openModal('pp-delete')
+                        this.openModal('pp-delete');
                     }
                 },
             ]

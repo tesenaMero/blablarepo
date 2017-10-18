@@ -26,6 +26,10 @@
         <project-profile-creator *ngIf="createProfileOpened" (confirmed)="projectProfileCreated()" (canceled)="closeModal('pp-creator')"></project-profile-creator>
     </modal>
 
+    <modal id="pp-view">
+        <project-profile-creator *ngIf="projectProfile" [projectProfile]="projectProfile" viewMode="true" (canceled)="closeModal('pp-view')"></project-profile-creator>
+    </modal>
+    
     <modal id="pp-delete">
         <div (click)="closeModal('pp-delete')" data-dismiss="modal" class="close">
             <svg class="icon-close-black">
