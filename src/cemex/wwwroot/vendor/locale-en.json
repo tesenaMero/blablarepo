@@ -904,6 +904,7 @@
 	"views.details.load_size": "Load Size",
 	"views.details.spacing": "Spacing",
 	"views.details.addition_serv": "Additional services",
+	"views.details.shipping_source": "Shipping Source",
 	"views.table.order_no": "Order No",
 	"views.table.submitted": "Submitted",
 	"views.table.submitted_by": "Submitted by",
