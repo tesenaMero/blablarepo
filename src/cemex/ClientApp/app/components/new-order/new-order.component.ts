@@ -21,9 +21,17 @@ export class NewOrderComponent implements OnInit, OnDestroy {
     ) {
         this.rebuildOrder = false;
         this.sub = this.customerService.customerSubject.subscribe((customer) => {
-            if (customer && customer != this.currentCustomer) {
-                this.currentCustomer = customer;
-                this.rebuild();
+            if (customer) {
+                if (!this.currentCustomer) {
+                    this.currentCustomer = customer;
+                    this.rebuild();
+                }
+                else { // Validate if is the same legal entity
+                    if (customer.legalEntityTypeCode && this.currentCustomer.legalEntityTypeCode != this.currentCustomer.legalEntityTypeCode) {           
+                        this.currentCustomer = customer;
+                        this.rebuild();
+                    }
+                }
             }
         });
     }
