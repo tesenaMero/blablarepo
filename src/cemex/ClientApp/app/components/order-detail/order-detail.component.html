@@ -183,6 +183,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-3 col-xs-6" *ngIf="itemData.shippingSource?.shippingSourceDesc">
+                                    <div class="group">
+                                        <div class="title">
+                                            Shipping Source
+                                        </div>
+                                        <div class="value">
+                                            {{ itemData.shippingSource?.shippingSourceDesc }}
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-md-3 col-xs-6" *ngIf="!UTILS.isProductReadyMix(itemData) && itemData.orderItemProfile?.transportMethod">
                                     <div class="group">
                                         <div class="title">
@@ -258,8 +268,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-8" *ngIf="itemData?.orderItemProfile?.additionalServices">
+                            <div class="row" *ngIf="itemData?.orderItemProfile?.additionalServices">
+                                <div class="col-sm-12">
                                     <div class="group">
                                         <div class="title">
                                             {{ t.pt('views.details.addition_serv') }}
