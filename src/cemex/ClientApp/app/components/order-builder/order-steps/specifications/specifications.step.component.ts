@@ -708,79 +708,81 @@ export class SpecificationsStepComponent implements StepEventsListener {
             return product.quantity = 0;
         }
 
+        product.quantity = newValue;
+
         // If contract selected and should not be
-        if (product.contract && !product.shouldVerifyQuantity()) {
-            product.quantity = newValue;
-            return;
-        }
+        // if (product.contract && !product.shouldVerifyQuantity()) {
+        //     product.quantity = newValue;
+        //     return;
+        // }
         
         //inicialize
-        product.setContractBalanceValidation(true);
-        product.setQuantityValidation(true);
+        // product.setContractBalanceValidation(true);
+        // product.setQuantityValidation(true);
 
-        let contractBalance = product.getContractBalance();
-        let maxCapacitySalesArea = product.maximumCapacity;
-        let conversion = product.convertToTons(newValue);
+        // let contractBalance = product.getContractBalance();
+        // let maxCapacitySalesArea = product.maximumCapacity;
+        // let conversion = product.convertToTons(newValue);
 
-        //---------------------------------------------------------- CONVERSION NEEDS TO BE FINISHED than remove this condition
-        if (conversion === undefined) {
-            return product.quantity = newValue;
-            //conversion = newValue;
-        }
+        // //---------------------------------------------------------- CONVERSION NEEDS TO BE FINISHED than remove this condition
+        // if (conversion === undefined) {
+        //     return product.quantity = newValue;
+        //     //conversion = newValue;
+        // }
 
-        //country dependent - no US quantity validation  
+        // //country dependent - no US quantity validation  
 
-        if (this.isMXCustomer()) {
-            //contract remaining amount validation
-            if (contractBalance) {
-                if (conversion > contractBalance) {
-                    product.setContractBalanceValidation(false);
-                    this.dashboard.alertTranslateError('views.specifications.contract_remaining_amount_overflow', 3000);
-                    return product.quantity = newValue;
-                }
-            }
-            //delivery mode only
-            if (Validations.isDelivery()) {
-                //only cement
-                let isCementBag = Validations.isProductCementBag(product);
-                let isCementBulk = Validations.isProductCementBulk(product);
-                if ((isCementBulk || isCementBag)) {
-                    // jobsite max capacity area
-                    if (conversion <= maxCapacitySalesArea) {
-                        product.setQuantityValidation(true);
-                        return product.quantity = newValue;
-                    }
-                    // error on capacity overflow
-                    else {
-                        this.dashboard.alertTranslateError('views.specifications.maximum_capacity_reached', 3000);
-                        product.setQuantityValidation(false);
-                        return product.quantity = newValue;
-                    }
-                }
-                // No ready mix, multiproducts, aggregates
-                else {
-                    product.setQuantityValidation(true);
-                    return product.quantity = newValue;
-                }
-            }
-            // No pickup validation
-            else {
-                product.setQuantityValidation(true);
-                return product.quantity = newValue;
-            }
-        }
-        // No US validation
-        else {
-            if (contractBalance) {
-                if (conversion > contractBalance) {
-                    product.setContractBalanceValidation(false);
-                    this.dashboard.alertTranslateError('views.specifications.contract_remaining_amount_overflow', 3000);
-                    return product.quantity = newValue;
-                }
-            }
+        // if (this.isMXCustomer()) {
+        //     //contract remaining amount validation
+        //     if (contractBalance) {
+        //         if (conversion > contractBalance) {
+        //             product.setContractBalanceValidation(false);
+        //             this.dashboard.alertTranslateError('views.specifications.contract_remaining_amount_overflow', 3000);
+        //             return product.quantity = newValue;
+        //         }
+        //     }
+        //     //delivery mode only
+        //     if (Validations.isDelivery()) {
+        //         //only cement
+        //         let isCementBag = Validations.isProductCementBag(product);
+        //         let isCementBulk = Validations.isProductCementBulk(product);
+        //         if ((isCementBulk || isCementBag)) {
+        //             // jobsite max capacity area
+        //             if (conversion <= maxCapacitySalesArea) {
+        //                 product.setQuantityValidation(true);
+        //                 return product.quantity = newValue;
+        //             }
+        //             // error on capacity overflow
+        //             else {
+        //                 this.dashboard.alertTranslateError('views.specifications.maximum_capacity_reached', 3000);
+        //                 product.setQuantityValidation(false);
+        //                 return product.quantity = newValue;
+        //             }
+        //         }
+        //         // No ready mix, multiproducts, aggregates
+        //         else {
+        //             product.setQuantityValidation(true);
+        //             return product.quantity = newValue;
+        //         }
+        //     }
+        //     // No pickup validation
+        //     else {
+        //         product.setQuantityValidation(true);
+        //         return product.quantity = newValue;
+        //     }
+        // }
+        // // No US validation
+        // else {
+        //     if (contractBalance) {
+        //         if (conversion > contractBalance) {
+        //             product.setContractBalanceValidation(false);
+        //             this.dashboard.alertTranslateError('views.specifications.contract_remaining_amount_overflow', 3000);
+        //             return product.quantity = newValue;
+        //         }
+        //     }
 
-            return product.quantity = newValue;
-        }
+        //     return product.quantity = newValue;
+        // }
 
     }
 
