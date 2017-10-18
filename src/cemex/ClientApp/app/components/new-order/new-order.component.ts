@@ -14,6 +14,10 @@ export class NewOrderComponent implements OnInit, OnDestroy {
     private sub: Subscription;
     private currentCustomer: any;
 
+    // Lang 
+    private subLang: Subscription;
+    private language: any
+    
     constructor(
         private t: TranslationService,
         private customerService: CustomerService,
@@ -21,8 +25,25 @@ export class NewOrderComponent implements OnInit, OnDestroy {
     ) {
         this.rebuildOrder = false;
         this.sub = this.customerService.customerSubject.subscribe((customer) => {
-            if (customer && customer != this.currentCustomer) {
-                this.currentCustomer = customer;
+            if (customer) {
+                if (!this.currentCustomer) {
+                    this.currentCustomer = customer;
+                    this.rebuild();
+                }
+                else { // Validate if is the same legal entity
+                    if (customer.legalEntityTypeCode && this.currentCustomer.legalEntityTypeCode != this.currentCustomer.legalEntityTypeCode) {           
+                        this.currentCustomer = customer;
+                        this.rebuild();
+                    }
+                }
+            }
+        });
+        
+        // Listen to language change
+        this.subLang = this.t.localeData.subscribe(response => {
+            // If its different from the already selected language
+            if (this.language != response.lang) {
+                this.language = response.lang;
                 this.rebuild();
             }
         });
