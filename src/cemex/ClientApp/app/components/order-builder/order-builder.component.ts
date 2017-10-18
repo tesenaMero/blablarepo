@@ -233,7 +233,7 @@ export class OrderBuilderComponent implements OnDestroy {
             credentials: {
                 token: sessionStorage.getItem('access_token'),
                 jwt: sessionStorage.getItem('jwt'),
-                refresh_token: sessionStorage.getItem('refresh_token')
+                refresh_token: JSON.parse(sessionStorage.getItem('userInfo')).oauth2.refresh_token
             },
             data: data
         }
