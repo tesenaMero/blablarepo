@@ -451,7 +451,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 }
                 else {
                     // No payments term
-                    this.dashboard.alertError(this.t.pt('views.specifications.no_payment_terms'), 0);
+                    this.dashboard.alertTranslateError('views.specifications.no_payment_terms', 0);
                 }
             }
             else {
@@ -467,7 +467,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     // No payments
                     item.payment = undefined;
                     item.disableds.payments = true;
-                    this.dashboard.alertError(this.t.pt('views.specifications.no_payment_terms'), 0);
+                    this.dashboard.alertTranslateError('views.specifications.no_payment_terms', 0);
                 }
             }
 
@@ -704,7 +704,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         // general validation for negative values
         if (newValue <= 0 || isNaN(newValue)) {
-            this.dashboard.alertError(this.t.pt('views.specifications.negative_amount'), 3000);
+            this.dashboard.alertTranslateError('views.specifications.negative_amount', 3000);
             return product.quantity = 0;
         }
         
@@ -734,7 +734,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             if (contractBalance) {
                 if (conversion > contractBalance) {
                     product.setContractBalanceValidation(false);
-                    this.dashboard.alertError(this.t.pt('views.specifications.contract_remaining_amount_overflow'), 3000);
+                    this.dashboard.alertTranslateError('views.specifications.contract_remaining_amount_overflow', 3000);
                     return product.quantity = newValue;
                 }
             }
@@ -751,7 +751,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     }
                     // error on capacity overflow
                     else {
-                        this.dashboard.alertError(this.t.pt('views.specifications.maximum_capacity_reached'), 3000);
+                        this.dashboard.alertTranslateError('views.specifications.maximum_capacity_reached', 3000);
                         product.setQuantityValidation(false);
                         return product.quantity = newValue;
                     }
@@ -773,7 +773,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             if (contractBalance) {
                 if (conversion > contractBalance) {
                     product.setContractBalanceValidation(false);
-                    this.dashboard.alertError(this.t.pt('views.specifications.contract_remaining_amount_overflow'), 3000);
+                    this.dashboard.alertTranslateError('views.specifications.contract_remaining_amount_overflow', 3000);
                     return product.quantity = newValue;
                 }
             }

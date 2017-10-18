@@ -69,15 +69,14 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         // Patch optimal sources then recovers prices
         this.onCompleted.emit(false);
         if (this.shouldCallOptimalSource()) {
-            this.dashboard.alertInfo(this.t.pt('views.checkout.recovering_prices'), 0);
+            this.dashboard.alertTranslateInfo('views.checkout.recovering_prices', 0);
             this.optimalSourceSub = this.drafts.optimalSourcesPatch(this.manager.draftId).flatMap((x) => {
                 this.manager.isPatched = true;
                 return this.drafts.prices(this.manager.draftId);
             }).subscribe((response) => {
                 this.handlePrices(response);
             }, (error) => {
-                this.dashboard.alertError(this.t.pt('views.common.something_was_wrong'));
-                console.error(this.t.pt('views.checkout.prices_error'), error);
+                this.dashboard.alertTranslateError('views.common.something_was_wrong');
             });
         }
         else if (this.shouldCallPrices()) {
@@ -118,7 +117,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
 
         if (this.getGrandTotal() != 0) {
             this.onCompleted.emit(this.draftOrder);
-            this.dashboard.alertSuccess(this.t.pt('views.checkout.prices_recovered'));
+            this.dashboard.alertTranslateSuccess('views.checkout.prices_recovered');
         }
         else {
             let messages = this.draftOrder.messages.split('|', 2);
