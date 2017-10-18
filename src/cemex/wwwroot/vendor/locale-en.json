@@ -987,6 +987,7 @@
 	"views.project.profile.load_size": "Load Size",
 	"views.project.profile.saving": "Saving...",
 	"views.project.profile.confirm": "Confirm",
+	"views.project.profile.deleteSure": "Are you sure you want to delete?",
 
 	"views.cross.placed": "Order placed successfully, requesting order code...",
 

@@ -991,6 +991,7 @@
 	"views.project.profile.load_size": "Tamaño de carga",
 	"views.project.profile.saving": "Guardando",	 
 	"views.project.profile.confirm": "Confirmado",
+	"views.project.profile.deleteSure": "¿Estas seguro que quieres borrarlo?",
 
 	"views.cross.placed": "Pedido realizado satisfactorimente, solicitando código...",	
 
