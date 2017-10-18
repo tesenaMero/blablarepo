@@ -69,3 +69,72 @@ $link-blue: #3FA9F5;
     height: 40px;
     margin-bottom: 15px;
 }
+
+.close {
+    position: absolute;
+    top: 30px;
+    right: 32px;
+    cursor: pointer;
+    @include media-breakpoint-down(sm) {
+        position: absolute;
+        top: 17px;
+        right: 17px;
+        cursor: pointer;
+    }
+}
+
+.container-layout {
+    padding: 50px 58px;
+    padding-top: 50px;
+    padding-bottom: 30px;
+    padding-left: 58px;
+    padding-right: 58px;
+    @include media-breakpoint-down(sm) {
+        padding-top: 60px;
+        padding-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
+
+.center-text {
+    text-align: center;
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 0;
+    @include media-breakpoint-down(sm) {
+        position: absolute;
+        padding: 0;
+        padding-right: 58px;
+        width: 100%;
+        height: 75%;
+    }
+}
+
+.cmx-icon-trash {
+    color:#EE3D42;
+    font-size: 126px;
+}
+
+.success-text {
+    margin-top: 26px;
+    font-size: 26px;
+}
+
+.actions {
+    margin-top: 73px;
+    button:not(:first-child) {
+        margin-left: 8px;
+    }
+    @include media-breakpoint-down(sm) {
+        margin-top: 26px;
+    }
+}
+
+.button.true-red {
+    border: 1px solid #EE3D42;
+}

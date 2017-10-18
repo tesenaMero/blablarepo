@@ -21,6 +21,8 @@ export class ProjectProfilesComponent {
     createProfileOpened = false
 
     private loading = true;
+    private deletingProjectProfile: boolean = false;
+    private deleteProjectProfileId;
 
     constructor(private ppService: ProjectProfileApi, private sanitizer: DomSanitizer, private t: TranslationService, private CustomerService: CustomerService, private modalService: ModalService) {
         this.CustomerService.customerSubject.subscribe((customer) => {
@@ -59,6 +61,15 @@ export class ProjectProfilesComponent {
         this.fetchProjectProfiles();
     }
 
+    deleteProjectProfile() {
+        this.deletingProjectProfile = true;
+        this.ppService.delete(this.deleteProjectProfileId).first().subscribe(res => {
+            this.deletingProjectProfile = false;
+            this.closeModal('pp-delete');
+            this.fetchProjectProfiles();
+        });
+    }
+
     fetchProjectProfiles(customer = this.CustomerService.currentCustomer()) {
         this.loading = true;
         this.rows = [];
@@ -84,7 +95,8 @@ export class ProjectProfilesComponent {
                 { inner: projectProperties.kicker, class: "capitalize" },
                 {
                     inner: "DELETE", class: "action-button", click: (item) => {
-                        this.ppService.delete(profile.profileId).subscribe(res => res.ok && this.fetchProjectProfiles())
+                        this.deleteProjectProfileId = profile.profileId;
+                        this.openModal('pp-delete')
                     }
                 },
             ]
