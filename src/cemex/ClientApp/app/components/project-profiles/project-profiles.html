@@ -26,6 +26,30 @@
         <project-profile-creator *ngIf="createProfileOpened" (confirmed)="projectProfileCreated()" (canceled)="closeModal('pp-creator')"></project-profile-creator>
     </modal>
 
+    <modal id="pp-delete">
+        <div (click)="closeModal('pp-delete')" data-dismiss="modal" class="close">
+            <svg class="icon-close-black">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-close"></use>
+            </svg>
+        </div>
+        <div class="container-layout">
+            <div class="center-text center-content">
+                <div class="success-group">
+                    <span class="cmx-icon-trash"></span>
+                    <div class="success-text">
+                        {{ t.pt('views.project.profile.deleteSure') }}
+                    </div>
+                </div>
+            </div>
+            <div class="row actions text-right">
+                <div class="col">
+                    <button (click)="closeModal('pp-delete')" data-dismiss="modal" class="button-ghost mb-2">{{ t.pt('views.common.cancel') }}</button>
+                    <button [disabled]="deletingProjectProfile" (click)="deleteProjectProfile()" class="button true-red">{{ deletingProjectProfile ? t.pt('views.common.loading'): t.pt('views.common.confirm') }}</button>
+                </div>
+            </div>
+        </div>
+    </modal>
+
     <dls-table [rows]="rows" [columns]="columns"></dls-table>
 
     <div *ngIf="loading">
