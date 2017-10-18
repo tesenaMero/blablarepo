@@ -907,6 +907,7 @@
 	"views.details.load_size": "Tamaño de carga",
 	"views.details.spacing": "Frecuencia",
 	"views.details.addition_serv": "Servicios adicionales",
+	"views.details.shipping_source": "Planta",
 	"views.table.order_no": "No. pedido",
 	"views.table.submitted": "Enviado",
 	"views.table.submitted_by": "Enviado por",
