@@ -7,6 +7,8 @@ import { OrdersApi } from '../../../shared/services/api';
     templateUrl: './order-detail-comments.component.html',
     styleUrls: ['./order-detail-comments.component.scss']
 })
+
+// TODO Support pagination
 export class OrderDetailCommentsComponent {
     comments: any = [];
     isLoading: boolean = false;
@@ -22,16 +24,16 @@ export class OrderDetailCommentsComponent {
         this.getComments(orderItemId);
     }
 
-    constructor(private OrdersApi: OrdersApi) {
-
-    }
+    constructor(private OrdersApi: OrdersApi) {}
 
     getComments(id) {
         this.isLoading = true;
-        this.OrdersApi.getComments(id, 10, 1)
+        this.OrdersApi.getComments(id, 100, 1)
         .map(response => response.json())
         .subscribe(response => {
-            const comments = response ? response.comments : [];
+            const comments = response ? 
+                response.comments.sort((a, b) => 
+                    new Date(a.createdDateTime).getTime() - new Date(b.createdDateTime).getTime()) : [];
             this.comments = comments;
             this.isLoading = false;
         }, err => {
