@@ -118,6 +118,9 @@ export class Api implements OnDestroy {
     }
 
     ngOnDestroy() {
-        this.sub.unsubscribe();
+        // Why?
+        if (this.sub) {
+            this.sub.unsubscribe();
+        }
     }
 }
