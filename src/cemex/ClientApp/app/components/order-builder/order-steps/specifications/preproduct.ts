@@ -22,7 +22,6 @@ export class PreProduct {
     unit: any;
     payment: any;
     contract: any;
-    maxCapacity: any;
     product: any;
     productBaseUnit: any;
     plant: any;
@@ -63,9 +62,9 @@ export class PreProduct {
     validations = {
         plant: { valid: false, mandatory: true, text: 'views.specifications.verify_plant' },
         contract: { valid: false, mandatory: true, text: 'views.specifications.verify_contract' },
-        payment: { valid: false, mandatory: true, text: 'views.specifications.verify_payment' },
+        payment: { valid: false, mandatory: false, text: 'views.specifications.verify_payment' },
         product: { valid: false, mandatory: true, text: 'views.specifications.verify_products_selected' },
-        maxCapacity: { valid: true, mandatory: true, text: 'views.specifications.maximum_capacity_reached' },
+        maxCapacity: { valid: true, mandatory: false, text: 'views.specifications.maximum_capacity_reached' },
         contractBalance: { valid: true, mandatory: true, text: 'views.specifications.contract_remaining_amount_overflow' },
     }
 
@@ -524,13 +523,24 @@ export class PreProduct {
     }
 
     // Convert to tons quantity selected
-    convertToTons(qty): any {
+    convertToTons(qty?): any {
+        if (qty === undefined) { qty = this.quantity; }
         if (this.unit === undefined) {
             return qty;
         }
 
         let factor = this.unit.numerator / this.unit.denominator;
         let convertion = qty * factor;
+        return convertion || undefined;
+    }
+
+    tons(): any {
+        if (this.unit === undefined) {
+            return this.quantity;
+        }
+
+        let factor = this.unit.numerator / this.unit.denominator;
+        let convertion = this.quantity * factor;
         return convertion || undefined;
     }
 
@@ -609,10 +619,20 @@ export class PreProduct {
     }
 
     shouldVerifyQuantity() {
-        return this.contract && this.contract.salesDocument && this.contract.salesDocument.hasBalance
+        if (this.contract === undefined) { return true; }
+        else { return this.contract && this.contract.salesDocument && this.contract.salesDocument.hasBalance; }
     }
 
     isValid(): boolean {
+        // Validate contract balance
+        if (this.shouldVerifyQuantity()) {
+            this.validations.contractBalance.mandatory = true;
+            this.validations.contractBalance.valid = this.isQtyValid();
+        }
+        else {
+            this.validations.contractBalance.mandatory = false;
+        }
+
         let valid = true;
         for (let key in this.validations) {
             if (this.validations[key].mandatory) {
@@ -624,19 +644,109 @@ export class PreProduct {
             }
         }
 
+        // Validate payment term
+        if (!this.payment) {
+            this.dashboard.alertTranslateError('views.specifications.verify_payment');
+            return false;
+        }
+
         // Validate unit
         if (!this.unit) {
             this.dashboard.alertTranslateError('views.specifications.verify_unit');
             return false;
         }
 
+        return valid
+    }
+
+    isQtyValid(): boolean {
         // Validate quantity
+        if (this.isQtyZeroOrNan()) { return false; }
+
+        if (Validations.isMexicoCustomer()) {
+            return this.isValidQtyMX();
+        }
+        else {
+            return this.isValidQtyUSA();
+        }
+    }
+
+    private isValidQtyMX(): boolean {
+        // No contract case
+        if (!this.contract) { return this.isValidQtyNoContractCase(); }
+
+        // Has contract case
+        else { return this.isValidQtyContractCase(); }
+    }
+
+    private isValidQtyUSA(): boolean {
+        const balance = this.getContractBalance();
+        if (balance) {
+            if (this.tons() > balance) {
+                this.dashboard.alertTranslateError('views.specifications.contract_remaining_amount_overflow', 3000);
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        else {
+            return true;
+        }
+    }
+
+    private isQtyZeroOrNan() {
         const q = Number(this.quantity)
         if (!q || q <= 0) {
             this.dashboard.alertError("Verify quantity");
             return false;
         }
+    }
 
-        return valid
+    private isValidQtyNoContractCase(): boolean {
+        if (Validations.isDelivery()) {
+            return this.isValidNoContractDeliveryCase();
+        }
+        else {
+            return true;
+        }
+    }
+
+    private isValidQtyContractCase(): boolean {
+        const balance = this.getContractBalance();
+        if (balance) {
+            if (this.tons() <= balance) {
+                return this.isValidQtyNoContractCase();
+            }
+            else {
+                this.dashboard.alertError("Quantity requested is greater than quantity remaining in the contract");
+                return false;
+            }
+        }
+        else {
+            this.isValidQtyNoContractCase();
+        }
+    }
+
+    private isValidNoContractDeliveryCase(): boolean {
+        if (Validations.isCementBag() || Validations.isBulkCement()) {
+            // No maximum capacity defined (API error probably)
+            if (this.maximumCapacity === undefined) {
+                //this.dashboard.alertError("There is no maximum capacity defined for this jobsite");
+                return true;
+            }
+
+            // This quanity in tons <= jobsite max capacity
+            if (this.tons() <= this.maximumCapacity) {
+                return true;
+            }
+            else {
+                this.dashboard.alertError("Quanitity requested is greater than Jobsite's Max Capacity");
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
     }
 }

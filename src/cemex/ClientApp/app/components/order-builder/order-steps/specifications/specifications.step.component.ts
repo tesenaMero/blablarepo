@@ -266,7 +266,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 }
                 else {
                     this.preProducts.forEach((item: PreProduct) => {
-                        // Enable product selection anyways
+                        item.product = undefined;
                         item.disableds.products = true;
                         item.loadings.products = false;
                         item.loadings.contracts = false;
@@ -707,79 +707,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
             this.dashboard.alertTranslateError('views.specifications.negative_amount', 3000);
             return product.quantity = 0;
         }
-        
-        //inicialize
-        product.setContractBalanceValidation(true);
-        product.setQuantityValidation(true);
-        let contractBalance = product.getContractBalance();
 
-        // If contract selected and should not be
-        if (product.contract && !product.shouldVerifyQuantity()) {
-            product.quantity = newValue;
-            return;
-        }
-
-        let maxCapacitySalesArea = product.maximumCapacity;
-        const isDelivery = Validations.isDelivery();
-        let conversion = product.convertToTons(newValue);
-        //---------------------------------------------------------- CONVERSION NEEDS TO BE FINISHED than remove this condition
-        if (conversion === undefined) {
-            conversion = newValue;
-        }
-
-        //country dependent - no US quantity validation  
-
-        if (this.isMXCustomer()) {
-            //contract remaining amount validation
-            if (contractBalance) {
-                if (conversion > contractBalance) {
-                    product.setContractBalanceValidation(false);
-                    this.dashboard.alertTranslateError('views.specifications.contract_remaining_amount_overflow', 3000);
-                    return product.quantity = newValue;
-                }
-            }
-            //delivery mode only
-            if (isDelivery) {
-                //only cement
-                let isCementBag = Validations.isProductCementBag(product);
-                let isCementBulk = Validations.isProductCementBulk(product);
-                if ((isCementBulk || isCementBag)) {
-                    // jobsite max capacity area
-                    if (conversion <= maxCapacitySalesArea) {
-                        product.setQuantityValidation(true);
-                        return product.quantity = newValue;
-                    }
-                    // error on capacity overflow
-                    else {
-                        this.dashboard.alertTranslateError('views.specifications.maximum_capacity_reached', 3000);
-                        product.setQuantityValidation(false);
-                        return product.quantity = newValue;
-                    }
-                }
-                // No ready mix, multiproducts, aggregates
-                else {
-                    product.setQuantityValidation(true);
-                    return product.quantity = newValue;
-                }
-            }
-            // No pickup validation
-            else {
-                product.setQuantityValidation(true);
-                return product.quantity = newValue;
-            }
-        }
-        // No US validation
-        else {
-            if (contractBalance) {
-                if (conversion > contractBalance) {
-                    product.setContractBalanceValidation(false);
-                    this.dashboard.alertTranslateError('views.specifications.contract_remaining_amount_overflow', 3000);
-                    return product.quantity = newValue;
-                }
-            }
-
-            return product.quantity = newValue;
-        }
+        product.quantity = newValue;
 
     }
 
