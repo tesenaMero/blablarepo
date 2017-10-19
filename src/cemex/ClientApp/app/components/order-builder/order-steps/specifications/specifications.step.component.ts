@@ -605,14 +605,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             return true;
         }
     }
-    // changeAditionalService(preProduct: PreProduct, target, index) {
-    //     if (target.checked) {
-    //         preProduct.additionalServices.push(this.readyMixAdditionalServices[index]);
-    //     } else {
-    //         const idx = this.additionalServices.indexOf(this.readyMixAdditionalServices[index]);
-    //         preProduct.additionalServices.splice(idx, 1);
-    //     }
-    // }
+
     isAdditionalServiceSaved(preProduct: PreProduct, serviceCode: string) {
         const foundService = preProduct.additionalServices.find(service => {
         return service.entryCode === serviceCode
