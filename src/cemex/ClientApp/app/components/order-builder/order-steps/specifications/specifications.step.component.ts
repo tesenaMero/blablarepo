@@ -510,7 +510,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
     }
 
-    dateChanged(preProduct, index, event) {
+    dateChanged(index, event) {
         if (Validations.isReadyMix() && Validations.isUSACustomer() && this.preProducts.length > 1) {
             this.preProducts.forEach((product: PreProduct) => {
                 product.date = event;
@@ -520,7 +520,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
     }
 
-    timeChanged(preProduct, index, event) {
+    timeChanged(index, event) {
         if (Validations.isReadyMix() && Validations.isUSACustomer() && this.preProducts.length > 1) {
             this.preProducts.forEach((product: PreProduct) => {
                 product.time = event;
