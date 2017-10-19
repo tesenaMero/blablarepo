@@ -716,7 +716,7 @@ export class PreProduct {
         const balance = this.getContractBalance();
         if (balance) {
             if (this.tons() <= balance) {
-                this.isValidQtyNoContractCase();
+                return this.isValidQtyNoContractCase();
             }
             else {
                 this.dashboard.alertError("Quantity requested is greater than quantity remaining in the contract");
