@@ -656,6 +656,9 @@ export class PreProduct {
             return false;
         }
 
+        // TODO
+        this.maximumCapacity = this.getMaximumCapacity();
+        
         return valid
     }
 
@@ -731,13 +734,13 @@ export class PreProduct {
     private isValidNoContractDeliveryCase(): boolean {
         if (Validations.isCementBag() || Validations.isBulkCement()) {
             // No maximum capacity defined (API error probably)
-            if (this.maximumCapacity === undefined) {
+            if (this.getMaximumCapacity() === undefined) {
                 //this.dashboard.alertError("There is no maximum capacity defined for this jobsite");
                 return true;
             }
 
             // This quanity in tons <= jobsite max capacity
-            if (this.tons() <= this.maximumCapacity) {
+            if (this.tons() <= this.getMaximumCapacity()) {
                 return true;
             }
             else {
