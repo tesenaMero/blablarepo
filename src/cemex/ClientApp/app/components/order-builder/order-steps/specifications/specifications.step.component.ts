@@ -734,7 +734,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }, 400);
     }
 
-    // TODO: Refactor this method
     changeQty(product: PreProduct, newValue) {
         this.dashboard.closeAlert();
         newValue = (Number(String(newValue).replace(/,/g, "")))

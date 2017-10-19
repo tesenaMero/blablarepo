@@ -38,8 +38,11 @@
                         <div class="title">
                             {{ t.pt('views.checkout.request_date') }}
                         </div>
-                        <div class="desc">
+                        <div class="desc" *ngIf="UTIL.isMexicoCustomer()">
                             {{ item?.date | date:'dd/MM/yyyy' }}
+                        </div>
+                        <div class="desc" *ngIf="UTIL.isUSACustomer()">
+                            {{ item?.date | date:'shortDate' }}
                         </div>
                     </div>
                 </div>
@@ -176,8 +179,11 @@
                                 <div class="title">
                                     {{ t.pt('views.checkout.request_date') }}
                                 </div>
-                                <div class="desc">
+                                <div class="desc" *ngIf="UTIL.isMexicoCustomer()">
                                     {{ item?.date | date:'dd/MM/yyyy' }}
+                                </div>
+                                <div class="desc" *ngIf="UTIL.isUSACustomer()">
+                                    {{ item?.date | date:'shortDate' }}
                                 </div>
                             </div>
                         </div>
@@ -346,8 +352,11 @@
                                 <div class="title">
                                     {{ t.pt('views.checkout.request_date') }}
                                 </div>
-                                <div class="desc">
+                                <div class="desc" *ngIf="UTIL.isMexicoCustomer()">
                                     {{ item?.date | date:'dd/MM/yyyy' }}
+                                </div>
+                                <div class="desc" *ngIf="UTIL.isUSACustomer()">
+                                    {{ item?.date | date:'shortDate' }}
                                 </div>
                             </div>
                         </div>
@@ -426,7 +435,7 @@
                                 </div>
                                 <div class="desc" *ngFor="let service of item.additionalServices">
                                     <span>{{ service.entryDesc }}</span>
-                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-2 mt-3">
@@ -507,8 +516,11 @@
                                 <div class="title">
                                     {{ t.pt('views.checkout.request_date') }}
                                 </div>
-                                <div class="desc">
+                                <div class="desc" *ngIf="UTIL.isMexicoCustomer()">
                                     {{ item?.date | date:'dd/MM/yyyy' }}
+                                </div>
+                                <div class="desc" *ngIf="UTIL.isUSACustomer()">
+                                    {{ item?.date | date:'shortDate' }}
                                 </div>
                             </div>
                         </div>
@@ -585,9 +597,9 @@
                                 <div class="desc">
                                     <span *ngIf="item?.maneuvering">Maneuvering</span>
                                 </div>
-                               <div class="desc" *ngFor="let service of item.additionalServices">
+                                <div class="desc" *ngFor="let service of item.additionalServices">
                                     <span>{{ service.entryDesc }}</span>
-                               </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-2 mt-3">

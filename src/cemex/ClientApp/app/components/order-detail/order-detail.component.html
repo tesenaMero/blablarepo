@@ -183,7 +183,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-xs-6" *ngIf="itemData.shippingSource?.shippingSourceDesc">
+                                <div class="col-md-3 col-xs-6" *ngIf="shouldShowShippingSource() && itemData.shippingSource?.shippingSourceDesc">
                                     <div class="group">
                                         <div class="title">
                                             {{ t.pt('views.details.shipping_source') }}

@@ -89,6 +89,7 @@ import {
     PaymentTermsApi,
     PingSalesOrderApi,
     SalesDocumentApi,
+    LegalEntityApi
 } from './shared/services/api';
 
 import { EncodeDecodeJsonObjService } from './shared/services/encodeDecodeJsonObj.service';
@@ -211,6 +212,7 @@ export const sharedConfig: NgModule = {
         SalesDocumentApi,
         SearchProductService,
         ModalService,
-        CountlyService
+        CountlyService,
+        LegalEntityApi
     ]
 };
