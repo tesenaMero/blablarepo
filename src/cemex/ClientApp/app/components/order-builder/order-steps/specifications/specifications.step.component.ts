@@ -213,7 +213,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.preProducts.forEach((item: PreProduct) => {
             item.defineValidations();
             item.loadings.products = true;
-            item.disableds.products = true;
+            item.disableds.products = true; 
         });
 
         const customer = this.customerService.currentCustomer();
@@ -586,18 +586,29 @@ export class SpecificationsStepComponent implements StepEventsListener {
         };
     }
 
-    changeAditionalService(preProduct: PreProduct, target, index) {
-        if (target.checked) {
-            preProduct.additionalServices.push(this.readyMixAdditionalServices[index]);
+    changeAditionalService(product: PreProduct, checked: boolean, i: number, serviceCode: string) {
+        const index = product.additionalServices.findIndex(x => x.entryCode===serviceCode);
+        if (checked) {
+            if (index === -1) {
+                product.additionalServices.push(this.readyMixAdditionalServices[i])
+            } 
         } else {
-            const idx = this.additionalServices.indexOf(this.readyMixAdditionalServices[index]);
-            preProduct.additionalServices.splice(idx, 1);
+            product.additionalServices.splice(index, 1);
+        }
+    }
+
+    isServiceSaved(product: PreProduct,serviceCode:string) {
+        const index = product.additionalServices.findIndex(x => x.entryCode===serviceCode);
+        if (index === -1) {
+            return false;
+        } else {
+            return true;
         }
     }
 
     isAdditionalServiceSaved(preProduct: PreProduct, serviceCode: string) {
         const foundService = preProduct.additionalServices.find(service => {
-            return service.entryCode === serviceCode
+        return service.entryCode === serviceCode
         });
         return !!foundService;
     }

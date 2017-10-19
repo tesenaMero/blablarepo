@@ -246,7 +246,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 mt-3">
+                        <div class="col-md-3 mt-3" *ngIf="item?.maneuvering">
                             <div class="group">
                                 <div class="title">
                                     {{ t.pt('views.checkout.aditional_services') }}
@@ -416,7 +416,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 mt-3">
+                        <div class="col-md-3 mt-4" *ngIf="item.additionalServices.length > 0 || item.maneuvering">
                             <div class="group">
                                 <div class="title">
                                     {{ t.pt('views.checkout.aditional_services') }}
@@ -424,6 +424,9 @@
                                 <div class="desc">
                                     <span *ngIf="item?.maneuvering">Maneuvering</span>
                                 </div>
+                                <div class="desc" *ngFor="let service of item.additionalServices">
+                                    <span>{{ service.entryDesc }}</span>
+                                    </div>
                             </div>
                         </div>
                         <div class="col-md-2 mt-3">
@@ -574,7 +577,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 mt-3" *ngIf="item?.maneuvering">
+                        <div class="col-md-3 mt-4" *ngIf="item.additionalServices.length > 0 || item?.maneuvering">
                             <div class="group">
                                 <div class="title">
                                     {{ t.pt('views.checkout.aditional_services') }}
@@ -582,6 +585,9 @@
                                 <div class="desc">
                                     <span *ngIf="item?.maneuvering">Maneuvering</span>
                                 </div>
+                               <div class="desc" *ngFor="let service of item.additionalServices">
+                                    <span>{{ service.entryDesc }}</span>
+                               </div>
                             </div>
                         </div>
                         <div class="col-md-2 mt-3">

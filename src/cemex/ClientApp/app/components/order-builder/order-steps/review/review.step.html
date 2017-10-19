@@ -144,13 +144,16 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-3" *ngIf="item.maneuvering">
+            <div class="col-sm-3" *ngIf="item.additionalServices.length > 0 || item.maneuvering"> 
                 <div class="group">
                     <div class="title">
                         {{ t.pt('views.review.aditional_services') }}
                     </div>
                     <div class="value">
                         <span *ngIf="item.maneuvering">{{ t.pt('views.review.maneuvering') }}</span>
+                    </div>
+                    <div class="value" *ngFor="let service of item.additionalServices">
+                        <span>{{ service.entryDesc }}</span>
                     </div>
                 </div>
             </div>
