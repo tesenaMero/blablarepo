@@ -16,15 +16,15 @@ export class OrderDetailLogsComponent {
         this.error = null;
         this.isLoading = true;
 
-        // this.OrdersApi.fetchLogs(orderItemId, 10, 1)
-        // .map(response => response.json())
-        // .subscribe(response => {
-        //     this.logs.next(response.logs);
-        //     this.isLoading = false;
-        // }, err => {
-        //     this.isLoading = false;
-        //     this.error = "Failed fetching logs";
-        // });
+        this.OrdersApi.fetchLogs(orderItemId, 100, 1)
+        .map(response => response.json())
+        .subscribe(response => {
+            this.logs.next(response.logs);
+            this.isLoading = false;
+        }, err => {
+            this.isLoading = false;
+            this.error = "Failed fetching logs";
+        });
     }
 
     constructor(private OrdersApi: OrdersApi) {
