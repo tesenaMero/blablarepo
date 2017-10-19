@@ -473,29 +473,27 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
             this.loadings.pods = false;
         });
 
-        if (!Validations.isCement()) {
-            // Fetch contacts
-            this.shipmentApi.contacts(this.location).subscribe((response => {
-                this.contacts = response.json().contacts;
-                this.contactsIndex = undefined;
-                if (this.contacts) {
-                    if (this.contacts.length > 0) {
-                        this.contacts.forEach((contact, index) => {
-                            contact.id = index;
-                            if (this.contact && this.contact.contactId === contact.contactId) {
-                                this.contactsIndex = index;
-                            }
-                        });
-                        if (this.contactsIndex) {
-                            this.contactChanged(this.contact);
-                        } else {
-                            this.contactChanged(undefined);
+        // Fetch contacts
+        this.shipmentApi.contacts(this.location).subscribe((response => {
+            this.contacts = response.json().contacts;
+            this.contactsIndex = undefined;
+            if (this.contacts) {
+                if (this.contacts.length > 0) {
+                    this.contacts.forEach((contact, index) => {
+                        contact.id = index;
+                        if (this.contact && this.contact.contactId === contact.contactId) {
+                            this.contactsIndex = index;
                         }
+                    });
+                    if (this.contactsIndex) {
+                        this.contactChanged(this.contact);
+                    } else {
+                        this.contactChanged(undefined);
                     }
-                    this.loadings.contacts = false;
                 }
-            }));
-        }
+                this.loadings.contacts = false;
+            }
+        }));
     }
 
     geoFromAddress(address) {

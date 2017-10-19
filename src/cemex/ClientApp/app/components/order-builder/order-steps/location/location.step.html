@@ -31,7 +31,7 @@
                         <span class="error-message ">{{ t.pt('views.location.purchase_order_error') }}</span>
                     </div>
                 </div>
-                <div class="row align-items-center mb-21px" *ngIf="!isCement" [ngClass]="{ error: validations.contactPerson.showError }">
+                <div class="row align-items-center mb-21px" [ngClass]="{ error: validations.contactPerson.showError }">
                     <div class="col-md-4 col-sm-12 select-label">
                         <label [ngClass]="{ required: validations.contactPerson.mandatory }" class="select-label">{{ t.pt('views.location.contact_person') }}</label>
                     </div>
