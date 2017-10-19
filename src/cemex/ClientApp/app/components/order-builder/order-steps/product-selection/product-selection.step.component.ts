@@ -109,10 +109,10 @@ export class ProductSelectionStepComponent implements StepEventsListener {
     }
 
     joinProductLines(a, b, newName) {
-        return {
-            productLineDesc: newName,
+        return { 
+            productLineDesc: newName, 
             productLineId: a.productLineId + "," + b.productLineId,
-            productLineCode: "002,003" // Verify this with ignacio
+            productLineCode: [a.productLineCode, b.productLineCode].join(','),
         }
     }
 
