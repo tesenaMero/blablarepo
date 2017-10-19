@@ -65,7 +65,7 @@ export class PreProduct {
         payment: { valid: false, mandatory: false, text: 'views.specifications.verify_payment' },
         product: { valid: false, mandatory: true, text: 'views.specifications.verify_products_selected' },
         maxCapacity: { valid: true, mandatory: false, text: 'views.specifications.maximum_capacity_reached' },
-        contractBalance: { valid: true, mandatory: true, text: 'views.specifications.contract_remaining_amount_overflow' },
+        contractBalance: { valid: true, mandatory: false, text: 'views.specifications.contract_remaining_amount_overflow' },
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean, private templateProduct?: any) {
@@ -626,7 +626,6 @@ export class PreProduct {
         if (Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery()) {
             this.validations.maxCapacity.mandatory = true;
         }
-
     }
 
     shouldHidePayment() {
@@ -641,11 +640,11 @@ export class PreProduct {
     isValid(): boolean {
         // Validate contract balance
         if (this.shouldVerifyQuantity()) {
-            this.validations.contractBalance.mandatory = true;
-            this.validations.contractBalance.valid = this.isQtyValid();
+            this.validations.maxCapacity.mandatory = true;
+            this.validations.maxCapacity.valid = this.isQtyValid();
         }
         else {
-            this.validations.contractBalance.mandatory = false;
+            this.validations.maxCapacity.mandatory = false;
         }
 
         let valid = true;
