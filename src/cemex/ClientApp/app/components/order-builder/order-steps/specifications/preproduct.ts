@@ -554,6 +554,10 @@ export class PreProduct {
 
     // Maximum capacity salesArea
     private getMaximumCapacity() {
+        if (Validations.isCementBag() || Validations.isBulkCement()) {
+            return undefined;
+        }
+
         const salesAreaArray = _.get(this.manager, 'salesArea');
         let salesArea = _.get(this.manager, 'salesArea[0]');
         if (salesAreaArray && salesAreaArray.length > 1) {

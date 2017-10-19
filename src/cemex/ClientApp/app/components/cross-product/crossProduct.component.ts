@@ -74,9 +74,7 @@ export class CrossProductComponent implements OnInit {
 
     closeModal(){
         this.modalService.close('success-order');
-        setTimeout(function() {
-            this.router.navigate(['/ordersnproduct/app/orders']);
-        }, 1000);
+        this.router.navigate(['/ordersnproduct/app/orders']);
     }
 
     flowCementMX(jObj, orderWithoutDocuments: boolean = false) {
