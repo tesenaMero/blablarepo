@@ -180,7 +180,7 @@ export class LocationStepComponent implements OnInit, StepEventsListener {
         // Set shippingcondition sub
         this.shippingConditionMapSub = this.makeShippingConditionSub();
 
-        this.dashboard.alertInfo(this.t.pt('views.common.validating'), 0);
+        this.dashboard.alertTranslateInfo('views.common.validating', 0);
 
         // Run both at the same time
         // Wait for both to finish

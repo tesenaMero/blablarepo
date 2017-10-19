@@ -13,19 +13,23 @@ export class NewOrderComponent implements OnInit, OnDestroy {
     private rebuildOrder = false;
     private sub: Subscription;
     private currentCustomer: any;
-
-    constructor(
-        private t: TranslationService,
-        private customerService: CustomerService,
-        private manager: CreateOrderService
-    ) {
+    
+    constructor(private customerService: CustomerService, private manager: CreateOrderService, private t: TranslationService) {
         this.rebuildOrder = false;
         this.sub = this.customerService.customerSubject.subscribe((customer) => {
-            if (customer && customer != this.currentCustomer) {
-                this.currentCustomer = customer;
-                this.rebuild();
+            if (customer) {
+                if (this.isDifferentCustomer(customer)) {
+                    this.currentCustomer = customer;
+                    this.rebuild();
+                }
             }
         });
+    }
+
+    isDifferentCustomer(customer: any): boolean {
+        if (this.currentCustomer === undefined) { return true; }
+        if (customer.legalEntityTypeCode != this.currentCustomer.legalEntityTypeCode) { return true; }
+        else { return false; }
     }
 
     ngOnInit() {}

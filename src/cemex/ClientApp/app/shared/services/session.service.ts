@@ -50,7 +50,7 @@ export class SessionService {
                 'accept': 'text/plain, */*',
                 'X-IBM-Client-Id': this.http.clientId,
                 'App-Code': this.http.appId,
-                'Accept-Language': this.http.acceptLanguage
+                'Accept-Language': this.http.getAcceptedLanguage()
             })
         });
         

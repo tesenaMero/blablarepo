@@ -47,6 +47,8 @@
 	"views.dashboard.noApps": "You do not have access to any apps yet.",
 	"views.dashboard.noAppsRequest": "Request access to apps you want by clicking on 'Request Permissions' button, or contact your admin.",
 	"views.dashboard.btnRequestPermissions": "Request Permissions",
+	"views.dashboard.needHelp" : "Need Help?",
+	"views.dashboard.needAccess": "Need access to another App?",
 	"forms.placeholder.userName": "Enter username",
 	"forms.placeholder.name": "Enter first name",
 	"forms.placeholder.clientNumber": "Enter client number",
@@ -126,6 +128,7 @@
 	"views.userManagmenet.noCustomers": "User does not have any customer available",
 	"views.userManagmenet.noJobsites": "User does not have any jobsite available",
 	"views.userManagement.noRequests": "No requests available",
+	"views.userManagement.homeRoute": "Home",
 	"views.agreements.title" : "Terms + Conditions",
 	"views.agreements.agree" : "Agree",
 	"views.steps.btnExit": "Exit",
@@ -904,6 +907,7 @@
 	"views.details.load_size": "Load Size",
 	"views.details.spacing": "Spacing",
 	"views.details.addition_serv": "Additional services",
+	"views.details.shipping_source": "Shipping Source",
 	"views.table.order_no": "Order No",
 	"views.table.submitted": "Submitted",
 	"views.table.submitted_by": "Submitted by",
@@ -987,6 +991,7 @@
 	"views.project.profile.load_size": "Load Size",
 	"views.project.profile.saving": "Saving...",
 	"views.project.profile.confirm": "Confirm",
+	"views.project.profile.deleteSure": "Are you sure you want to delete?",
 
 	"views.cross.placed": "Order placed successfully, requesting order code...",
 

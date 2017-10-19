@@ -39,12 +39,6 @@ export class OrderBuilderComponent implements OnDestroy {
 
     private sub: Subscription;
 
-    private pl_step_name = this.t.pt('views.builder.product_line');
-    private location_step_name = this.t.pt('views.builder.location');
-    private specifications_step_name = this.t.pt('views.builder.specifications');
-    private review_step_name = this.t.pt('views.builder.review');
-    private summary_step_name = this.t.pt('views.builder.summary');
-
     constructor(
         @Inject(DOCUMENT) private document: any,
         private _changeDetector: ChangeDetectorRef,
@@ -239,7 +233,7 @@ export class OrderBuilderComponent implements OnDestroy {
             credentials: {
                 token: sessionStorage.getItem('access_token'),
                 jwt: sessionStorage.getItem('jwt'),
-                refresh_token: sessionStorage.getItem('refresh_token')
+                refresh_token: JSON.parse(sessionStorage.getItem('userInfo')).oauth2.refresh_token
             },
             data: data
         }

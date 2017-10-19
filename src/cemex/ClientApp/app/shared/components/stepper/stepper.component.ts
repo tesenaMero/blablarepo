@@ -11,8 +11,7 @@ import {
     EventEmitter,
     Output,
     ViewChild,
-    Input,
-    NgZone
+    Input
 } from '@angular/core';
 import { Step } from './step/step.component'
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
@@ -38,7 +37,7 @@ export class StepperComponent implements AfterContentInit {
     moving: boolean = false;
 
     currentStep: any;
-    constructor(private zone: NgZone, private t: TranslationService) {
+    constructor(private t: TranslationService) {
         this.overlay = false;
     }
 
