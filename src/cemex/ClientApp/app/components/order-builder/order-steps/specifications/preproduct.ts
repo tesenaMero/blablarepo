@@ -469,7 +469,7 @@ export class PreProduct {
                 }
                 // No units available so disable it
                 else {
-                    this.dashboard.alertError("No units available for this contract", 8000);
+                    this.dashboard.alertTranslateError('views.specifications.no_units', 8000);
                     this.unit = undefined;
                     this.disableds.units = true;
                     this.disableds.quantity = true;
@@ -698,7 +698,7 @@ export class PreProduct {
     private isQtyZeroOrNan() {
         const q = Number(this.quantity)
         if (!q || q <= 0) {
-            this.dashboard.alertError("Verify quantity");
+            this.dashboard.alertTranslateError('views.specifications.verify_quantity');
             return false;
         }
     }
@@ -719,7 +719,7 @@ export class PreProduct {
                 return this.isValidQtyNoContractCase();
             }
             else {
-                this.dashboard.alertError("Quantity requested is greater than quantity remaining in the contract");
+                this.dashboard.alertTranslateError('views.specifications.contract_remaining_amount_overflow');
                 return false;
             }
         }
@@ -732,7 +732,6 @@ export class PreProduct {
         if (Validations.isCementBag() || Validations.isBulkCement()) {
             // No maximum capacity defined (API error probably)
             if (this.maximumCapacity === undefined) {
-                //this.dashboard.alertError("There is no maximum capacity defined for this jobsite");
                 return true;
             }
 
@@ -741,7 +740,7 @@ export class PreProduct {
                 return true;
             }
             else {
-                this.dashboard.alertError("Quanitity requested is greater than Jobsite's Max Capacity");
+                this.dashboard.alertTranslateError('views.specifications.maximum_capacity_reached');
                 return false;
             }
         }
