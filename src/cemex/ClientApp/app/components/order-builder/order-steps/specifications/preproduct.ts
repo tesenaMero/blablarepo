@@ -99,13 +99,21 @@ export class PreProduct {
             this.disableds.payments = false;
         }
         else if (this.availablePayments.length > 0) {
-            this.payment = undefined;
+            // Set credit by default
+            const credit = this.availablePayments.find((term: any) => {
+                return term.paymentTermType.paymentTermTypeCode === 'CREDIT';
+            });
+
+            if (credit) { this.payment = credit; }
+            else { this.payment = this.availablePayments[0]; }
+
             this.disableds.payments = false;
         }
         else {
             this.payment = undefined;
             this.disableds.payments = true;
         }
+        
         this.loadings.payments = false;
         this.paymentChanged();
 

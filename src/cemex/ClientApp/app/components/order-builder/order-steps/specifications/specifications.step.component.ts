@@ -114,6 +114,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.searchProductService.fetchProductColors(this.manager.productLine.productLineId);
         this.modal.open('search-product');
 
+        // TODO:
+        // This creates new subscriptor each time so creates a bug after the second time its opened
         this.sub = this.searchProductService.searchedProduct.subscribe(product => {
             if (product) {
                 let filteredProducts = SpecificationsStepComponent.availableProducts.filter((availableProducts) => {
@@ -121,11 +123,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 });
                 if (filteredProducts.length) {
                     preProduct.product = filteredProducts[0];
+                    preProduct.disableds.products = false;
                     this.onCompleted.emit(true);
                 }
                 else {
                     SpecificationsStepComponent.availableProducts.push(product);
                     preProduct.product = product;
+                    preProduct.disableds.products = false;
                     preProduct.productChanged();
                     this.onCompleted.emit(true);
                 }
