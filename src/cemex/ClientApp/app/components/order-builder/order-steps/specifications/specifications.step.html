@@ -8,13 +8,14 @@
                         <label [ngClass]="{ loading: product.loadings.products }">
                             {{ t.pt('views.specifications.product_description') }}
                         </label>
-                        <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && (!product.loadings.products) && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
+                        <div class="input product-selection dropdown flex-space-between" (click)="availableProducts.length == 0 && (!product.loadings.products) && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
                             <span class="selection">
                                 {{ product.product?.commercialCode | trimLeadingZeroes }} / {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode | trimLeadingZeroes }} / {{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
+                            <span class="arrow cmx-icon-straight-arrow-down product-arrow"></span>
                             <span class="action" (click)="openProductSearch(product)">{{ t.pt('views.specifications.change') }}</span>
                         </div>
                     </div>
@@ -166,6 +167,7 @@
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode | trimLeadingZeroes }} / {{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
+                            <span class="arrow cmx-icon-straight-arrow-down product-arrow"></span>
                             <span class="action" (click)="openProductSearch(product)">{{ t.pt('views.specifications.change') }}</span>
                         </div>
                     </div>
@@ -336,6 +338,7 @@
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode | trimLeadingZeroes }} / {{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
+                            <span class="arrow cmx-icon-straight-arrow-down product-arrow"></span>
                             <!-- <span class="action">Change</span> -->
                         </div>
                     </div>
