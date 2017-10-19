@@ -580,8 +580,7 @@
                 <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let i = index;">
                     <div class="group">
                         <div class="service">
-                            <input (change)="changeAditionalService(product, $event.target, i)" [checked]="isAdditionalServiceSaved(product, rmxService.entryCode)"
-                                type="checkbox" id="{{ rmxService.entryCode }}{{ index }}">
+                            <input (change)="changeAditionalService(product, $event.target.checked, i, rmxService.entryCode)" [checked]="isServiceSaved(product, rmxService.entryCode)" type="checkbox" id="{{ rmxService.entryCode }}{{ index }}">
                             <label for="{{ rmxService.entryCode }}{{ index }}">
                                     <svg class="icon-checkbox-active">
                                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>

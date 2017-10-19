@@ -274,8 +274,8 @@
                                         <div class="title">
                                             {{ t.pt('views.details.addition_serv') }}
                                         </div>
-                                        <div class="value">
-                                            {{ itemData.orderItemProfile.additionalServices[0].additionalServiceDesc }}
+                                        <div class="value" *ngFor="let service of itemData.orderItemProfile.additionalServices">
+                                            {{ service.additionalServiceDesc }}
                                         </div>
                                     </div>
                                 </div>
