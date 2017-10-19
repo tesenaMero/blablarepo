@@ -113,7 +113,7 @@ export class PreProduct {
             this.payment = undefined;
             this.disableds.payments = true;
         }
-        
+
         this.loadings.payments = false;
         this.paymentChanged();
 
@@ -555,19 +555,22 @@ export class PreProduct {
     // Maximum capacity salesArea
     private getMaximumCapacity() {
         if (Validations.isCementBag() || Validations.isBulkCement()) {
+            const salesAreaArray = _.get(this.manager, 'salesArea');
+            let salesArea;
+            if (salesAreaArray && salesAreaArray.length > 0) {
+                salesArea = salesAreaArray.find(sa => {
+                    return _.get(sa, 'salesArea.divisionCode') == "02";
+                })
+
+                if (!salesArea) { salesArea = salesAreaArray[0]; }
+            }
+
+            if (salesArea) { return _.get(salesArea, 'maximumLot.amount'); }
+            else { return undefined; }
+        }
+        else {
             return undefined;
         }
-
-        const salesAreaArray = _.get(this.manager, 'salesArea');
-        let salesArea = _.get(this.manager, 'salesArea[0]');
-        if (salesAreaArray && salesAreaArray.length > 1) {
-            salesArea = salesAreaArray.find(sa => {
-                return _.get(sa, 'salesArea.divisionCode') == "02";
-            })
-        }
-
-        if (salesArea) { return _.get(salesArea, 'maximumLot.amount'); }
-        else { return undefined; }
     }
 
     // Maximum capacity contract
@@ -670,7 +673,7 @@ export class PreProduct {
 
         // TODO
         this.maximumCapacity = this.getMaximumCapacity();
-        
+
         return valid
     }
 
