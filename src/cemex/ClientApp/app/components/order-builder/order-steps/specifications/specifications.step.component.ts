@@ -510,6 +510,26 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
     }
 
+    dateChanged(preProduct, index, event) {
+        if (Validations.isReadyMix() && Validations.isUSACustomer() && this.preProducts.length > 1) {
+            this.preProducts.forEach((product: PreProduct) => {
+                product.date = event;
+            });
+        } else {
+            this.preProducts[index].date = event;
+        }
+    }
+
+    timeChanged(preProduct, index, event) {
+        if (Validations.isReadyMix() && Validations.isUSACustomer() && this.preProducts.length > 1) {
+            this.preProducts.forEach((product: PreProduct) => {
+                product.time = event;
+            });
+        } else {
+            this.preProducts[index].time = event;
+        }
+    }
+
     projectProfileChanged(preProduct: PreProduct, projectProfile) {
         if (projectProfile !== "null") {
             // Prefill
@@ -679,6 +699,12 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 preProduct.product = this.preProducts[0].product;
                 preProduct.availableContracts = this.preProducts[0].availableContracts;
             }
+        }
+
+        // initialize with the same date as first product
+        if (Validations.isReadyMix() && Validations.isUSACustomer() && this.preProducts.length) {
+            preProduct.date = this.preProducts[0].date;
+            preProduct.time = this.preProducts[0].time;
         }
 
         this.preProducts.push(preProduct);

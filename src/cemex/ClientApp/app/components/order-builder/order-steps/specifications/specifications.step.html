@@ -380,7 +380,7 @@
                                     <owl-date-time [(ngModel)]="product.date"
                                         [dateFormat]="'DD/MM/YYYY'" [min]="todayStr()"
                                         [type]="'calendar'" [placeHolder]="'dd/mm/yyyy'" 
-                                        (ngModelChange)="product.date = $event"
+                                        (ngModelChange)="dateChanged(product, index, $event)"
                                         [inputId]="'date' + index">
                                     </owl-date-time>
                                 </span>
@@ -394,7 +394,7 @@
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
                                     <owl-date-time [(ngModel)]="product.time"
-                                        (ngModelChange)="product.time = $event"
+                                        (ngModelChange)="timeChanged(product, index, $event)"
                                         [type]="'timer'" [dateFormat]="'HH:mm'" [placeHolder]="'HH:mm'"
                                         [inputId]="'time' + index">
                                     </owl-date-time>
