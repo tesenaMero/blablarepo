@@ -19,7 +19,7 @@ export class OrderDetailLogsComponent {
         this.OrdersApi.fetchLogs(orderItemId, 100, 1)
         .map(response => response.json())
         .subscribe(response => {
-            this.logs.next(response.logs);
+            this.logs = response.logItems;
             this.isLoading = false;
         }, err => {
             this.isLoading = false;
