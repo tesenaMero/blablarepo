@@ -758,6 +758,20 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     }
 
+    changeSlump(product: PreProduct, newValue) {
+        this.dashboard.closeAlert();
+        newValue = (Number(String(newValue).replace(/,/g, "")))
+
+        // general validation for negative values
+        if (newValue <= 0 || isNaN(newValue)) {
+            this.dashboard.alertTranslateError('views.specifications.negative_amount', 3000);
+            return product.projectProfile.project.projectProperties.slump = 0;
+        }
+
+        product.projectProfile.project.projectProperties.slump = newValue;
+ 
+    }
+
     numberKey(event, value) {
         let charCode = (event.which) ? event.which : event.keyCode;
         if (charCode != 46 && charCode > 31
