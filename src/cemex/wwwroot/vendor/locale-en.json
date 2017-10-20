@@ -856,7 +856,7 @@
 	"views.cart.spacing": "Spacing",
 	"views.project.profile.new": "New Project Profile",
 	"views.project.profile.name": "Define a Name for your Project Profile.",
-	"views.project.profile.dischare_time": "Unloading Time",
+	"views.project.profile.dischare_time": "Discharge Time",
 	"views.project.profile.transport_method": "Transport Method",
 	"views.project.profile.unload_type": "Unload Type",
 	"views.project.profile.pump_capacity": "Pump Capacity",
