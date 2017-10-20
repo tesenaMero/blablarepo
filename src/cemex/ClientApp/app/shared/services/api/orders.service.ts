@@ -58,7 +58,7 @@ export class OrdersApi {
     }
 
     fetchLogs(orderRequestItemId: number, perPage: number = 5, page: number = 1): Observable<Response> {
-        return this.api.get(`/v1/sm/orderrequestitems/${orderRequestItemId}/logs?fetch=${perPage}&page=${page}`);
+        return this.api.get(`/v4/sm/orders/${orderRequestItemId}/logs?fetch=${perPage}&page=${page}`);
     }
 
 }

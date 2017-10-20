@@ -1189,5 +1189,16 @@
 	"SECMORGROOT":"Organization Manager (Power User)",
 	"SECMORGROOT.DESC":"Super User for the Customer Organization",
 	"SECMORGUSR":"Organization Manager User",
-	"SECMORGUSR.DESC":"To Enable Menu"
+	"SECMORGUSR.DESC":"To Enable Menu",
+
+	"views.order_details.logs.order_placed_order": "has placed the order",
+	"views.order_details.logs.order_edited_order": "has edited the order",
+	"views.order_details.logs.order_blocked": "has blocked the order",
+	"views.order_details.logs.order_started_editing_order": "has started editing the order",
+	"views.order_details.logs.order_unblocked": "has unblocked the order",
+	"views.order_details.logs.order_unhold": "has unhold the order",
+	"views.order_details.logs.order_onhold": "has onhold the order",
+	"views.order_details.logs.order_updated": "has updated the order",
+	"views.order_details.logs.canceled_order": "has canceled the order",
+	"views.order_details.logs.assigned_sales_order": "has assigned an Sales Order number to the order"
 }
