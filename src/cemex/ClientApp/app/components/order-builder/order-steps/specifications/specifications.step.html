@@ -381,7 +381,10 @@
                                         [dateFormat]="'DD/MM/YYYY'" [min]="todayStr()"
                                         [type]="'calendar'" [placeHolder]="'dd/mm/yyyy'" 
                                         (ngModelChange)="dateChanged(index, $event)"
-                                        [inputId]="'date' + index">
+                                        [inputId]="'date' + index"
+                                        [ngClass]="{ disabled: index != 0 }"
+                                        [disabled]="index != 0"
+                                        >
                                     </owl-date-time>
                                 </span>
                                 <span class="mb-0">
@@ -396,7 +399,10 @@
                                     <owl-date-time [(ngModel)]="product.time"
                                         (ngModelChange)="timeChanged(index, $event)"
                                         [type]="'timer'" [dateFormat]="'HH:mm'" [placeHolder]="'HH:mm'"
-                                        [inputId]="'time' + index">
+                                        [inputId]="'time' + index"
+                                        [ngClass]="{ disabled: index != 0 }"
+                                        [disabled]="index != 0"
+                                        >
                                     </owl-date-time>
                                 </span>
                                 <span class="mb-0">
