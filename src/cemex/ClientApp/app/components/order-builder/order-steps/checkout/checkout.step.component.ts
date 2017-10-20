@@ -115,13 +115,13 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         // If locked (stepper is moving most likely) then dont do the call 
         if (this.lockRequests) { return; }
 
-        if (this.getGrandTotal() != 0) {
+        if (this.getGrandTotal() > 0) {
             this.onCompleted.emit(this.draftOrder);
             this.dashboard.alertTranslateSuccess('views.checkout.prices_recovered');
         }
         else {
             let messages = this.draftOrder.messages.split('|', 2);
-            this.dashboard.alertSuccess(messages[1].trim());
+            this.dashboard.alertWarning(messages[1].trim());
         }           
     }
 

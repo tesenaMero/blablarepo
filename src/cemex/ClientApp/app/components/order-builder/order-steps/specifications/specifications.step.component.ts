@@ -27,6 +27,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
     today: Date;
     sub: Subscription;
 
+    //lang
+    private subLang: Subscription;
+    private language: string;
+
     public quanitityMask = createNumberMask({
         prefix: '',
         allowDecimal: true,
@@ -107,6 +111,15 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.step.setEventsListener(this);
         this.step.canAdvance = () => this.canAdvance();
         this.step.onBeforeBack = () => this.onBeforeBack();
+        // Listen to language change
+        this.subLang = this.t.localeData.subscribe((response) => {
+            // If its different from the already selected language
+            if (this.language != response.lang) {
+                this.language = response.lang;
+                this.rechargeDropdowns();
+            }
+
+        });
     }
 
     openProductSearch(preProduct: PreProduct) {
@@ -324,6 +337,39 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 this.catalogs[catalog.catalogCode] = catalog.entries;
             });
             this.readyMixAdditionalServices = this.catalogs['ASC'];
+
+            
+            // Set new translations values
+            this.preProducts.forEach((item: PreProduct) => {
+                if (item.projectProfile.project.projectProperties.dischargeTime && 
+                    item.projectProfile.project.projectProperties.dischargeTime.index ) {
+                        this.onChangeDischargeTime(item, item.projectProfile.project.projectProperties.dischargeTime.index);
+                }
+                if (item.projectProfile.project.projectProperties.transportMethod &&
+                    item.projectProfile.project.projectProperties.transportMethod.index) {
+                        this.onChangeTransportMethod(item, item.projectProfile.project.projectProperties.transportMethod.index);                    
+                }
+                if (item.projectProfile.project.projectProperties.pumpCapacity &&
+                    item.projectProfile.project.projectProperties.pumpCapacity.index) {
+                        this.onChangePumpCapacity(item, item.projectProfile.project.projectProperties.pumpCapacity.index);                   
+                }
+                if (item.projectProfile.project.projectProperties.unloadType &&
+                    item.projectProfile.project.projectProperties.unloadType.index) {
+                        this.onChangeUnloadType(item, item.projectProfile.project.projectProperties.unloadType.index);
+                }
+                if (item.projectProfile.project.projectProperties.element && 
+                    item.projectProfile.project.projectProperties.element.index) {
+                        this.onChangeApplication(item, item.projectProfile.project.projectProperties.element.index);
+                }
+                if (item.projectProfile.project.projectProperties.loadSize &&
+                    item.projectProfile.project.projectProperties.loadSize.index) {
+                        this.onChangeLoadSize(item, item.projectProfile.project.projectProperties.loadSize.index);
+                }
+                if (item.projectProfile.project.projectProperties.timePerLoad &&
+                    item.projectProfile.project.projectProperties.timePerLoad.index) {
+                        this.onChangeTimePerLoad(item, item.projectProfile.project.projectProperties.timePerLoad.index);
+                }
+            });
         });
     }
 
@@ -549,7 +595,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         preProduct.projectProfile.project.projectProperties.dischargeTime = {
             dischargeTimeId: entry.entryId,
-            timePerDischargeDesc: entry.entryDesc
+            timePerDischargeDesc: entry.entryDesc,
+            index: index
         };
     }
 
@@ -558,7 +605,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         preProduct.projectProfile.project.projectProperties.transportMethod = {
             transportMethodId: entry.entryId,
-            transportMethodDesc: entry.entryDesc
+            transportMethodDesc: entry.entryDesc,
+            index: index
         };
     }
 
@@ -568,7 +616,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         preProduct.projectProfile.project.projectProperties.unloadType = {
             unloadTypeId: entry.entryId,
             unloadTypeCode: entry.entryCode,
-            unloadTypeDesc: entry.entryDesc
+            unloadTypeDesc: entry.entryDesc,
+            index: index
         };
     }
 
@@ -577,7 +626,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         preProduct.projectProfile.project.projectProperties.pumpCapacity = {
             pumpCapacityId: entry.entryId,
-            pumpCapacityDesc: entry.entryDesc
+            pumpCapacityDesc: entry.entryDesc,
+            index: index
         };
     }
 
@@ -587,7 +637,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         preProduct.projectProfile.project.projectProperties.element = {
             elementId: entry.entryId,
             elementDesc: entry.entryDesc,
-            elementCode: entry.entryCode
+            elementCode: entry.entryCode,
+            index: index
         };
     }
 
@@ -596,7 +647,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         preProduct.projectProfile.project.projectProperties.loadSize = {
             loadSizeId: entry.entryId,
-            loadSizeDesc: entry.entryDesc
+            loadSizeDesc: entry.entryDesc,
+            index: index
         };
     }
 
@@ -605,7 +657,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         preProduct.projectProfile.project.projectProperties.timePerLoad = {
             timePerLoadId: entry.entryId,
-            timePerLoadDesc: entry.entryDesc
+            timePerLoadDesc: entry.entryDesc,
+            index: index
         };
     }
 
@@ -787,5 +840,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     isMXCustomer() {
         return this.customerService.currentCustomer().countryCode.trim() == "MX";
+    }
+
+    rechargeDropdowns(){
+        this.getPaymentTerms();
+        this.getAdditionalServices();
     }
 }

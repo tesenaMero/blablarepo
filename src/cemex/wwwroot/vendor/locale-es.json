@@ -1119,6 +1119,8 @@
 	"views.specifications.add_product": "+ Añadir Producto",
 	"views.specifications.change": "Cambiar",
 	"views.specifications.plant": "Planta",
+	"views.specifications.verify_quantity": "Revisa la cantidad",
+	"views.specifications.no_units": "Sin unidades para el contrato seleccionado",
 	"views.specifications.slump": "Depresión",
 	
 	"views.specifications.verify_products_selected": "Verifica el(los) producto(s) seleccionado(s)",
