@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 
 import { OrdersApi } from '../../../shared/services/api';
 
@@ -16,18 +17,25 @@ export class OrderDetailLogsComponent {
         this.error = null;
         this.isLoading = true;
 
-        // this.OrdersApi.fetchLogs(orderItemId, 10, 1)
-        // .map(response => response.json())
-        // .subscribe(response => {
-        //     this.logs.next(response.logs);
-        //     this.isLoading = false;
-        // }, err => {
-        //     this.isLoading = false;
-        //     this.error = "Failed fetching logs";
-        // });
+        this.OrdersApi.fetchLogs(orderItemId, 100, 1)
+        .map(response => response.json())
+        .subscribe(response => {
+            this.logs = response.logItems && response.logItems.filter(log => 
+                { 
+                    // Hide draft actions
+                    const isDraft = log.newPayload && 
+                        JSON.parse(log.newPayload).status && 
+                            JSON.parse(log.newPayload).status.statusCode === 'DRFT';
+                    return !isDraft;
+                });
+            this.isLoading = false;
+        }, err => {
+            this.isLoading = false;
+            this.error = "Failed fetching logs";
+        });
     }
 
-    constructor(private OrdersApi: OrdersApi) {
+    constructor(private OrdersApi: OrdersApi, private t: TranslationService) {
         
     }
 }

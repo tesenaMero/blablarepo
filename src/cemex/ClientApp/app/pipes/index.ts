@@ -3,3 +3,4 @@ export { ZeroPadPipe } from './zeropad.pipe';
 export { SumGroupProductPipe } from './cart.pipe';
 export { DatePipe } from './dateformat.pipe';
 export { UnitCodeMapperPipe } from './unit-code-mapper.pipe';
+export { LogTranslator } from './log-translator.pipe';

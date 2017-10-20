@@ -13,7 +13,11 @@ export class PurchaseOrderApi {
     validate(purchaseOrder: string, productLine: any, location: any) {
         // Case when both product lines in one
         let productLineId = productLine.productLineId;
-        if (productLineId = "2,3") { productLineId = this.CEMENT_BAG_ID }
+    
+        if (productLineId === "2,3") { 
+            productLineId = this.CEMENT_BAG_ID 
+        } 
+        
         return this.api.get("/v4/sm/purchaseorders/" + purchaseOrder + "/validate?productLine=" + productLineId + "&jobsiteId=" + location.shipmentLocationId);
     }
 }

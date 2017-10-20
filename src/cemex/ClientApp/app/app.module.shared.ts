@@ -4,8 +4,11 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { DateValueAccessorModule } from 'angular-date-value-accessor';
 import { CountlyService } from '@cemex-core/helpers-v1/dist';
+import { CmxFooterModule } from '@cemex/cmx-footer-v1/dist'
+
+// TO-DO remove this
+import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 // Components
 import { AppComponent } from './components/app/app.component';
@@ -43,7 +46,8 @@ import {
     ZeroPadPipe,
     SumGroupProductPipe,
     DatePipe,
-    UnitCodeMapperPipe
+    UnitCodeMapperPipe,
+    LogTranslator
 } from './pipes'
 
 // Shared components
@@ -89,6 +93,7 @@ import {
     PaymentTermsApi,
     PingSalesOrderApi,
     SalesDocumentApi,
+    LegalEntityApi
 } from './shared/services/api';
 
 import { EncodeDecodeJsonObjService } from './shared/services/encodeDecodeJsonObj.service';
@@ -120,6 +125,7 @@ export const sharedConfig: NgModule = {
         UnitCodeMapperPipe,
         TrimLeadingZeroesPipe,
         FilterOutOldContractsPipe,
+        LogTranslator,
 
         // Regular components
         OrdersTableComponent,
@@ -147,7 +153,7 @@ export const sharedConfig: NgModule = {
         DLSTableComponent,
         NavigationComponent,
         FooterComponent,
-        ModalComponent,
+        ModalComponent
     ],
     imports: [
         SelectDropdownModule,
@@ -156,6 +162,7 @@ export const sharedConfig: NgModule = {
         CmxSharedModule,
         DateTimePickerModule,
         BrowserAnimationsModule,
+        CmxFooterModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full'},
             { path: 'ordersnproduct', redirectTo: 'app', pathMatch: 'prefix'},
@@ -211,6 +218,7 @@ export const sharedConfig: NgModule = {
         SalesDocumentApi,
         SearchProductService,
         ModalService,
-        CountlyService
+        CountlyService,
+        LegalEntityApi
     ]
 };

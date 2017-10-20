@@ -65,7 +65,7 @@ export class PreProduct {
         payment: { valid: false, mandatory: false, text: 'views.specifications.verify_payment' },
         product: { valid: false, mandatory: true, text: 'views.specifications.verify_products_selected' },
         maxCapacity: { valid: true, mandatory: false, text: 'views.specifications.maximum_capacity_reached' },
-        contractBalance: { valid: true, mandatory: true, text: 'views.specifications.contract_remaining_amount_overflow' },
+        contractBalance: { valid: true, mandatory: false, text: 'views.specifications.contract_remaining_amount_overflow' },
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean, private templateProduct?: any) {
@@ -99,13 +99,21 @@ export class PreProduct {
             this.disableds.payments = false;
         }
         else if (this.availablePayments.length > 0) {
-            this.payment = undefined;
+            // Set credit by default
+            const credit = this.availablePayments.find((term: any) => {
+                return term.paymentTermType.paymentTermTypeCode === 'CREDIT';
+            });
+
+            if (credit) { this.payment = credit; }
+            else { this.payment = this.availablePayments[0]; }
+
             this.disableds.payments = false;
         }
         else {
             this.payment = undefined;
             this.disableds.payments = true;
         }
+
         this.loadings.payments = false;
         this.paymentChanged();
 
@@ -134,6 +142,7 @@ export class PreProduct {
 
         if (Validations.isReadyMix()) {
             this.projectProfile.project.projectProperties.kicker = false;
+            this.projectProfile.project.projectProperties.slump = 0;
         }
     }
 
@@ -546,16 +555,23 @@ export class PreProduct {
 
     // Maximum capacity salesArea
     private getMaximumCapacity() {
-        const salesAreaArray = _.get(this.manager, 'salesArea');
-        let salesArea = _.get(this.manager, 'salesArea[0]');
-        if (salesAreaArray && salesAreaArray.length > 1) {
-            salesArea = salesAreaArray.find(sa => {
-                return _.get(sa, 'salesArea.divisionCode') == "02";
-            })
-        }
+        if (Validations.isCementBag() || Validations.isBulkCement()) {
+            const salesAreaArray = _.get(this.manager, 'salesArea');
+            let salesArea;
+            if (salesAreaArray && salesAreaArray.length > 0) {
+                salesArea = salesAreaArray.find(sa => {
+                    return _.get(sa, 'salesArea.divisionCode') == "02";
+                })
 
-        if (salesArea) { return _.get(salesArea, 'maximumLot.amount'); }
-        else { return undefined; }
+                if (!salesArea) { salesArea = salesAreaArray[0]; }
+            }
+
+            if (salesArea) { return _.get(salesArea, 'maximumLot.amount'); }
+            else { return undefined; }
+        }
+        else {
+            return undefined;
+        }
     }
 
     // Maximum capacity contract
@@ -611,7 +627,6 @@ export class PreProduct {
         if (Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery()) {
             this.validations.maxCapacity.mandatory = true;
         }
-
     }
 
     shouldHidePayment() {
@@ -626,11 +641,11 @@ export class PreProduct {
     isValid(): boolean {
         // Validate contract balance
         if (this.shouldVerifyQuantity()) {
-            this.validations.contractBalance.mandatory = true;
-            this.validations.contractBalance.valid = this.isQtyValid();
+            this.validations.maxCapacity.mandatory = true;
+            this.validations.maxCapacity.valid = this.isQtyValid();
         }
         else {
-            this.validations.contractBalance.mandatory = false;
+            this.validations.maxCapacity.mandatory = false;
         }
 
         let valid = true;
@@ -655,6 +670,9 @@ export class PreProduct {
             this.dashboard.alertTranslateError('views.specifications.verify_unit');
             return false;
         }
+
+        // TODO
+        this.maximumCapacity = this.getMaximumCapacity();
 
         return valid
     }
@@ -731,12 +749,13 @@ export class PreProduct {
     private isValidNoContractDeliveryCase(): boolean {
         if (Validations.isCementBag() || Validations.isBulkCement()) {
             // No maximum capacity defined (API error probably)
-            if (this.maximumCapacity === undefined) {
+            if (this.getMaximumCapacity() === undefined) {
+                //this.dashboard.alertError("There is no maximum capacity defined for this jobsite");
                 return true;
             }
 
             // This quanity in tons <= jobsite max capacity
-            if (this.tons() <= this.maximumCapacity) {
+            if (this.tons() <= this.getMaximumCapacity()) {
                 return true;
             }
             else {

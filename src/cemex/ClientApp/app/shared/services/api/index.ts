@@ -17,6 +17,7 @@ import { PurchaseOrderApi } from './pruchase-order.service'
 import { PaymentTermsApi } from './payment-terms.service';
 import { PingSalesOrderApi } from './ping-sales-order.service';
 import { SalesDocumentApi } from './sales-documents.service'
+import { LegalEntityApi } from './legal-entity.service'
 
 export {
     ShipmentLocationApi,
@@ -38,4 +39,5 @@ export {
     PurchaseOrderApi,
     PaymentTermsApi,
     SalesDocumentApi,
+    LegalEntityApi
 }

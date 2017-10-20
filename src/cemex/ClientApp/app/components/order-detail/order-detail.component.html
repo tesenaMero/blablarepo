@@ -77,12 +77,12 @@
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#products" role="tab">{{ t.pt('views.details.products') }}</a>
             </li>
-            <!-- <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#action-log" role="tab">Action log</a>
-            </li> -->
-            <!-- <li class="nav-item">
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#comments" role="tab">Comments</a>
-            </li> -->
+            </li>
         </ul>
     </div>
 
@@ -183,7 +183,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-xs-6" *ngIf="itemData.shippingSource?.shippingSourceDesc">
+                                <div class="col-md-3 col-xs-6" *ngIf="shouldShowShippingSource() && itemData.shippingSource?.shippingSourceDesc">
                                     <div class="group">
                                         <div class="title">
                                             {{ t.pt('views.details.shipping_source') }}
@@ -274,8 +274,8 @@
                                         <div class="title">
                                             {{ t.pt('views.details.addition_serv') }}
                                         </div>
-                                        <div class="value">
-                                            {{ itemData.orderItemProfile.additionalServices[0].additionalServiceDesc }}
+                                        <div class="value" *ngFor="let service of itemData.orderItemProfile.additionalServices">
+                                            {{ service.additionalServiceDesc }}
                                         </div>
                                     </div>
                                 </div>
@@ -288,8 +288,8 @@
         <div class="tab-pane fade" id="action-log" role="tabpanel">
             <order-detail-logs [orderItemId]="id"></order-detail-logs>
         </div>
-        <!-- <div class="tab-pane fade" id="comments" role="tabpanel">
+        <div class="tab-pane fade" id="comments" role="tabpanel">
             <order-detail-comments [orderItemId]="id"></order-detail-comments>
-        </div> -->
+        </div>
     </div>
 </div>

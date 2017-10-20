@@ -116,11 +116,11 @@ export class OrdersComponent implements OnDestroy {
 
         switch (orderType) {
             case buisnessLIneCodes.rmx:
-                return '<i class="cmx-icon-ready-mix"></i>';
+                return '<i class="icon cmx-icon-ready-mix"></i>';
             case buisnessLIneCodes.cem:
-                return '<i class="cmx-icon-bag-cement"></i>';
+                return '<i class="icon cmx-icon-bag-cement"></i>';
             case buisnessLIneCodes.aggr:
-                return '<i class="cmx-icon-aggregates"></i>';
+                return '<i class="icon cmx-icon-aggregates"></i>';
             default:
                 return '';
         }

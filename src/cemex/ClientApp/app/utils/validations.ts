@@ -68,12 +68,10 @@ export class Validations {
         return _.get(this.manager, 'productLine.productLineId') === "2,3";
     }
 
-    // TODO: Replace Id with code in enum
     static isPickup() {
         return _.get(this.manager, 'shippingCondition.shippingConditionCode') === this.MODE.Pickup;
     }
 
-    // TODO: Replace Id with code in enum
     static isDelivery() {
         return _.get(this.manager, 'shippingCondition.shippingConditionCode') === this.MODE.Delivery;
     }

@@ -14,11 +14,7 @@ export class OrderDetailApi {
     }
 
     shipmentLocationsJob(jobsiteId): Observable<Response> { //US & MX -> Jobsite
-        this.customerService.customerSubject.subscribe((response) => {
-            // console.log("async", response);
-        });
         const customerId = this.customerService.currentCustomer().legalEntityId;
-        // console.log("/v4/sm/myshipmentlocations?legalEntityId=" + customerId + ".1&shipmentLocationId=" + jobsiteId + ".2&shipmentLocationTypeId=2");
         return this.api.get("/v4/sm/myshipmentlocations?legalEntityId=" + customerId + ".1&shipmentLocationId=" + jobsiteId + ".2&shipmentLocationTypeId=2");
     }
 

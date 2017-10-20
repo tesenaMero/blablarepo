@@ -10,10 +10,9 @@ import { DashboardService } from '../../../../shared/services/dashboard.service'
 import { Validations } from '../../../../utils/validations';
 import { ModalService } from '../../../../shared/components/modal'
 import { PreProduct } from './preproduct'
-import { TranslationService } from '@cemex-core/angular-services-v2/dist';
-
-import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import { Subscription } from 'rxjs/Subscription';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 let CircularJSON = require('circular-json');
 
 @Component({
@@ -127,6 +126,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.searchProductService.fetchProductColors(this.manager.productLine.productLineId);
         this.modal.open('search-product');
 
+        // TODO:
+        // This creates new subscriptor each time so creates a bug after the second time its opened
         this.sub = this.searchProductService.searchedProduct.subscribe(product => {
             if (product) {
                 let filteredProducts = SpecificationsStepComponent.availableProducts.filter((availableProducts) => {
@@ -134,11 +135,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 });
                 if (filteredProducts.length) {
                     preProduct.product = filteredProducts[0];
+                    preProduct.disableds.products = false;
                     this.onCompleted.emit(true);
                 }
                 else {
                     SpecificationsStepComponent.availableProducts.push(product);
                     preProduct.product = product;
+                    preProduct.disableds.products = false;
                     preProduct.productChanged();
                     this.onCompleted.emit(true);
                 }
@@ -226,7 +229,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.preProducts.forEach((item: PreProduct) => {
             item.defineValidations();
             item.loadings.products = true;
-            item.disableds.products = true;
+            item.disableds.products = true; 
         });
 
         const customer = this.customerService.currentCustomer();
@@ -556,6 +559,26 @@ export class SpecificationsStepComponent implements StepEventsListener {
         });
     }
 
+    dateChanged(index, event) {
+        if (Validations.isReadyMix() && Validations.isUSACustomer() && this.preProducts.length > 1) {
+            this.preProducts.forEach((product: PreProduct) => {
+                product.date = event;
+            });
+        } else {
+            this.preProducts[index].date = event;
+        }
+    }
+
+    timeChanged(index, event) {
+        if (Validations.isReadyMix() && Validations.isUSACustomer() && this.preProducts.length > 1) {
+            this.preProducts.forEach((product: PreProduct) => {
+                product.time = event;
+            });
+        } else {
+            this.preProducts[index].time = event;
+        }
+    }
+
     projectProfileChanged(preProduct: PreProduct, projectProfile) {
         if (projectProfile !== "null") {
             // Prefill
@@ -639,18 +662,29 @@ export class SpecificationsStepComponent implements StepEventsListener {
         };
     }
 
-    changeAditionalService(preProduct: PreProduct, target, index) {
-        if (target.checked) {
-            preProduct.additionalServices.push(this.readyMixAdditionalServices[index]);
+    changeAditionalService(product: PreProduct, checked: boolean, i: number, serviceCode: string) {
+        const index = product.additionalServices.findIndex(x => x.entryCode===serviceCode);
+        if (checked) {
+            if (index === -1) {
+                product.additionalServices.push(this.readyMixAdditionalServices[i])
+            } 
         } else {
-            const idx = this.additionalServices.indexOf(this.readyMixAdditionalServices[index]);
-            preProduct.additionalServices.splice(idx, 1);
+            product.additionalServices.splice(index, 1);
+        }
+    }
+
+    isServiceSaved(product: PreProduct,serviceCode:string) {
+        const index = product.additionalServices.findIndex(x => x.entryCode===serviceCode);
+        if (index === -1) {
+            return false;
+        } else {
+            return true;
         }
     }
 
     isAdditionalServiceSaved(preProduct: PreProduct, serviceCode: string) {
         const foundService = preProduct.additionalServices.find(service => {
-            return service.entryCode === serviceCode
+        return service.entryCode === serviceCode
         });
         return !!foundService;
     }
@@ -700,6 +734,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     add() {
         const shouldFetchContracts = !(Validations.isReadyMix() && SpecificationsStepComponent.globalContract);
+        
+        // Do not let add more products when there is no contract selected in ReadyMix
+        if (Validations.isReadyMix() && !SpecificationsStepComponent.globalContract && this.preProducts.length > 0) {
+            this.dashboard.alertError("Select a contract");
+            return;
+        }
+
         let preProduct = new PreProduct(
             this.productsApi,
             this.manager,
@@ -721,6 +762,12 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 preProduct.product = this.preProducts[0].product;
                 preProduct.availableContracts = this.preProducts[0].availableContracts;
             }
+        }
+
+        // initialize with the same date as first product
+        if (Validations.isReadyMix() && Validations.isUSACustomer() && this.preProducts.length) {
+            preProduct.date = this.preProducts[0].date;
+            preProduct.time = this.preProducts[0].time;
         }
 
         this.preProducts.push(preProduct);
@@ -750,7 +797,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }, 400);
     }
 
-    // TODO: Refactor this method
     changeQty(product: PreProduct, newValue) {
         this.dashboard.closeAlert();
         newValue = (Number(String(newValue).replace(/,/g, "")))
@@ -763,6 +809,20 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         product.quantity = newValue;
 
+    }
+
+    changeSlump(product: PreProduct, newValue) {
+        this.dashboard.closeAlert();
+        newValue = (Number(String(newValue).replace(/,/g, "")))
+
+        // general validation for negative values
+        if (newValue <= 0 || isNaN(newValue)) {
+            this.dashboard.alertTranslateError('views.specifications.negative_amount', 3000);
+            return product.projectProfile.project.projectProperties.slump = 0;
+        }
+
+        product.projectProfile.project.projectProperties.slump = newValue;
+ 
     }
 
     numberKey(event, value) {

@@ -1121,6 +1121,7 @@
 	"views.specifications.plant": "Planta",
 	"views.specifications.verify_quantity": "Revisa la cantidad",
 	"views.specifications.no_units": "Sin unidades para el contrato seleccionado",
+	"views.specifications.slump": "Depresión",
 	
 	"views.specifications.verify_products_selected": "Verifica el(los) producto(s) seleccionado(s)",
 	"views.specifications.no_payment_jobsite": "No hay tipos de pago disponibles para la obra",	
@@ -1195,5 +1196,16 @@
 	"SECMORGROOT":"Administrador de la organización (Power User)",
 	"SECMORGROOT.DESC":"Súper usuario para la organización del cliente",
 	"SECMORGUSR":"Usuario administrador de la organización",
-	"SECMORGUSR.DESC":"Este rol habilita el menú"
+	"SECMORGUSR.DESC":"Este rol habilita el menú",
+
+	"views.order_details.logs.order_placed_order": "ha realizado un pedido",
+	"views.order_details.logs.order_edited_order": "ha editado la órden",
+	"views.order_details.logs.order_blocked": "ha bloqueado la órden",
+	"views.order_details.logs.order_started_editing_order": "ha comenzado a editar la órden",
+	"views.order_details.logs.order_unblocked": "ha desbloqueado la órden",
+	"views.order_details.logs.order_unhold": "ha procedido con la órden",
+	"views.order_details.logs.order_onhold": "ha detenido la órden",
+	"views.order_details.logs.order_updated": "ha actualizado la órden",
+	"views.order_details.logs.canceled_order": "ha cancelado la órden",
+	"views.order_details.logs.assigned_sales_order": "tiene un número Sales Order asignado a la orden"
 }

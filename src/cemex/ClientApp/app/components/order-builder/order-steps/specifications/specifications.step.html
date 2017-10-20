@@ -8,13 +8,14 @@
                         <label [ngClass]="{ loading: product.loadings.products }">
                             {{ t.pt('views.specifications.product_description') }}
                         </label>
-                        <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && (!product.loadings.products) && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
-                            <span class="selection">
+                        <div class="input product-selection dropdown flex-space-between" (click)="availableProducts.length == 0 && (!product.loadings.products) && openProductSearch(product)">
+                            <span class="selection" [ngClass]="{ disabled: product.disableds.products }">
                                 {{ product.product?.commercialCode | trimLeadingZeroes }} / {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode | trimLeadingZeroes }} / {{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
+                            <span class="arrow cmx-icon-straight-arrow-down product-arrow" [ngClass]="{ disabled: product.disableds.products }"></span>
                             <span class="action" (click)="openProductSearch(product)">{{ t.pt('views.specifications.change') }}</span>
                         </div>
                     </div>
@@ -30,8 +31,8 @@
                                 <input class="value" [textMask]="{ mask: quanitityMask }" [ngModel]="product.quantity" (ngModelChange)="changeQty(product, $event)" />
                                 <span (click)="changeQty(product, product.quantity+1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="isMXCustomer() && product.maximumCapacity">
-                                {{ t.pt('views.specifications.maximum_capacity') }} {{ product.maximumCapacity }} Ton(s)
+                            <div class="info" *ngIf="isMXCustomer() && product.getMaximumCapacity()">
+                                {{ t.pt('views.specifications.maximum_capacity') }} {{ product.getMaximumCapacity() }} Ton(s)
                             </div>
                         </div>
                         <div class="group w40">
@@ -159,13 +160,14 @@
                         <label [ngClass]="{ loading: product.loadings.products }">
                             {{ t.pt('views.specifications.product_description') }}
                         </label>
-                        <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && (!product.loadings.products) && openProductSearch(product)" [ngClass]="{ disabled: product.disableds.products }">
-                            <span class="selection">
+                        <div class="input product-selection dropdown" (click)="availableProducts.length == 0 && (!product.loadings.products) && openProductSearch(product)">
+                            <span class="selection" [ngClass]="{ disabled: product.disableds.products }">
                                 {{ product.product?.commercialCode | trimLeadingZeroes }} / {{ product.product?.commercialDesc }}
                                 <select *ngIf="availableProducts.length" style="width: calc(100% - 80px);" [(ngModel)]="product.product" (ngModelChange)="productChanged(product)" class="input behind">
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode | trimLeadingZeroes }} / {{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
+                            <span class="arrow cmx-icon-straight-arrow-down product-arrow" [ngClass]="{ disabled: product.disableds.products }"></span>
                             <span class="action" (click)="openProductSearch(product)">{{ t.pt('views.specifications.change') }}</span>
                         </div>
                     </div>
@@ -178,11 +180,11 @@
                             </label>
                             <div class="noselect input number-stepper" [ngClass]="{ disabled: product.disableds.quantity }">
                                 <span (click)="changeQty(product, product.quantity-1)" class="control minus"><span class="cmx-icon-minus"></span></span>
-                                <input class="value" [textMask]="{ mask: quanitityMask }" [ngModel]="product.quantity" (ngModelChange)="changeQty(product, $event)"/>
+                                <input class="value" [textMask]="{ mask: quanitityMask }" [ngModel]="product.quantity" (ngModelChange)="changeQty(product, $event)" />
                                 <span (click)="changeQty(product, product.quantity+1)" class="control plus"><span class="cmx-icon-plus"></span></span>
                             </div>
-                            <div class="info" *ngIf="UTILS.isMexicoCustomer() && product.maximumCapacity">
-                                {{ t.pt('views.specifications.maximum_capacity') }} {{ product.maximumCapacity }} Ton(s)
+                            <div class="info" *ngIf="UTILS.isMexicoCustomer() && product.getMaximumCapacity()">
+                                {{ t.pt('views.specifications.maximum_capacity') }} {{ product.getMaximumCapacity() }} Ton(s)
                             </div>
                         </div>
                         <div class="group w40">
@@ -336,6 +338,7 @@
                                     <option *ngFor="let p of availableProducts" [ngValue]="p">{{ p?.commercialCode | trimLeadingZeroes }} / {{ p?.commercialDesc }}</option>
                                 </select>
                             </span>
+                            <span class="arrow cmx-icon-straight-arrow-down product-arrow" [ngClass]="{ disabled: product.disableds.products }"></span>
                             <!-- <span class="action">Change</span> -->
                         </div>
                     </div>
@@ -377,8 +380,11 @@
                                     <owl-date-time [(ngModel)]="product.date"
                                         [dateFormat]="'DD/MM/YYYY'" [min]="todayStr()"
                                         [type]="'calendar'" [placeHolder]="'dd/mm/yyyy'" 
-                                        (ngModelChange)="product.date = $event"
-                                        [inputId]="'date' + index">
+                                        (ngModelChange)="dateChanged(index, $event)"
+                                        [inputId]="'date' + index"
+                                        [ngClass]="{ disabled: index != 0 }"
+                                        [disabled]="index != 0"
+                                        >
                                     </owl-date-time>
                                 </span>
                                 <span class="mb-0">
@@ -391,9 +397,12 @@
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
                                     <owl-date-time [(ngModel)]="product.time"
-                                        (ngModelChange)="product.time = $event"
+                                        (ngModelChange)="timeChanged(index, $event)"
                                         [type]="'timer'" [dateFormat]="'HH:mm'" [placeHolder]="'HH:mm'"
-                                        [inputId]="'time' + index">
+                                        [inputId]="'time' + index"
+                                        [ngClass]="{ disabled: index != 0 }"
+                                        [disabled]="index != 0"
+                                        >
                                     </owl-date-time>
                                 </span>
                                 <span class="mb-0">
@@ -540,6 +549,16 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
+                <div class="group" style="width: 30px;" *ngIf="UTILS.isUSACustomer()">
+                    <label>
+                        {{ t.pt('views.specifications.slump') }}
+                    </label>
+                    <div class="noselect input number-stepper">
+                        <span (click)="changeSlump(product, product.projectProfile.project.projectProperties.slump-1)" class="control minus"><span class="cmx-icon-minus"></span></span>
+                        <input class="value" [textMask]="{ mask: quanitityMask }" [ngModel]="product.projectProfile.project.projectProperties.slump" (ngModelChange)="changeSlump(product, $event)" />
+                        <span (click)="changeSlump(product, product.projectProfile.project.projectProperties.slump+1)" class="control plus"><span class="cmx-icon-plus"></span></span>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">
@@ -550,8 +569,7 @@
                 <div class="col-sm-6">
                     <div class="group">
                         <div class="center-kicker">
-                            <input (change)="onChangeKicker(product, $event.target.checked)" [ngModel]="product.projectProfile.project.projectProperties.kicker"
-                                type="checkbox" id="kicker{{index}}">
+                            <input (change)="onChangeKicker(product, $event.target.checked)" [ngModel]="product.projectProfile.project.projectProperties.kicker" type="checkbox" id="kicker{{index}}">
                             <label for="kicker{{index}}">
                             <svg class="icon-checkbox-active">
                                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
@@ -577,8 +595,7 @@
                 <div class="col-md-4" *ngFor="let rmxService of readyMixAdditionalServices; let i = index;">
                     <div class="group">
                         <div class="service">
-                            <input (change)="changeAditionalService(product, $event.target, i)" [checked]="isAdditionalServiceSaved(product, rmxService.entryCode)"
-                                type="checkbox" id="{{ rmxService.entryCode }}{{ index }}">
+                            <input (change)="changeAditionalService(product, $event.target.checked, i, rmxService.entryCode)" [checked]="isServiceSaved(product, rmxService.entryCode)" type="checkbox" id="{{ rmxService.entryCode }}{{ index }}">
                             <label for="{{ rmxService.entryCode }}{{ index }}">
                                     <svg class="icon-checkbox-active">
                                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-checkbox-active"></use>
