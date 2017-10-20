@@ -166,8 +166,6 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     canAdvance(): boolean {
         this.manager.setProducts(this.preProducts);
-
-
         let advance = true;
         for (let preProduct of this.preProducts) {
             if (!preProduct.isValid()) {

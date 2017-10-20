@@ -658,11 +658,6 @@ export class PreProduct {
     }
 
     isValid(): boolean {
-        // If something is loading
-        if (this.isLoadingSomething()) {
-            return false;
-        }
-
         // Validate contract balance
         if (this.shouldVerifyQuantity()) {
             this.validations.maxCapacity.mandatory = true;
