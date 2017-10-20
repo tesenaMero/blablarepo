@@ -791,6 +791,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 // Set the same product as initial so ensure they belong to the same contract
                 preProduct.product = this.preProducts[0].product;
                 preProduct.availableContracts = this.preProducts[0].availableContracts;
+                preProduct.contract = this.preProducts[0].contract;
+                preProduct.contractChanged();
             }
         }
 
