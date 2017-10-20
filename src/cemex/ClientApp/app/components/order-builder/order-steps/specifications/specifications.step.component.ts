@@ -10,10 +10,9 @@ import { DashboardService } from '../../../../shared/services/dashboard.service'
 import { Validations } from '../../../../utils/validations';
 import { ModalService } from '../../../../shared/components/modal'
 import { PreProduct } from './preproduct'
-import { TranslationService } from '@cemex-core/angular-services-v2/dist';
-
-import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import { Subscription } from 'rxjs/Subscription';
+import { TranslationService } from '@cemex-core/angular-services-v2/dist';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 let CircularJSON = require('circular-json');
 
 @Component({
@@ -682,6 +681,13 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     add() {
         const shouldFetchContracts = !(Validations.isReadyMix() && SpecificationsStepComponent.globalContract);
+        
+        // Do not let add more products when there is no contract selected in ReadyMix
+        if (Validations.isReadyMix() && !SpecificationsStepComponent.globalContract && this.preProducts.length > 0) {
+            this.dashboard.alertError("Select a contract");
+            return;
+        }
+
         let preProduct = new PreProduct(
             this.productsApi,
             this.manager,

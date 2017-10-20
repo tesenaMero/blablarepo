@@ -4,8 +4,11 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { DateValueAccessorModule } from 'angular-date-value-accessor';
 import { CountlyService } from '@cemex-core/helpers-v1/dist';
+import { CmxFooterComponent } from '@cemex/cmx-footer-v1'
+
+// TO-DO remove this
+import { DateValueAccessorModule } from 'angular-date-value-accessor';
 
 // Components
 import { AppComponent } from './components/app/app.component';
@@ -151,6 +154,7 @@ export const sharedConfig: NgModule = {
         NavigationComponent,
         FooterComponent,
         ModalComponent,
+        CmxFooterComponent,
     ],
     imports: [
         SelectDropdownModule,
