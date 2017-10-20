@@ -543,6 +543,16 @@
                         <span class="arrow cmx-icon-straight-arrow-down"></span>
                     </div>
                 </div>
+                <div class="group" style="width: 30px;" *ngIf="UTILS.isUSACustomer()">
+                    <label>
+                        {{ t.pt('views.specifications.slump') }}
+                    </label>
+                    <div class="noselect input number-stepper">
+                        <span (click)="changeSlump(product, product.projectProfile.project.projectProperties.slump-1)" class="control minus"><span class="cmx-icon-minus"></span></span>
+                        <input class="value" [textMask]="{ mask: quanitityMask }" [ngModel]="product.projectProfile.project.projectProperties.slump" (ngModelChange)="changeSlump(product, $event)" />
+                        <span (click)="changeSlump(product, product.projectProfile.project.projectProperties.slump+1)" class="control plus"><span class="cmx-icon-plus"></span></span>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3">

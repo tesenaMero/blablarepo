@@ -1119,6 +1119,7 @@
 	"views.specifications.add_product": "+ Añadir Producto",
 	"views.specifications.change": "Cambiar",
 	"views.specifications.plant": "Planta",
+	"views.specifications.slump": "Depresión",
 	
 	"views.specifications.verify_products_selected": "Verifica el(los) producto(s) seleccionado(s)",
 	"views.specifications.no_payment_jobsite": "No hay tipos de pago disponibles para la obra",	
