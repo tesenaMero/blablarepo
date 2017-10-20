@@ -13,6 +13,7 @@ import * as _ from 'lodash';
 export class PreProduct {
     // View states
     deleting: boolean = false;
+    isReadyMixMasterProduct: boolean = false;
 
     // Props
     maneuvering: boolean = false;
@@ -68,7 +69,7 @@ export class PreProduct {
         contractBalance: { valid: true, mandatory: false, text: 'views.specifications.contract_remaining_amount_overflow' },
     }
 
-    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean) {
+    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, public shouldFetchContracts?: boolean) {
         // Optionals
         if (this.shouldFetchContracts == undefined) { this.shouldFetchContracts = true }
 
@@ -152,7 +153,7 @@ export class PreProduct {
 
         if (Validations.isReadyMix()) {
             // Normal case
-            if (this.shouldFetchContracts) {
+            if (this.shouldFetchContracts || this.isReadyMixMasterProduct) {
                 // Return new reference to the array (objects inside same reference)
                 return this.availableProducts.slice()
             }

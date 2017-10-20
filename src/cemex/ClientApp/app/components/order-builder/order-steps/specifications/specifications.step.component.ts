@@ -337,36 +337,36 @@ export class SpecificationsStepComponent implements StepEventsListener {
             });
             this.readyMixAdditionalServices = this.catalogs['ASC'];
 
-            
+
             // Set new translations values
             this.preProducts.forEach((item: PreProduct) => {
-                if (item.projectProfile.project.projectProperties.dischargeTime && 
-                    item.projectProfile.project.projectProperties.dischargeTime.index ) {
-                        this.onChangeDischargeTime(item, item.projectProfile.project.projectProperties.dischargeTime.index);
+                if (item.projectProfile.project.projectProperties.dischargeTime &&
+                    item.projectProfile.project.projectProperties.dischargeTime.index) {
+                    this.onChangeDischargeTime(item, item.projectProfile.project.projectProperties.dischargeTime.index);
                 }
                 if (item.projectProfile.project.projectProperties.transportMethod &&
                     item.projectProfile.project.projectProperties.transportMethod.index) {
-                        this.onChangeTransportMethod(item, item.projectProfile.project.projectProperties.transportMethod.index);                    
+                    this.onChangeTransportMethod(item, item.projectProfile.project.projectProperties.transportMethod.index);
                 }
                 if (item.projectProfile.project.projectProperties.pumpCapacity &&
                     item.projectProfile.project.projectProperties.pumpCapacity.index) {
-                        this.onChangePumpCapacity(item, item.projectProfile.project.projectProperties.pumpCapacity.index);                   
+                    this.onChangePumpCapacity(item, item.projectProfile.project.projectProperties.pumpCapacity.index);
                 }
                 if (item.projectProfile.project.projectProperties.unloadType &&
                     item.projectProfile.project.projectProperties.unloadType.index) {
-                        this.onChangeUnloadType(item, item.projectProfile.project.projectProperties.unloadType.index);
+                    this.onChangeUnloadType(item, item.projectProfile.project.projectProperties.unloadType.index);
                 }
-                if (item.projectProfile.project.projectProperties.element && 
+                if (item.projectProfile.project.projectProperties.element &&
                     item.projectProfile.project.projectProperties.element.index) {
-                        this.onChangeApplication(item, item.projectProfile.project.projectProperties.element.index);
+                    this.onChangeApplication(item, item.projectProfile.project.projectProperties.element.index);
                 }
                 if (item.projectProfile.project.projectProperties.loadSize &&
                     item.projectProfile.project.projectProperties.loadSize.index) {
-                        this.onChangeLoadSize(item, item.projectProfile.project.projectProperties.loadSize.index);
+                    this.onChangeLoadSize(item, item.projectProfile.project.projectProperties.loadSize.index);
                 }
                 if (item.projectProfile.project.projectProperties.timePerLoad &&
                     item.projectProfile.project.projectProperties.timePerLoad.index) {
-                        this.onChangeTimePerLoad(item, item.projectProfile.project.projectProperties.timePerLoad.index);
+                    this.onChangeTimePerLoad(item, item.projectProfile.project.projectProperties.timePerLoad.index);
                 }
             });
         });
@@ -712,38 +712,30 @@ export class SpecificationsStepComponent implements StepEventsListener {
                 if (this.preProducts.length === 1) {
                     this.preProducts[0].disableds.contracts = false;
                 }
+                else {
+                    // Lock contracts if there are more than one preproducts
+                    this.preProducts[0].disableds.contracts = true;
+                }
             }
         }
 
+        if (this.isSubReadyMixCase()) {
+            preProduct.shouldFetchContracts = false;
+        }
+        else {
+            preProduct.shouldFetchContracts = true;
+        }
         preProduct.productChanged();
-    }
-
-    productHasContract(product: any, contract: any) {
-        SpecificationsStepComponent.availableProducts.filter((item) => {
-            return item.salesDocument.salesDocumentId == product.salesDocument.salesDocumentId;
-        });
     }
 
     contractChanged(preProduct: PreProduct) {
         // Readymix scenario
         // All products should be using the same contract
         if (Validations.isReadyMix()) {
-            // Only first one can change contract
-            SpecificationsStepComponent.globalContract = preProduct.contract;
-
-            this.preProducts.forEach((item: PreProduct, index) => {
-                item.contract = SpecificationsStepComponent.globalContract;
-                item.contractChanged();
-
-                if (SpecificationsStepComponent.globalContract) {
-                    // Valid contract selected
-                    if (index > 0) { item.disableds.contracts = true; }
-                }
-                else {
-                    // Contract unselected
-                    item.disableds.contracts = false;
-                }
-            });
+            if (this.preProducts.indexOf(preProduct) == 0) {
+                // Only first one can change contract
+                SpecificationsStepComponent.globalContract = preProduct.contract;
+            }
         }
 
         // Normal scenario
@@ -803,6 +795,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
 
         this.preProducts.push(preProduct);
+        
+        if (this.preProducts.length === 1) {
+            this.preProducts[0].isReadyMixMasterProduct = true;
+        }
 
         if (this.preProducts.length > 0) {
             this.onCompleted.emit(true);
@@ -826,7 +822,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             setTimeout(() => {
                 this.preProducts.splice(index, 1);
 
-                if (this.preProducts.length == 0) {
+                if (this.preProducts.length === 0) {
                     this.onCompleted.emit(false);
                     SpecificationsStepComponent.globalContract = undefined;
                 }
@@ -837,6 +833,10 @@ export class SpecificationsStepComponent implements StepEventsListener {
                     if (this.preProducts.length === 1) {
                         this.preProducts[0].disableds.contracts = false;
                     }
+                }
+
+                if (this.preProducts.length > 0) {
+                    this.preProducts[0].isReadyMixMasterProduct = true;
                 }
             }, 400);
         }
@@ -867,7 +867,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         }
 
         product.projectProfile.project.projectProperties.slump = newValue;
- 
+
     }
 
     numberKey(event, value) {
@@ -887,7 +887,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         return this.customerService.currentCustomer().countryCode.trim() == "MX";
     }
 
-    rechargeDropdowns(){
+    rechargeDropdowns() {
         this.getPaymentTerms();
         this.getAdditionalServices();
     }
