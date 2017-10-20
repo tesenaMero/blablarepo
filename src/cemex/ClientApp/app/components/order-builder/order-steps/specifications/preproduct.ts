@@ -162,6 +162,9 @@ export class PreProduct {
                 });
             }
         }
+        else {
+            return this.availableProducts;
+        }
     }
 
     setProducts(products: any[]) {
