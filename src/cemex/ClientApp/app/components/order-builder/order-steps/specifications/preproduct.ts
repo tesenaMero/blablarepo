@@ -68,9 +68,9 @@ export class PreProduct {
         contractBalance: { valid: true, mandatory: false, text: 'views.specifications.contract_remaining_amount_overflow' },
     }
 
-    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean, private templateProduct?: any) {
+    constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, private shouldFetchContracts?: boolean) {
         // Optionals
-        if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
+        if (this.shouldFetchContracts == undefined) { this.shouldFetchContracts = true }
 
         // Max capacity
         this.maximumCapacity = this.getMaximumCapacity();
@@ -81,8 +81,8 @@ export class PreProduct {
         // Available products init
         // -------------------------------------------------------
         if (SSC.availableProducts.length && !this.product) {
-            //this.setProduct(SSC.availableProducts[0], shouldFetchContracts);
             this.setProduct(SSC.availableProducts[0]);
+            this.availableProducts = SSC.availableProducts;
             this.loadings.products = false;
         }
         else {
@@ -145,6 +145,20 @@ export class PreProduct {
         }
     }
 
+    getAvailableProducts(): any[] {
+        // Normal case
+        if (this.shouldFetchContracts) {
+            // Return new reference to the array (objects inside same reference)
+            return SpecificationsStepComponent.availableProducts.slice()
+        }
+        // 1+ Product readymix
+        else {
+            return SpecificationsStepComponent.availableProducts.filter(item => {
+                return item.salesDocument.salesDocumentId == this.product.salesDocument.salesDocumentId;
+            });
+        }
+    }
+
     setProducts(products: any[]) {
         if (products.length && this.product) {
             // Try to preselect product
@@ -162,17 +176,14 @@ export class PreProduct {
         }
     }
 
-    setProduct(product: any, shouldFetchContracts?: boolean) {
+    setProduct(product: any) {
         // Optionals
-        if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
-
         this.product = product;
-        this.productChanged(shouldFetchContracts);
+        this.productChanged();
     }
 
-    productChanged(shouldFetchContracts?: boolean) {
+    productChanged() {
         // Optionals
-        if (shouldFetchContracts == undefined) { shouldFetchContracts = true }
         if (!this.product) {
             // Disable stuff and remove loadings
             this.disableds.products = true;
@@ -191,7 +202,7 @@ export class PreProduct {
             this.loadings.products = false;
         }
 
-        if (shouldFetchContracts) {
+        if (this.shouldFetchContracts) {
             this.fetchContracts();
         }
         else {
