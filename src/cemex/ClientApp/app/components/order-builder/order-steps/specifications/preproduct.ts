@@ -82,7 +82,6 @@ export class PreProduct {
         // -------------------------------------------------------
         if (SSC.availableProducts.length && !this.product) {
             this.setProduct(SSC.availableProducts[0]);
-            this.availableProducts = SSC.availableProducts;
             this.loadings.products = false;
         }
         else {
@@ -146,16 +145,22 @@ export class PreProduct {
     }
 
     getAvailableProducts(): any[] {
-        // Normal case
-        if (this.shouldFetchContracts) {
-            // Return new reference to the array (objects inside same reference)
-            return SpecificationsStepComponent.availableProducts.slice()
-        }
-        // 1+ Product readymix
-        else {
-            return SpecificationsStepComponent.availableProducts.filter(item => {
-                return item.salesDocument.salesDocumentId == this.product.salesDocument.salesDocumentId;
-            });
+        this.availableProducts = _.uniqBy(SpecificationsStepComponent.availableProducts, (p) => {
+            return p.commercialCode;
+        });
+
+        if (Validations.isReadyMix()) {
+            // Normal case
+            if (this.shouldFetchContracts) {
+                // Return new reference to the array (objects inside same reference)
+                return this.availableProducts.slice()
+            }
+            // 1+ Product readymix
+            else {
+                return this.availableProducts.filter(item => {
+                    return item.salesDocument.salesDocumentId == this.product.salesDocument.salesDocumentId;
+                });
+            }
         }
     }
 
@@ -649,6 +654,11 @@ export class PreProduct {
     }
 
     isValid(): boolean {
+        // If something is loading
+        if (this.isLoadingSomething()) {
+            return false;
+        }
+
         // Validate contract balance
         if (this.shouldVerifyQuantity()) {
             this.validations.maxCapacity.mandatory = true;
@@ -776,5 +786,15 @@ export class PreProduct {
         else {
             return true;
         }
+    }
+
+    isLoadingSomething(): boolean {
+        for (let key in this.loadings) {
+            if (this.loadings[key]) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
