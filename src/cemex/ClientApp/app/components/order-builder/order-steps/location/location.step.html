@@ -27,7 +27,7 @@
                         <label for="purchase-order" class="select-label" [ngClass]="{ required: validations.purchaseOrder.mandatory }">{{ t.pt('views.location.purchase_order') }}</label>
                     </div>
                     <div class="col-md-8 col-sm-12">
-                        <input maxlength="5" type="text " class="form-control dls" id="purchase-order" placeholder="{{ t.pt('views.location.put_pod') }}" name="purchase-order" [(ngModel)]="purchaseOrder" (keyup)="purchaseOrderChanged($event)" />
+                        <input maxlength="35" type="text " class="form-control dls" id="purchase-order" placeholder="{{ t.pt('views.location.put_pod') }}" name="purchase-order" [(ngModel)]="purchaseOrder" (keyup)="purchaseOrderChanged($event)" />
                         <span class="error-message ">{{ t.pt('views.location.purchase_order_error') }}</span>
                     </div>
                 </div>
