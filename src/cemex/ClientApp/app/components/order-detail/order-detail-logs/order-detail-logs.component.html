@@ -16,7 +16,7 @@
             <div class="date col-auto">{{log.datetime}}</div>
         </div>
         <div class="comment-text">
-            <p>{{ t.pt(log | logTranslator) }}</p>
+            <p><strong>{{log.user.userAccount}}</strong> {{ t.pt(log | logTranslator) }}</p>
         </div>
     </div>
 </div>
