@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { CountlyService } from '@cemex-core/helpers-v1/dist';
-import { CmxFooterComponent } from '@cemex/cmx-footer-v1'
+import { CmxFooterModule } from '@cemex/cmx-footer-v1/dist'
 
 // TO-DO remove this
 import { DateValueAccessorModule } from 'angular-date-value-accessor';
@@ -153,8 +153,7 @@ export const sharedConfig: NgModule = {
         DLSTableComponent,
         NavigationComponent,
         FooterComponent,
-        ModalComponent,
-        CmxFooterComponent,
+        ModalComponent
     ],
     imports: [
         SelectDropdownModule,
@@ -163,6 +162,7 @@ export const sharedConfig: NgModule = {
         CmxSharedModule,
         DateTimePickerModule,
         BrowserAnimationsModule,
+        CmxFooterModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'app', pathMatch: 'full'},
             { path: 'ordersnproduct', redirectTo: 'app', pathMatch: 'prefix'},
