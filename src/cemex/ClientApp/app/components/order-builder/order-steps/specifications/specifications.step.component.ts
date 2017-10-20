@@ -217,7 +217,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
         this.preProducts.forEach((item: PreProduct) => {
             item.defineValidations();
             item.loadings.products = true;
-            item.disableds.products = true; 
+            item.disableds.products = true;
         });
 
         const customer = this.customerService.currentCustomer();
@@ -611,18 +611,18 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     changeAditionalService(product: PreProduct, checked: boolean, i: number, serviceCode: string) {
-        const index = product.additionalServices.findIndex(x => x.entryCode===serviceCode);
+        const index = product.additionalServices.findIndex(x => x.entryCode === serviceCode);
         if (checked) {
             if (index === -1) {
                 product.additionalServices.push(this.readyMixAdditionalServices[i])
-            } 
+            }
         } else {
             product.additionalServices.splice(index, 1);
         }
     }
 
-    isServiceSaved(product: PreProduct,serviceCode:string) {
-        const index = product.additionalServices.findIndex(x => x.entryCode===serviceCode);
+    isServiceSaved(product: PreProduct, serviceCode: string) {
+        const index = product.additionalServices.findIndex(x => x.entryCode === serviceCode);
         if (index === -1) {
             return false;
         } else {
@@ -711,7 +711,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
     add() {
         const shouldFetchContracts = !this.isSubReadyMixCase();
-        
+
         // Do not let add more products when there is no contract selected in ReadyMix
         if (!this.canAdd()) {
             this.dashboard.alertError("Select a contract");
@@ -761,30 +761,32 @@ export class SpecificationsStepComponent implements StepEventsListener {
     }
 
     isSubReadyMixCase(): boolean {
-        return  Validations.isReadyMix() &&
-                SpecificationsStepComponent.globalContract &&
-                this.preProducts.length > 0;
+        return Validations.isReadyMix() &&
+            SpecificationsStepComponent.globalContract &&
+            this.preProducts.length > 0;
     }
 
     remove(index: any) {
-        let product = this.preProducts[index];
-        product.deleting = true;
-        setTimeout(() => {
-            this.preProducts.splice(index, 1);
+        if (index > 0) {
+            let product = this.preProducts[index];
+            product.deleting = true;
+            setTimeout(() => {
+                this.preProducts.splice(index, 1);
 
-            if (this.preProducts.length == 0) {
-                this.onCompleted.emit(false);
-                SpecificationsStepComponent.globalContract = undefined;
-            }
-
-            // Readymix case when all contracts should be the same.
-            // Always make sure first one can change contract if its alone
-            if (Validations.isReadyMix() && this.preProducts.length) {
-                if (this.preProducts.length === 1) {
-                    this.preProducts[0].disableds.contracts = false;
+                if (this.preProducts.length == 0) {
+                    this.onCompleted.emit(false);
+                    SpecificationsStepComponent.globalContract = undefined;
                 }
-            }
-        }, 400);
+
+                // Readymix case when all contracts should be the same.
+                // Always make sure first one can change contract if its alone
+                if (Validations.isReadyMix() && this.preProducts.length) {
+                    if (this.preProducts.length === 1) {
+                        this.preProducts[0].disableds.contracts = false;
+                    }
+                }
+            }, 400);
+        }
     }
 
     changeQty(product: PreProduct, newValue) {
