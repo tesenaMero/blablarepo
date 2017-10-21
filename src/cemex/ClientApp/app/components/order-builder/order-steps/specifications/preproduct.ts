@@ -318,7 +318,7 @@ export class PreProduct {
     fetchUnits() {
         this.loadings.units = true;
         this.disableds.units = true;
-        this.disableds.quantity = true;
+        this.disableds.quantity = false;
 
         // Fetch product base unit + alt units parallel
         Observable.forkJoin(
