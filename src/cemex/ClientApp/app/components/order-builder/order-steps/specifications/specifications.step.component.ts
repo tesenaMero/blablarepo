@@ -738,10 +738,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
             }
         }
 
-        // Normal scenario
-        else {
-            preProduct.contractChanged();
-        }
+        preProduct.contractChanged();
     }
 
     plantChanged(preProduct: PreProduct) {

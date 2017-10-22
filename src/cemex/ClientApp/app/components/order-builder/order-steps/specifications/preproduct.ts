@@ -60,6 +60,7 @@ export class PreProduct {
         quantity: true
     }
 
+    // TO-DO chnage valid boolean field to function callback(): boolean. Call only once at the end
     validations = {
         plant: { valid: false, mandatory: true, text: 'views.specifications.verify_plant' },
         contract: { valid: false, mandatory: true, text: 'views.specifications.verify_contract' },
@@ -339,7 +340,7 @@ export class PreProduct {
     fetchUnits() {
         this.loadings.units = true;
         this.disableds.units = true;
-        this.disableds.quantity = false;
+        this.disableds.quantity = false; // TO-DO check this case with team. Should be true init
 
         // Fetch product base unit + alt units parallel
         Observable.forkJoin(
@@ -661,11 +662,14 @@ export class PreProduct {
     isValid(): boolean {
         // Validate contract balance
         if (this.shouldVerifyQuantity()) {
+            // Do buisness rules validations
             this.validations.maxCapacity.mandatory = true;
             this.validations.maxCapacity.valid = this.isQtyValid();
         }
         else {
-            this.validations.maxCapacity.mandatory = false;
+            // Verify only if is valid number and > 0
+            this.validations.maxCapacity.mandatory = true;
+            this.validations.maxCapacity.valid = !this.isQtyZeroOrNan();
         }
 
         let valid = true;
@@ -737,8 +741,10 @@ export class PreProduct {
         const q = Number(this.quantity)
         if (!q || q <= 0) {
             this.dashboard.alertTranslateError('views.specifications.verify_quantity');
-            return false;
+            return true;
         }
+
+        return false;
     }
 
     private isValidQtyNoContractCase(): boolean {
