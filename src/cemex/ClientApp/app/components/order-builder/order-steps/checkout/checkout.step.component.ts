@@ -68,18 +68,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
 
         // Patch optimal sources then recovers prices
         this.onCompleted.emit(false);
-        if (this.shouldCallOptimalSource()) {
-            this.dashboard.alertTranslateInfo('views.checkout.recovering_prices', 0);
-            this.optimalSourceSub = this.drafts.optimalSourcesPatch(this.manager.draftId).flatMap((x) => {
-                this.manager.isPatched = true;
-                return this.drafts.prices(this.manager.draftId);
-            }).subscribe((response) => {
-                this.handlePrices(response);
-            }, (error) => {
-                this.dashboard.alertTranslateError('views.common.something_was_wrong');
-            });
-        }
-        else if (this.shouldCallPrices()) {
+        if (this.shouldCallPrices()) {
             this.pricesSub = this.drafts.prices(this.manager.draftId).subscribe((response) => {
                 this.handlePrices(response);
             });

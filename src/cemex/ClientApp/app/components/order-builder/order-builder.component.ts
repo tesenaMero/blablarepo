@@ -167,21 +167,6 @@ export class OrderBuilderComponent implements OnDestroy {
         this.placeOrder();
     }
 
-    getManagerState() {
-        let cache = [];
-        JSON.stringify(this.manager, (key, value) => {
-            if (typeof value === 'object' && value !== null) {
-                // If circular, discard key
-                if (cache.indexOf(value) !== -1) { return; }
-                cache.push(value);
-            }
-            return value;
-        });
-
-        // GC
-        cache = null;
-    }
-
     // Payment flow
     // --------------------------------------------------------------------
     placeOrder() {
