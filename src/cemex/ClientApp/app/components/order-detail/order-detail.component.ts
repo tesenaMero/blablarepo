@@ -111,10 +111,14 @@ export class OrderDetailComponent {
 
     showRegionDate(date) {
         if (this.countryCode === 'MX') {
-            return moment.utc(date).local().format('DD/MM/YYYY');
+            return moment.utc(date).format('DD/MM/YYYY');
         } else {
-            return moment.utc(date).local().format('MM/DD/YYYY');
+            return moment.utc(date).format('MM/DD/YYYY');
         }
+    }
+
+    showRegionTime(time) {
+        return moment.utc(time).format('HH:mm A');
     }
 
     // Pikcup && USA

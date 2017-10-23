@@ -135,7 +135,7 @@
                                             {{ t.pt('views.details.delivery_time') }}
                                         </div>
                                         <div class="value">
-                                            {{ itemData.requestedDateTime | date : "shortTime" }}
+                                            {{ showRegionTime(itemData.requestedDateTime) }}
                                         </div>
                                     </div>
                                 </div>
