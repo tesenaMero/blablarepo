@@ -904,6 +904,7 @@
 	"views.details.pump_capacity_max": "Pump Capacity Max",
 	"views.details.application": "Application",
 	"views.details.kicker": "Kicker",
+	"views.details.slump": "Slump",
 	"views.details.load_size": "Load Size",
 	"views.details.spacing": "Spacing",
 	"views.details.addition_serv": "Additional services",

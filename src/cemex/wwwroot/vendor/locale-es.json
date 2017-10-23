@@ -907,6 +907,7 @@
 	"views.details.pump_capacity_max": "Tamaño de bomba",
 	"views.details.application": "Elemento a colar",
 	"views.details.kicker": "Ajuste",
+	"views.details.slump": "Depresión",
 	"views.details.load_size": "Tamaño de carga",
 	"views.details.spacing": "Frecuencia",
 	"views.details.addition_serv": "Servicios adicionales",
