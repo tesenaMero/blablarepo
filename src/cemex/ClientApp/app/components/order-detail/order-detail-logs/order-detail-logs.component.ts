@@ -19,10 +19,12 @@ export class OrderDetailLogsComponent {
 
         this.OrdersApi.fetchLogs(orderItemId, 100, 1)
         .map(response => response.json())
+        .first()
         .subscribe(response => {
-            if (!response.ok || !response.logItems) {
+            if (!response || !response.ok || !response.logItems) {
                 this.isLoading = false;
                 this.error = "Failed fetching logs";
+                return;
             }
 
             this.logs = response.logItems && response.logItems.filter(log => 
