@@ -68,6 +68,9 @@ export class PreProduct {
         product: { valid: false, mandatory: true, text: 'views.specifications.verify_products_selected' },
         maxCapacity: { valid: true, mandatory: false, text: 'views.specifications.maximum_capacity_reached' },
         contractBalance: { valid: true, mandatory: false, text: 'views.specifications.contract_remaining_amount_overflow' },
+        slump: { valid: true, mandatory: false, text: 'views.specifications.verify_slump' },
+        loadSize: { valid: true, mandatory: false, text: 'views.specifications.verify_load_size' },
+        spacing: { valid: true, mandatory: false, text: 'views.specifications.verify_spacing' }
     }
 
     constructor(private productsApi: ProductsApi, private manager: CreateOrderService, private paymentTermsApi: PaymentTermsApi, private plantApi: PlantApi, private customerService: CustomerService, private dashboard: DashboardService, private t: TranslationService, public shouldFetchContracts?: boolean) {
@@ -620,11 +623,35 @@ export class PreProduct {
         else { return unlimited; }
     }
 
+    slumpChanged(newValue) {
+        this.validations.slump.valid = !!newValue;
+    }
+
+    timePerLoadChanged(entry) {
+        this.validations.spacing.valid = !!entry;
+    }
+
+    loadSizeChanged(entry) {
+        this.validations.loadSize.valid = !!entry;
+    }
+
     defineValidations() {
         // Readymix
         if (Validations.isReadyMix()) {
             this.validations.contract.mandatory = true;
             this.validations.plant.mandatory = false;
+
+            if (Validations.isUSACustomer()) {
+                this.validations.loadSize.mandatory = true;
+                this.validations.loadSize.valid = false;
+
+                this.validations.slump.mandatory = true;
+                this.validations.slump.valid = false;           
+
+                this.validations.spacing.mandatory = true;
+                this.validations.spacing.valid = false;                
+            }
+
             return;
         }
 

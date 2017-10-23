@@ -649,6 +649,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
             loadSizeDesc: entry.entryDesc,
             index: index
         };
+
+        preProduct.loadSizeChanged(entry);
     }
 
     onChangeTimePerLoad(preProduct, index) {
@@ -659,6 +661,8 @@ export class SpecificationsStepComponent implements StepEventsListener {
             timePerLoadDesc: entry.entryDesc,
             index: index
         };
+
+        preProduct.timePerLoadChanged(entry);
     }
 
     changeAditionalService(product: PreProduct, checked: boolean, i: number, serviceCode: string) {
@@ -865,6 +869,7 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
         product.projectProfile.project.projectProperties.slump = newValue;
 
+        product.slumpChanged(newValue);
     }
 
     numberKey(event, value) {
