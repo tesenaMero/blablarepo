@@ -17,7 +17,7 @@
                     </div>
                     <div class="col-md-8 col-sm-12" [ngClass]="{ disabled: loadings.pods }">
                         <ss-multiselect-dropdown [options]="pods" [texts]="podsTexts" [settings]="dropDownSettings " [(ngModel)]="podsIndex" (ngModelChange)="podChanged(pods[$event[0]])"></ss-multiselect-dropdown>
-                        <span class="error-message-select" *ngIf="validations.jobsite.showError">{{ t.pt('views.location.select_pod') }}</span>
+                        <span class="error-message-select" *ngIf="validations.pod.showError">{{ t.pt('views.location.select_pod') }}</span>
                     </div>
                 </div>
             </div>
