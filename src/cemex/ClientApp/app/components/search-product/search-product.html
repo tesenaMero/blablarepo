@@ -18,7 +18,7 @@
                     <option *ngFor="let productColor of productColors" [ngValue]="productColor.productColorId">{{productColor.productColorDesc}}</option>
                 </select>
             </div>
-            <div class="col-sm-6" *ngIf="UTILS.isPickup() && UTILS.isBulkCement()">
+            <div class="col-sm-6" *ngIf="UTILS.isPickup() && UTILS.isCement()">
                 <label for="ps-plant" class="">{{ t.pt('views.search.plant') }}</label>
                 <select [(ngModel)]="plantSelected" (change)="plantChanged($event.target.value)" name="ps-plant" id="ps-plant" class="form-control">
                     <option value="" selected disabled hidden></option>
