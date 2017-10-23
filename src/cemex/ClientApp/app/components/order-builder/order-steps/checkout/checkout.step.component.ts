@@ -115,7 +115,7 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
         // If locked (stepper is moving most likely) then dont do the call 
         if (this.lockRequests) { return; }
 
-        if (this.getGrandTotal() > 0) {
+        if (this.checkEachPrice()) {
             this.onCompleted.emit(this.draftOrder);
             this.dashboard.alertTranslateSuccess('views.checkout.prices_recovered');
         }
@@ -146,6 +146,15 @@ export class CheckoutStepComponent implements OnInit, StepEventsListener {
             taxes += item.taxAmount;
         });
         return taxes;
+    }
+
+    // Check each price all should be > 0
+    checkEachPrice() {
+        let validation = true;
+        this.draftOrder.items.forEach(item => {
+            if (item.totalPrice <= 0) {validation = false}
+        });
+        return validation;
     }
 
     getGrandTotal() {
