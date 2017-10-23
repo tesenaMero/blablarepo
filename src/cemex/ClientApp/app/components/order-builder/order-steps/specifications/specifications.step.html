@@ -397,11 +397,9 @@
                             <label for="time{{ index }}" class="input flex-space-between nopadding">
                                 <span class="mb-0 value">
                                     <owl-date-time [(ngModel)]="product.time"
-                                        (ngModelChange)="timeChanged(index, $event)"
+                                        (ngModelChange)="product.time = $event"
                                         [type]="'timer'" [dateFormat]="'HH:mm'" [placeHolder]="'HH:mm'"
                                         [inputId]="'time' + index"
-                                        [ngClass]="{ disabled: index != 0 }"
-                                        [disabled]="index != 0"
                                         >
                                     </owl-date-time>
                                 </span>
