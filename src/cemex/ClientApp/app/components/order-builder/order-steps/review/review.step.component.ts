@@ -9,6 +9,7 @@ import { DraftsService } from '../../../../shared/services/api/drafts.service';
 import { Validations } from '../../../../utils/validations';
 import { TranslationService } from '@cemex-core/angular-services-v2/dist';
 import { PreProduct } from '../specifications/preproduct'
+import { Observable } from 'rxjs/Observable';
 
 import { } from '@types/googlemaps';
 import * as _ from 'lodash';
@@ -36,6 +37,7 @@ export class ReviewStepComponent implements StepEventsListener {
 
     // Subs
     draftSub: any;
+    optimalSourceSub: any;
     lockRequests: boolean = false;
 
     constructor(
@@ -56,6 +58,7 @@ export class ReviewStepComponent implements StepEventsListener {
         // Cancel needed requests and lock
         this.lockRequests = true;
         if (this.draftSub) { this.draftSub.unsubscribe(); }
+        if (this.optimalSourceSub) { this.optimalSourceSub.unsubscribe(); }
         this.onCompleted.emit(false);
     }
 
@@ -117,12 +120,22 @@ export class ReviewStepComponent implements StepEventsListener {
         if (this.lockRequests) { return; }
 
         //this.dashboard.alertInfo(this.t.pt('views.review.saving_draft'), 0);
-        let draftSub = this.drafts.add(this.generateOrderObj()).subscribe((response) => {
+        this.draftSub = this.drafts.add(this.generateOrderObj()).subscribe((response) => {
             //this.dashboard.alertSuccess(this.t.pt('views.review.draft_saved'));
             this.manager.draftId = response.json().id;
+            if (this.shouldCallOptimalSource()) { this.patchOrderAsync(); }
             this.onCompleted.emit(response.json().id)
         }, (error) => {
-            //this.dashboard.alertError(this.t.pt('views.review.draft_no_saved'));
+            this.dashboard.alertTranslateError('views.review.draft_no_saved');
+        });
+    }
+
+    patchOrderAsync() {
+        this.optimalSourceSub = this.drafts.optimalSourcesPatch(this.manager.draftId).subscribe((x) => {
+            this.manager.isPatched = true;
+            this.optimalSourceSub.unsubscribe()
+        }, (error) => {
+            this.dashboard.alertError("Failed patching order");
         });
     }
 
@@ -298,6 +311,10 @@ export class ReviewStepComponent implements StepEventsListener {
         let factor = product.unit.numerator / product.unit.denominator;
         let convertion = qty * factor;
         return convertion || undefined;
+    }
+
+    shouldCallOptimalSource() {
+        return Validations.isMexicoCustomer() && Validations.isCement() && Validations.isDelivery();
     }
 
     // Map stuff
