@@ -12,7 +12,7 @@
             <div class="row" *ngIf="!viewMode">
                 <div class="col-md-12 col-sm-12">
                     <label for="pp-name" class="">{{ t.pt('views.project.profile.name') }}</label>
-                    <input [(ngModel)]="projectProfile.profileName" type="text" class="form-control " id="pp-name" name="pp-name" value="">
+                    <input [(ngModel)]="projectProfile.profileName" (input)="projectProfileNameChanged($event.target)" type="text" class="form-control " id="pp-name" name="pp-name" value="">
                 </div>
             </div>
             <div class="row" *ngIf="isMX">

@@ -18,6 +18,7 @@ export class ProjectProfileCreatorComponent {
     private finishedOrder: boolean;
     private loadingCatalog: boolean;
     private isUnloadTypePump: boolean;
+    private projectProfileNameFilled: boolean = false;
     private catalogs: any = {};
 
     @Input()
@@ -57,7 +58,8 @@ export class ProjectProfileCreatorComponent {
     }
 
     confirm() {
-        // this.CustomerService.currentCustomer().legalEntityId 
+        // this.CustomerService.currentCustomer().legalEntityId
+        if(this.projectProfileNameFilled) {
         this.postingTheOrder = true;
         const customerId = this.CustomerService.currentCustomer().legalEntityId;
         this.ProjectProfileApi.create({ ...this.projectProfile, customer: { customerId } }, customerId)
@@ -67,7 +69,15 @@ export class ProjectProfileCreatorComponent {
                 this.finishedOrder = true;
                 this.confirmed.emit();
             });
+        }
 
+    }
+
+    projectProfileNameChanged(target) {
+        console.log(target)
+        if (target) {
+            this.projectProfileNameFilled = true
+        }
     }
 
     cancel() {
