@@ -586,6 +586,15 @@ export class SpecificationsStepComponent implements StepEventsListener {
 
             // Clone project object
             preProduct.projectProfile.project.projectProperties = JSON.parse(JSON.stringify(projectProfile.project.projectProperties));
+
+            // Fire preproduct methods for validations
+            preProduct.timePerLoadChanged(projectProfile.project.projectProperties.timePerLoad);
+            preProduct.loadSizeChanged(projectProfile.project.projectProperties.loadSize);
+            preProduct.slumpChanged(projectProfile.slump);
+        } else {
+            preProduct.timePerLoadChanged(null);
+            preProduct.loadSizeChanged(null);
+            preProduct.slumpChanged(null);
         }
     }
 
